@@ -26,11 +26,38 @@ PR をマージする前に確認すべき必須チェック（人がマージ�
 
 判定スクリプト（補助ツール）は次の通りです。これは自動的なマージを実行するものではなく、マージ前の判断材料を提供します。
 
+#### Merge Decision Check
+
 ```bash
 node scripts/merge-decision-check.mjs --pr-context ./path/to/pr-context.json
 ```
 
 このスクリプトは、条件未達時に `stopReasons` を返し、PR comment と workflow summary で明示します。スクリプトは自動マージを行わず、推奨対応と停止理由を出力するだけです。
+
+#### AI Review Evaluator
+
+```bash
+PR_NUMBER=<num> node scripts/ai-review.mjs
+```
+
+環境変数で指定:
+- `COPILOT_GITHUB_TOKEN` or `GITHUB_TOKEN`: GitHub API トークン
+- `GITHUB_REPOSITORY`: `owner/repo` 形式のリポジトリ指定
+- `PR_NUMBER`: PR 番号
+
+**検査項目:**
+- Issue との紐付け確認（#XXXX または "Issue:" 形式）
+- テスト設計成果物の存在（test-design.json）
+- Coverage 結果の明示
+- 差分内の秘密情報検出（API_KEY, SECRET, 秘密鍵など）
+- Fork PR 判定
+
+**判定結果:**
+- `pass`: すべての検査をクリア、PR オーナーのリポジトリ
+- `fail`: 検査項目に不合格がある場合
+- `neutral`: 秘密情報検出は失敗しないが、fork PR の場合
+
+出力は JSON で、`result`, `stopReasons`, `evidence`, `summary` を含みます。
 
 ### GitHub Actions 連携
 
