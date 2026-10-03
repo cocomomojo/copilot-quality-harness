@@ -1,3 +1,8 @@
+---
+name: issue-intake-and-triage
+description: Initial evaluation and classification of GitHub Issues to determine scope and risk level
+---
+
 # Issue Intake and Triage
 
 ## Purpose

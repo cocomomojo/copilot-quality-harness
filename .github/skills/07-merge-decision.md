@@ -1,3 +1,8 @@
+---
+name: merge-decision
+description: Provides merge decision support with evidence-based reasoning (no auto-merge)
+---
+
 # Merge Decision
 
 ## Purpose

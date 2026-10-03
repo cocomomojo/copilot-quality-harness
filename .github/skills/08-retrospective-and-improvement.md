@@ -1,3 +1,8 @@
+---
+name: retrospective-and-improvement
+description: Analyzes workflow execution for process improvement opportunities
+---
+
 # Retrospective and Improvement
 
 ## Purpose

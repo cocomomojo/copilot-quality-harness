@@ -1,3 +1,8 @@
+---
+name: ai-review-implementation
+description: Evaluates PR quality against contract criteria using GitHub API
+---
+
 # AI Review Skill
 
 ## Purpose

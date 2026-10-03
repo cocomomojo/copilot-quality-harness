@@ -1,3 +1,8 @@
+---
+name: common-contract
+description: Defines common input/output contracts and safety boundaries for all quality workflow skills
+---
+
 # Common Skill Contract
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: pr-report-and-ai-review
+description: Creates PR with quality evidence and performs AI review evaluation
+---
+
 # PR Report and AI Review
 
 ## Purpose

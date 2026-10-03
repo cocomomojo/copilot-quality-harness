@@ -1,3 +1,8 @@
+---
+name: repository-analysis
+description: Analyzes code structure and test strategy based on repository contents
+---
+
 # Repository Analysis
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: test-observation-design
+description: Designs test cases and test viewpoints based on issue requirements
+---
+
 # Test Observation Design
 
 ## Purpose
