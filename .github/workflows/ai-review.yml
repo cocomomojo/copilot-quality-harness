@@ -1,0 +1,81 @@
+name: AI Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+  checks: write
+
+jobs:
+  "AI Review":
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Prepare script directory
+        run: mkdir -p .github/scripts
+
+      - name: Run AI review script
+        id: ai_review
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: |
+          node .github/scripts/ai-review.mjs "$PR_NUMBER" > /tmp/ai_review_result.json || true
+          cat /tmp/ai_review_result.json
+
+      - name: Post AI Review comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const resultPath = '/tmp/ai_review_result.json';
+            const result = fs.existsSync(resultPath)
+              ? JSON.parse(fs.readFileSync(resultPath, 'utf8') || '{}')
+              : { result: 'neutral', stopReasons: ['AI review output not produced'], evidence: {} };
+
+            const body = [];
+            body.push('## AI Review (補助ゲート)');
+            body.push('> 注意: AI レビューは人間レビューの代替ではありません。最終判断は人間が行ってください。');
+            body.push('');
+            if (result.summary) {
+              body.push(result.summary);
+            } else {
+              body.push('- 判定: **neutral**');
+            }
+            body.push('');
+            if (result.stopReasons && result.stopReasons.length) {
+              body.push('### Stop reasons');
+              for (const r of result.stopReasons) body.push('- ' + r);
+              body.push('');
+            }
+            if (result.evidence) {
+              body.push('### Evidence');
+              for (const k of Object.keys(result.evidence)) {
+                body.push(`- **${k}**: ${result.evidence[k]}`);
+              }
+              body.push('');
+            }
+            body.push('---');
+            body.push('_このコメントは自動生成されています。_');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: body.join('\n')
+            });
+
+      - name: Fail job when result indicates fail
+        if: steps.ai_review.outcome == 'failure' || steps.ai_review.conclusion == 'failure'
+        run: |
+          echo "AI review reported failure. Marking job failed." && exit 1
