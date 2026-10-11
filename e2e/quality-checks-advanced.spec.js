@@ -23,11 +23,13 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
     test('displays error when name exceeds 120 characters', async ({ page }) => {
       const input = page.getByLabel('Check name');
 
-      // Note: HTML input maxLength="120" will prevent this, but test the behavior
-      await input.fill('A'.repeat(120));
+      // HTML input maxLength="120" will prevent exceeding 120 characters
+      // Fill with 121 characters to test truncation behavior
+      await input.fill('A'.repeat(121));
 
+      // Verify that the actual input value is truncated to 120 characters
       const charCount = await input.inputValue();
-      expect(charCount.length).toBeLessThanOrEqual(120);
+      expect(charCount.length).toBe(120);
     });
 
     test('clears error message when user corrects input', async ({ page }) => {
