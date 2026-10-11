@@ -7,6 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "test": "vitest run --coverage",
+    "test:advanced": "vitest run App-advanced.test.jsx",
     "lint": "eslint ."
   },
   "dependencies": {

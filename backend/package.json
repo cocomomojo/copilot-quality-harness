@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "test": "vitest run --coverage",
     "test:api": "vitest run src/app.test.js",
+    "test:advanced": "vitest run src/app-advanced.test.js",
     "lint": "eslint ."
   },
   "dependencies": {
