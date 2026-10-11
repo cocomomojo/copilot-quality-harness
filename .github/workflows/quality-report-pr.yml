@@ -1,0 +1,230 @@
+name: Quality Report PR
+
+on:
+  workflow_run:
+    workflows: ["Test Matrix"]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  download-artifacts:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download test matrix results
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: test-matrix.yml
+          run_id: ${{ github.event.workflow_run.id }}
+          path: artifacts
+          name_is_regexp: true
+          name: 'test-results-.*|test-matrix-summary'
+      
+      - name: Upload artifacts for next job
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-test-results
+          path: artifacts/
+          retention-days: 1
+
+  generate-quality-report:
+    runs-on: ubuntu-latest
+    needs: download-artifacts
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Download merged results
+        uses: actions/download-artifact@v4
+        with:
+          name: merged-test-results
+          path: test-results-data
+      
+      - name: Generate quality report
+        id: quality_report
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          const resultsDir = 'test-results-data';
+          const results = {};
+          
+          // Parse all JSON files
+          function readJsonFiles(dir, prefix = '') {
+            try {
+              if (!fs.existsSync(dir)) return;
+              for (const file of fs.readdirSync(dir)) {
+                const filePath = path.join(dir, file);
+                const stat = fs.statSync(filePath);
+                
+                if (stat.isDirectory()) {
+                  readJsonFiles(filePath, prefix + file + '/');
+                } else if (file.endsWith('.json') && file.includes('test-result')) {
+                  const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                  const key = `node${data.node_version}-${data.test_type}`;
+                  results[key] = data;
+                }
+              }
+            } catch (e) {
+              console.error('Error reading results:', e.message);
+            }
+          }
+          
+          readJsonFiles(resultsDir);
+          
+          // Create markdown table
+          const rows = [];
+          rows.push('| Node Version | Unit Tests | API Tests | E2E Tests | Advanced Tests |');
+          rows.push('|---|---|---|---|---|');
+          
+          const nodeVersions = [18, 20];
+          for (const nodeVer of nodeVersions) {
+            const row = [`Node ${nodeVer}`];
+            
+            for (const testType of ['unit', 'api', 'e2e', 'advanced']) {
+              const key = `node${nodeVer}-${testType}`;
+              if (results[key]) {
+                const r = results[key];
+                const emoji = r.status === 'passed' ? '✅' : '❌';
+                row.push(`${emoji} ${r.passed}P/${r.failed}F`);
+              } else {
+                row.push('⏭️ N/A');
+              }
+            }
+            
+            rows.push('| ' + row.join(' | ') + ' |');
+          }
+          
+          const table = rows.join('\n');
+          console.log('Generated quality table:\n' + table);
+          
+          // Calculate summary
+          const allPassed = Object.values(results).length > 0 && Object.values(results).every(r => r.status === 'passed' || r.status === 'unknown');
+          const totalTests = Object.values(results).reduce((sum, r) => sum + r.passed + r.failed, 0);
+          const totalPassed = Object.values(results).reduce((sum, r) => sum + r.passed, 0);
+          const passRate = totalTests > 0 ? Math.round((totalPassed / totalTests) * 100) : 100;
+          
+          fs.writeFileSync('quality-report-table.md', table);
+          fs.writeFileSync('quality-report-summary.json', JSON.stringify({
+            all_passed: allPassed,
+            pass_rate: passRate,
+            total_tests: totalTests,
+            total_passed: totalPassed,
+            total_failed: totalTests - totalPassed,
+            table: table,
+            timestamp: new Date().toISOString()
+          }, null, 2));
+          
+          // Output to GITHUB_OUTPUT instead of deprecated set-output
+          const output = `pass_rate=${passRate}\nall_passed=${allPassed}\n`;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
+          
+          console.log('Summary:', { all_passed: allPassed, pass_rate: passRate });
+          EOF
+      
+      - name: Upload quality report
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-report-data
+          path: quality-report-summary.json
+          retention-days: 5
+
+  post-pr-comment:
+    runs-on: ubuntu-latest
+    needs: generate-quality-report
+    if: github.event.workflow_run.event == 'pull_request'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Find PR
+        id: find_pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=$(gh pr list --search "head:${{ github.event.workflow_run.head_branch }}" --json number --jq ".[0].number" || echo "")
+          if [ -z "$PR_NUMBER" ]; then
+            echo "Could not find PR for branch: ${{ github.event.workflow_run.head_branch }}"
+            echo "pr_number=" >> $GITHUB_OUTPUT
+          else
+            echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Download quality report
+        if: steps.find_pr.outputs.pr_number
+        uses: actions/download-artifact@v4
+        with:
+          name: quality-report-data
+          path: report-data
+      
+      - name: Post quality report to PR
+        if: steps.find_pr.outputs.pr_number
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'report-data/quality-report-summary.json';
+            
+            let summary = { 
+              all_passed: false, 
+              pass_rate: 0, 
+              total_tests: 0,
+              total_passed: 0,
+              total_failed: 0,
+              table: ''
+            };
+            try {
+              if (fs.existsSync(reportPath)) {
+                summary = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
+              }
+            } catch (e) {
+              console.error('Could not read report:', e.message);
+            }
+            
+            const statusEmoji = summary.all_passed ? '✅' : '⚠️';
+            const body = [];
+            body.push('## 📊 Quality Report');
+            body.push('');
+            body.push(`${statusEmoji} **Pass Rate**: ${summary.pass_rate}% (${summary.total_passed}/${summary.total_tests} tests)`);
+            body.push('');
+            body.push('### Test Results by Matrix');
+            body.push('');
+            if (summary.table) {
+              body.push(summary.table);
+            } else {
+              body.push('| Node Version | Unit Tests | API Tests | E2E Tests | Advanced Tests |');
+              body.push('|---|---|---|---|---|');
+              body.push('| Node 18 | ⏳ No data | ⏳ No data | ⏳ No data | ⏳ No data |');
+              body.push('| Node 20 | ⏳ No data | ⏳ No data | ⏳ No data | ⏳ No data |');
+            }
+            body.push('');
+            body.push('---');
+            body.push(`_Report generated at ${summary.timestamp || new Date().toISOString()}_`);
+            
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: ${{ steps.find_pr.outputs.pr_number }},
+                body: body.join('\n')
+              });
+              console.log('Posted quality report to PR #${{ steps.find_pr.outputs.pr_number }}');
+            } catch (e) {
+              console.error('Could not post comment:', e.message);
+            }
