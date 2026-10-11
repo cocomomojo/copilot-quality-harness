@@ -267,6 +267,10 @@ describe('App Component - Advanced Tests', () => {
 
   describe('List Updates', () => {
     test('adds new check to top of list', async () => {
+      let allChecks = [
+        { id: 1, name: 'Old Check', status: 'pending', createdAt: '2026-10-11T00:00:00Z' }
+      ];
+
       global.fetch = vi.fn(async (url, options) => {
         if (url.includes('/api/checks')) {
           return {
@@ -274,11 +278,11 @@ describe('App Component - Advanced Tests', () => {
             status: options?.method === 'POST' ? 201 : 200,
             json: async () => {
               if (options?.method === 'POST') {
-                return { id: 2, name: 'New Check', status: 'pending', createdAt: '2026-10-11T01:00:00Z' };
+                const newCheck = { id: 2, name: 'New Check', status: 'pending', createdAt: '2026-10-11T01:00:00Z' };
+                allChecks = [newCheck, ...allChecks];
+                return newCheck;
               }
-              return [
-                { id: 1, name: 'Old Check', status: 'pending', createdAt: '2026-10-11T00:00:00Z' }
-              ];
+              return allChecks;
             }
           };
         }
