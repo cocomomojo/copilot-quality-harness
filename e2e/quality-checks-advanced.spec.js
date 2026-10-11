@@ -37,10 +37,11 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       
       await input.fill('   ');
       await button.click();
-      
+       
       const error = page.getByRole('alert');
       await expect(error).toBeVisible();
-      
+      await expect(error).toContainText(ERROR_MESSAGE_INVALID_NAME);
+       
       await input.fill('Valid Check Name');
       // Error should be cleared before submission
       await button.click();
