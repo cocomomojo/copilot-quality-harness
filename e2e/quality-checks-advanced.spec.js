@@ -21,12 +21,11 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
     });
 
     test('displays error when name exceeds 120 characters', async ({ page }) => {
-      const longName = 'A'.repeat(121);
       const input = page.getByLabel('Check name');
-      
+
       // Note: HTML input maxLength="120" will prevent this, but test the behavior
       await input.fill('A'.repeat(120));
-      
+
       const charCount = await input.inputValue();
       expect(charCount.length).toBeLessThanOrEqual(120);
     });
@@ -34,18 +33,18 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
     test('clears error message when user corrects input', async ({ page }) => {
       const input = page.getByLabel('Check name');
       const button = page.getByRole('button', { name: 'Add check' });
-      
+
       await input.fill('   ');
       await button.click();
-       
+
       const error = page.getByRole('alert');
       await expect(error).toBeVisible();
       await expect(error).toContainText(ERROR_MESSAGE_INVALID_NAME);
-       
+
       await input.fill('Valid Check Name');
       // Error should be cleared before submission
       await button.click();
-      
+
       await expect(page.getByText('Valid Check Name')).toBeVisible();
     });
 
