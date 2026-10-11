@@ -38,13 +38,18 @@ describe('App Component - Advanced Tests', () => {
     });
 
     test('handles slow API response gracefully', async () => {
-      global.fetch = vi.fn(async () => ({
-        ok: true,
-        json: async () => [{ id: 1, name: 'Slow Check', status: 'pending', createdAt: '2026-10-11T00:00:00Z' }]
-      }));
+      global.fetch = vi.fn(async () => {
+        // Simulate a slow API response with a real delay
+        await new Promise(resolve => setTimeout(resolve, 50));
+        return {
+          ok: true,
+          json: async () => [{ id: 1, name: 'Slow Check', status: 'pending', createdAt: '2026-10-11T00:00:00Z' }]
+        };
+      });
 
       render(<App />);
       
+      // Should eventually display the check even with the delay
       await waitFor(() => {
         expect(screen.getByText('Slow Check')).toBeInTheDocument();
       });
