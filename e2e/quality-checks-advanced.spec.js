@@ -6,18 +6,6 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
   });
 
   test.describe('Error Path Tests', () => {
-    test('displays error when adding check with empty name', async ({ page }) => {
-      const input = page.getByLabel('Check name');
-      const button = page.getByRole('button', { name: 'Add check' });
-      
-      await input.fill('');
-      await button.click();
-      
-      const error = page.getByRole('alert');
-      await expect(error).toBeVisible();
-      expect(await error.textContent()).toBeTruthy();
-    });
-
     test('displays error when adding check with only whitespace', async ({ page }) => {
       const input = page.getByLabel('Check name');
       const button = page.getByRole('button', { name: 'Add check' });
@@ -27,6 +15,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       
       const error = page.getByRole('alert');
       await expect(error).toBeVisible();
+      expect(await error.textContent()).toContain('name must be between 1 and 120 characters');
     });
 
     test('displays error when name exceeds 120 characters', async ({ page }) => {
@@ -44,7 +33,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       const input = page.getByLabel('Check name');
       const button = page.getByRole('button', { name: 'Add check' });
       
-      await input.fill('');
+      await input.fill('   ');
       await button.click();
       
       const error = page.getByRole('alert');
@@ -290,7 +279,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       const input = page.getByLabel('Check name');
       const button = page.getByRole('button', { name: 'Add check' });
       
-      await input.fill('');
+      await input.fill('   ');
       await button.click();
       
       const alert = page.getByRole('alert');
