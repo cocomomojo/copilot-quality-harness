@@ -28,8 +28,8 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await input.fill('A'.repeat(121));
 
       // Verify that the actual input value is truncated to 120 characters
-      const charCount = await input.inputValue();
-      expect(charCount.length).toBe(120);
+      const inputValue = await input.inputValue();
+      expect(inputValue.length).toBe(120);
     });
 
     test('clears error message when user corrects input', async ({ page }) => {
