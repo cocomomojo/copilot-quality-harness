@@ -70,13 +70,13 @@ jobs:
       - name: Analyze test changes
         id: test_analysis
         run: |
-          node -e "
+          node << 'EOF'
           const { execSync } = require('child_process');
           
           try {
             const diff = execSync('git diff origin/main...HEAD --name-only').toString();
             const testFiles = diff.split('\n').filter(f => f.includes('.test.') || f.includes('.spec.'));
-            const srcFiles = diff.split('\n').filter(f => !f.includes('.test.') && !f.includes('.spec.') && !f.includes('.');
+            const srcFiles = diff.split('\n').filter(f => !f.includes('.test.') && !f.includes('.spec.') && f.trim().length > 0);
             
             const hasTestCoverage = testFiles.length > 0;
             const testRatio = srcFiles.length > 0 ? (testFiles.length / (srcFiles.length + testFiles.length)) : 0;
@@ -91,10 +91,10 @@ jobs:
             console.log('::set-output name=analysis::' + JSON.stringify(analysis));
             console.log('::set-output name=adequate_coverage::' + (analysis.adequate_coverage ? 'true' : 'false'));
           } catch (e) {
-            console.log('::set-output name=analysis::{\"error\":\"Could not analyze\"}');
+            console.log('::set-output name=analysis::{"error":"Could not analyze"}');
             console.log('::set-output name=adequate_coverage::true');
           }
-          "
+          EOF
   
   post-review:
     runs-on: ubuntu-latest
