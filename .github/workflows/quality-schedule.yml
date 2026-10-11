@@ -51,7 +51,7 @@ jobs:
       - name: Parse comprehensive results
         id: parse_results
         run: |
-          node -e "
+          node << 'EOF'
           const fs = require('fs');
           
           const results = {
@@ -64,14 +64,18 @@ jobs:
           let totalPassed = 0, totalFailed = 0;
           
           for (const suite of suites) {
-            const logFile = \`/tmp/\${suite}-${{ matrix.node-version }}.log\`;
+            const logFile = `/tmp/${suite}-${{ matrix.node-version }}.log`;
             if (fs.existsSync(logFile)) {
               const content = fs.readFileSync(logFile, 'utf-8');
-              const passMatch = content.match(/(\d+)\s+passing/);
-              const failMatch = content.match(/(\d+)\s+failing/);
               
-              const passed = passMatch ? parseInt(passMatch[1]) : 0;
-              const failed = failMatch ? parseInt(failMatch[1]) : 0;
+              // Support both Vitest and Mocha formats
+              const vitestPass = content.match(/✓\s+(\d+)\s+passed/);
+              const vitestFail = content.match(/✖\s+(\d+)\s+failed/);
+              const mochaPass = content.match(/(\d+)\s+passing/);
+              const mochaFail = content.match(/(\d+)\s+failing/);
+              
+              const passed = vitestPass ? parseInt(vitestPass[1]) : (mochaPass ? parseInt(mochaPass[1]) : 0);
+              const failed = vitestFail ? parseInt(vitestFail[1]) : (mochaFail ? parseInt(mochaFail[1]) : 0);
               
               results.test_suites[suite] = {
                 passed,
@@ -91,11 +95,14 @@ jobs:
             status: totalFailed === 0 ? 'all_passed' : 'some_failed'
           };
           
-          fs.writeFileSync(\`comprehensive-results-${{ matrix.node-version }}.json\`, JSON.stringify(results, null, 2));
-          console.log(JSON.stringify(results, null, 2));
-          console.log('::set-output name=status::' + results.summary.status);
-          console.log('::set-output name=pass_rate::' + results.summary.pass_rate);
-          "
+          fs.writeFileSync(`comprehensive-results-${{ matrix.node-version }}.json`, JSON.stringify(results, null, 2));
+          
+          // Write output using GITHUB_OUTPUT instead of deprecated set-output
+          const output = `status=${results.summary.status}\npass_rate=${results.summary.pass_rate}\n`;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
+          
+          console.log('Comprehensive Results:', JSON.stringify(results));
+          EOF
       
       - name: Upload comprehensive results
         uses: actions/upload-artifact@v4
@@ -104,9 +111,70 @@ jobs:
           path: comprehensive-results-${{ matrix.node-version }}.json
           retention-days: 30
   
+  m2-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run M2 validation
+        id: m2_validation
+        continue-on-error: true
+        run: npm run test:m2 2>&1 | tee /tmp/m2-validation.log
+      
+      - name: Parse M2 results
+        id: parse_m2
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          
+          const logFile = '/tmp/m2-validation.log';
+          const m2Results = {
+            timestamp: new Date().toISOString(),
+            status: 'unknown',
+            passed: 0,
+            failed: 0
+          };
+          
+          if (fs.existsSync(logFile)) {
+            const content = fs.readFileSync(logFile, 'utf-8');
+            
+            // Parse Node test runner output
+            const passMatch = content.match(/(\d+)\s+passed/);
+            const failMatch = content.match(/(\d+)\s+failed/);
+            
+            m2Results.passed = passMatch ? parseInt(passMatch[1]) : 0;
+            m2Results.failed = failMatch ? parseInt(failMatch[1]) : 0;
+            m2Results.status = m2Results.failed === 0 ? 'passed' : 'failed';
+          }
+          
+          fs.writeFileSync('m2-validation-result.json', JSON.stringify(m2Results));
+          
+          // Write output
+          const output = `status=${m2Results.status}\npassed=${m2Results.passed}\nfailed=${m2Results.failed}\n`;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
+          
+          console.log('M2 Validation:', JSON.stringify(m2Results));
+          EOF
+      
+      - name: Upload M2 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: m2-validation-result
+          path: m2-validation-result.json
+          retention-days: 30
+  
   quality-validation:
     runs-on: ubuntu-latest
-    needs: scheduled-tests
+    needs: [scheduled-tests, m2-validation]
     if: always()
     
     steps:
@@ -120,7 +188,7 @@ jobs:
       - name: Analyze quality metrics
         id: analyze
         run: |
-          node -e "
+          node << 'EOF'
           const fs = require('fs');
           const path = require('path');
           
@@ -128,13 +196,15 @@ jobs:
           let allResults = [];
           
           try {
-            for (const dir of fs.readdirSync(resultsDir)) {
-              const dirPath = path.join(resultsDir, dir);
-              if (fs.statSync(dirPath).isDirectory()) {
-                for (const file of fs.readdirSync(dirPath)) {
-                  if (file.endsWith('.json')) {
-                    const data = JSON.parse(fs.readFileSync(path.join(dirPath, file), 'utf-8'));
-                    allResults.push(data);
+            if (fs.existsSync(resultsDir)) {
+              for (const dir of fs.readdirSync(resultsDir)) {
+                const dirPath = path.join(resultsDir, dir);
+                if (fs.statSync(dirPath).isDirectory()) {
+                  for (const file of fs.readdirSync(dirPath)) {
+                    if (file.endsWith('.json')) {
+                      const data = JSON.parse(fs.readFileSync(path.join(dirPath, file), 'utf-8'));
+                      allResults.push(data);
+                    }
                   }
                 }
               }
@@ -146,55 +216,62 @@ jobs:
           const analysis = {
             timestamp: new Date().toISOString(),
             total_results: allResults.length,
-            all_passed: allResults.every(r => r.summary.status === 'all_passed'),
+            all_passed: allResults.length > 0 ? allResults.every(r => r.summary && r.summary.status === 'all_passed') : false,
             average_pass_rate: allResults.length > 0 
-              ? Math.round(allResults.reduce((sum, r) => sum + r.summary.pass_rate, 0) / allResults.length)
+              ? Math.round(allResults.reduce((sum, r) => sum + (r.summary ? r.summary.pass_rate : 0), 0) / allResults.length)
               : 100,
             by_node_version: {}
           };
           
           for (const result of allResults) {
-            analysis.by_node_version[result.node_version] = result.summary;
+            if (result.summary) {
+              analysis.by_node_version[result.node_version] = result.summary;
+            }
           }
           
           fs.writeFileSync('scheduled-analysis.json', JSON.stringify(analysis, null, 2));
-          console.log('Quality Analysis:');
-          console.log(JSON.stringify(analysis, null, 2));
-          console.log('::set-output name=all_passed::' + (analysis.all_passed ? 'true' : 'false'));
-          console.log('::set-output name=pass_rate::' + analysis.average_pass_rate);
-          "
+          
+          // Write output using GITHUB_OUTPUT
+          const output = `all_passed=${analysis.all_passed}\npass_rate=${analysis.average_pass_rate}\n`;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
+          
+          console.log('Quality Analysis:', JSON.stringify(analysis));
+          EOF
       
-      - name: Create issue if critical gaps found
+      - name: Create issue if tests failed
         if: steps.analyze.outputs.all_passed == 'false'
         uses: actions/github-script@v6
         with:
           script: |
-            const passRate = ${{ steps.analyze.outputs.pass_rate }};
+            const passRate = parseInt('${{ steps.analyze.outputs.pass_rate }}') || 0;
             
-            const body = \`## 🚨 Scheduled Quality Check Failed
+            const body = `## 🚨 Scheduled Quality Check Failed
             
-**Date**: \${new Date().toISOString()}
-**Average Pass Rate**: \${passRate}%
+**Timestamp**: ${new Date().toISOString()}
+**Average Pass Rate**: ${passRate}%
 
-### Action Required
-- Review test failures in the scheduled quality run
-- Check the workflow artifacts for detailed results
-- Address critical issues before next scheduled run
+### Test Results
+- Check the workflow artifacts for detailed test results
+- Review any failing tests and address issues
 
-### Workflow
-- [View full results](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-\`;
+### Links
+- [Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+### Next Steps
+1. Review the test failures in the artifacts
+2. Fix failing tests in your code
+3. The next scheduled run will validate the fixes`;
             
             try {
               const issue = await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                title: '🚨 Scheduled Quality Check Failed',
+                title: '[Scheduled] Quality Check Failed - Action Required',
                 body: body,
-                labels: ['ci-failure', 'quality-check']
+                labels: ['automated', 'quality-check', 'scheduled-run']
               });
               
-              console.log('Created issue:', issue.data.number);
+              console.log('Created issue #' + issue.data.number);
             } catch (e) {
               console.error('Could not create issue:', e.message);
             }

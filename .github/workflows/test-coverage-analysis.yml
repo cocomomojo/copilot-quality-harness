@@ -47,7 +47,7 @@ jobs:
       - name: Analyze test coverage gaps
         id: coverage_analysis
         run: |
-          node -e "
+          node << 'EOF'
           const fs = require('fs');
           const path = require('path');
           
@@ -70,17 +70,22 @@ jobs:
           for (const [type, logFile] of Object.entries(logs)) {
             if (fs.existsSync(logFile)) {
               const content = fs.readFileSync(logFile, 'utf-8');
-              const passMatch = content.match(/(\d+)\s+passing/);
-              const failMatch = content.match(/(\d+)\s+failing/);
-              const skipMatch = content.match(/(\d+)\s+skipped/);
+              
+              // Match Vitest format (modern)
+              const vitestPass = content.match(/✓\s+(\d+)\s+passed/);
+              const vitestFail = content.match(/✖\s+(\d+)\s+failed/);
+              
+              // Match Mocha format (legacy)
+              const mochaPass = content.match(/(\d+)\s+passing/);
+              const mochaFail = content.match(/(\d+)\s+failing/);
               
               stats.test_results[type] = {
-                passed: passMatch ? parseInt(passMatch[1]) : 0,
-                failed: failMatch ? parseInt(failMatch[1]) : 0,
-                skipped: skipMatch ? parseInt(skipMatch[1]) : 0
+                passed: vitestPass ? parseInt(vitestPass[1]) : (mochaPass ? parseInt(mochaPass[1]) : 0),
+                failed: vitestFail ? parseInt(vitestFail[1]) : (mochaFail ? parseInt(mochaFail[1]) : 0),
+                skipped: 0
               };
               
-              stats.total_tests += (passMatch ? parseInt(passMatch[1]) : 0) + (failMatch ? parseInt(failMatch[1]) : 0);
+              stats.total_tests += stats.test_results[type].passed + stats.test_results[type].failed;
             }
           }
           
@@ -92,12 +97,12 @@ jobs:
           const gapScore = 100 - stats.coverage_score;
           const criticalGaps = gapScore > 10 ? 'yes' : 'no';
           
-          console.log(JSON.stringify(stats, null, 2));
-          console.log('::set-output name=gap_score::' + gapScore);
-          console.log('::set-output name=coverage_score::' + stats.coverage_score);
-          console.log('::set-output name=critical_gaps::' + criticalGaps);
-          console.log('::set-output name=stats::' + JSON.stringify(stats));
-          "
+          // Write output using GITHUB_OUTPUT instead of deprecated set-output
+          const output = `gap_score=${gapScore}\ncoverage_score=${stats.coverage_score}\ncritical_gaps=${criticalGaps}\nstats=${JSON.stringify(stats)}\n`;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
+          
+          console.log('Coverage Analysis:', JSON.stringify(stats));
+          EOF
       
       - name: Create coverage artifact
         run: |

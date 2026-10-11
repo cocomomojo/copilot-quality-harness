@@ -60,8 +60,9 @@ jobs:
         id: parse_results
         continue-on-error: true
         run: |
-          node -e "
+          node << 'EOF'
           const fs = require('fs');
+          const path = require('path');
           const logFile = '/tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log';
           
           let result = {
@@ -76,25 +77,46 @@ jobs:
           
           if (fs.existsSync(logFile)) {
             const content = fs.readFileSync(logFile, 'utf-8');
-            const passMatch = content.match(/(\d+)\s+passing/);
-            const failMatch = content.match(/(\d+)\s+failing/);
-            const skipMatch = content.match(/(\d+)\s+skipped/);
             
-            result.passed = passMatch ? parseInt(passMatch[1]) : 0;
-            result.failed = failMatch ? parseInt(failMatch[1]) : 0;
-            result.skipped = skipMatch ? parseInt(skipMatch[1]) : 0;
+            // Match Vitest, Node test runner, and Mocha output formats
+            const vitestPass = content.match(/✓\s+(\d+)\s+passed/);
+            const vitestFail = content.match(/✖\s+(\d+)\s+failed/);
+            const vitestSkip = content.match(/⊘\s+(\d+)\s+skipped/);
+            
+            const mochaPass = content.match(/(\d+)\s+passing/);
+            const mochaFail = content.match(/(\d+)\s+failing/);
+            const mochaSkip = content.match(/(\d+)\s+pending/);
+            
+            const nodePass = content.match(/tests\s+(\d+)/);
+            const nodeFail = content.match(/failures\s+(\d+)/);
+            
+            // Try Vitest format first (modern default)
+            result.passed = vitestPass ? parseInt(vitestPass[1]) : (mochaPass ? parseInt(mochaPass[1]) : 0);
+            result.failed = vitestFail ? parseInt(vitestFail[1]) : (mochaFail ? parseInt(mochaFail[1]) : 0);
+            result.skipped = vitestSkip ? parseInt(vitestSkip[1]) : (mochaSkip ? parseInt(mochaSkip[1]) : 0);
+            
+            // For Playwright (E2E), look for "passed/failed" pattern
+            if ('${{ matrix.test-type }}' === 'e2e') {
+              const pwPass = content.match(/(\d+)\s+passed/);
+              const pwFail = content.match(/(\d+)\s+failed/);
+              result.passed = pwPass ? parseInt(pwPass[1]) : 0;
+              result.failed = pwFail ? parseInt(pwFail[1]) : 0;
+            }
             
             result.status = result.failed === 0 ? 'passed' : 'failed';
+          } else {
+            result.status = 'error';
           }
           
-          fs.writeFileSync('test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.json', JSON.stringify(result, null, 2));
+          // Write JSON result
+          fs.writeFileSync('test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.json', JSON.stringify(result));
           
-          console.log('Test Results:');
-          console.log(JSON.stringify(result, null, 2));
-          console.log('::set-output name=status::' + result.status);
-          console.log('::set-output name=passed::' + result.passed);
-          console.log('::set-output name=failed::' + result.failed);
-          "
+          // Output result to GitHub Actions environment
+          const output = `status=${result.status}\npassed=${result.passed}\nfailed=${result.failed}\n`;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
+          
+          console.log('Test Results:', JSON.stringify(result));
+          EOF
       
       - name: Upload test results
         if: always()

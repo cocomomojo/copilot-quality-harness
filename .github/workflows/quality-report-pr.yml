@@ -58,7 +58,7 @@ jobs:
       - name: Generate quality report
         id: quality_report
         run: |
-          node -e "
+          node << 'EOF'
           const fs = require('fs');
           const path = require('path');
           
@@ -68,6 +68,7 @@ jobs:
           // Parse all JSON files
           function readJsonFiles(dir, prefix = '') {
             try {
+              if (!fs.existsSync(dir)) return;
               for (const file of fs.readdirSync(dir)) {
                 const filePath = path.join(dir, file);
                 const stat = fs.statSync(filePath);
@@ -76,7 +77,7 @@ jobs:
                   readJsonFiles(filePath, prefix + file + '/');
                 } else if (file.endsWith('.json') && file.includes('test-result')) {
                   const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-                  const key = \`node\${data.node_version}-\${data.test_type}\`;
+                  const key = `node${data.node_version}-${data.test_type}`;
                   results[key] = data;
                 }
               }
@@ -94,14 +95,14 @@ jobs:
           
           const nodeVersions = [18, 20];
           for (const nodeVer of nodeVersions) {
-            const row = [\`Node \${nodeVer}\`];
+            const row = [`Node ${nodeVer}`];
             
             for (const testType of ['unit', 'api', 'e2e', 'advanced']) {
-              const key = \`node\${nodeVer}-\${testType}\`;
+              const key = `node${nodeVer}-${testType}`;
               if (results[key]) {
                 const r = results[key];
                 const emoji = r.status === 'passed' ? '✅' : '❌';
-                row.push(\`\${emoji} \${r.passed}P/\${r.failed}F\`);
+                row.push(`${emoji} ${r.passed}P/${r.failed}F`);
               } else {
                 row.push('⏭️ N/A');
               }
@@ -111,11 +112,10 @@ jobs:
           }
           
           const table = rows.join('\n');
-          console.log('Generated quality table:');
-          console.log(table);
+          console.log('Generated quality table:\n' + table);
           
           // Calculate summary
-          const allPassed = Object.values(results).every(r => r.status === 'passed' || r.status === 'unknown');
+          const allPassed = Object.values(results).length > 0 && Object.values(results).every(r => r.status === 'passed' || r.status === 'unknown');
           const totalTests = Object.values(results).reduce((sum, r) => sum + r.passed + r.failed, 0);
           const totalPassed = Object.values(results).reduce((sum, r) => sum + r.passed, 0);
           const passRate = totalTests > 0 ? Math.round((totalPassed / totalTests) * 100) : 100;
@@ -127,13 +127,16 @@ jobs:
             total_tests: totalTests,
             total_passed: totalPassed,
             total_failed: totalTests - totalPassed,
+            table: table,
             timestamp: new Date().toISOString()
           }, null, 2));
           
-          console.log('::set-output name=pass_rate::' + passRate);
-          console.log('::set-output name=all_passed::' + (allPassed ? 'true' : 'false'));
-          console.log('::set-output name=table::' + Buffer.from(table).toString('base64'));
-          "
+          // Output to GITHUB_OUTPUT instead of deprecated set-output
+          const output = `pass_rate=${passRate}\nall_passed=${allPassed}\n`;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
+          
+          console.log('Summary:', { all_passed: allPassed, pass_rate: passRate });
+          EOF
       
       - name: Upload quality report
         uses: actions/upload-artifact@v4
@@ -178,7 +181,14 @@ jobs:
             const fs = require('fs');
             const reportPath = 'report-data/quality-report-summary.json';
             
-            let summary = { all_passed: false, pass_rate: 0, total_tests: 0 };
+            let summary = { 
+              all_passed: false, 
+              pass_rate: 0, 
+              total_tests: 0,
+              total_passed: 0,
+              total_failed: 0,
+              table: ''
+            };
             try {
               if (fs.existsSync(reportPath)) {
                 summary = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
@@ -191,18 +201,21 @@ jobs:
             const body = [];
             body.push('## 📊 Quality Report');
             body.push('');
-            body.push(\`\${statusEmoji} **Pass Rate**: \${summary.pass_rate}% (\${summary.total_passed}/\${summary.total_tests} tests)\`);
+            body.push(`${statusEmoji} **Pass Rate**: ${summary.pass_rate}% (${summary.total_passed}/${summary.total_tests} tests)`);
             body.push('');
             body.push('### Test Results by Matrix');
-            body.push('*Detailed test results by Node version and test type*');
             body.push('');
-            body.push('| Node Version | Unit Tests | API Tests | E2E Tests | Advanced Tests |');
-            body.push('|---|---|---|---|---|');
-            body.push('| Node 18 | ⏳ Running... | ⏳ Running... | ⏳ Running... | ⏳ Running... |');
-            body.push('| Node 20 | ⏳ Running... | ⏳ Running... | ⏳ Running... | ⏳ Running... |');
+            if (summary.table) {
+              body.push(summary.table);
+            } else {
+              body.push('| Node Version | Unit Tests | API Tests | E2E Tests | Advanced Tests |');
+              body.push('|---|---|---|---|---|');
+              body.push('| Node 18 | ⏳ No data | ⏳ No data | ⏳ No data | ⏳ No data |');
+              body.push('| Node 20 | ⏳ No data | ⏳ No data | ⏳ No data | ⏳ No data |');
+            }
             body.push('');
             body.push('---');
-            body.push('_Report generated at ' + new Date().toISOString() + '_');
+            body.push(`_Report generated at ${summary.timestamp || new Date().toISOString()}_`);
             
             try {
               await github.rest.issues.createComment({
@@ -211,7 +224,7 @@ jobs:
                 issue_number: ${{ steps.find_pr.outputs.pr_number }},
                 body: body.join('\n')
               });
-              console.log('Posted quality report to PR');
+              console.log('Posted quality report to PR #${{ steps.find_pr.outputs.pr_number }}');
             } catch (e) {
               console.error('Could not post comment:', e.message);
             }
