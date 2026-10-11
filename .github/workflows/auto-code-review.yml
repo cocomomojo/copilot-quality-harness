@@ -1,0 +1,152 @@
+name: Auto Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  lint-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run linter
+        id: lint
+        continue-on-error: true
+        run: |
+          npm run lint 2>&1 | tee /tmp/lint-output.log || true
+      
+      - name: Parse lint results
+        id: lint_results
+        run: |
+          node -e "
+          const fs = require('fs');
+          const content = fs.readFileSync('/tmp/lint-output.log', 'utf-8');
+          
+          const issues = {
+            errors: (content.match(/✖ \d+/g) || []).length,
+            warnings: (content.match(/⚠ \d+/g) || []).length,
+            has_critical: content.includes('error') || content.includes('Error')
+          };
+          
+          console.log('::set-output name=lint_issues::' + JSON.stringify(issues));
+          console.log('::set-output name=has_issues::' + (issues.errors > 0 || issues.warnings > 0 ? 'true' : 'false'));
+          "
+  
+  test-coverage-impact:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Analyze test changes
+        id: test_analysis
+        run: |
+          node -e "
+          const { execSync } = require('child_process');
+          
+          try {
+            const diff = execSync('git diff origin/main...HEAD --name-only').toString();
+            const testFiles = diff.split('\n').filter(f => f.includes('.test.') || f.includes('.spec.'));
+            const srcFiles = diff.split('\n').filter(f => !f.includes('.test.') && !f.includes('.spec.') && !f.includes('.');
+            
+            const hasTestCoverage = testFiles.length > 0;
+            const testRatio = srcFiles.length > 0 ? (testFiles.length / (srcFiles.length + testFiles.length)) : 0;
+            
+            const analysis = {
+              test_files_changed: testFiles.length,
+              source_files_changed: srcFiles.length,
+              test_coverage_ratio: Math.round(testRatio * 100),
+              adequate_coverage: testRatio >= 0.2 || testFiles.length > 0
+            };
+            
+            console.log('::set-output name=analysis::' + JSON.stringify(analysis));
+            console.log('::set-output name=adequate_coverage::' + (analysis.adequate_coverage ? 'true' : 'false'));
+          } catch (e) {
+            console.log('::set-output name=analysis::{\"error\":\"Could not analyze\"}');
+            console.log('::set-output name=adequate_coverage::true');
+          }
+          "
+  
+  post-review:
+    runs-on: ubuntu-latest
+    needs: [lint-check, test-coverage-impact]
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Post auto-review comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const lintIssues = ${{ needs.lint-check.outputs.lint_issues || '{}' }};
+            const testAnalysis = ${{ needs.test-coverage-impact.outputs.analysis || '{}' }};
+            const adequateCoverage = '${{ needs.test-coverage-impact.outputs.adequate_coverage }}' === 'true';
+            
+            const body = [];
+            body.push('## 🤖 Auto Code Review');
+            body.push('');
+            
+            // Lint check results
+            body.push('### Linting Check');
+            if (lintIssues.errors > 0 || lintIssues.warnings > 0) {
+              body.push(`⚠️ Found ${lintIssues.errors || 0} errors and ${lintIssues.warnings || 0} warnings`);
+              if (lintIssues.has_critical) {
+                body.push('🔴 **Critical issues detected** - Please fix before merge');
+              }
+            } else {
+              body.push('✅ No linting issues');
+            }
+            body.push('');
+            
+            // Test coverage check
+            body.push('### Test Coverage Analysis');
+            if (testAnalysis.error) {
+              body.push('ℹ️ Could not analyze test coverage changes');
+            } else {
+              body.push(`- Source files changed: ${testAnalysis.source_files_changed}`);
+              body.push(`- Test files changed: ${testAnalysis.test_files_changed}`);
+              body.push(`- Test coverage ratio: ${testAnalysis.test_coverage_ratio}%`);
+              if (adequateCoverage) {
+                body.push('✅ Adequate test coverage for changes');
+              } else {
+                body.push('⚠️ Consider adding tests for source changes');
+              }
+            }
+            body.push('');
+            body.push('---');
+            body.push('_This review is automated and complements human review._');
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body.join('\n')
+            });

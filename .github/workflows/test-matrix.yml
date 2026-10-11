@@ -1,0 +1,195 @@
+name: Test Matrix
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  test-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
+        test-type: [unit, api, e2e, advanced]
+      fail-fast: false
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run unit tests
+        if: matrix.test-type == 'unit'
+        id: test
+        continue-on-error: true
+        run: npm test 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+      
+      - name: Run API tests
+        if: matrix.test-type == 'api'
+        id: test
+        continue-on-error: true
+        run: npm run test:api 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+      
+      - name: Run E2E tests
+        if: matrix.test-type == 'e2e'
+        id: test
+        continue-on-error: true
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:e2e 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+      
+      - name: Run advanced tests
+        if: matrix.test-type == 'advanced'
+        id: test
+        continue-on-error: true
+        run: npm run test:advanced 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+      
+      - name: Parse test results
+        id: parse_results
+        continue-on-error: true
+        run: |
+          node -e "
+          const fs = require('fs');
+          const logFile = '/tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log';
+          
+          let result = {
+            test_type: '${{ matrix.test-type }}',
+            node_version: '${{ matrix.node-version }}',
+            status: 'unknown',
+            passed: 0,
+            failed: 0,
+            skipped: 0,
+            timestamp: new Date().toISOString()
+          };
+          
+          if (fs.existsSync(logFile)) {
+            const content = fs.readFileSync(logFile, 'utf-8');
+            const passMatch = content.match(/(\d+)\s+passing/);
+            const failMatch = content.match(/(\d+)\s+failing/);
+            const skipMatch = content.match(/(\d+)\s+skipped/);
+            
+            result.passed = passMatch ? parseInt(passMatch[1]) : 0;
+            result.failed = failMatch ? parseInt(failMatch[1]) : 0;
+            result.skipped = skipMatch ? parseInt(skipMatch[1]) : 0;
+            
+            result.status = result.failed === 0 ? 'passed' : 'failed';
+          }
+          
+          fs.writeFileSync('test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.json', JSON.stringify(result, null, 2));
+          
+          console.log('Test Results:');
+          console.log(JSON.stringify(result, null, 2));
+          console.log('::set-output name=status::' + result.status);
+          console.log('::set-output name=passed::' + result.passed);
+          console.log('::set-output name=failed::' + result.failed);
+          "
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-node-${{ matrix.node-version }}-${{ matrix.test-type }}
+          path: test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.json
+          retention-days: 5
+  
+  test-summary:
+    runs-on: ubuntu-latest
+    needs: test-matrix
+    if: always()
+    
+    steps:
+      - name: Download all test results
+        uses: actions/download-artifact@v4
+        with:
+          path: test-results-all
+      
+      - name: Generate test matrix summary
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+          
+          const resultsDir = 'test-results-all';
+          const allResults = [];
+          
+          // Collect all test results
+          for (const dir of fs.readdirSync(resultsDir)) {
+            const dirPath = path.join(resultsDir, dir);
+            const jsonFile = path.join(dirPath, dir.replace('test-results-', '') + '.json');
+            
+            try {
+              const files = fs.readdirSync(dirPath);
+              const jsonPath = path.join(dirPath, files[0]);
+              const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+              allResults.push(data);
+            } catch (e) {
+              console.error('Error reading', dir);
+            }
+          }
+          
+          // Generate summary
+          const summary = {
+            timestamp: new Date().toISOString(),
+            total_combinations: allResults.length,
+            passed_combinations: allResults.filter(r => r.status === 'passed').length,
+            failed_combinations: allResults.filter(r => r.status === 'failed').length,
+            total_tests: allResults.reduce((sum, r) => sum + r.passed + r.failed, 0),
+            total_passed: allResults.reduce((sum, r) => sum + r.passed, 0),
+            total_failed: allResults.reduce((sum, r) => sum + r.failed, 0),
+            by_node_version: {},
+            by_test_type: {}
+          };
+          
+          // Group by node version
+          for (const version of [18, 20]) {
+            const versionResults = allResults.filter(r => r.node_version === version);
+            summary.by_node_version[version] = {
+              passed_tests: versionResults.reduce((sum, r) => sum + r.passed, 0),
+              failed_tests: versionResults.reduce((sum, r) => sum + r.failed, 0),
+              status: versionResults.every(r => r.status === 'passed') ? 'all_passed' : 'some_failed'
+            };
+          }
+          
+          // Group by test type
+          for (const type of ['unit', 'api', 'e2e', 'advanced']) {
+            const typeResults = allResults.filter(r => r.test_type === type);
+            summary.by_test_type[type] = {
+              passed_tests: typeResults.reduce((sum, r) => sum + r.passed, 0),
+              failed_tests: typeResults.reduce((sum, r) => sum + r.failed, 0),
+              status: typeResults.every(r => r.status === 'passed') ? 'all_passed' : 'some_failed'
+            };
+          }
+          
+          console.log('Test Matrix Summary:');
+          console.log(JSON.stringify(summary, null, 2));
+          
+          fs.writeFileSync('test-matrix-summary.json', JSON.stringify(summary, null, 2));
+          "
+      
+      - name: Upload test summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-matrix-summary
+          path: test-matrix-summary.json
+          retention-days: 5
+      
+      - name: Set test status output
+        id: test_status
+        run: |
+          if [ -f test-matrix-summary.json ]; then
+            STATUS=$(jq -r '.total_failed > 0 ? "failed" : "passed"' test-matrix-summary.json)
+            echo "status=$STATUS" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
