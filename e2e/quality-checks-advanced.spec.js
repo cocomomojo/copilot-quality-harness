@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+const ERROR_MESSAGE_INVALID_NAME = 'name must be between 1 and 120 characters';
+
 test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -15,7 +17,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       
       const error = page.getByRole('alert');
       await expect(error).toBeVisible();
-      await expect(error).toContainText('name must be between 1 and 120 characters');
+      await expect(error).toContainText(ERROR_MESSAGE_INVALID_NAME);
     });
 
     test('displays error when name exceeds 120 characters', async ({ page }) => {
