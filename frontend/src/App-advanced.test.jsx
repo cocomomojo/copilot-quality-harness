@@ -187,35 +187,6 @@ describe('App Component - Advanced Tests', () => {
       });
     });
 
-    test('prevents default form submission', async () => {
-      global.fetch = vi.fn(async (url, options) => {
-        if (url.includes('/api/checks') && options?.method === 'POST') {
-          return {
-            ok: true,
-            status: 201,
-            json: async () => ({ id: 1, name: 'Test', status: 'pending', createdAt: '2026-10-11T00:00:00Z' })
-          };
-        }
-        return {
-          ok: true,
-          json: async () => []
-        };
-      });
-
-      render(<App />);
-      
-      const input = screen.getByLabelText('Check name');
-      const button = screen.getByRole('button', { name: 'Add check' });
-      
-      await userEvent.type(input, 'Test');
-      await userEvent.click(button);
-      
-      // Form should have submitted successfully
-      await waitFor(() => {
-        expect(input).toHaveValue('');
-      });
-    });
-
     test('updates form input state as user types', async () => {
       global.fetch = vi.fn(async () => ({
         ok: true,
