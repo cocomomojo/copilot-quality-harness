@@ -15,7 +15,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       
       const error = page.getByRole('alert');
       await expect(error).toBeVisible();
-      expect(await error.textContent()).toContain('name must be between 1 and 120 characters');
+      await expect(error).toContainText('name must be between 1 and 120 characters');
     });
 
     test('displays error when name exceeds 120 characters', async ({ page }) => {
