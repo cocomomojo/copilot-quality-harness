@@ -114,19 +114,19 @@ async function callCopilotAPI(prompt: string): Promise<CopilotAnalysis> {
    await page.click('button[data-testid="submit"]');`,
         risk: 'テストの実行時間が若干増加する可能性があります。ネットワーク遅延が改善されない場合、テストがさらに遅くなる恐れがあります。',
         verify: [
-          '修正後、ローカルでテストを実行し、タイムアウトエラーが解決したか確認',
+          'ローカルでテストを実行してタイムアウトエラーが解決したか確認',
           'CI パイプラインで複数回実行して安定性を確認',
           '他のテストのタイムアウト値も見直し、統一性を取る'
         ],
         priority: 'high'
       },
       {
-        title: 'セレクター精度の向上',
+        title: 'Locator API への移行',
         purpose: 'より具体的なセレクターを使用して、要素検出の信頼性を向上',
         changed_files: ['e2e/login.spec.ts'],
         patch: `--- a/e2e/login.spec.ts
 +++ b/e2e/login.spec.ts
-@@ -10,7 +10,7 @@
+@@ -10,7 +10,8 @@
    await page.goto('/login');
 -  await page.waitForSelector('button[data-testid="submit"]', { timeout: 5000 });
 -  await page.click('button[data-testid="submit"]');
@@ -154,7 +154,7 @@ async function callCopilotAPI(prompt: string): Promise<CopilotAnalysis> {
    await page.click('button[data-testid="submit"]');`,
         risk: 'ネットワークリクエストが多い場合、テストの実行時間が大幅に増加する可能性があります。',
         verify: [
-          'waitForLoadState('networkidle') で期待通りに動作するか確認',
+          'waitForLoadState networkidle で期待通りに動作するか確認',
           'ネットワーク遅延がある環境でテスト',
           '他のページナビゲーションテストにも適用検討'
         ],

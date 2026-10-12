@@ -120,7 +120,7 @@ jobs:
         if: steps.trace_summary.outputs.trace_found == 'true'
         id: pr_body
         run: |
-          ANALYSIS=$(cat ./analysis.json)
+          ANALYSIS=$(cat ./trace-artifacts/analysis.json)
           
           cat > ./draft-pr-body.md <<'BODY'
           # 🤖 Copilot Playwright トレース解析提案
