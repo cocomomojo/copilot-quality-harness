@@ -19,7 +19,8 @@
     "lint": "npm run lint --workspace frontend && npm run lint --workspace backend",
     "quality:report": "node scripts/quality-report.mjs",
     "analyze:trace": "ts-node scripts/trace-summary.ts",
-    "analyze:trace:help": "echo 'Usage: npm run analyze:trace -- <trace-file-path>' && echo 'Example: npm run analyze:trace -- ./trace-artifacts/trace.json' && echo 'Outputs: trace-summary.json in the same directory as trace file'"
+    "analyze:trace:help": "echo 'Usage: npm run analyze:trace -- <trace-file-path>' && echo 'Example: npm run analyze:trace -- ./trace-artifacts/trace.json' && echo 'Outputs: trace-summary.json in the same directory as trace file'",
+    "create:test-trace": "ts-node scripts/create-test-trace.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",

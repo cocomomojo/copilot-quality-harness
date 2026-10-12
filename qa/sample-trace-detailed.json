@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  "startTime": 1697836800000,
+  "endTime": 1697836820000,
+  "testIdAttribute": "data-testid",
+  "pages": [
+    {
+      "id": "page-1",
+      "events": [
+        {
+          "type": "navigation",
+          "timestamp": 1697836800000,
+          "url": "https://example.com/login",
+          "title": "Login Page"
+        },
+        {
+          "type": "action",
+          "timestamp": 1697836805000,
+          "action": "fill",
+          "selector": "input[data-testid='email-input']",
+          "value": "test@example.com"
+        },
+        {
+          "type": "action",
+          "timestamp": 1697836810000,
+          "action": "click",
+          "selector": "button[data-testid='submit']"
+        },
+        {
+          "type": "error",
+          "timestamp": 1697836815000,
+          "message": "Timeout: waitForSelector exceeded 5000ms while waiting for locator 'button[data-testid=\"submit\"]'",
+          "level": "error",
+          "category": "timeout"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "trace.json",
+      "entries": [
+        {
+          "type": "console",
+          "timestamp": 1697836814000,
+          "args": [
+            {
+              "type": "string",
+              "value": "Error: Element not visible after retries"
+            }
+          ]
+        },
+        {
+          "type": "network",
+          "timestamp": 1697836811000,
+          "method": "GET",
+          "url": "https://example.com/api/login",
+          "status": 504,
+          "statusText": "Gateway Timeout",
+          "error": "Network timeout"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "screenshot-1.png",
+      "type": "screenshot",
+      "path": "/tmp/trace/screenshot-1.png"
+    }
+  ],
+  "testResult": {
+    "name": "login_test",
+    "status": "failed",
+    "error": "Timeout: waitForSelector exceeded 5000ms",
+    "duration": 15000,
+    "locator": "button[data-testid='submit']"
+  }
+}
