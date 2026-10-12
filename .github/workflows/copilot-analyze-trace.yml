@@ -39,7 +39,7 @@ jobs:
       - name: ⬇️ Download Trace Artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ inputs.artifact_name }}
+          name: ${{ inputs.artifact_id || inputs.artifact_name }}
           path: ./trace-artifacts
         continue-on-error: true
 

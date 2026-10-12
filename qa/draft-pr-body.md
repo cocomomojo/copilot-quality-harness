@@ -37,7 +37,7 @@ Copilot が以下 {{ solution_count }} 案を提示しました。優先度順�
 
 {{ #solutions }}
 
-### 修正案 {{ index + 1 }}: {{ title }} （優先度: {{ priority }}）
+### 修正案 {{ solution_number }}: {{ title }} （優先度: {{ priority }}）
 
 **目的**: {{ purpose }}
 

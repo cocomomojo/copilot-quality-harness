@@ -9,7 +9,6 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import * as zlib from 'zlib';
 
 interface TraceSummary {
   failure_reason: string;
@@ -30,7 +29,7 @@ const SECRET_PATTERNS = [
   /token[=":\s]+[A-Za-z0-9._\-]+/gi, // トークン
   /api[_-]?key[=":\s]+[A-Za-z0-9._\-]+/gi, // API キー
   /password[=":\s]+[^\s]+/gi, // パスワード
-  /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, // メールアドレス
+  /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, // メールアドレス
   /\b(?:\d{1,3}\.){3}\d{1,3}\b/g, // IP アドレス
   /\b\d{10,}\b/g, // 電話番号（10桁以上の数字）
 ];

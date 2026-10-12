@@ -50,7 +50,7 @@ Playwright テスト失敗時、自動的にトレース（trace artifact）を�
 ### Phase 3: Draft PR 作成（自動）
 
 ```
-7. templates/draft-pr-body.md をテンプレートに Draft PR 本文を生成
+7. qa/draft-pr-body.md をテンプレートに Draft PR 本文を生成
 8. gh pr create --draft でDraft PRを作成
    ├─ ラベル: copilot-suggestion
    ├─ ブランチ: copilot-suggest/<timestamp>
