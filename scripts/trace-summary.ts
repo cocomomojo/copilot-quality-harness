@@ -9,6 +9,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import AdmZip from 'adm-zip';
 
 interface TraceSummary {
   failure_reason: string;
@@ -73,9 +74,38 @@ async function analyzeTrace(tracePath: string): Promise<TraceSummary> {
     let traceText = '';
 
     if (tracePath.endsWith('.zip')) {
-      // zip ファイルの場合は、trace.json を抽出する必要がある
-      // PoC では JSON ファイルを想定
-      throw new Error('Zip format not yet implemented. Please provide trace.json or trace files in JSON format.');
+      // zip ファイルから trace.json を抽出
+      const zip = new AdmZip(tracePath);
+      const zipEntries = zip.getEntries();
+
+      // trace.json を探す（resources/trace.json など）
+      const traceEntry = zipEntries.find(entry =>
+        entry.entryName.toLowerCase().endsWith('trace.json') ||
+        entry.entryName.toLowerCase().includes('trace/trace.json')
+      );
+
+      if (!traceEntry) {
+        // trace.json が見つからない場合、最初の JSON ファイルを試す
+        const jsonEntry = zipEntries.find(entry =>
+          entry.entryName.toLowerCase().endsWith('.json') && !entry.isDirectory
+        );
+
+        if (!jsonEntry) {
+          throw new Error('No trace.json or JSON files found in zip archive');
+        }
+
+        traceText = jsonEntry.getData().toString('utf-8');
+      } else {
+        traceText = traceEntry.getData().toString('utf-8');
+      }
+
+      try {
+        traceData = JSON.parse(traceText);
+        traceText = JSON.stringify(traceData, null, 2);
+      } catch (parseError) {
+        // JSON パースエラーの場合は raw テキストとして扱う
+        console.warn('Warning: Could not parse JSON from zip entry, treating as raw text');
+      }
     } else {
       // JSON ファイルの場合
       const fileContent = fs.readFileSync(tracePath, 'utf-8');
