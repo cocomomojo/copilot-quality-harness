@@ -100,158 +100,57 @@ jobs:
           echo "✅ Copilot request prepared"
           cat ./copilot-request.json
 
-      - name: 🤖 Request Copilot Analysis
+      - name: 🚀 Install Copilot CLI
+        if: steps.trace_summary.outputs.trace_found == 'true'
+        run: |
+          echo "Installing Copilot CLI..."
+          curl -fsSL https://gh.io/copilot-install | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          
+          # Verify installation
+          $HOME/.local/bin/copilot --version
+
+      - name: 🤖 Run Copilot Dynamic Workflow
         if: steps.trace_summary.outputs.trace_found == 'true'
         id: copilot_analysis
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: |
-          # copilot-client.ts を実行してCopilot分析を実行
-          npx ts-node scripts/copilot-client.ts ./trace-artifacts/trace-summary.json
+          echo "Running Copilot Dynamic Workflow..."
           
-          # analysis.json が生成されたか確認
-          if [ -f "./trace-artifacts/analysis.json" ]; then
+          # Check if COPILOT_GITHUB_TOKEN is set
+          if [ -z "$COPILOT_GITHUB_TOKEN" ]; then
+            echo "❌ ERROR: COPILOT_GITHUB_TOKEN is not set"
+            echo "Please add COPILOT_GITHUB_TOKEN to repository secrets"
+            exit 1
+          fi
+          
+          # Run Copilot workflow
+          $HOME/.local/bin/copilot --experimental --allow-tool=read \
+            workflow run analyze-trace-workflow \
+            --args @./trace-artifacts/trace-summary.json \
+            --output-format json \
+            > ./trace-artifacts/analysis.json 2>&1 || {
+            echo "❌ Copilot workflow failed"
+            cat ./trace-artifacts/analysis.json || echo "No output"
+            exit 1
+          }
+          
+          # Verify analysis.json was created and has content
+          if [ -f "./trace-artifacts/analysis.json" ] && [ -s "./trace-artifacts/analysis.json" ]; then
             echo "✅ Copilot analysis generated successfully"
             cat ./trace-artifacts/analysis.json
           else
-            echo "❌ Failed to generate analysis.json"
+            echo "❌ Failed to generate analysis.json or output is empty"
             exit 1
           fi
 
-      - name: 📝 Generate Draft PR Body
+      - name: 📝 Generate Draft PR
         if: steps.trace_summary.outputs.trace_found == 'true'
-        id: pr_body
+        id: pr_generation
         run: |
-          ANALYSIS=$(cat ./trace-artifacts/analysis.json)
-          
-          cat > ./draft-pr-body.md <<'BODY'
-          # 🤖 Copilot Playwright トレース解析提案
-          
-          自動解析による修正案を提案します。詳細はコメントを参照してください。
-          
-          **重要**: これは Draft PR です。自動マージは行われません。必ず人間がレビューしてください。
-          
-          ## 解析結果
-          
-          ### 概要
-          Playwright テスト失敗の原因を自動解析しました。主な原因はタイムアウトまたはネットワークエラーです。
-          
-          ### 修正提案
-          
-          #### 修正案 1: タイムアウト時間の延長（優先度: 高）
-          
-          **目的**: テスト実行時のタイムアウトエラーを解決
-          
-          **変更ファイル**: `e2e/test-name.spec.ts`
-          
-          **パッチ**:
-          ```typescript
-          - await page.waitForSelector(selector, { timeout: 5000 })
-          + await page.waitForSelector(selector, { timeout: 10000 })
-          ```
-          
-          **リスク**: テスト実行時間が増加する可能性があります（約1分程度）
-          
-          **検証手順**:
-          1. ローカルで該当テストを実行して成功を確認
-          2. CI で全テストが成功することを確認
-          
-          ---
-          
-          #### 修正案 2: ネットワーク遅延への対応（優先度: 中）
-          
-          **目的**: ネットワークエラーによる失敗を削減
-          
-          **変更ファイル**: `e2e/test-name.spec.ts`
-          
-          **パッチ**:
-          ```typescript
-          - await page.goto(url);
-          + await page.goto(url, { waitUntil: 'networkidle' });
-          ```
-          
-          **リスク**: テスト実行時間がさらに増加する可能性があります
-          
-          **検証手順**:
-          1. ネットワーク遅延をシミュレートして動作確認
-          2. 本番 CI で複数回実行して安定性を検証
-          
-          ---
-          
-          #### 修正案 3: Locator の改善（優先度: 低）
-          
-          **目的**: Element not found エラーを根本解決
-          
-          **変更ファイル**: `e2e/test-name.spec.ts`
-          
-          **パッチ**:
-          ```typescript
-          - const element = page.locator('button:has-text("Click")');
-          + const element = page.locator('button[data-testid="submit-button"]');
-          ```
-          
-          **リスク**: 低い（既存テスト ID を使用）
-          
-          **検証手順**:
-          1. 対象要素が HTML に存在することを確認
-          2. 手動テストで要素が正しく選択されることを確認
-          
-          ---
-          
-          ## 次のステップ
-          
-          1. このコメントを確認して、どの修正案を採用するか決定してください
-          2. 対応する修正を実装してください
-          3. ローカルおよび CI で検証してください
-          4. Draft PR を Review 状態に変更してください
-          5. チーム内で最終確認してからマージしてください
-          
-          **注意**: 自動マージは行われません。必ず人間が最終判断してください。
-          BODY
-          
-          cat ./draft-pr-body.md
-
-      - name: 🔐 Verify No Secrets in Logs
-        if: always()
-        run: |
-          echo "✅ Checking for secrets in workflow logs..."
-          # ログにシークレットが含まれていないか確認（簡略版）
-          echo "Secrets check passed (see mask in GitHub)"
-
-      - name: 📤 Create Draft PR
-        if: steps.trace_summary.outputs.trace_found == 'true'
-        id: create_pr
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          BRANCH_NAME="copilot-suggest/trace-analysis-$(date +%s | sha256sum | cut -c1-8)"
-          
-          # ブランチを作成
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH_NAME"
-          
-          # artifact ファイルをコミット（オプション）
-          if [ -d "./trace-artifacts" ]; then
-            mkdir -p ./qa/trace-analyses
-            cp -r ./trace-artifacts/* ./qa/trace-analyses/ || true
-            git add ./qa/trace-analyses/ || true
-            git commit -m "chore: add trace analysis artifacts" || true
-          fi
-          
-          # ファイルをプッシュ
-          git push origin "$BRANCH_NAME" || true
-          
-          # Draft PR を作成
-          PR_BODY=$(cat ./draft-pr-body.md)
-          
-          gh pr create \
-            --draft \
-            --title "[Copilot] Playwright トレース解析提案" \
-            --body "$PR_BODY" \
-            --label "copilot-suggestion" \
-            --base main
-          
-          echo "✅ Draft PR created"
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "Generating Draft PR..."
+          npx ts-node scripts/create-draft-pr.ts
 
       - name: ✨ Workflow Complete
         if: success()
