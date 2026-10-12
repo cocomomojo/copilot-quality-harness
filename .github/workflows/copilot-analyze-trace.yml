@@ -13,6 +13,15 @@ on:
         required: false
         type: string
 
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'e2e/**'
+      - 'playwright.config.js'
+      - 'frontend/**'
+      - 'backend/**'
+
 permissions:
   contents: read
   actions: read
@@ -151,6 +160,16 @@ jobs:
         run: |
           echo "Generating Draft PR..."
           npx ts-node scripts/create-draft-pr.ts
+
+      - name: 💬 Post Comment on PR (Phase 2C)
+        if: github.event_name == 'pull_request' && steps.trace_summary.outputs.trace_found == 'true'
+        id: pr_comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "Posting Copilot analysis as comment on PR..."
+          npx ts-node scripts/post-pr-comment.ts
 
       - name: ✨ Workflow Complete
         if: success()
