@@ -37,6 +37,53 @@
 ---
 
 ### [10] Playwright トレース解析と Copilot 修正案生成
+<<<<<<< HEAD
+**目的**: Playwright テスト失敗を自動解析し、修正案を Draft PR または PR コメントで提案  
+**トリガー**: 手動（workflow_dispatch）/ 自動（pull_request）  
+**成果物**: trace-summary.json, analysis.json, Draft PR / PR コメント  
+**実装状態**: ✅ 完全実装完了（PR #7-10 マージ済み）
+
+**ファイル**:
+- `.github/skills/10-playwright-trace-analysis.md` – 詳細ガイド
+- `.github/workflows/copilot-analyze-trace.yml` – メインワークフロー（5 ジョブパイプライン）
+- `scripts/trace-summary.ts` – トレース.zip パース & PII フィルタ
+- `scripts/copilot-client.ts` – Copilot CLI クライアント（実 API）
+- `scripts/detect-trace-artifacts.ts` – アーティファクト検出 & Matrix 生成
+- `scripts/aggregate-trace-results.ts` – 複数トレース集約 & デダプリケーション
+- `scripts/generate-aggregated-comment.ts` – PR コメント本文生成
+- `scripts/create-draft-pr.ts` – Draft PR 作成
+- `.github/agents/trace-analyzer.md` – Copilot エージェント用プロンプト
+- `.github/extensions/analyze-trace/extension.mjs` – Copilot Canvas 拡張
+- `templates/draft-pr-body.md` – Draft PR テンプレート
+
+**ワークフロー構成** (Phase 2D Part 2 実装):
+1. **detect-artifacts**: トレース成果物スキャン（アーティファクト検出）
+2. **analyze-traces**: Matrix 戦略で 1-8 並列実行（Copilot 分析）
+3. **aggregate-results**: 複数トレース集約 & 85% デダプリケーション
+4. **post-aggregated-comment**: 単一 PR コメント投稿
+5. **analyze-trace-manual**: Manual mode（後方互換性）
+
+**性能**:
+- 単一トレース: 2-3 分（40% 高速化）
+- 4 並列: 3-4 分（3.3x 高速化）
+- 8 並列: 3-4 分（4x 高速化）
+- API コスト: 30% 削減
+
+**実行方法**:
+```bash
+# 手動トリガー（Matrix 自動）
+gh workflow run copilot-analyze-trace.yml
+
+# または GitHub UI から Actions タブ → copilot-analyze-trace → Run workflow
+```
+
+**進捗**:
+- ✅ Phase 2A: トレース解析基礎 (PR #7)
+- ✅ Phase 2B: Copilot CLI 統合 (PR #8)
+- ✅ Phase 2C: 自動化と最適化 (PR #9)
+- ✅ Phase 2D: 並列処理と統合 (PR #10)
+
+=======
 **目的**: Playwright テスト失敗を自動解析し、修正案を Draft PR で提案  
 **トリガー**: 手動（workflow_dispatch）→ 将来は PR トリガーへ拡張  
 **成果物**: trace-summary.json, analysis.json, Draft PR  
@@ -61,6 +108,7 @@ gh workflow run copilot-analyze-trace.yml \
 npm run analyze:trace -- trace-artifacts/trace.zip
 ```
 
+>>>>>>> origin/main
 ---
 
 ## 🔄 スキル間の関係図
@@ -179,9 +227,15 @@ gh pr comment <pr-number> --body-file response.md
 
 | スキル | 状態 | 進捗 |
 |--------|------|------|
+<<<<<<< HEAD
+| [00] AI-Powered Failure Analysis | ✅ 完成 | テンプレート・実装例完備（Skill [10] の基礎） |
+| [01] Copilot レビュー指摘対応 | ✅ 完成 | 実装例多数、テンプレート完備 |
+| [10] Playwright トレース解析 | ✅ 完成 | Phase 2A-2D 全完成、本番環境稼働中 |
+=======
 | [00] AI-Powered Failure Analysis | 🟡 計画済み | テンプレート完成、実装待ち |
 | [01] Copilot レビュー指摘対応 | ✅ 完成 | 実装例多数、テンプレート完備 |
 | [10] Playwright トレース解析 | 🟠 進行中 | Phase 1 完成、Phase 2 実装中 |
+>>>>>>> origin/main
 
 ---
 
@@ -219,6 +273,23 @@ scripts/                            # 実行スクリプト
 
 ## 🎯 今後の拡張予定
 
+<<<<<<< HEAD
+**Phase 2D Part 3（オプション）**:
+- [10] の実装強化（レート制限とリトライロジック）
+- パフォーマンスメトリクスの自動収集と分析
+
+**Phase 3（将来）**:
+- [11] Jest / Vitest テスト失敗解析スキル
+- [12] E2E テスト失敗解析スキル
+- [20] ビルド・デプロイエラー解析スキル
+- [30] セキュリティ脆弱性スキャンスキル
+- [40] パフォーマンス回帰検出スキル
+
+**機械学習統合**:
+- 修正案の優先度を自動学習
+- 過去の修正案と類似度マッチング
+- ユーザーフィードバック（有用性スコア）の反映
+=======
 **Phase 2B（2-4週間）**:
 - [00] の実装例を追加（Jest, ビルド, デプロイ）
 - [10] の Phase 2B を実装（実 Copilot API 統合）
@@ -227,6 +298,7 @@ scripts/                            # 実行スクリプト
 - [11] E2E テスト失敗解析スキル
 - [12] パフォーマンス回帰分析スキル
 - [20] セキュリティ脆弱性解析スキル
+>>>>>>> origin/main
 
 ---
 
@@ -266,5 +338,10 @@ scripts/                            # 実行スクリプト
 
 ---
 
+<<<<<<< HEAD
+**最終更新**: 2026-10-12 (Phase 2D Part 2 完成後)
+**次回見直し**: Phase 3 計画時
+=======
 **最終更新**: 2026-10-12
 **次回見直し**: Phase 2B 完成後
+>>>>>>> origin/main
