@@ -104,58 +104,17 @@ jobs:
         if: steps.trace_summary.outputs.trace_found == 'true'
         id: copilot_analysis
         run: |
-          # Copilot Dynamic Workflows を呼び出し
-          # （実装の第2段階: Dynamic Workflows スクリプト統合）
+          # copilot-client.ts を実行してCopilot分析を実行
+          npx ts-node scripts/copilot-client.ts ./trace-artifacts/trace-summary.json
           
-          # ここに Copilot API 呼び出しロジックを実装
-          # 今は mock response を生成
-          
-          cat > ./analysis.json <<'EOF'
-          {
-            "summary": "Playwright テスト失敗の自動解析を実行しました。",
-            "solutions": [
-              {
-                "title": "修正案 1: タイムアウト時間の延長",
-                "priority": "高",
-                "purpose": "テスト実行時のタイムアウトエラーを解決",
-                "changed_files": ["e2e/test-name.spec.ts"],
-                "patch": "- await page.waitForSelector(selector, { timeout: 5000 })\n+ await page.waitForSelector(selector, { timeout: 10000 })",
-                "risk": "テスト実行時間が増加する可能性がある",
-                "verify": [
-                  "ローカルで該当テストを実行して成功を確認",
-                  "CI で全テストが成功することを確認"
-                ]
-              },
-              {
-                "title": "修正案 2: ネットワーク遅延への対応",
-                "priority": "中",
-                "purpose": "ネットワークエラーによる失敗を削減",
-                "changed_files": ["e2e/test-name.spec.ts"],
-                "patch": "- await page.goto(url);\n+ await page.goto(url, { waitUntil: 'networkidle' });",
-                "risk": "テスト実行時間がさらに増加する可能性",
-                "verify": [
-                  "ネットワーク遅延を シミュレートして動作確認",
-                  "本番 CI で複数回実行して安定性を検証"
-                ]
-              },
-              {
-                "title": "修正案 3: Locator の改善",
-                "priority": "低",
-                "purpose": "Element not found エラーを根本解決",
-                "changed_files": ["e2e/test-name.spec.ts"],
-                "patch": "- const element = page.locator('button:has-text(\"Click\")');\n+ const element = page.locator('button[data-testid=\"submit-button\"]');",
-                "risk": "低い（既存テストIDを使用）",
-                "verify": [
-                  "対象要素が HTML に存在することを確認",
-                  "手動テストで要素が正しく選択されることを確認"
-                ]
-              }
-            ]
-          }
-          EOF
-          
-          echo "✅ Copilot analysis generated (mock)"
-          cat ./analysis.json
+          # analysis.json が生成されたか確認
+          if [ -f "./trace-artifacts/analysis.json" ]; then
+            echo "✅ Copilot analysis generated successfully"
+            cat ./trace-artifacts/analysis.json
+          else
+            echo "❌ Failed to generate analysis.json"
+            exit 1
+          fi
 
       - name: 📝 Generate Draft PR Body
         if: steps.trace_summary.outputs.trace_found == 'true'
