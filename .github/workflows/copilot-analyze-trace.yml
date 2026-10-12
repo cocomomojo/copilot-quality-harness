@@ -85,12 +85,46 @@ jobs:
             exit 1
           fi
 
-      - name: 📋 Prepare Copilot Input
+      - name: 🎯 Detect Trace Artifacts (Phase 2C Task 2)
         if: steps.trace_summary.outputs.trace_found == 'true'
+        id: detect_artifacts
+        run: |
+          echo "Detecting trace artifacts..."
+          npx ts-node scripts/detect-trace-artifacts.ts
+
+      - name: 🔎 Check Duplicate Analysis (Phase 2C Task 4)
+        if: github.event_name == 'pull_request' && steps.trace_summary.outputs.trace_found == 'true'
+        id: check_duplicate
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          FAILING_TEST: ${{ fromJson(steps.trace_summary.outputs.failing_test) || 'unknown' }}
+          FAILURE_CATEGORY: ${{ fromJson(steps.trace_summary.outputs.failure_category) || 'unknown_failure' }}
+        run: |
+          echo "Checking for duplicate analysis..."
+          npx ts-node scripts/check-duplicate-analysis.ts
+
+      - name: 💡 Generate Dynamic Prompt (Phase 2C Task 5)
+        if: steps.trace_summary.outputs.trace_found == 'true' && steps.check_duplicate.outputs.skip_analysis != 'true'
+        id: dynamic_prompt
+        env:
+          TRACE_SUMMARY_PATH: ./trace-artifacts/trace-summary.json
+          PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+        run: |
+          echo "Generating dynamic prompt with context..."
+          npx ts-node scripts/generate-dynamic-prompt.ts
+
+      - name: 📋 Prepare Copilot Input
+        if: steps.trace_summary.outputs.trace_found == 'true' && steps.check_duplicate.outputs.skip_analysis != 'true'
         id: copilot_input
         run: |
           # trace-summary.json を読み込み
           TRACE_SUMMARY=$(cat ./trace-artifacts/trace-summary.json)
+          
+          # 動的プロンプトが存在する場合は使用
+          PROMPT=""
+          if [ -f "./dynamic-prompt.md" ]; then
+            PROMPT=$(cat ./dynamic-prompt.md)
+          fi
           
           # Copilot に渡す JSON を生成
           cat > ./copilot-request.json <<'EOF'
@@ -102,7 +136,8 @@ jobs:
               "max_solutions": 3,
               "max_log_chars": 2000,
               "no_auto_commit": true
-            }
+            },
+            "enhanced_prompt": "$PROMPT"
           }
           EOF
           
