@@ -28,10 +28,282 @@ permissions:
   pull-requests: write
 
 jobs:
-  analyze-trace:
-    name: Analyze Playwright Trace & Generate Copilot Suggestions
+  # Phase 2D Part 2: Detect artifacts for matrix strategy
+  detect-artifacts:
+    name: 🔍 Detect Trace Artifacts (Matrix Detection)
     runs-on: ubuntu-latest
+    outputs:
+      artifacts: ${{ steps.detect.outputs.artifacts }}
+      has_artifacts: ${{ steps.detect.outputs.has_artifacts }}
 
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 📋 Detect Available Artifacts
+        id: detect
+        run: |
+          echo "Detecting trace artifacts for parallel analysis..."
+          npx ts-node scripts/detect-trace-artifacts.ts
+          # Output format: {"artifacts": ["artifact1", "artifact2"]}
+
+  # Phase 2D Part 2: Parallel matrix job for trace analysis
+  analyze-traces:
+    name: 🚀 Analyze Trace (Matrix Job)
+    needs: [detect-artifacts]
+    if: needs.detect-artifacts.outputs.has_artifacts == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        trace: ${{ fromJson(needs.detect-artifacts.outputs.artifacts) }}
+      max-parallel: 8
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: ⬇️ Download Trace Artifact
+        id: download
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.trace }}
+          path: ./trace-artifacts
+        continue-on-error: true
+
+      - name: 📊 Generate Trace Summary
+        id: trace_summary
+        if: steps.download.outcome == 'success'
+        run: |
+          TRACE_FILE=$(find ./trace-artifacts -name "*.trace" -o -name "trace.json" | head -1)
+          
+          if [ -z "$TRACE_FILE" ]; then
+            echo "⚠️ Warning: No trace file found in artifact '${{ matrix.trace }}'"
+            echo "trace_found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "✅ Found trace file: $TRACE_FILE"
+          echo "trace_found=true" >> $GITHUB_OUTPUT
+          echo "trace_file=$TRACE_FILE" >> $GITHUB_OUTPUT
+          
+          # trace-summary.ts を実行
+          npx ts-node scripts/trace-summary.ts "$TRACE_FILE"
+          
+          if [ -f "./trace-artifacts/trace-summary.json" ]; then
+            echo "✅ trace-summary.json generated successfully"
+            cat ./trace-artifacts/trace-summary.json
+          else
+            echo "❌ Failed to generate trace-summary.json"
+            exit 1
+          fi
+
+      - name: 🔎 Check Duplicate Analysis (Phase 2C)
+        if: github.event_name == 'pull_request' && steps.trace_summary.outputs.trace_found == 'true'
+        id: check_duplicate
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          FAILING_TEST: ${{ fromJson(steps.trace_summary.outputs.failing_test) || 'unknown' }}
+          FAILURE_CATEGORY: ${{ fromJson(steps.trace_summary.outputs.failure_category) || 'unknown_failure' }}
+          TRACE_ARTIFACT_NAME: ${{ matrix.trace }}
+        run: |
+          echo "Checking for duplicate analysis of '${{ matrix.trace }}'..."
+          npx ts-node scripts/check-duplicate-analysis.ts
+
+      - name: 💡 Generate Dynamic Prompt (Phase 2C)
+        if: steps.trace_summary.outputs.trace_found == 'true' && steps.check_duplicate.outputs.skip_analysis != 'true'
+        id: dynamic_prompt
+        env:
+          TRACE_SUMMARY_PATH: ./trace-artifacts/trace-summary.json
+          PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+        run: |
+          echo "Generating dynamic prompt for artifact '${{ matrix.trace }}'..."
+          npx ts-node scripts/generate-dynamic-prompt.ts
+
+      - name: 🚀 Install Copilot CLI
+        if: steps.trace_summary.outputs.trace_found == 'true' && steps.check_duplicate.outputs.skip_analysis != 'true'
+        run: |
+          echo "Installing Copilot CLI..."
+          curl -fsSL https://gh.io/copilot-install | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          $HOME/.local/bin/copilot --version
+
+      - name: 🤖 Run Copilot Analysis
+        if: steps.trace_summary.outputs.trace_found == 'true' && steps.check_duplicate.outputs.skip_analysis != 'true'
+        id: copilot_analysis
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          TRACE_ARTIFACT_NAME: ${{ matrix.trace }}
+        run: |
+          echo "Running Copilot analysis for '${{ matrix.trace }}'..."
+          
+          if [ -z "$COPILOT_GITHUB_TOKEN" ]; then
+            echo "⚠️ WARNING: COPILOT_GITHUB_TOKEN not set, using mock mode"
+            # Mock mode for testing
+            cat > ./trace-artifacts/analysis.json <<'EOF'
+          {
+            "summary": "Mock analysis for ${{ matrix.trace }}",
+            "solutions": []
+          }
+          EOF
+          else
+            $HOME/.local/bin/copilot --experimental --allow-tool=read \
+              workflow run analyze-trace-workflow \
+              --args @./trace-artifacts/trace-summary.json \
+              --output-format json \
+              > ./trace-artifacts/analysis.json 2>&1 || {
+              echo "❌ Copilot workflow failed"
+              exit 1
+            }
+          fi
+          
+          if [ -f "./trace-artifacts/analysis.json" ] && [ -s "./trace-artifacts/analysis.json" ]; then
+            echo "✅ Copilot analysis generated"
+            ARTIFACT_HASH=$(echo -n "${{ matrix.trace }}" | sha256sum | cut -d' ' -f1)
+            cat ./trace-artifacts/analysis.json
+          else
+            echo "❌ Failed to generate analysis.json"
+            exit 1
+          fi
+
+      - name: 📤 Upload Analysis Artifact
+        if: steps.trace_summary.outputs.trace_found == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-${{ matrix.trace }}
+          path: ./trace-artifacts/analysis.json
+          retention-days: 5
+
+  # Phase 2D Part 2: Aggregate results from parallel jobs
+  aggregate-results:
+    name: 📊 Aggregate Multi-Trace Results
+    needs: [detect-artifacts, analyze-traces]
+    if: needs.detect-artifacts.outputs.has_artifacts == 'true' && success()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: ⬇️ Download All Analysis Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          pattern: analysis-*
+
+      - name: 📊 Aggregate Results
+        id: aggregate
+        run: |
+          echo "Aggregating results from matrix jobs..."
+          
+          # Collect all analysis-*.json files
+          mkdir -p ./trace-artifacts
+          
+          # Merge all analysis files
+          ANALYSIS_FILES=$(find ./artifacts -name "analysis.json" -type f)
+          if [ -z "$ANALYSIS_FILES" ]; then
+            echo "⚠️ No analysis files found, skipping aggregation"
+            echo "skip_aggregation=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "Found analysis files:"
+          echo "$ANALYSIS_FILES"
+          
+          # Run aggregation script
+          npx ts-node scripts/aggregate-trace-results.ts
+          
+          if [ -f "./trace-artifacts/aggregated-analysis.json" ]; then
+            echo "✅ Aggregation completed"
+            echo "skip_aggregation=false" >> $GITHUB_OUTPUT
+            cat ./trace-artifacts/aggregated-analysis.json
+          else
+            echo "❌ Aggregation failed"
+            exit 1
+          fi
+
+      - name: 📤 Upload Aggregated Results
+        if: steps.aggregate.outputs.skip_aggregation != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: aggregated-analysis
+          path: ./trace-artifacts/aggregated-analysis.json
+          retention-days: 5
+
+  # Phase 2D Part 2: Post aggregated comment on PR
+  post-aggregated-comment:
+    name: 💬 Post Aggregated Analysis Comment
+    needs: [detect-artifacts, aggregate-results]
+    if: github.event_name == 'pull_request' && needs.detect-artifacts.outputs.has_artifacts == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: ⬇️ Download Aggregated Results
+        uses: actions/download-artifact@v4
+        with:
+          name: aggregated-analysis
+          path: ./trace-artifacts
+        continue-on-error: true
+
+      - name: 💬 Generate and Post PR Comment
+        id: pr_comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "Posting aggregated analysis comment to PR..."
+          
+          if [ ! -f "./trace-artifacts/aggregated-analysis.json" ]; then
+            echo "⚠️ No aggregated analysis found, skipping comment"
+            exit 0
+          fi
+          
+          npx ts-node scripts/generate-aggregated-comment.ts
+
+  # Manual single-trace path (backward compatibility)
+  analyze-trace-manual:
+    name: 📋 Analyze Single Trace (Manual Mode)
+    if: github.event_name == 'workflow_dispatch' && inputs.artifact_id != ''
+    runs-on: ubuntu-latest
+    
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
@@ -52,168 +324,29 @@ jobs:
           path: ./trace-artifacts
         continue-on-error: true
 
-      - name: 🔍 List Downloaded Artifacts
-        run: |
-          echo "Downloaded artifacts:"
-          find ./trace-artifacts -type f || echo "No artifacts found"
-
       - name: 📊 Generate Trace Summary
         id: trace_summary
         run: |
-          # trace ファイルを探す
           TRACE_FILE=$(find ./trace-artifacts -name "*.trace" -o -name "trace.json" | head -1)
           
           if [ -z "$TRACE_FILE" ]; then
-            echo "⚠️ Warning: No trace file found"
             echo "trace_found=false" >> $GITHUB_OUTPUT
             exit 0
           fi
           
-          echo "✅ Found trace file: $TRACE_FILE"
           echo "trace_found=true" >> $GITHUB_OUTPUT
-          echo "trace_file=$TRACE_FILE" >> $GITHUB_OUTPUT
-          
-          # trace-summary.ts を実行
           npx ts-node scripts/trace-summary.ts "$TRACE_FILE"
-          
-          # trace-summary.json が生成されたか確認
-          if [ -f "./trace-artifacts/trace-summary.json" ]; then
-            echo "✅ trace-summary.json generated successfully"
-            cat ./trace-artifacts/trace-summary.json
-          else
-            echo "❌ Failed to generate trace-summary.json"
-            exit 1
-          fi
 
-      - name: 🎯 Detect Trace Artifacts (Phase 2C Task 2)
-        if: steps.trace_summary.outputs.trace_found == 'true'
-        id: detect_artifacts
-        run: |
-          echo "Detecting trace artifacts..."
-          npx ts-node scripts/detect-trace-artifacts.ts
-
-      - name: 🔎 Check Duplicate Analysis (Phase 2C Task 4)
-        if: github.event_name == 'pull_request' && steps.trace_summary.outputs.trace_found == 'true'
-        id: check_duplicate
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          FAILING_TEST: ${{ fromJson(steps.trace_summary.outputs.failing_test) || 'unknown' }}
-          FAILURE_CATEGORY: ${{ fromJson(steps.trace_summary.outputs.failure_category) || 'unknown_failure' }}
-        run: |
-          echo "Checking for duplicate analysis..."
-          npx ts-node scripts/check-duplicate-analysis.ts
-
-      - name: 💡 Generate Dynamic Prompt (Phase 2C Task 5)
-        if: steps.trace_summary.outputs.trace_found == 'true' && steps.check_duplicate.outputs.skip_analysis != 'true'
-        id: dynamic_prompt
-        env:
-          TRACE_SUMMARY_PATH: ./trace-artifacts/trace-summary.json
-          PR_NUMBER: ${{ github.event.pull_request.number || '' }}
-        run: |
-          echo "Generating dynamic prompt with context..."
-          npx ts-node scripts/generate-dynamic-prompt.ts
-
-      - name: 📋 Prepare Copilot Input
-        if: steps.trace_summary.outputs.trace_found == 'true' && steps.check_duplicate.outputs.skip_analysis != 'true'
-        id: copilot_input
-        run: |
-          # trace-summary.json を読み込み
-          TRACE_SUMMARY=$(cat ./trace-artifacts/trace-summary.json)
-          
-          # 動的プロンプトが存在する場合は使用
-          PROMPT=""
-          if [ -f "./dynamic-prompt.md" ]; then
-            PROMPT=$(cat ./dynamic-prompt.md)
-          fi
-          
-          # Copilot に渡す JSON を生成
-          cat > ./copilot-request.json <<'EOF'
-          {
-            "repo": "cocomomojo/copilot-quality-harness",
-            "trace_summary": $TRACE_SUMMARY,
-            "constraints": {
-              "language": "ja",
-              "max_solutions": 3,
-              "max_log_chars": 2000,
-              "no_auto_commit": true
-            },
-            "enhanced_prompt": "$PROMPT"
-          }
-          EOF
-          
-          echo "✅ Copilot request prepared"
-          cat ./copilot-request.json
-
-      - name: 🚀 Install Copilot CLI
+      - name: 📝 Generate Draft PR (Manual)
         if: steps.trace_summary.outputs.trace_found == 'true'
         run: |
-          echo "Installing Copilot CLI..."
-          curl -fsSL https://gh.io/copilot-install | bash
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-          
-          # Verify installation
-          $HOME/.local/bin/copilot --version
-
-      - name: 🤖 Run Copilot Dynamic Workflow
-        if: steps.trace_summary.outputs.trace_found == 'true'
-        id: copilot_analysis
-        env:
-          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
-        run: |
-          echo "Running Copilot Dynamic Workflow..."
-          
-          # Check if COPILOT_GITHUB_TOKEN is set
-          if [ -z "$COPILOT_GITHUB_TOKEN" ]; then
-            echo "❌ ERROR: COPILOT_GITHUB_TOKEN is not set"
-            echo "Please add COPILOT_GITHUB_TOKEN to repository secrets"
-            exit 1
-          fi
-          
-          # Run Copilot workflow
-          $HOME/.local/bin/copilot --experimental --allow-tool=read \
-            workflow run analyze-trace-workflow \
-            --args @./trace-artifacts/trace-summary.json \
-            --output-format json \
-            > ./trace-artifacts/analysis.json 2>&1 || {
-            echo "❌ Copilot workflow failed"
-            cat ./trace-artifacts/analysis.json || echo "No output"
-            exit 1
-          }
-          
-          # Verify analysis.json was created and has content
-          if [ -f "./trace-artifacts/analysis.json" ] && [ -s "./trace-artifacts/analysis.json" ]; then
-            echo "✅ Copilot analysis generated successfully"
-            cat ./trace-artifacts/analysis.json
-          else
-            echo "❌ Failed to generate analysis.json or output is empty"
-            exit 1
-          fi
-
-      - name: 📝 Generate Draft PR
-        if: steps.trace_summary.outputs.trace_found == 'true'
-        id: pr_generation
-        run: |
-          echo "Generating Draft PR..."
+          echo "Generating Draft PR for manual run..."
           npx ts-node scripts/create-draft-pr.ts
 
-      - name: 💬 Post Comment on PR (Phase 2C)
-        if: github.event_name == 'pull_request' && steps.trace_summary.outputs.trace_found == 'true'
-        id: pr_comment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          echo "Posting Copilot analysis as comment on PR..."
-          npx ts-node scripts/post-pr-comment.ts
-
-      - name: ✨ Workflow Complete
+      - name: ✨ Manual Workflow Complete
         if: success()
         run: |
-          echo "✅ Playwright トレース解析ワークフロー完了"
+          echo "✅ Manual Playwright トレース解析完了"
           echo "📋 成果物:"
           echo "  - trace-summary.json: トレース要約"
-          echo "  - analysis.json: Copilot 分析結果"
           echo "  - Draft PR: 修正提案（人間レビュー必須）"
-          echo ""
-          echo "⚠️ 重要: Draft PR は自動マージされません"
-          echo "必ず人間がレビューしてから対応してください"

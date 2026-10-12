@@ -173,11 +173,20 @@ async function main() {
     )
   );
 
-  // Set GitHub output
+  // Set GitHub output (for matrix strategy)
   if (process.env.GITHUB_OUTPUT) {
     const fs = require("fs");
-    const output = `artifacts=${JSON.stringify(artifacts.map((a) => a.name))}\nfailed_tests=${JSON.stringify(failedTests)}\n`;
+    const artifactNames = artifacts.map((a) => a.name);
+    const hasArtifacts = artifactNames.length > 0 ? "true" : "false";
+    
+    // Format: artifacts=["name1","name2"] for fromJson() in workflow
+    const artifactsJson = JSON.stringify(artifactNames);
+    const output = `artifacts=${artifactsJson}\nhas_artifacts=${hasArtifacts}\nfailed_tests=${JSON.stringify(failedTests)}\n`;
     fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
+    
+    console.log("\n✅ GitHub Actions output set:");
+    console.log(`  - artifacts=${artifactsJson}`);
+    console.log(`  - has_artifacts=${hasArtifacts}`);
   }
 }
 
