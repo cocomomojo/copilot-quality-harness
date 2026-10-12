@@ -410,6 +410,7 @@ Playwright トレースから抽出したテスト失敗情報
 | 症状 | 原因 | 解決方法 |
 |------|------|---------|
 | Artifact がない | artifact 名が違う / artifact 削除済み | `artifact_name` 入力を正確に指定 |
+| Zip format error | trace.zip ファイル形式（PoC未対応） | JSON 形式の trace ファイルを使用（Phase 2 で zip 対応予定） |
 | trace-summary.ts エラー | trace ファイル形式が非標準 | trace ファイルを確認 / console を確認 |
 | Copilot が応答しない | ネットワーク遅延 / API 制限 | リトライするか、ワークフロー再実行 |
 | Draft PR 作成失敗 | GITHUB_TOKEN 権限不足 | リポジトリ設定で Actions 権限確認 |

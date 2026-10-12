@@ -75,14 +75,18 @@ async function analyzeTrace(tracePath: string): Promise<TraceSummary> {
 
     if (tracePath.endsWith('.zip')) {
       // zip ファイルの場合は、trace.json を抽出する必要がある
-      // 簡略版：raw trace データとして扱う
-      const fileContent = fs.readFileSync(tracePath, 'utf-8');
-      traceText = fileContent;
+      // PoC では JSON ファイルを想定
+      throw new Error('Zip format not yet implemented. Please provide trace.json or trace files in JSON format.');
     } else {
       // JSON ファイルの場合
       const fileContent = fs.readFileSync(tracePath, 'utf-8');
-      traceData = JSON.parse(fileContent);
-      traceText = JSON.stringify(traceData, null, 2);
+      try {
+        traceData = JSON.parse(fileContent);
+        traceText = JSON.stringify(traceData, null, 2);
+      } catch (parseError) {
+        // JSON パースエラーの場合は raw テキストとして扱う
+        traceText = fileContent;
+      }
     }
 
     // シークレット・PII を除外
