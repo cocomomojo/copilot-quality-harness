@@ -2,6 +2,11 @@
 
 This document describes the Dynamic Workflows CI/CD system implemented for the copilot-quality-harness project.
 
+**Quick Links**:
+- 📚 [Skills Index](.github/skills/SKILLS_INDEX.md) – 再利用可能なプロセス・パターン一覧
+- 🎯 [Copilot Review Response Skill](.github/skills/01-copilot-review-response-template.md) – PR review 指摘への対応フロー
+- 🔍 [Playwright Trace Analysis Skill](.github/skills/10-playwright-trace-analysis.md) – テスト失敗の自動解析
+
 ## Overview
 
 Five coordinated GitHub Actions workflows provide comprehensive quality assurance:
