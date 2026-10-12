@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { exec } from "child_process";
 import { promisify } from "util";
-import { sha256 } from "crypto";
+import * as crypto from "crypto";
 
 const execAsync = promisify(exec);
 
@@ -50,7 +50,11 @@ async function createDraftPR() {
 
     // Generate branch name
     const timestamp = Date.now().toString().slice(-8);
-    const hash = sha256(Buffer.from(timestamp)).toString("hex").slice(0, 8);
+    const hash = crypto
+      .createHash("sha256")
+      .update(timestamp)
+      .digest("hex")
+      .slice(0, 8);
     const branchName = `copilot-suggest/trace-${timestamp}-${hash}`;
 
     console.log(`📌 Branch name: ${branchName}`);
