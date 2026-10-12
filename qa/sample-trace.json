@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "events": [
+    {
+      "type": "error",
+      "message": "Timeout: waitForSelector exceeded 5000ms while waiting for locator 'button[data-testid=\"submit\"]'"
+    },
+    {
+      "type": "network",
+      "message": "GET /api/login failed with 504 Gateway Timeout"
+    },
+    {
+      "type": "console",
+      "message": "Error: Element not visible after retries"
+    }
+  ],
+  "trace": {
+    "name": "login_test",
+    "locator": "button[data-testid='submit']",
+    "error": "Timeout: waitForSelector exceeded 5000ms"
+  }
+}

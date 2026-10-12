@@ -17,10 +17,15 @@
     "test:m2": "node --test scripts/m2-validation.test.mjs",
     "m2:validate": "node scripts/m2-validation.mjs --issue fixtures/m2/valid-issue.json --catalog qa/test-management/test-observation-catalog.yml --root . --output qa/test-management/reports/m2-validation.json",
     "lint": "npm run lint --workspace frontend && npm run lint --workspace backend",
-    "quality:report": "node scripts/quality-report.mjs"
+    "quality:report": "node scripts/quality-report.mjs",
+    "analyze:trace": "ts-node scripts/trace-summary.ts",
+    "analyze:trace:help": "echo 'Usage: npm run analyze:trace -- <trace-file-path>' && echo 'Example: npm run analyze:trace -- ./trace-artifacts/trace.json' && echo 'Outputs: trace-summary.json in the same directory as trace file'"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "typescript": "^5.6.0",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.11.0"
   }
 }
