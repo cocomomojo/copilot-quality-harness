@@ -17,7 +17,9 @@
     "test:m2": "node --test scripts/m2-validation.test.mjs",
     "m2:validate": "node scripts/m2-validation.mjs --issue fixtures/m2/valid-issue.json --catalog qa/test-management/test-observation-catalog.yml --root . --output qa/test-management/reports/m2-validation.json",
     "lint": "npm run lint --workspace frontend && npm run lint --workspace backend",
-    "quality:report": "node scripts/quality-report.mjs"
+    "quality:report": "node scripts/quality-report.mjs",
+    "analyze:trace": "ts-node scripts/trace-summary.ts",
+    "analyze:trace:help": "echo 'Usage: TRACE_ARTIFACT_PATH=path/to/trace.zip npm run analyze:trace' && echo 'Outputs: trace-summary.json in current directory'"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
