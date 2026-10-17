@@ -1,0 +1,343 @@
+# テスト設計テンプレ - ユーザー登録フロー
+# 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
+# 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
+
+test_spec:
+  # ============================================================
+  # 基本情報
+  # ============================================================
+  feature: "ユーザー登録"
+  description: "メール認証によるユーザー新規登録フロー（正常系・エラー系）"
+  component: "auth/user-registration"
+  requires_human_approval: false
+  # ⚠️  セキュリティ変更の場合は true に設定
+
+  # ============================================================
+  # ユニットテスト (UT) 定義
+  # ============================================================
+  ut:
+    - id: "UT-001"
+      title: "バリデーション: メールアドレスが空"
+      category: "input_validation"
+      function: "validateEmail"
+      input:
+        email: ""
+      expected_output:
+        success: false
+        error_code: "INVALID_EMAIL_FORMAT"
+        error_message: "メールアドレスを入力してください"
+      mock_dependencies: []
+
+    - id: "UT-002"
+      title: "バリデーション: メールアドレスが不正な形式"
+      category: "input_validation"
+      function: "validateEmail"
+      input:
+        email: "invalid-email"
+      expected_output:
+        success: false
+        error_code: "INVALID_EMAIL_FORMAT"
+        error_message: "有効なメールアドレスを入力してください"
+      mock_dependencies: []
+
+    - id: "UT-003"
+      title: "バリデーション: メールアドレスが正しい形式"
+      category: "input_validation"
+      function: "validateEmail"
+      input:
+        email: "user@example.com"
+      expected_output:
+        success: true
+      mock_dependencies: []
+
+    - id: "UT-004"
+      title: "重複チェック: 既存メールアドレス"
+      category: "business_logic"
+      function: "checkEmailExists"
+      input:
+        email: "existing@example.com"
+      expected_output:
+        success: false
+        error_code: "EMAIL_ALREADY_EXISTS"
+        error_message: "このメールアドレスは既に登録されています"
+      mock_dependencies:
+        - name: "user_db"
+          behavior: "return_existing_user"
+
+    - id: "UT-005"
+      title: "重複チェック: 新規メールアドレス"
+      category: "business_logic"
+      function: "checkEmailExists"
+      input:
+        email: "newuser@example.com"
+      expected_output:
+        success: true
+      mock_dependencies:
+        - name: "user_db"
+          behavior: "return_no_user"
+
+    - id: "UT-006"
+      title: "パスワードハッシュ: 正常系"
+      category: "security"
+      function: "hashPassword"
+      input:
+        password: "SecurePass123!"
+      expected_output:
+        success: true
+        # ハッシュ値は毎回異なるため、形式チェックのみ
+        hash_format: "^\\$2[aby]\\$\\d{2}\\$.{53}$" # bcrypt format
+      mock_dependencies: []
+
+    - id: "UT-007"
+      title: "認証トークン生成: トークン一意性"
+      category: "security"
+      function: "generateVerificationToken"
+      input: {}
+      expected_output:
+        success: true
+        token_format: "^[A-Za-z0-9]{32,}$" # 32文字以上のランダム文字列
+        expiry_hours: 24
+      mock_dependencies: []
+
+    - id: "UT-008"
+      title: "ユーザー作成: 正常系"
+      category: "data_persistence"
+      function: "createUser"
+      input:
+        email: "newuser@example.com"
+        password: "SecurePass123!"
+      expected_output:
+        success: true
+        user_id: "uuid_pattern"
+        user_status: "pending_verification"
+      mock_dependencies:
+        - name: "user_db"
+          behavior: "insert_success"
+
+    - id: "UT-009"
+      title: "ユーザー作成: DB 接続失敗"
+      category: "error_handling"
+      function: "createUser"
+      input:
+        email: "user@example.com"
+        password: "SecurePass123!"
+      expected_output:
+        success: false
+        error_code: "DB_CONNECTION_ERROR"
+        error_message: "サーバーエラーが発生しました。後でお試しください"
+      mock_dependencies:
+        - name: "user_db"
+          behavior: "connection_refused"
+
+  # ============================================================
+  # エンドツーエンドテスト (E2E) 定義
+  # ============================================================
+  e2e:
+    - id: "E2E-001"
+      title: "正常系: ユーザー登録フロー（確認メール受信まで）"
+      description: "ユーザーが signup ページでメール・パスワード入力 → 登録成功 → 確認メール受信"
+      priority: "critical"
+      steps:
+        # Step 1: ページ遷移
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/signup"
+          expected:
+            - text_present: "新規登録"
+            - text_present: "メールアドレス"
+
+        # Step 2: メールアドレス入力
+        - step_id: 2
+          action: "fill"
+          selector: "input[name=email]"
+          value: "testuser+{seed}@example.com"
+          expected:
+            - value_filled: true
+
+        # Step 3: パスワード入力
+        - step_id: 3
+          action: "fill"
+          selector: "input[name=password]"
+          value: "TestPass{seed}!"
+          expected:
+            - value_filled: true
+
+        # Step 4: 利用規約同意
+        - step_id: 4
+          action: "click"
+          selector: "input[name=agree_tos]"
+          expected:
+            - checked: true
+
+        # Step 5: 登録ボタンクリック
+        - step_id: 5
+          action: "click"
+          selector: "button[type=submit]"
+          expected:
+            - http_status: 201
+
+        # Step 6: 成功メッセージ確認
+        - step_id: 6
+          action: "assert_text"
+          target: "確認メールを送信しました"
+          timeout_ms: 3000
+
+        # Step 7: メール受信確認（モック）
+        - step_id: 7
+          action: "call_api"
+          endpoint: "/api/test/mock-email/last-message"
+          expected:
+            - response.to: "testuser+{seed}@example.com"
+            - response.subject_contains: "メールアドレスの確認"
+
+    - id: "E2E-002"
+      title: "エラー系: メール形式バリデーション"
+      description: "不正なメール形式で登録を試みる"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/signup"
+        - step_id: 2
+          action: "fill"
+          selector: "input[name=email]"
+          value: "invalid-email"
+        - step_id: 3
+          action: "fill"
+          selector: "input[name=password]"
+          value: "TestPass123!"
+        - step_id: 4
+          action: "click"
+          selector: "button[type=submit]"
+          expected:
+            - http_status: 400
+        - step_id: 5
+          action: "assert_text"
+          target: "有効なメールアドレスを入力してください"
+
+    - id: "E2E-003"
+      title: "エラー系: メールアドレス重複"
+      description: "既に登録されているメールアドレスで登録を試みる"
+      priority: "high"
+      pre_condition:
+        - action: "seed_db"
+          data: "user_email_duplicate.sql"
+          # existing_user@example.com が既に登録されている状態
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/signup"
+        - step_id: 2
+          action: "fill"
+          selector: "input[name=email]"
+          value: "existing@example.com"
+        - step_id: 3
+          action: "fill"
+          selector: "input[name=password]"
+          value: "TestPass123!"
+        - step_id: 4
+          action: "click"
+          selector: "button[type=submit]"
+          expected:
+            - http_status: 409
+        - step_id: 5
+          action: "assert_text"
+          target: "このメールアドレスは既に登録されています"
+
+  # ============================================================
+  # モック設定（E2E/UT 共通）
+  # ============================================================
+  mocks:
+    - name: "email_service"
+      endpoint: "POST /api/mock/email/send"
+      description: "メール送信サービスのモック"
+      behavior: "record_and_return_success"
+      response_template:
+        status: 200
+        body:
+          message_id: "msg_{uuid}"
+          status: "sent"
+
+    - name: "user_db"
+      endpoint: "sqlite:///test.db"
+      description: "ユーザー DB（テスト用 SQLite）"
+      behavior: "in_memory_transaction"
+      # トランザクションで隔離、テスト終了後ロールバック
+
+    - name: "auth_token_service"
+      endpoint: "POST /api/mock/auth/verify-token"
+      description: "メール確認トークン検証サービス"
+      behavior: "return_valid"
+      response_template:
+        status: 200
+        body:
+          valid: true
+          user_id: "{user_id}"
+
+  # ============================================================
+  # シード値（再現性確保用）
+  # ============================================================
+  seeds:
+    - name: "base_seed"
+      value: 12345
+      description: "基本シード値（テストデータ ID 生成用）"
+    - name: "email_seed"
+      value: 67890
+      description: "メールアドレス生成用（例: user+{email_seed}@example.com）"
+    - name: "password_seed"
+      value: 54321
+      description: "パスワード生成用（テスト固有）"
+
+  # ============================================================
+  # 環境変数・設定
+  # ============================================================
+  environment:
+    MOCK_EMAIL_SERVICE: "true"
+    TEST_DB_URL: "sqlite:///:memory:"
+    API_BASE_URL: "http://localhost:3000"
+    VERIFICATION_TOKEN_EXPIRY_HOURS: 24
+    PASSWORD_MIN_LENGTH: 8
+
+  # ============================================================
+  # UT カバレッジ要件
+  # ============================================================
+  coverage_requirements:
+    - component: "auth/user-registration"
+      target_percentage: 90
+      critical_paths:
+        - "validateEmail"
+        - "checkEmailExists"
+        - "hashPassword"
+        - "createUser"
+
+  # ============================================================
+  # 実行時オプション
+  # ============================================================
+  execution:
+    timeout_ms: 30000
+    retry_on_flake:
+      enabled: true
+      max_attempts: 3
+      backoff_ms: 1000
+    parallel_execution:
+      enabled: true
+      max_workers: 4
+    failure_mode: "fast_fail" # 最初の失敗で中断
+
+  # ============================================================
+  # 関連ドキュメント
+  # ============================================================
+  references:
+    - ".github/ISSUE_TEMPLATE/acceptance.md"
+    - ".github/auto-merge-policy.md"
+    - "scripts/pii-filter.ts"
+    - "CONTRIBUTING.md"
+
+  # ============================================================
+  # 備考（Copilot 用）
+  # ============================================================
+  notes: |
+    - E2E テストは必ずモック環境で実行してください（外部メールサービス非依存）
+    - seed 値は reproducible な生成に使われます
+    - テスト後は自動で DB がロールバックされます
+    - trace は自動で PII フィルタを通されます

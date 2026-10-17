@@ -20,7 +20,11 @@
     "quality:report": "node scripts/quality-report.mjs",
     "analyze:trace": "ts-node scripts/trace-summary.ts",
     "analyze:trace:help": "echo 'Usage: npm run analyze:trace -- <trace-file-path>' && echo 'Example: npm run analyze:trace -- ./trace-artifacts/trace.json' && echo 'Outputs: trace-summary.json in the same directory as trace file'",
-    "create:test-trace": "ts-node scripts/create-test-trace.ts"
+    "create:test-trace": "ts-node scripts/create-test-trace.ts",
+    "generate-tests": "ts-node scripts/generate-tests-from-spec.ts",
+    "generate-tests:help": "echo 'Usage: npm run generate-tests -- <spec-file-path>' && echo 'Example: npm run generate-tests -- tests/specs/user-registration.yml' && echo 'Outputs: UT, E2E, and Mock files'",
+    "collect-kpi": "node ops/kpi-collector.js",
+    "sanitize-trace": "ts-node scripts/pii-filter.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
