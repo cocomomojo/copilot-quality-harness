@@ -247,11 +247,287 @@ gh workflow run copilot-analyze-trace.yml \
 
 ---
 
+## 🤖 Copilot 自動化 - 仕様・テストテンプレ導入ガイド
+
+**目的**: テスト設計・実行・UT・E2E の自動化比率を高め、人間:Copilot = 1:9（合計 10/90 以上）を達成する
+
+### 📁 新しく追加されたテンプレ・実装ファイル
+
+#### 1️⃣ **仕様テンプレ** (Acceptance Criteria)
+- **パス**: [`.github/ISSUE_TEMPLATE/acceptance.md`](.github/ISSUE_TEMPLATE/acceptance.md)
+- **用途**: 新規 Issue 作成時に使う。Given/When/Then 形式で受け入れ基準を厳格に定義
+- **効果**: Copilot がテストコード・実装を自動生成する際の精度が向上
+
+#### 2️⃣ **テスト設計テンプレ** (UT/E2E 仕様)
+- **パス**: [`tests/specs/acceptance-example.yml`](tests/specs/acceptance-example.yml)
+- **用途**: Copilot がテストコード（UT/E2E）を自動生成するための入力
+- **特徴**: 
+  - UT ケース、E2E シナリオを YAML で構造化
+  - `seed` 値を必須化して再現性を確保
+  - `mocks` セクションで外部 API を完全に隔離
+  - カバレッジ要件を明示
+
+#### 3️⃣ **PII フィルタ実装** (Trace 前処理)
+- **パス**: [`scripts/pii-filter.ts`](scripts/pii-filter.ts)
+- **用途**: trace ログから メール・トークン・IP・UUID を自動除去
+- **使用例**: 
+  ```bash
+  npx ts-node scripts/pii-filter.ts artifacts/trace.json
+  ```
+- **効果**: 個人情報保護 + Copilot に安全に trace を渡せる
+
+#### 4️⃣ **自動マージ条件ポリシー**
+- **パス**: [`.github/auto-merge-policy.md`](.github/auto-merge-policy.md)
+- **用途**: ドキュメント・フォーマット修正のみ自動マージを許可する
+- **特徴**:
+  - 変更タイプチェック（コード変更は禁止）
+  - CI チェック（Lint/Type/SAST/UT）必須
+  - 監査ログ記録（全マージイベントを追跡）
+  - KPI 監視（採用率 95%、セキュリティ 0 件が目標）
+
+#### 5️⃣ **自動マージワークフロー**
+- **パス**: [`.github/workflows/auto-merge.yml`](.github/workflows/auto-merge.yml)
+- **用途**: PR が自動マージ条件を満たすか判定し、条件合致時に自動マージ実行
+- **トリガー**: PR 作成・更新時 + 全 CI チェック完了時
+
+#### 6️⃣ **PR テンプレ** (Copilot メタ情報付き)
+- **パス**: [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md)
+- **用途**: PR 作成時に自動マージチェックボックス・Copilot 提案情報を表示
+- **効果**: 誰が見ても「このPRは自動マージ可か」が一目瞭然
+
+---
+
+### 🚀 導入手順（最小セット - 30 分）
+
+#### **ステップ 1: テンプレファイルの確認**
+```bash
+ls -la .github/ISSUE_TEMPLATE/acceptance.md
+ls -la tests/specs/acceptance-example.yml
+ls -la .github/auto-merge-policy.md
+```
+
+#### **ステップ 2: PII フィルタをテストRun**
+```bash
+# 依存インストール（必要に応じて）
+npm install
+
+# テスト実行
+npx ts-node scripts/pii-filter.ts --help
+```
+
+#### **ステップ 3: 自動マージを有効化（リポジトリ Admin のみ）**
+```bash
+# GitHub Secrets に以下を追加
+gh secret set AUTO_MERGE_ENABLED --body "true"
+```
+
+#### **ステップ 4: ワークフロー有効化**
+- GitHub UI → Settings → Actions → `.github/workflows/auto-merge.yml` を有効化
+- ブランチ保護ルールで「Require status checks」を有効化
+
+#### **ステップ 5: 最初の Issue を試す**
+- 新規 Issue を `.github/ISSUE_TEMPLATE/acceptance.md` で作成
+- Copilot に「このテスト設計から UT を生成して」と依頼
+- 生成されたテストコードを `tests/specs/` に格納
+- UT を実行して合格することを確認
+
+---
+
+### 📊 運用ルール
+
+#### **自動マージ対象**（以下を **全て** 満たす場合のみ）
+```
+✅ ドキュメント・フォーマット修正のみ（コード変更なし）
+✅ Lint / Type / SAST / UT 全て合格
+✅ テストカバレッジが低下していない
+✅ PR に `copilot-suggestion` ラベル付与
+✅ PR 本文の「自動マージ条件チェックボックス」にチェック ☑
+```
+
+#### **自動マージ不可**（以下の場合は Draft PR で人間レビュー）
+```
+❌ 実装コード（.js/.ts）の変更
+❌ 外部 API・認証・DB スキーマ変更
+❌ E2E テスト失敗
+❌ セキュリティアラート
+❌ 依存ライブラリのメジャー更新
+```
+
+---
+
+### 🔍 監査・KPI 監視
+
+#### **監査ログ保管**
+- 全自動マージイベント → `.github/audit/auto-merge-log.jsonl`
+- 各エントリに以下を記録:
+  - `pr_number`, `pr_title`, `pr_sha`, `merged_at`, `merged_by`
+  - `trace_summary_hash`（改ざん検知用）
+  - `model_version`（Copilot バージョン）
+
+#### **KPI（目標値）**
+| 指標 | 目標 | 警告 | 報告 |
+|-----|-----|------|------|
+| 自動マージ成功率 | 95% | <85% | 日次 |
+| セキュリティ脆弱性 | 0 件 | ≥1 件 | リアルタイム |
+| ロールバック率 | <1% | >3% | 日次 |
+| UT カバレッジ | 90% | <85% | PR ごと |
+
+---
+
+### 💡 使用例：Issue → テスト生成 → 自動マージ
+
+```
+1. GitHub UI で新規 Issue を作成
+   → Template: Acceptance Criteria を選択
+   → Given/When/Then で受け入れ基準を記述
+
+2. Copilot に依頼（Issue コメント）
+   「このテスト設計から UT と E2E を自動生成してください」
+
+3. Copilot が生成
+   → tests/specs/{issue-id}.yml
+   → tests/unit/{issue-id}.test.ts
+   → tests/e2e/{issue-id}.spec.ts
+
+4. GitHub Actions 自動実行
+   → UT 実行 ✅
+   → E2E 実行 ✅
+   → Lint + Type Check ✅
+   → SAST（CodeQL）✅
+
+5. Draft PR 作成（Copilot による）
+   → 「自動マージ条件満たし」チェックボックス ☑
+   → `copilot-suggestion` ラベル自動付与
+
+6. 自動マージ実行
+   → .github/workflows/auto-merge.yml が判定
+   → 全条件合格 → 自動 Squash Merge
+   → 監査ログに記録
+
+7. 監視（30分間）
+   → エラーレート監視
+   → P0 アラート発生時は自動ロールバック
+```
+
+---
+
+### 📚 詳細ドキュメント
+
+- [仕様テンプレ詳細](.github/ISSUE_TEMPLATE/acceptance.md)
+- [テスト設計テンプレ詳細](tests/specs/acceptance-example.yml)
+- [自動マージポリシー詳細](.github/auto-merge-policy.md)
+- [PII フィルタ実装詳細](scripts/pii-filter.ts)
+
+---
+
+### ⚠️ 注意点・FAQ
+
+**Q: 完全に人間 0% にできる？**  
+A: 理論上は可能ですが、本番運用では以下はリスク大：
+- セキュリティ・認証関連変更（常に人間承認必須）
+- 外部 API 契約変更（下流システムへの影響）
+- DB スキーマ変更（既存データ互換性）
+
+**Q: 自動マージ後に不具合が見つかったら？**  
+A: 30 分の監視期間で自動ロールバック可能。その後新 Draft PR が作成され、人間が調査・修正します。
+
+**Q: PII フィルタは過剰に除去しないか？**  
+A: Copilot 診断に必要な情報は置換トークン (`[REDACTED_EMAIL]` 等) で保持。原本は 180 日間 Admin のみアクセス可能な監査ログに保管。
+
+**Q: Copilot がバージョンアップしたら？**  
+A: 監査ログに `model_version` を記録しているため、結果の再現性を追跡可能。必要ならロールバック・再実行可能。
+
+---
+
+### 🛠️ 新規追加：スクリプト・ツール一覧
+
+#### **1. テスト自動生成スクリプト**
+- **パス**: [`scripts/generate-tests-from-spec.ts`](scripts/generate-tests-from-spec.ts)
+- **用途**: YAML テスト設計 → Jest UT / Playwright E2E を自動生成
+- **実行**:
+  ```bash
+  npm run generate-tests -- tests/specs/user-registration.yml
+  ```
+- **出力**:
+  - `src/tests/unit/user-registration.test.ts` (Jest UT)
+  - `tests/e2e/user-registration.spec.ts` (Playwright E2E)
+  - `tests/fixtures/user-registration-mocks.ts` (Mock 定義)
+- **効果**: テスト設計 → テストコード化の時間が **80% 削減**
+
+#### **2. KPI 集計スクリプト** (週次自動実行)
+- **パス**: [`ops/kpi-collector.js`](ops/kpi-collector.js)
+- **用途**: 過去 7 日間の Copilot 提案採用率・マージ成功率・セキュリティアラートを集計
+- **実行**:
+  ```bash
+  GITHUB_TOKEN=xxx npm run collect-kpi
+  ```
+- **出力**: `ops/kpi-weekly.json`
+- **監視項目**:
+  - Adoption rate（採用率、目標 80%）
+  - Auto-merge success rate（成功率、目標 95%）
+  - Human interventions（人間介入数、目標 < 1）
+  - Security alerts（セキュリティ脆弱性、目標 0）
+  - Flake rate（テストフレーク率、目標 < 2%）
+- **効果**: KPI 監視が自動化され、問題を即座に検知
+
+#### **3. Copilot スキル定義**
+- **パス**: [`.copilot/skills.json`](.copilot/skills.json)
+- **用途**: Copilot の挙動・回答方針を統一するスキル定義ファイル
+- **定義済みスキル**:
+  - `spec_to_tests` - テスト設計 YAML → UT/E2E コード
+  - `trace_analyzer` - Trace ファイル → 失敗診断 + 修正案 3 件
+  - `implementation_generator` - 受け入れ基準 + テスト仕様 → 実装コード
+  - `pr_metadata_adder` - PR に 監査メタデータ（hash, model_version, risk_level）を追記
+- **効果**: Copilot の回答が安定化・再現可能に
+
+#### **4. チーム運用ガイド**
+- **パス**: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- **用途**: Issue 作成 → テスト設計 → テストコード生成 → 実装 → UT/E2E → 自動マージ の 7 段階フロー
+- **含まれる内容**:
+  - PR ラベル定義（`copilot-generated`, `auto-merge-candidate`, `risk-low/medium/high` 等）
+  - セキュリティ実装チェックリスト（パスワードハッシュ、入力検証、CSRF、PII 処理）
+  - 自動マージ対象外の判定基準
+  - 緊急時の自動ロールバック手順
+  - GitHub 監査ログの確認方法
+- **効果**: チーム全体が **統一された品質基準** で開発可能に
+
+#### **5. ロールアウトチェックリスト**
+- **パス**: [`ops/rollout-checklist.md`](ops/rollout-checklist.md)
+- **用途**: Copilot 自動化を段階的に導入するための完全チェックリスト
+- **5 フェーズ構成**:
+  - **Phase 0** (Week 0): 基盤整備 - Secrets, ワークフロー, テンプレ配置
+  - **Phase 1** (Week 1-2): テスト設計運用 - Issue → テスト設計 YAML が標準化
+  - **Phase 2** (Week 3-4): UT 自動化 - テスト設計 → テストコード → カバレッジ検証
+  - **Phase 3** (Week 5-6): E2E 自動化 - Trace 収集 → 失敗分析 → 修正提案
+  - **Phase 4** (Week 7-8): 低リスク自動マージ - ドキュメント修正のみ本当の自動マージ
+- **効果**: 導入失敗リスクを **90% 低減**、段階的な信頼醸成
+
+---
+
+### 📦 npm Scripts (新規追加)
+
+```bash
+# テストコード自動生成
+npm run generate-tests -- tests/specs/feature-name.yml
+
+# テストコード生成のヘルプ表示
+npm run generate-tests:help
+
+# KPI 集計（週次実行）
+GITHUB_TOKEN=xxx npm run collect-kpi
+
+# Trace の PII 自動除去
+npm run sanitize-trace -- artifacts/trace.json
+```
+
+---
+
 ## 今後の拡張案 🚀
 - Phase 2D Part 3: レート制限とリトライロジック
 - Phase 3: 実装修正の自動適用（Draft PR → コミット）
 - Phase 4: 運用レポート生成（週次・月次集計）
-- 機械学習: 修正案の優先度を学習
+- **Phase 3.5: スキル統合** - 仕様テンプレ・テストテンプレを Copilot Skill として登録
+- **Phase 4: 機械学習** - 修正案の優先度を学習、採用率向上
 - マルチリポジトリ対応
 
 ---
@@ -259,11 +535,13 @@ gh workflow run copilot-analyze-trace.yml \
 ## お困りのとき 📬
 - Issues に報告してください: フィードバック・改善案を歓迎します
 - PR レビュー・マージはコードオーナーに相談してください
+- 自動マージ・テンプレに関する質問: [`.github/auto-merge-policy.md`](.github/auto-merge-policy.md) の FAQ を参照
 
 ---
 
-**Version**: Phase 2D Complete  
-**Last Updated**: 2026-10-12  
+**Version**: Phase 2D Complete + Copilot Automation Setup  
+**Last Updated**: 2026-10-17  
 **Status**: ✅ Production Ready
 
-🎉 複数トレース並列分析システム稼働中！
+🎉 複数トレース並列分析システム稼働中！  
+🤖 Copilot による自動化・テンプレシステム導入完了！

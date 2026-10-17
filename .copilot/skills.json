@@ -1,0 +1,243 @@
+{
+  "version": "1.0",
+  "description": "Copilot 用 skill 定義。テスト設計YAML → テストコード、trace → 修正提案、PR メタデータの一貫性を担保するプロンプトとルール",
+  "metadata": {
+    "owner": "copilot-quality-team",
+    "last_updated": "2026-10-18",
+    "approval_required": true
+  },
+  "skills": {
+    "spec_to_tests": {
+      "name": "仕様YAML → UT/E2E テストコード生成",
+      "purpose": "tests/specs/*.yml を入力として、TypeScript UT コードと Playwright E2E スクリプトを自動生成する",
+      "input_schema": {
+        "feature": "string",
+        "description": "string",
+        "metadata": {
+          "version": "number",
+          "seed": "number",
+          "requires_human_approval": "boolean",
+          "risk_level": "string (low|medium|high)"
+        },
+        "unit_tests": [
+          {
+            "id": "string",
+            "title": "string",
+            "category": "string (validation|business_logic|security|error_handling)",
+            "input": "object",
+            "expected_output": "object",
+            "mock_dependencies": ["string"]
+          }
+        ],
+        "e2e_tests": [
+          {
+            "id": "string",
+            "title": "string",
+            "steps": [
+              {
+                "step_id": "number",
+                "action": "string (navigate|fill|click|assert_text|call_api)",
+                "target": "string (selector or endpoint)",
+                "value": "string (optional)",
+                "expected": "object (optional)"
+              }
+            ],
+            "environment": {
+              "mock_email_service": "boolean",
+              "network_conditions": "string"
+            },
+            "pre_condition": ["object"]
+          }
+        ],
+        "mocks": [
+          {
+            "name": "string",
+            "endpoint": "string",
+            "behavior": "string (record_and_return_success|return_valid|in_memory_transaction)"
+          }
+        ],
+        "seeds": [
+          {
+            "name": "string",
+            "value": "number or string",
+            "description": "string"
+          }
+        ],
+        "constraints": {
+          "max_test_cases": "number",
+          "max_e2e_steps": "number",
+          "language": "string (ja|en)",
+          "pii_filter": "boolean"
+        }
+      },
+      "prompt_template": "You are a test code generator for Node.js/TypeScript and Playwright. Given a structured test specification (YAML), generate:\n\n1. **Unit Tests** (Jest/Mocha format):\n   - Use the provided seed values for deterministic test data\n   - Replace external API calls with mocks defined in 'mocks'\n   - For each unit_test, create a test case with input/expected_output\n   - Add comments: /* test case generated from spec: {id} */\n   - Ensure tests are idempotent and clean up created data\n\n2. **E2E Tests** (Playwright format):\n   - For each e2e_test, create a Playwright test with the specified steps\n   - Use page.locator('{selector}').waitFor() for reliability\n   - Replace external API calls with mocks\n   - Add comments: // test generated from spec: {id}\n   - Include proper timeouts and retry logic\n\n3. **Mock Setup**:\n   - Create mock server/fixtures for all 'mocks' defined in spec\n   - Ensure mocks are isolated and don't affect other tests\n   - Mock behavior should match spec exactly\n\n4. **Output Format**:\n   Return a JSON object:\n   {\n     \"unit_files\": [\n       { \"path\": \"src/tests/unit/foo.spec.ts\", \"content\": \"...\", \"generated_from\": \"UT-001,UT-002\" }\n     ],\n     \"e2e_files\": [\n       { \"path\": \"tests/e2e/foo.spec.ts\", \"content\": \"...\", \"generated_from\": \"E2E-001\" }\n     ],\n     \"mock_files\": [\n       { \"path\": \"tests/fixtures/mocks.ts\", \"content\": \"...\", \"generated_from\": \"spec.mocks\" }\n     ]\n   }\n\n5. **Quality Rules**:\n   - Do NOT use hardcoded values; use seed values only\n   - Ensure all {seed} placeholders are replaced with actual seed values\n   - Do NOT make real HTTP requests; use mocks exclusively\n   - Each test must be independent (no shared state)\n   - Add teardown/cleanup at the end of each test\n   - Use data-test attributes for E2E selectors (more robust than CSS classes)\n\n6. **Constraints**:\n   - Max E2E steps: {max_e2e_steps}\n   - Language: {language}\n   - PII filter: {pii_filter} (remove email, phone, IDs from test data)\n\n7. **Security**:\n   - Do NOT embed secrets, API keys, or credentials\n   - Use environment variables or fixtures for sensitive data\n   - All passwords in tests must be marked with /* test password */\n\nGenerate high-quality, production-ready test code that matches the provided specification exactly.",
+      "output_schema": {
+        "unit_files": [
+          {
+            "path": "string",
+            "content": "string",
+            "generated_from": "string (comma-separated UT IDs)"
+          }
+        ],
+        "e2e_files": [
+          {
+            "path": "string",
+            "content": "string",
+            "generated_from": "string (comma-separated E2E IDs)"
+          }
+        ],
+        "mock_files": [
+          {
+            "path": "string",
+            "content": "string",
+            "generated_from": "string"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "input": "UT-001 from spec: email validation",
+          "output": "expect(validateEmail('')).toThrow('Email required')"
+        },
+        {
+          "input": "E2E-001: signup flow",
+          "output": "await page.locator('[data-test=email]').fill('user@example.com')"
+        }
+      ]
+    },
+    "trace_analyzer": {
+      "name": "E2E trace → 失敗分析・修正提案",
+      "purpose": "trace-summary.json を入力として、failure_category に基づく診断・修正案・Draft PR 本文を自動生成する",
+      "input_schema": {
+        "failure_reason": "string",
+        "failing_test": "string",
+        "failing_locator": "string",
+        "top_console_errors": ["string"],
+        "top_network_failures": ["string"],
+        "screenshot_paths": ["string"],
+        "trace_excerpt": "string (max 2000 chars)",
+        "failure_category": "string (timeout|network_error|element_not_found|assertion_failure)",
+        "risk_level": "string (low|medium|high)"
+      },
+      "prompt_template": "You are an automated debugging assistant for E2E test failures. Given a trace summary JSON, produce a structured analysis:\n\n1. **Diagnosis** (max 3 sentences):\n   - What went wrong and why\n   - Reference failure_category to guide analysis\n   - Be specific and actionable\n\n2. **Proposals** (up to 3 prioritized fix proposals):\n   For each proposal:\n   - title: brief description of the fix\n   - category: 'selector' | 'timeout' | 'mock' | 'logic' | 'environment'\n   - description: explanation of the issue and fix\n   - patch: code snippet or test adjustment (max 100 lines)\n   - risk: 'low' | 'medium' | 'high'\n   - effort: 'quick' (< 10 min) | 'medium' (10-30 min) | 'complex' (> 30 min)\n\n3. **Rules by failure_category**:\n   - 'timeout': Suggest increased timeout, retry logic, or wait conditions\n   - 'network_error': Suggest mock stabilization, retries, or fallback behavior\n   - 'element_not_found': Suggest more robust selectors (data-test > class > id > xpath)\n   - 'assertion_failure': Suggest clearer assertions or test data adjustment\n\n4. **Draft PR Body**:\n   Create a PR body using this template:\n   ```markdown\n   # Copilot Suggestion: Fix [failing_test]\n   \n   ## Diagnosis\n   [diagnosis text]\n   \n   ## Proposals\n   ### Proposal 1: [title]\n   [description]\n   ```[patch]```\n   Risk: [risk], Effort: [effort]\n   \n   [Repeat for Proposal 2, 3]\n   \n   ## Verification Steps\n   1. Run the failing E2E test\n   2. Verify fix resolves the issue\n   3. Run full E2E suite to check for regressions\n   \n   ## Risk Assessment\n   risk_level: [risk_level]\n   requires_human_approval: [true|false]\n   ```\n\n5. **Quality Rules**:\n   - Do NOT reintroduce PII (emails, IPs, tokens)\n   - Focus on root cause, not symptoms\n   - Proposals should be independent (can be applied in any order)\n   - Code snippets must be production-ready\n   - Add comments explaining the fix\n\n6. **Security**:\n   - If failure involves auth/secrets, mark requires_human_approval: true\n   - Do NOT suggest hardcoding credentials\n\nOutput a JSON object with keys: { diagnosis, proposals: [], draft_pr, risk_assessment }",
+      "output_schema": {
+        "diagnosis": "string",
+        "proposals": [
+          {
+            "title": "string",
+            "category": "string",
+            "description": "string",
+            "patch": "string",
+            "risk": "string",
+            "effort": "string"
+          }
+        ],
+        "draft_pr": "string (markdown format)",
+        "risk_assessment": "object (risk_level, requires_human_approval, security_notes)"
+      }
+    },
+    "implementation_generator": {
+      "name": "テスト設計 → 実装コード生成",
+      "purpose": "テスト設計YAML と acceptance.md から、実装コード（API・Service・UI コンポーネント）を生成する",
+      "input_schema": {
+        "issue_id": "string",
+        "feature_title": "string",
+        "acceptance_criteria": "string (Given/When/Then format)",
+        "test_spec": "object (from spec_to_tests skill)",
+        "non_functional_requirements": {
+          "performance": "object (max_response_ms, etc)",
+          "security": ["string"],
+          "availability": "string"
+        }
+      },
+      "prompt_template": "You are an implementation code generator. Given acceptance criteria and test specification, generate production-ready implementation code:\n\n1. **API Layer** (Express/FastAPI format):\n   - Create endpoint matching acceptance criteria\n   - Add input validation based on UT cases\n   - Add error handling for failure scenarios\n   - Return appropriate HTTP status codes\n   - Add comments: /* generated from acceptance: Given/When/Then */\n\n2. **Service/Business Logic**:\n   - Extract from unit_tests what business logic is needed\n   - Implement each function referenced in UT\n   - Add proper error handling\n   - Include comments explaining complex logic\n\n3. **Data Models**:\n   - Define request/response schemas based on test inputs/outputs\n   - Add validation decorators (if framework supports)\n   - Include TypeScript types or JSDoc\n\n4. **Security Implementation**:\n   - Add input validation for all user inputs\n   - Hash passwords using bcrypt (never hardcode)\n   - Add CORS/CSRF protection if needed\n   - Sanitize error messages (no sensitive info leaked)\n\n5. **Output Format**:\n   {\n     \"implementation_files\": [\n       { \"path\": \"src/controllers/user.ts\", \"content\": \"...\" },\n       { \"path\": \"src/services/email.ts\", \"content\": \"...\" }\n     ]\n   }\n\n6. **Quality Rules**:\n   - Do NOT over-engineer; match test requirements exactly\n   - Add /* copilot-generated */ comments\n   - Do NOT hardcode secrets; use environment variables\n   - Ensure error handling matches test expectations\n\nGenerate clean, maintainable implementation code.",
+      "output_schema": {
+        "implementation_files": [
+          {
+            "path": "string",
+            "content": "string",
+            "generated_from": "string"
+          }
+        ]
+      }
+    },
+    "pr_metadata_adder": {
+      "name": "PR メタデータ挿入",
+      "purpose": "生成物の監査情報（ハッシュ、モデル情報、タイムスタンプ）を PR 本文に追加する",
+      "input_schema": {
+        "pr_body": "string (existing PR body)",
+        "trace_summary_hash": "string (SHA-256)",
+        "copilot_model": "string (e.g., claude-3.5-sonnet)",
+        "generated_at": "string (ISO 8601)",
+        "risk_level": "string (low|medium|high)",
+        "requires_human_approval": "boolean",
+        "generated_files": ["string"]
+      },
+      "prompt_template": "Append an 'Audit Metadata' section to the PR body. Ensure fields are machine-parseable (YAML format). Include:\n- trace_summary_hash\n- copilot_model\n- generated_at\n- risk_level\n- requires_human_approval\n- generated_files (list of files created/modified by Copilot)\n\nFormat as a code block for easy extraction.",
+      "output_schema": {
+        "pr_body_with_metadata": "string"
+      }
+    }
+  },
+  "rules": {
+    "output_consistency": {
+      "description": "全 skill の出力は必ずこの形式に従うこと",
+      "rules": [
+        "生成コードには /* copilot-generated */ コメントを必ず付与",
+        "PII（メール・IP・トークン）は絶対に含めない",
+        "生成物は必ず seed 値を使用し、hardcoded value を避ける",
+        "出力は JSON または Markdown 形式",
+        "エラーメッセージに機密情報を含めない"
+      ]
+    },
+    "quality_gates": {
+      "description": "生成物の品質ゲート",
+      "rules": [
+        "UT: テスト数 ≥ UT 設計の観点数",
+        "UT: カバレッジ ≥ 90%（対象モジュール）",
+        "E2E: すべてのステップが mock を使用",
+        "E2E: タイムアウト・リトライが明示",
+        "実装: TypeScript strict エラー 0",
+        "実装: SAST で脆弱性 0",
+        "PR: `requires_human_approval: false` のみ auto-merge 対象"
+      ]
+    },
+    "human_approval_required": [
+      "認証・認可・暗号化の実装",
+      "外部 API 統合",
+      "DB スキーマ変更",
+      "セキュリティ設定変更",
+      "コアアルゴリズム（AI が生成したものは参考に過ぎない）"
+    ],
+    "auto_merge_policy": {
+      "description": "自動マージ許可条件",
+      "allowed_changes": [
+        "ドキュメント修正（.md ファイル）",
+        "フォーマット修正（Prettier）",
+        "Lint 自動修正（ESLint --fix）",
+        "依存ライブラリの小バージョン更新（security patch）",
+        "テストコード追加（UT のみ）"
+      ],
+      "forbidden_changes": [
+        "実装コード変更（.ts/.js）",
+        "E2E テスト修正",
+        "セキュリティ・認証関連",
+        "外部 API 契約変更",
+        "DB スキーマ変更"
+      ]
+    }
+  },
+  "diagnostics": {
+    "failure_category_guide": {
+      "timeout": "タイムアウト - 待機時間不足またはシステムが遅い",
+      "network_error": "ネットワークエラー - 外部 API の失敗または接続不安定",
+      "element_not_found": "要素が見つからない - セレクタが間違っているか要素が遅延ロード",
+      "assertion_failure": "アサーション失敗 - 期待値と実際の値が不一致"
+    },
+    "fix_priority": {
+      "quick": "< 10 分で修正可能（セレクタ変更、タイムアウト増加）",
+      "medium": "10-30 分（mock の安定化、リトライロジック追加）",
+      "complex": "> 30 分（ロジック変更、API 再設計）"
+    }
+  }
+}
