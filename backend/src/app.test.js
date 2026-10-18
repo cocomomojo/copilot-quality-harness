@@ -147,3 +147,72 @@ describe('User Profile API', () => {
     expect(response.body).toMatchObject({ error: 'Internal Server Error' });
   });
 });
+
+// copilot-generated: Test endpoint for E2E tests
+describe('Test Seed Endpoint', () => {
+  let db;
+  let app;
+  afterEach(() => db?.close());
+
+  test('seeds user data successfully', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app)
+      .post('/api/test/seed-user')
+      .send({
+        id: 'test-user-1',
+        email: 'test@example.com',
+        name: 'Test User',
+        created_at: '2026-10-18T10:00:00Z'
+      });
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual({ success: true, message: 'User seeded successfully' });
+
+    // Verify user was created
+    const user = await request(app).get('/api/user/me');
+    expect(user.body).toMatchObject({
+      id: 'test-user-1',
+      email: 'test@example.com',
+      created_at: '2026-10-18T10:00:00Z'
+    });
+  });
+
+  test('rejects seed with missing fields', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app)
+      .post('/api/test/seed-user')
+      .send({
+        id: 'test-user-1',
+        email: 'test@example.com'
+      });
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBeDefined();
+  });
+
+  test('replaces existing user when seeding', async () => {
+    db = createDatabase(); app = createApp(db);
+    
+    // Seed first user
+    await request(app)
+      .post('/api/test/seed-user')
+      .send({
+        id: 'user-1',
+        email: 'first@example.com',
+        name: 'First User',
+        created_at: '2026-10-18T10:00:00Z'
+      });
+
+    // Seed second user (should replace first)
+    await request(app)
+      .post('/api/test/seed-user')
+      .send({
+        id: 'user-2',
+        email: 'second@example.com',
+        name: 'Second User',
+        created_at: '2026-10-19T10:00:00Z'
+      });
+
+    const response = await request(app).get('/api/user/me');
+    expect(response.body.id).toBe('user-2');
+    expect(response.body.email).toBe('second@example.com');
+  });
+});

@@ -34,5 +34,19 @@ export function createApp(db = createDatabase()) {
       return response.status(500).json({ error: 'Internal Server Error', message: 'Failed to fetch user profile' });
     }
   });
+  // copilot-generated: Test endpoint for seeding user data (E2E tests only)
+  app.post('/api/test/seed-user', (request, response) => {
+    try {
+      const { id, email, name, created_at } = request.body;
+      if (!id || !email || !name) {
+        return response.status(400).json({ error: 'Missing required fields: id, email, name' });
+      }
+      db.prepare('DELETE FROM users').run();
+      db.prepare('INSERT INTO users (id, email, name, created_at) VALUES (?, ?, ?, ?)').run(id, email, name, created_at);
+      return response.status(201).json({ success: true, message: 'User seeded successfully' });
+    } catch (error) {
+      return response.status(500).json({ error: 'Failed to seed user' });
+    }
+  });
   return app;
 }
