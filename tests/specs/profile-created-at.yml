@@ -1,0 +1,442 @@
+# テスト設計テンプレ - ユーザープロフィール画面 アカウント作成日表示
+# 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
+# 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
+# Issue: Closes cocomomojo/copilot-quality-harness#17
+
+test_spec:
+  # ============================================================
+  # 基本情報
+  # ============================================================
+  feature: "ユーザープロフィール画面 - アカウント作成日表示"
+  description: "ユーザーのマイページにおいて、アカウント作成日を表示する機能。正常系・エラー系の両方に対応"
+  component: "frontend/components/UserProfile"
+  requires_human_approval: false
+  # ⚠️  セキュリティ変更ではないため false に設定
+
+  # ============================================================
+  # ユニットテスト (UT) 定義
+  # ============================================================
+  ut:
+    - id: "UT-001"
+      title: "日付フォーマット: 正常系（ISO 8601 形式）"
+      category: "input_validation"
+      function: "formatAccountCreatedDate"
+      input:
+        createdAt: "2026-10-18T10:00:00Z"
+        locale: "ja-JP"
+      expected_output:
+        success: true
+        formatted_date: "2026年10月18日"
+      mock_dependencies: []
+
+    - id: "UT-002"
+      title: "日付フォーマット: 異なるタイムゾーン（UTC+9 日本標準時）"
+      category: "input_validation"
+      function: "formatAccountCreatedDate"
+      input:
+        createdAt: "2026-10-18T10:00:00Z"
+        locale: "ja-JP"
+        timezone: "Asia/Tokyo"
+      expected_output:
+        success: true
+        formatted_date: "2026年10月18日"
+      mock_dependencies: []
+
+    - id: "UT-003"
+      title: "日付フォーマット: 英語ロケール"
+      category: "input_validation"
+      function: "formatAccountCreatedDate"
+      input:
+        createdAt: "2026-10-18T10:00:00Z"
+        locale: "en-US"
+      expected_output:
+        success: true
+        formatted_date: "October 18, 2026"
+      mock_dependencies: []
+
+    - id: "UT-004"
+      title: "エラーハンドリング: null createdAt"
+      category: "error_handling"
+      function: "formatAccountCreatedDate"
+      input:
+        createdAt: null
+        locale: "ja-JP"
+      expected_output:
+        success: true
+        formatted_date: "-"
+      mock_dependencies: []
+
+    - id: "UT-005"
+      title: "エラーハンドリング: undefined createdAt"
+      category: "error_handling"
+      function: "formatAccountCreatedDate"
+      input:
+        createdAt: undefined
+        locale: "ja-JP"
+      expected_output:
+        success: true
+        formatted_date: "未設定"
+      mock_dependencies: []
+
+    - id: "UT-006"
+      title: "エラーハンドリング: 不正な日付形式"
+      category: "error_handling"
+      function: "formatAccountCreatedDate"
+      input:
+        createdAt: "invalid-date-string"
+        locale: "ja-JP"
+      expected_output:
+        success: true
+        formatted_date: "-"
+      mock_dependencies: []
+
+    - id: "UT-007"
+      title: "エラーハンドリング: 空文字列"
+      category: "error_handling"
+      function: "formatAccountCreatedDate"
+      input:
+        createdAt: ""
+        locale: "ja-JP"
+      expected_output:
+        success: true
+        formatted_date: "未設定"
+      mock_dependencies: []
+
+    - id: "UT-008"
+      title: "ユーザープロフィール取得: 正常系"
+      category: "business_logic"
+      function: "fetchUserProfile"
+      input:
+        userId: "user-123"
+      expected_output:
+        success: true
+        user_id: "user-123"
+        email: "testuser@example.com"
+        created_at: "2026-10-18T10:00:00Z"
+      mock_dependencies:
+        - name: "user_api"
+          behavior: "return_user_with_createdAt"
+
+    - id: "UT-009"
+      title: "ユーザープロフィール取得: createdAt なし（レガシー）"
+      category: "business_logic"
+      function: "fetchUserProfile"
+      input:
+        userId: "user-456"
+      expected_output:
+        success: true
+        user_id: "user-456"
+        email: "legacyuser@example.com"
+        created_at: null
+      mock_dependencies:
+        - name: "user_api"
+          behavior: "return_user_without_createdAt"
+
+    - id: "UT-010"
+      title: "ユーザープロフィール取得: API エラー"
+      category: "error_handling"
+      function: "fetchUserProfile"
+      input:
+        userId: "user-error"
+      expected_output:
+        success: false
+        error_code: "FETCH_USER_FAILED"
+        error_message: "ユーザープロフィール取得に失敗しました"
+      mock_dependencies:
+        - name: "user_api"
+          behavior: "return_error"
+
+  # ============================================================
+  # エンドツーエンドテスト (E2E) 定義
+  # ============================================================
+  e2e:
+    - id: "E2E-001"
+      title: "正常系: ログイン済みユーザーが有効な createdAt でプロフィール表示"
+      description: "シナリオ 1：ログイン済みのユーザーがプロフィール画面を表示したとき、アカウント作成日が正しく表示される"
+      priority: "critical"
+      preconditions:
+        - action: "seed_db"
+          data: "user_with_created_at.sql"
+          # createdAt: 2026-10-18T10:00:00Z のユーザーが存在する状態
+        - action: "login"
+          user_email: "testuser@example.com"
+          user_password: "TestPassword123!"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/profile"
+          expected:
+            - text_present: "プロフィール"
+            - text_present: "アカウント作成日"
+
+        - step_id: 2
+          action: "assert_text"
+          target: "2026年10月18日"
+          timeout_ms: 3000
+          expected:
+            - text_present: true
+
+        - step_id: 3
+          action: "assert_element_present"
+          selector: "[data-testid='account-created-at']"
+          expected:
+            - element_present: true
+            - element_visible: true
+
+        - step_id: 4
+          action: "assert_text"
+          target: "2026年10月18日"
+          selector: "[data-testid='account-created-at-value']"
+          expected:
+            - text_present: true
+
+    - id: "E2E-002"
+      title: "エラー系: createdAt が null の場合、フォールバック表示"
+      description: "シナリオ 2：アカウント作成日データが null または不正なとき、画面がクラッシュせず、「-」または「未設定」が表示される"
+      priority: "high"
+      preconditions:
+        - action: "seed_db"
+          data: "user_without_created_at.sql"
+          # createdAt が null のユーザーが存在する状態
+        - action: "login"
+          user_email: "legacyuser@example.com"
+          user_password: "TestPassword123!"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/profile"
+          expected:
+            - text_present: "プロフィール"
+            - text_present: "アカウント作成日"
+
+        - step_id: 2
+          action: "assert_element_present"
+          selector: "[data-testid='account-created-at']"
+          expected:
+            - element_present: true
+            - element_visible: true
+
+        - step_id: 3
+          action: "assert_text_match"
+          selector: "[data-testid='account-created-at-value']"
+          pattern: "^(-|未設定)$"
+          timeout_ms: 3000
+          expected:
+            - match_found: true
+
+    - id: "E2E-003"
+      title: "エラー系: API が 404 を返した場合、エラーハンドリング"
+      description: "ユーザープロフィール API が 404 を返した場合、エラーメッセージが表示される"
+      priority: "high"
+      preconditions:
+        - action: "mock_api"
+          endpoint: "GET /api/user/me"
+          status: 404
+          response:
+            error: "User not found"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/profile"
+          expected:
+            - http_status: 404
+
+        - step_id: 2
+          action: "assert_text"
+          target: "ユーザー情報を取得できません"
+          timeout_ms: 3000
+          expected:
+            - text_present: true
+
+    - id: "E2E-004"
+      title: "正常系: API から createdAt を取得して表示"
+      description: "API エンドポイント GET /api/user/me から createdAt を取得し、正しくフォーマットされて表示される"
+      priority: "critical"
+      steps:
+        - step_id: 1
+          action: "call_api"
+          method: "GET"
+          endpoint: "/api/user/me"
+          expected:
+            - http_status: 200
+            - response.created_at_type: "string"
+            - response.created_at_format: "ISO8601"
+
+        - step_id: 2
+          action: "navigate"
+          target: "http://localhost:3000/profile"
+          expected:
+            - text_present: "プロフィール"
+
+        - step_id: 3
+          action: "assert_text"
+          selector: "[data-testid='account-created-at-value']"
+          pattern: "\\d{4}年\\d{1,2}月\\d{1,2}日"
+          expected:
+            - match_found: true
+
+    - id: "E2E-005"
+      title: "エラー系: 不正な createdAt 形式での API レスポンス"
+      description: "API が不正な日付形式を返した場合、フォールバック表示される"
+      priority: "high"
+      preconditions:
+        - action: "mock_api"
+          endpoint: "GET /api/user/me"
+          status: 200
+          response:
+            id: "user-123"
+            email: "user@example.com"
+            created_at: "not-a-valid-date"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/profile"
+          expected:
+            - text_present: "プロフィール"
+
+        - step_id: 2
+          action: "assert_text_match"
+          selector: "[data-testid='account-created-at-value']"
+          pattern: "^(-|未設定)$"
+          expected:
+            - match_found: true
+
+  # ============================================================
+  # モック設定（E2E/UT 共通）
+  # ============================================================
+  mocks:
+    - name: "user_api"
+      endpoint: "GET /api/user/me"
+      description: "ユーザープロフィール取得 API のモック"
+      behaviors:
+        - name: "return_user_with_createdAt"
+          status: 200
+          response_template:
+            id: "user-123"
+            email: "testuser@example.com"
+            name: "Test User"
+            created_at: "{created_at_seed}"
+            updated_at: "{now}"
+
+        - name: "return_user_without_createdAt"
+          status: 200
+          response_template:
+            id: "user-456"
+            email: "legacyuser@example.com"
+            name: "Legacy User"
+            updated_at: "{now}"
+
+        - name: "return_error"
+          status: 500
+          response_template:
+            error: "Internal Server Error"
+            message: "Failed to fetch user profile"
+
+    - name: "auth_service"
+      endpoint: "POST /api/auth/login"
+      description: "ログイン API のモック"
+      behavior: "return_token_on_success"
+      response_template:
+        status: 200
+        body:
+          token: "jwt_token_{uuid}"
+          user_id: "{user_id}"
+
+  # ============================================================
+  # シード値（再現性確保用）
+  # ============================================================
+  seeds:
+    - name: "base_seed"
+      value: 20261018
+      description: "基本シード値（テストデータ生成用）"
+    - name: "created_at_seed"
+      value: "2026-10-18T10:00:00Z"
+      description: "固定のアカウント作成日（テスト再現性確保用）"
+      # この値は受け入れ基準 Scenario 1 に合わせた固定値
+    - name: "user_id_seed"
+      value: "user-123"
+      description: "テストユーザー ID の基本シード"
+
+  # ============================================================
+  # 環境変数・設定
+  # ============================================================
+  environment:
+    API_BASE_URL: "http://localhost:3000"
+    DEFAULT_LOCALE: "ja-JP"
+    DEFAULT_TIMEZONE: "Asia/Tokyo"
+    DATE_FORMAT_PATTERN: "YYYY年M月D日"
+    FALLBACK_DATE_DISPLAY: "-"
+    FALLBACK_UNDEFINED_DATE_DISPLAY: "未設定"
+    MOCK_USER_SERVICE: "true"
+    TEST_DB_URL: "sqlite:///:memory:"
+
+  # ============================================================
+  # UT カバレッジ要件
+  # ============================================================
+  coverage_requirements:
+    - component: "frontend/components/UserProfile"
+      target_percentage: 90
+      critical_paths:
+        - "formatAccountCreatedDate"
+        - "fetchUserProfile"
+        - "handleDateFormatting"
+        - "renderProfileSection"
+
+    - component: "frontend/utils/dateFormatter"
+      target_percentage: 95
+      critical_paths:
+        - "formatDate"
+        - "isValidDate"
+        - "handleNullDate"
+
+  # ============================================================
+  # パフォーマンス要件
+  # ============================================================
+  performance:
+    - metric: "date_formatting_time_ms"
+      target: 5
+      description: "日付フォーマット処理時間（< 5ms）"
+    - metric: "profile_api_response_time_ms"
+      target: 200
+      description: "プロフィール API レスポンス時間（< 200ms）"
+    - metric: "e2e_test_time_s"
+      target: 30
+      description: "E2E テスト実行時間（< 30s）"
+
+  # ============================================================
+  # 実行時オプション
+  # ============================================================
+  execution:
+    timeout_ms: 30000
+    retry_on_flake:
+      enabled: true
+      max_attempts: 3
+      backoff_ms: 1000
+    parallel_execution:
+      enabled: true
+      max_workers: 4
+    failure_mode: "fast_fail" # 最初の失敗で中断
+
+  # ============================================================
+  # 関連ドキュメント
+  # ============================================================
+  references:
+    - ".github/ISSUE_TEMPLATE/feature.yml"
+    - "CONTRIBUTING.md"
+    - "QA_POLICY.md"
+    - "README.md"
+
+  # ============================================================
+  # 備考（Copilot 用）
+  # ============================================================
+  notes: |
+    - E2E テストは必ずモック環境で実行してください（実 API 非依存）
+    - シード値の `created_at_seed` は再現性確保のため、受け入れ基準の固定値（2026-10-18T10:00:00Z）を使用
+    - テスト実行時の基準時刻は固定シード値を使用し、タイムゾーン変換をテスト
+    - テスト後は自動で DB がロールバックされます
+    - trace は自動で PII フィルタを通されます
+    - 日付フォーマットは以下の仕様に従う:
+      * 日本語ロケール (ja-JP): "YYYY年M月D日" （例: 2026年10月18日）
+      * 英語ロケール (en-US): "MMMM D, YYYY" （例: October 18, 2026）
+    - null/undefined/不正形式の createdAt に対しては適切なフォールバック表示を実施
+    - API レスポンスの createdAt フィールドは ISO 8601 形式（YYYY-MM-DDTHH:mm:ssZ）に統一
