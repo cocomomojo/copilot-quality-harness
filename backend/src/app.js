@@ -1,5 +1,6 @@
 import express from 'express';
 import { createDatabase } from './db.js';
+import { isValidURL } from './utils/validators.js';
 
 export function createApp(db = createDatabase()) {
   const app = express();
@@ -14,6 +15,12 @@ export function createApp(db = createDatabase()) {
     if (!name || name.length > 120) return response.status(400).json({ error: 'name must be between 1 and 120 characters' });
     const result = db.prepare('INSERT INTO checks (name) VALUES (?)').run(name);
     return response.status(201).json(db.prepare('SELECT id, name, status, created_at AS createdAt FROM checks WHERE id = ?').get(result.lastInsertRowid));
+  });
+  // copilot-generated: URL validator endpoint
+  app.post('/api/validators/check-url', (request, response) => {
+    const url = request.body?.url;
+    const result = isValidURL(url);
+    return response.status(200).json(result);
   });
   return app;
 }

@@ -1,0 +1,244 @@
+# テスト設計テンプレ - URL フォーマット検証
+# 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
+# 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
+
+test_spec:
+  # ============================================================
+  # 基本情報
+  # ============================================================
+  feature: "URL フォーマット検証"
+  description: "URL が正しい形式（http/https）かを検証する関数"
+  component: "utils/validators"
+  requires_human_approval: false
+  # ⚠️  セキュリティ変更ではないため false に設定
+
+  # ============================================================
+  # ユニットテスト (UT) 定義
+  # ============================================================
+  ut:
+    - id: "UT-001"
+      title: "正常系: HTTPS URL（GitHub リポジトリ）"
+      category: "input_validation"
+      function: "isValidURL"
+      input:
+        url: "https://github.com/cocomomojo/copilot-quality-harness"
+      expected_output:
+        success: true
+        valid: true
+      mock_dependencies: []
+
+    - id: "UT-002"
+      title: "正常系: HTTP URL（シンプルなドメイン）"
+      category: "input_validation"
+      function: "isValidURL"
+      input:
+        url: "http://example.com"
+      expected_output:
+        success: true
+        valid: true
+      mock_dependencies: []
+
+    - id: "UT-003"
+      title: "失敗系: フォーマット不正（プロトコルなし）"
+      category: "input_validation"
+      function: "isValidURL"
+      input:
+        url: "not-a-valid-url"
+      expected_output:
+        success: true
+        valid: false
+        error: "Invalid URL format"
+      mock_dependencies: []
+
+    - id: "UT-004"
+      title: "失敗系: 空文字列"
+      category: "input_validation"
+      function: "isValidURL"
+      input:
+        url: ""
+      expected_output:
+        success: true
+        valid: false
+        error: "URL cannot be empty"
+      mock_dependencies: []
+
+    - id: "UT-005"
+      title: "失敗系: null 入力"
+      category: "input_validation"
+      function: "isValidURL"
+      input:
+        url: null
+      expected_output:
+        success: true
+        valid: false
+        error: "URL cannot be empty"
+      mock_dependencies: []
+
+    - id: "UT-006"
+      title: "失敗系: FTP プロトコル（許可されていない）"
+      category: "input_validation"
+      function: "isValidURL"
+      input:
+        url: "ftp://files.example.com/file.txt"
+      expected_output:
+        success: true
+        valid: false
+        error: "Invalid URL format"
+      mock_dependencies: []
+
+    - id: "UT-007"
+      title: "失敗系: URL 長が 2048 文字を超過"
+      category: "input_validation"
+      function: "isValidURL"
+      input:
+        url: "https://example.com/{超長い文字列-2049文字以上}"
+      expected_output:
+        success: true
+        valid: false
+        error: "Invalid URL format"
+      mock_dependencies: []
+
+  # ============================================================
+  # エンドツーエンドテスト (E2E) 定義
+  # ============================================================
+  e2e:
+    - id: "E2E-001"
+      title: "正常系: 有効な HTTPS URL をチェック"
+      description: "/api/validators/check-url エンドポイントで有効な URL を検証"
+      priority: "critical"
+      steps:
+        - step_id: 1
+          action: "call_api"
+          method: "POST"
+          endpoint: "/api/validators/check-url"
+          request_body:
+            url: "https://example.com"
+          expected:
+            - http_status: 200
+            - response.valid: true
+
+    - id: "E2E-002"
+      title: "エラー系: 不正な URL フォーマット"
+      description: "/api/validators/check-url エンドポイントで不正な URL を検証"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "call_api"
+          method: "POST"
+          endpoint: "/api/validators/check-url"
+          request_body:
+            url: "not-a-valid-url"
+          expected:
+            - http_status: 200
+            - response.valid: false
+            - response.error: "Invalid URL format"
+
+    - id: "E2E-003"
+      title: "エラー系: 空文字列入力"
+      description: "/api/validators/check-url エンドポイントで空文字列を検証"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "call_api"
+          method: "POST"
+          endpoint: "/api/validators/check-url"
+          request_body:
+            url: ""
+          expected:
+            - http_status: 200
+            - response.valid: false
+            - response.error: "URL cannot be empty"
+
+    - id: "E2E-004"
+      title: "エラー系: null 入力"
+      description: "/api/validators/check-url エンドポイントで null を検証"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "call_api"
+          method: "POST"
+          endpoint: "/api/validators/check-url"
+          request_body:
+            url: null
+          expected:
+            - http_status: 200
+            - response.valid: false
+            - response.error: "URL cannot be empty"
+
+  # ============================================================
+  # モック設定（E2E/UT 共通）
+  # ============================================================
+  mocks:
+    external_http_calls: false
+    # URL フォーマット検証のみ。DNS や外部 HTTP リクエストは不要
+
+  # ============================================================
+  # シード値（再現性確保用）
+  # ============================================================
+  seeds:
+    - name: "base_seed"
+      value: 54321
+      description: "基本シード値（テストデータ生成用）"
+
+  # ============================================================
+  # 環境変数・設定
+  # ============================================================
+  environment:
+    API_BASE_URL: "http://localhost:3000"
+    URL_MAX_LENGTH: 2048
+    ALLOWED_PROTOCOLS: "http,https"
+
+  # ============================================================
+  # UT カバレッジ要件
+  # ============================================================
+  coverage_requirements:
+    - component: "utils/validators"
+      target_percentage: 90
+      critical_paths:
+        - "isValidURL"
+
+  # ============================================================
+  # パフォーマンス要件
+  # ============================================================
+  performance:
+    - metric: "validation_time_ms"
+      target: 10
+      description: "URL バリデーション処理時間（< 10ms）"
+    - metric: "api_response_time_ms"
+      target: 100
+      description: "API レスポンス時間（< 100ms）"
+    - metric: "e2e_test_time_s"
+      target: 30
+      description: "E2E テスト実行時間（< 30s）"
+
+  # ============================================================
+  # 実行時オプション
+  # ============================================================
+  execution:
+    timeout_ms: 30000
+    retry_on_flake:
+      enabled: true
+      max_attempts: 3
+      backoff_ms: 1000
+    parallel_execution:
+      enabled: true
+      max_workers: 4
+    failure_mode: "fast_fail" # 最初の失敗で中断
+
+  # ============================================================
+  # 関連ドキュメント
+  # ============================================================
+  references:
+    - "CONTRIBUTING.md"
+    - "QA_POLICY.md"
+
+  # ============================================================
+  # 備考（Copilot 用）
+  # ============================================================
+  notes: |
+    - E2E テストは必ずモック環境で実行してください（外部 HTTP リクエスト非依存）
+    - seed 値は reproducible な生成に使われます
+    - テスト後は自動で DB がロールバックされます
+    - trace は自動で PII フィルタを通されます
+    - URL 長制限は 2048 文字（RFC 3986）
+    - プロトコル制限は http/https のみ
