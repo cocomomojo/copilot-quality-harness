@@ -3,7 +3,9 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('User Profile - Account Created At Display (E2E)', () => {
-  const apiUrl = 'http://localhost:3000';
+  // Use environment variables with fallback to default values
+  // Can be configured via: BACKEND_API_URL=http://custom-host:3000 npm run test:e2e
+  const apiUrl = process.env.BACKEND_API_URL || 'http://127.0.0.1:3000';
 
   // E2E-001: Normal case - logged-in user with valid createdAt
   test('E2E-001: Display profile with valid createdAt', async ({ page, request }) => {
@@ -19,8 +21,8 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
       // Endpoint might not exist, continue with test
     });
 
-    // Navigate to profile page
-    await page.goto(`${apiUrl}/profile`);
+    // Navigate to profile page (uses baseURL from playwright.config.js)
+    await page.goto('/profile');
 
     // Verify page title and headings
     await expect(page.getByRole('heading', { name: /プロフィール/i })).toBeVisible();
@@ -52,8 +54,8 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
       // Endpoint might not exist, continue with test
     });
 
-    // Navigate to profile page
-    await page.goto(`${apiUrl}/profile`);
+    // Navigate to profile page (uses baseURL from playwright.config.js)
+    await page.goto('/profile');
 
     // Verify page displays
     await expect(page.getByRole('heading', { name: /プロフィール/i })).toBeVisible();
@@ -71,8 +73,8 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
 
   // E2E-003: Error case - API returns 404
   test('E2E-003: Handle 404 API error', async ({ page }) => {
-    // Navigate to profile page without user data
-    await page.goto(`${apiUrl}/profile`);
+    // Navigate to profile page without user data (uses baseURL from playwright.config.js)
+    await page.goto('/profile');
 
     // Verify error message is displayed
     await expect(page.locator('[role="alert"]')).toBeVisible({ timeout: 3000 });
@@ -95,8 +97,8 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
       }
     }
 
-    // Step 2 & 3: Navigate to profile and verify date format
-    await page.goto(`${apiUrl}/profile`);
+    // Step 2 & 3: Navigate to profile and verify date format (uses baseURL from playwright.config.js)
+    await page.goto('/profile');
     
     // Verify profile page
     const heading = page.getByRole('heading', { name: /プロフィール/i });
@@ -124,8 +126,8 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
       // Endpoint might not exist, continue with test
     });
 
-    // Navigate to profile
-    await page.goto(`${apiUrl}/profile`);
+    // Navigate to profile (uses baseURL from playwright.config.js)
+    await page.goto('/profile');
 
     // Verify page displays
     const heading = page.getByRole('heading', { name: /プロフィール/i });
@@ -149,8 +151,8 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
       }
     }).catch(() => {});
 
-    // Navigate
-    await page.goto(`${apiUrl}/profile`);
+    // Navigate (uses baseURL from playwright.config.js)
+    await page.goto('/profile');
 
     // Verify main structure
     const main = page.locator('main');
@@ -172,8 +174,8 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
       }
     }).catch(() => {});
 
-    // Navigate and verify
-    await page.goto(`${apiUrl}/profile`);
+    // Navigate and verify (uses baseURL from playwright.config.js)
+    await page.goto('/profile');
 
     const createdAtValue = page.locator('[data-testid="account-created-at-value"]');
     

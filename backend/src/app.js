@@ -23,12 +23,14 @@ export function createApp(db = createDatabase()) {
     return response.status(200).json(result);
   });
   // copilot-generated: User profile endpoint
-  // Note: This endpoint currently returns the most recent user in the database.
+  // ⚠️  SECURITY WARNING: This endpoint returns user data without authentication verification.
+  // This is acceptable ONLY in a development/test harness running locally or in isolated test environments.
+  // DO NOT expose this endpoint to the internet without authentication.
   // In a production system, this should:
-  // 1. Implement proper authentication (JWT, session, etc.)
-  // 2. Verify the authenticated user's identity from the request context
-  // 3. Return only that authenticated user's profile
-  // 4. Include rate limiting to prevent abuse
+  // 1. Verify the authenticated user's identity (JWT, session cookie, etc.)
+  // 2. Return only the authenticated user's own profile (not any user in the database)
+  // 3. Include rate limiting to prevent abuse
+  // 4. Use HTTPS and secure session management
   app.get('/api/user/me', (request, response) => {
     try {
       const user = db.prepare('SELECT id, email, name, created_at, updated_at FROM users ORDER BY rowid DESC LIMIT 1').get();
@@ -41,7 +43,9 @@ export function createApp(db = createDatabase()) {
     }
   });
   // copilot-generated: Test endpoint for seeding user data (E2E tests only)
-  // Only available in development and test environments
+  // ⚠️  CRITICAL: This endpoint is ONLY available in non-production environments and should NEVER be exposed to the internet.
+  // It allows resetting and reinitializing the entire user database, which is essential for test reproducibility.
+  // The NODE_ENV check ensures it's not registered in production environments.
   if (process.env.NODE_ENV !== 'production') {
     app.post('/api/test/seed-user', (request, response) => {
       try {

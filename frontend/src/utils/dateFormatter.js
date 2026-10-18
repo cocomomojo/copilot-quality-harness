@@ -71,7 +71,8 @@ export function formatAccountCreatedDate(createdAt, locale = 'ja-JP', timezone =
     // Default fallback to ISO string
     return { success: true, formatted_date: createdAt };
   } catch (error) {
-    return { success: true, formatted_date: '-' };
+    // Return error if date formatting fails
+    return { success: false, formatted_date: '-' };
   }
 }
 
