@@ -30,3 +30,64 @@ describe('checks API', () => {
     expect(response.status).toBe(400);
   });
 });
+
+// copilot-generated: URL Validator API tests
+describe('URL Validator API', () => {
+  let db;
+  let app;
+  afterEach(() => db?.close());
+
+  test('validates a valid HTTPS URL', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app)
+      .post('/api/validators/check-url')
+      .send({ url: 'https://example.com' });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ valid: true });
+  });
+
+  test('validates a valid HTTP URL', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app)
+      .post('/api/validators/check-url')
+      .send({ url: 'http://localhost:3000/api/health' });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ valid: true });
+  });
+
+  test('rejects an invalid URL format', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app)
+      .post('/api/validators/check-url')
+      .send({ url: 'not-a-valid-url' });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ valid: false, error: 'Invalid URL format' });
+  });
+
+  test('rejects an empty URL', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app)
+      .post('/api/validators/check-url')
+      .send({ url: '' });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ valid: false, error: 'URL cannot be empty' });
+  });
+
+  test('rejects a null URL', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app)
+      .post('/api/validators/check-url')
+      .send({ url: null });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ valid: false, error: 'URL cannot be empty' });
+  });
+
+  test('rejects FTP protocol', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app)
+      .post('/api/validators/check-url')
+      .send({ url: 'ftp://files.example.com/file.txt' });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ valid: false, error: 'Invalid URL format' });
+  });
+});
