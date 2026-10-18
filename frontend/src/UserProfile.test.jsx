@@ -132,7 +132,7 @@ describe('UserProfile Component', () => {
 
       await waitFor(() => {
         expect(screen.getByRole('alert')).toBeInTheDocument();
-        expect(screen.getByText('ユーザー情報を取得できません')).toBeInTheDocument();
+        expect(screen.getByText('ユーザープロフィール取得に失敗しました')).toBeInTheDocument();
       });
     });
 

@@ -19,7 +19,7 @@ export function isValidDate(dateString) {
  * @returns {boolean} - True if the date is null/undefined
  */
 function handleNullDate(createdAt) {
-  return createdAt === null || createdAt === undefined || createdAt === '';
+  return createdAt === null || createdAt === undefined;
 }
 
 /**
@@ -31,7 +31,7 @@ function handleNullDate(createdAt) {
  */
 export function formatAccountCreatedDate(createdAt, locale = 'ja-JP', timezone = 'Asia/Tokyo') {
   try {
-    // Handle null, undefined, empty string
+    // Handle null/undefined first
     if (handleNullDate(createdAt)) {
       if (createdAt === undefined) {
         return { success: true, formatted_date: '未設定' };
@@ -39,7 +39,7 @@ export function formatAccountCreatedDate(createdAt, locale = 'ja-JP', timezone =
       return { success: true, formatted_date: '-' };
     }
 
-    // Handle empty string separately
+    // Handle empty string
     if (createdAt === '') {
       return { success: true, formatted_date: '未設定' };
     }
