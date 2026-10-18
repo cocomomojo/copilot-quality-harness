@@ -23,9 +23,15 @@ export function createApp(db = createDatabase()) {
     return response.status(200).json(result);
   });
   // copilot-generated: User profile endpoint
+  // Note: This endpoint currently returns the most recent user in the database.
+  // In a production system, this should:
+  // 1. Implement proper authentication (JWT, session, etc.)
+  // 2. Verify the authenticated user's identity from the request context
+  // 3. Return only that authenticated user's profile
+  // 4. Include rate limiting to prevent abuse
   app.get('/api/user/me', (request, response) => {
     try {
-      const user = db.prepare('SELECT id, email, name, created_at AS created_at, updated_at FROM users ORDER BY id DESC LIMIT 1').get();
+      const user = db.prepare('SELECT id, email, name, created_at, updated_at FROM users ORDER BY rowid DESC LIMIT 1').get();
       if (!user) {
         return response.status(404).json({ error: 'User not found' });
       }

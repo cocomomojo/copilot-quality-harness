@@ -83,9 +83,6 @@ export async function fetchUserProfile() {
   try {
     const response = await fetch('/api/user/me');
     if (!response.ok) {
-      if (response.status === 404) {
-        return { success: false, error_code: 'USER_NOT_FOUND', error_message: 'User not found' };
-      }
       return { success: false, error_code: 'FETCH_USER_FAILED', error_message: 'ユーザープロフィール取得に失敗しました' };
     }
     const data = await response.json();

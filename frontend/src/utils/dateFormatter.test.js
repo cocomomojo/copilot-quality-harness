@@ -154,6 +154,19 @@ describe('dateFormatter utility', () => {
       expect(result.error_message).toBe('ユーザープロフィール取得に失敗しました');
     });
 
+    test('returns error for 404 Not Found', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        json: async () => ({ error: 'User not found' })
+      });
+
+      const result = await fetchUserProfile();
+      expect(result.success).toBe(false);
+      expect(result.error_code).toBe('FETCH_USER_FAILED');
+      expect(result.error_message).toBe('ユーザープロフィール取得に失敗しました');
+    });
+
     test('returns error when fetch throws exception', async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
