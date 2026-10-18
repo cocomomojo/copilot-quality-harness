@@ -91,3 +91,59 @@ describe('URL Validator API', () => {
     expect(response.body).toEqual({ valid: false, error: 'Invalid URL format' });
   });
 });
+
+// copilot-generated: User Profile API tests
+describe('User Profile API', () => {
+  let db;
+  let app;
+  afterEach(() => db?.close());
+
+  test('UT-008: fetches user profile with createdAt successfully', async () => {
+    db = createDatabase(); app = createApp(db);
+    db.prepare('INSERT INTO users (id, email, name, created_at) VALUES (?, ?, ?, ?)').run(
+      'user-123',
+      'testuser@example.com',
+      'Test User',
+      '2026-10-18T10:00:00Z'
+    );
+    const response = await request(app).get('/api/user/me');
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({
+      id: 'user-123',
+      email: 'testuser@example.com',
+      created_at: '2026-10-18T10:00:00Z'
+    });
+  });
+
+  test('UT-009: fetches user profile without createdAt (legacy)', async () => {
+    db = createDatabase(); app = createApp(db);
+    db.prepare('INSERT INTO users (id, email, name, created_at) VALUES (?, ?, ?, ?)').run(
+      'user-456',
+      'legacyuser@example.com',
+      'Legacy User',
+      null
+    );
+    const response = await request(app).get('/api/user/me');
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({
+      id: 'user-456',
+      email: 'legacyuser@example.com',
+      created_at: null
+    });
+  });
+
+  test('UT-010: returns error when user is not found', async () => {
+    db = createDatabase(); app = createApp(db);
+    const response = await request(app).get('/api/user/me');
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: 'User not found' });
+  });
+
+  test('UT-010: returns error on API failure', async () => {
+    db = createDatabase(); app = createApp(db);
+    db.close();
+    const response = await request(app).get('/api/user/me');
+    expect(response.status).toBe(500);
+    expect(response.body).toMatchObject({ error: 'Internal Server Error' });
+  });
+});

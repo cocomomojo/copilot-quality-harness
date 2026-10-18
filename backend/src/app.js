@@ -22,5 +22,17 @@ export function createApp(db = createDatabase()) {
     const result = isValidURL(url);
     return response.status(200).json(result);
   });
+  // copilot-generated: User profile endpoint
+  app.get('/api/user/me', (request, response) => {
+    try {
+      const user = db.prepare('SELECT id, email, name, created_at AS created_at, updated_at FROM users ORDER BY id DESC LIMIT 1').get();
+      if (!user) {
+        return response.status(404).json({ error: 'User not found' });
+      }
+      return response.status(200).json(user);
+    } catch (error) {
+      return response.status(500).json({ error: 'Internal Server Error', message: 'Failed to fetch user profile' });
+    }
+  });
   return app;
 }
