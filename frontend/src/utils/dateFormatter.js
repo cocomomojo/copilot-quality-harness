@@ -51,17 +51,20 @@ export function formatAccountCreatedDate(createdAt, locale = 'ja-JP', timezone =
 
     const date = new Date(createdAt);
 
-    // Format based on locale
+    // Use Intl.DateTimeFormat for both locales to respect timezone parameter
     if (locale === 'ja-JP') {
       // Japanese format: YYYY年M月D日
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
+      const options = { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: timezone };
+      const formatter = new Intl.DateTimeFormat('ja-JP', options);
+      const parts = formatter.formatToParts(date);
+      const year = parts.find(p => p.type === 'year')?.value || '';
+      const month = parts.find(p => p.type === 'month')?.value || '';
+      const day = parts.find(p => p.type === 'day')?.value || '';
       return { success: true, formatted_date: `${year}年${month}月${day}日` };
     } else if (locale === 'en-US') {
       // English format: Month D, YYYY (e.g., October 18, 2026)
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      const formatter = new Intl.DateTimeFormat(locale, options);
+      const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: timezone };
+      const formatter = new Intl.DateTimeFormat('en-US', options);
       return { success: true, formatted_date: formatter.format(date) };
     }
 
@@ -74,10 +77,9 @@ export function formatAccountCreatedDate(createdAt, locale = 'ja-JP', timezone =
 
 /**
  * Fetches user profile from the API
- * @param {string} userId - The user ID
  * @returns {Promise<Object>} - User profile data or error
  */
-export async function fetchUserProfile(userId) {
+export async function fetchUserProfile() {
   try {
     const response = await fetch('/api/user/me');
     if (!response.ok) {

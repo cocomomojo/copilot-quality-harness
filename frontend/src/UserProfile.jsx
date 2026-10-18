@@ -14,7 +14,7 @@ export default function UserProfile() {
       try {
         setLoading(true);
         setError('');
-        const profile = await fetchUserProfile('current');
+        const profile = await fetchUserProfile();
         
         if (!profile.success) {
           setError(profile.error_message);
@@ -28,7 +28,7 @@ export default function UserProfile() {
         const formatted = formatAccountCreatedDate(profile.created_at, 'ja-JP', 'Asia/Tokyo');
         setFormattedDate(formatted.formatted_date);
       } catch (err) {
-        setError('ユーザー情報を取得できません');
+        setError('ユーザープロフィール取得に失敗しました');
       } finally {
         setLoading(false);
       }

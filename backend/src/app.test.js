@@ -139,7 +139,7 @@ describe('User Profile API', () => {
     expect(response.body).toEqual({ error: 'User not found' });
   });
 
-  test('UT-010: returns error on API failure', async () => {
+  test('UT-011: returns error on API failure', async () => {
     db = createDatabase(); app = createApp(db);
     db.close();
     const response = await request(app).get('/api/user/me');
