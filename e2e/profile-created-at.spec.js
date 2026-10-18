@@ -76,7 +76,8 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
 
     // Verify error message is displayed
     await expect(page.locator('[role="alert"]')).toBeVisible({ timeout: 3000 });
-    await expect(page.getByText(/ユーザー情報を取得できません/i)).toBeVisible();
+    // The error message should be from fetchUserProfile's 404 handling
+    await expect(page.getByText(/ユーザープロフィール取得に失敗しました/i)).toBeVisible();
   });
 
   // E2E-004: Normal case - fetch and display from API

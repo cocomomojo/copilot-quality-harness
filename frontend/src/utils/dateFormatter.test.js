@@ -108,7 +108,7 @@ describe('dateFormatter utility', () => {
         })
       });
 
-      const result = await fetchUserProfile('user-123');
+      const result = await fetchUserProfile();
       expect(result.success).toBe(true);
       expect(result.user_id).toBe('user-123');
       expect(result.email).toBe('testuser@example.com');
@@ -128,7 +128,7 @@ describe('dateFormatter utility', () => {
         })
       });
 
-      const result = await fetchUserProfile('user-456');
+      const result = await fetchUserProfile();
       expect(result.success).toBe(true);
       expect(result.user_id).toBe('user-456');
       expect(result.email).toBe('legacyuser@example.com');
@@ -148,7 +148,7 @@ describe('dateFormatter utility', () => {
         })
       });
 
-      const result = await fetchUserProfile('user-error');
+      const result = await fetchUserProfile();
       expect(result.success).toBe(false);
       expect(result.error_code).toBe('FETCH_USER_FAILED');
       expect(result.error_message).toBe('ユーザープロフィール取得に失敗しました');
@@ -157,7 +157,7 @@ describe('dateFormatter utility', () => {
     test('returns error when fetch throws exception', async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
-      const result = await fetchUserProfile('user-error');
+      const result = await fetchUserProfile();
       expect(result.success).toBe(false);
       expect(result.error_code).toBe('FETCH_USER_FAILED');
       expect(result.error_message).toBe('ユーザープロフィール取得に失敗しました');
