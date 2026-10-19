@@ -220,6 +220,11 @@ async function generateDashboard(config) {
       color: #721c24;
     }
 
+    .status-warn {
+      background: #fff3cd;
+      color: #856404;
+    }
+
     .footer {
       background: white;
       padding: 20px;
@@ -541,13 +546,6 @@ async function generateDashboard(config) {
       tbody.innerHTML = '';
       // Add up to 5 sample rows
       const rowCount = Math.min(5, data.passRateTrend.length, data.coverageTrend.length);
-      const rankMap = {
-        'A': 'rank-a',
-        'B': 'rank-b',
-        'C': 'rank-c',
-        'D': 'rank-d',
-        'E': 'rank-e'
-      };
       const statusMap = {
         'A': 'status-pass',
         'B': 'status-pass',
