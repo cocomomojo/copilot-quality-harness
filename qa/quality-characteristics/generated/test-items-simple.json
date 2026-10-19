@@ -1,0 +1,313 @@
+{
+  "schemaVersion": 1,
+  "mode": "simple",
+  "generatedAt": "2026-10-19T12:02:58.950Z",
+  "testItems": [
+    {
+      "id": "FS-001",
+      "characteristic_id": "functional-suitability",
+      "perspective": "happy-path-testing",
+      "description": "正常系: 正常な入力で正しく機能することを確認",
+      "test_condition": "正常な入力データを提供",
+      "expected_result": "システムが期待通りの結果を返す",
+      "acceptance_criteria": "結果が仕様書の期待値と一致すること"
+    },
+    {
+      "id": "FS-002",
+      "characteristic_id": "functional-suitability",
+      "perspective": "boundary-value-testing",
+      "description": "境界値: 最小値・最大値で正しく機能することを確認",
+      "test_condition": "最小値および最大値の入力を提供",
+      "expected_result": "システムが正しく処理する",
+      "acceptance_criteria": "最小値・最大値両方で期待通りの結果を返すこと"
+    },
+    {
+      "id": "FS-003",
+      "characteristic_id": "functional-suitability",
+      "perspective": "input-validation",
+      "description": "入力検証: 無効な入力を適切に処理",
+      "test_condition": "型が間違った、負の値など無効な入力を提供",
+      "expected_result": "システムがエラーを返す",
+      "acceptance_criteria": "エラーメッセージが明確で、ユーザーが修正できるハント を含むこと"
+    },
+    {
+      "id": "FS-004",
+      "characteristic_id": "functional-suitability",
+      "perspective": "error-handling",
+      "description": "エラー処理: エラーが発生した時に適切に処理",
+      "test_condition": "システムにエラー条件を引き起こす",
+      "expected_result": "システムがエラーを適切に処理する",
+      "acceptance_criteria": "エラーハンドリングがログに記録され、ユーザーに通知されること"
+    },
+    {
+      "id": "FS-005",
+      "characteristic_id": "functional-suitability",
+      "perspective": "feature-completeness",
+      "description": "完全性: 仕様書に記載されたすべての機能が実装されているか",
+      "test_condition": "仕様書のすべての要件を確認",
+      "expected_result": "すべての要件が実装されている",
+      "acceptance_criteria": "トレーサビリティマトリクスですべての要件がカバーされていること"
+    },
+    {
+      "id": "FS-006",
+      "characteristic_id": "functional-suitability",
+      "perspective": "data-integrity",
+      "description": "データ整合性: データが保存・取得時に破損しないこと",
+      "test_condition": "データを保存してから取得する",
+      "expected_result": "取得したデータが保存したデータと一致する",
+      "acceptance_criteria": "バイト単位で完全に一致すること"
+    },
+    {
+      "id": "PE-001",
+      "characteristic_id": "performance-efficiency",
+      "perspective": "response-time-testing",
+      "description": "応答時間: API応答が要件の時間内に完了する",
+      "test_condition": "標準的な負荷下でAPI呼び出しを実行",
+      "expected_result": "API応答時間が要件値以下である",
+      "acceptance_criteria": "P95応答時間が定義された閾値以下であること（例: 200ms）"
+    },
+    {
+      "id": "PE-002",
+      "characteristic_id": "performance-efficiency",
+      "perspective": "load-testing",
+      "description": "負荷試験: 予期された最大負荷で正常に動作",
+      "test_condition": "同時ユーザー数100の負荷を加える",
+      "expected_result": "システムが安定して動作する",
+      "acceptance_criteria": "エラー率が1%未満であり、応答時間が要件内であること"
+    },
+    {
+      "id": "PE-003",
+      "characteristic_id": "performance-efficiency",
+      "perspective": "memory-profiling",
+      "description": "メモリ使用量: メモリリークがなく効率的に利用",
+      "test_condition": "長時間連続操作を実行してメモリを監視",
+      "expected_result": "メモリ使用量が安定している",
+      "acceptance_criteria": "メモリ使用量が線形に増加しないこと"
+    },
+    {
+      "id": "PE-004",
+      "characteristic_id": "performance-efficiency",
+      "perspective": "cpu-profiling",
+      "description": "CPU効率: CPU使用率が適切な範囲内",
+      "test_condition": "標準的な操作を実行してCPU使用率を測定",
+      "expected_result": "CPU使用率が予期された範囲内である",
+      "acceptance_criteria": "CPU使用率がピーク時でも80%以下であること"
+    },
+    {
+      "id": "PE-005",
+      "characteristic_id": "performance-efficiency",
+      "perspective": "throughput-testing",
+      "description": "スループット: 単位時間あたりの処理数が要件を満たす",
+      "test_condition": "1時間の連続操作で処理数を測定",
+      "expected_result": "スループットが要件以上である",
+      "acceptance_criteria": "最小スループットが定義値以上であること"
+    },
+    {
+      "id": "C-001",
+      "characteristic_id": "compatibility",
+      "perspective": "cross-browser-testing",
+      "description": "複数ブラウザ対応: 主要ブラウザで同じように動作",
+      "test_condition": "Chrome, Firefox, Safari, Edge で動作確認",
+      "expected_result": "すべてのブラウザで同じ結果が得られる",
+      "acceptance_criteria": "対象ブラウザの最新2バージョンで同じように動作すること"
+    },
+    {
+      "id": "C-002",
+      "characteristic_id": "compatibility",
+      "perspective": "cross-platform-testing",
+      "description": "複数OS対応: Windows, macOS, Linux で動作",
+      "test_condition": "各OSでシステムの動作を確認",
+      "expected_result": "すべてのOSで同じ動作をする",
+      "acceptance_criteria": "対象OS全てでテストケースがパスすること"
+    },
+    {
+      "id": "C-003",
+      "characteristic_id": "compatibility",
+      "perspective": "api-version-compatibility",
+      "description": "API互換性: 異なるAPIバージョン間で互換性がある",
+      "test_condition": "複数のAPIバージョンを使用してテスト",
+      "expected_result": "互換性が保たれている",
+      "acceptance_criteria": "後方互換性が維持されていること"
+    },
+    {
+      "id": "U-001",
+      "characteristic_id": "usability",
+      "perspective": "ui-display-testing",
+      "description": "UI表示: UIが正しく表示される",
+      "test_condition": "UIコンポーネントを各解像度で表示",
+      "expected_result": "UIが正しく表示され、レイアウトが崩れない",
+      "acceptance_criteria": "すべての解像度（1280x720以上）でUIが正しく表示されること"
+    },
+    {
+      "id": "U-002",
+      "characteristic_id": "usability",
+      "perspective": "user-flow-testing",
+      "description": "ユーザーフロー: 主要な操作フローが完結できる",
+      "test_condition": "一般的なユーザーシナリオを実行",
+      "expected_result": "目的の機能を簡単に実行できる",
+      "acceptance_criteria": "5クリック以内で主要な操作が完結すること"
+    },
+    {
+      "id": "U-003",
+      "characteristic_id": "usability",
+      "perspective": "accessibility-testing",
+      "description": "アクセシビリティ: 身体障害者でも利用可能",
+      "test_condition": "スクリーンリーダーで操作、キーボード操作のみで操作",
+      "expected_result": "すべての機能にアクセス可能である",
+      "acceptance_criteria": "WCAG 2.1 AA基準をクリアすること"
+    },
+    {
+      "id": "U-004",
+      "characteristic_id": "usability",
+      "perspective": "error-message-clarity",
+      "description": "エラーメッセージ: ユーザーが問題を理解できる",
+      "test_condition": "エラー条件を引き起こしてメッセージを確認",
+      "expected_result": "エラーメッセージが明確で解決方法が提示されている",
+      "acceptance_criteria": "エラーメッセージに原因と対処法が明記されていること"
+    },
+    {
+      "id": "R-001",
+      "characteristic_id": "reliability",
+      "perspective": "regression-testing",
+      "description": "回帰テスト: 既存機能が引き続き動作する",
+      "test_condition": "前回のテストスイート全体を実行",
+      "expected_result": "すべてのテストがパスする",
+      "acceptance_criteria": "回帰テスト合格率が100%であること"
+    },
+    {
+      "id": "R-002",
+      "characteristic_id": "reliability",
+      "perspective": "crash-testing",
+      "description": "クラッシュテスト: 異常な入力でクラッシュしない",
+      "test_condition": "ストレステストとエッジケースを実行",
+      "expected_result": "システムがクラッシュしない",
+      "acceptance_criteria": "エラーが発生してもシステムが落ちないこと"
+    },
+    {
+      "id": "R-003",
+      "characteristic_id": "reliability",
+      "perspective": "recovery-testing",
+      "description": "リカバリテスト: エラーから正常に復帰する",
+      "test_condition": "エラー状態から復帰を試みる",
+      "expected_result": "システムが正常な状態に戻る",
+      "acceptance_criteria": "リカバリ成功率が99%以上であること"
+    },
+    {
+      "id": "R-004",
+      "characteristic_id": "reliability",
+      "perspective": "data-corruption-testing",
+      "description": "データ破損テスト: データベースレベルのエラーに対応",
+      "test_condition": "データベース接続失敗をシミュレート",
+      "expected_result": "データが破損せず、ユーザーに通知される",
+      "acceptance_criteria": "データ整合性が保たれていること"
+    },
+    {
+      "id": "S-001",
+      "characteristic_id": "security",
+      "perspective": "authentication-testing",
+      "description": "ユーザー認証: 正規ユーザーのみアクセス可能",
+      "test_condition": "有効・無効な認証情報でログインを試みる",
+      "expected_result": "正規ユーザーはアクセス可、無効な認証はブロック",
+      "acceptance_criteria": "無効な認証がブロックされていること"
+    },
+    {
+      "id": "S-002",
+      "characteristic_id": "security",
+      "perspective": "authorization-testing",
+      "description": "権限確認: ユーザーは許可された機能のみアクセス",
+      "test_condition": "異なる権限レベルでアクセス制御を確認",
+      "expected_result": "ユーザーの権限に応じたアクセス制御が機能する",
+      "acceptance_criteria": "権限外のリソースへのアクセスがブロックされること"
+    },
+    {
+      "id": "S-003",
+      "characteristic_id": "security",
+      "perspective": "encryption-testing",
+      "description": "暗号化: 機密データは暗号化される",
+      "test_condition": "ネットワークトラフィックを分析",
+      "expected_result": "機密データが暗号化された状態で送受信される",
+      "acceptance_criteria": "TLS 1.2以上が使用されていること"
+    },
+    {
+      "id": "S-004",
+      "characteristic_id": "security",
+      "perspective": "injection-attack-testing",
+      "description": "インジェクション防止: SQLインジェクション等を防止",
+      "test_condition": "SQLインジェクション、XSSペイロードを入力",
+      "expected_result": "攻撃がブロックされる",
+      "acceptance_criteria": "すべてのインジェクション攻撃がブロックされること"
+    },
+    {
+      "id": "S-005",
+      "characteristic_id": "security",
+      "perspective": "pii-protection-testing",
+      "description": "個人情報保護: PII（個人識別情報）が保護される",
+      "test_condition": "ログ、キャッシュにPIIが含まれていないか確認",
+      "expected_result": "PIIがログに記録されていない",
+      "acceptance_criteria": "PII（パスワード、クレジットカード番号等）がログに含まれていないこと"
+    },
+    {
+      "id": "M-001",
+      "characteristic_id": "maintainability",
+      "perspective": "code-quality-testing",
+      "description": "コード品質: コード品質基準を満たす",
+      "test_condition": "リンターとコード分析ツールを実行",
+      "expected_result": "コード品質メトリクスが基準を満たす",
+      "acceptance_criteria": "コード複雑性（CC）が15以下であること"
+    },
+    {
+      "id": "M-002",
+      "characteristic_id": "maintainability",
+      "perspective": "unit-test-coverage",
+      "description": "ユニットテストカバレッジ: 十分なテストカバレッジがある",
+      "test_condition": "カバレッジレポートを生成",
+      "expected_result": "テストカバレッジが基準を満たす",
+      "acceptance_criteria": "コードカバレッジが80%以上であること"
+    },
+    {
+      "id": "M-003",
+      "characteristic_id": "maintainability",
+      "perspective": "documentation-testing",
+      "description": "ドキュメント: コードが十分にドキュメント化されている",
+      "test_condition": "ドキュメント完全性を確認",
+      "expected_result": "すべての公開APIがドキュメント化されている",
+      "acceptance_criteria": "公開メソッド100%にJSDocコメントがあること"
+    },
+    {
+      "id": "M-004",
+      "characteristic_id": "maintainability",
+      "perspective": "logging-testing",
+      "description": "ログ記録: デバッグに必要なログが十分に出力される",
+      "test_condition": "ログレベルと出力内容を確認",
+      "expected_result": "エラーやイベントが適切にログされている",
+      "acceptance_criteria": "トラブルシューティングに必要な情報がログに含まれていること"
+    },
+    {
+      "id": "P-001",
+      "characteristic_id": "portability",
+      "perspective": "os-compatibility-testing",
+      "description": "OS互換性: 複数OSで動作する",
+      "test_condition": "Windows, macOS, Linux でデプロイ",
+      "expected_result": "すべてのOSで同じ動作をする",
+      "acceptance_criteria": "対象OS全てで同じテストスイートがパスすること"
+    },
+    {
+      "id": "P-002",
+      "characteristic_id": "portability",
+      "perspective": "deployment-testing",
+      "description": "デプロイ: 新しい環境へ簡単にデプロイできる",
+      "test_condition": "別の環境にデプロイして動作確認",
+      "expected_result": "デプロイが成功し、システムが正常に動作する",
+      "acceptance_criteria": "デプロイにかかる時間が30分以下であること"
+    },
+    {
+      "id": "P-003",
+      "characteristic_id": "portability",
+      "perspective": "environment-variable-testing",
+      "description": "環境変数: 環境固有の設定で適切に動作",
+      "test_condition": "異なる環境変数で動作確認",
+      "expected_result": "システムが環境変数に応じて正しく動作する",
+      "acceptance_criteria": "ハードコーディングされた設定がないこと"
+    }
+  ]
+}

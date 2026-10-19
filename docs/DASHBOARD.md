@@ -243,9 +243,9 @@ AI危険度ランク **C** 以下の場合：
 
 ### ダッシュボード HTML のカスタマイズ
 
-`scripts/generate-dashboard.ts` を編集：
+`scripts/generate-dashboard.mjs` を編集：
 
-```typescript
+```javascript
 // スタイル変更
 const dashboardHTML = `...
   <style>
@@ -262,9 +262,9 @@ updateTables(data) // 表示データを追加
 
 ### KPI 計算ロジックのカスタマイズ
 
-`scripts/generate-dashboard.ts` の `generateDashboard()` 関数を編集：
+`scripts/generate-dashboard.mjs` の `generateDashboard()` 関数を編集：
 
-```typescript
+```javascript
 // AI危険度ランク計算ロジック
 let aiDangerRank = 'A';
 if (passRate < 80 || coverage < 70) aiDangerRank = 'E';

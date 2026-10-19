@@ -159,7 +159,7 @@ jobs:
       - name: Generate dashboard
         run: |
           mkdir -p docs/dashboard
-          ts-node scripts/generate-dashboard.ts "qa/dashboard-data" "docs/dashboard" "Quality Dashboard"
+          node scripts/generate-dashboard.mjs "qa/dashboard-data" "docs/dashboard" "Quality Dashboard"
       
       - name: Verify dashboard
         run: |

@@ -32,7 +32,7 @@
 #### 成果物
 
 1. **ダッシュボード生成スクリプト**
-   - ファイル: `scripts/generate-dashboard.ts`
+   - ファイル: `scripts/generate-dashboard.mjs`
    - 機能: インタラクティブなHTML5ダッシュボードを生成
    - 特徴:
      - リアルタイム品質指標表示
@@ -129,7 +129,7 @@ Create/Update Summary Issue
 │       └── kpi-history.json                (自動生成)
 ├── scripts/
 │   ├── generate-quality-characteristics.ts [NEW] テスト項目生成
-│   └── generate-dashboard.ts               [NEW] ダッシュボード生成
+│   └── generate-dashboard.mjs               [NEW] ダッシュボード生成
 └── package.json                            [UPDATED] yaml 追加
 ```
 
@@ -287,9 +287,9 @@ E (Critical):    pass_rate < 80% OR coverage < 70%
 
 ### 2. ダッシュボード UI をカスタマイズ
 
-`scripts/generate-dashboard.ts` の HTML/CSS を編集：
+`scripts/generate-dashboard.mjs` の HTML/CSS を編集：
 
-```typescript
+```javascript
 const dashboardHTML = `
   <style>
     /* カスタム CSS */
@@ -301,12 +301,17 @@ const dashboardHTML = `
 
 ### 3. AI 危険度ランク計算をカスタマイズ
 
-`scripts/generate-dashboard.ts` の `callCopilotAPI()` 関数を編集：
+AI 危険度ランク (`ai_danger_rank`) は KPI データに含まれる値です。ダッシュボード生成時にランク値を変更するには、`scripts/generate-dashboard.mjs` の `generateDashboard()` 関数内のロジックを編集してください：
 
-```typescript
-if (passRate < 85 || coverage < 75) aiDangerRank = 'E';
-// ロジックをカスタマイズ
+```javascript
+// サンプル KPI データのランク値をカスタマイズ
+const sampleKPIData = {
+  // ... 他のフィールド ...
+  ai_danger_rank: 'A', // ここを変更してカスタマイズ
+};
 ```
+
+実際の運用環境では、ランク計算ロジックは KPI データ生成パイプライン（`scripts/quality-report.mjs` など）で行われるため、そこで計算ロジックをカスタマイズしてください。
 
 ## 📚 参考資料
 

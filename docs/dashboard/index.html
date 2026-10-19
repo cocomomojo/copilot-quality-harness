@@ -1,37 +1,9 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-
-interface KPIData {
-  timestamp: string;
-  pass_rate: number;
-  test_count: number;
-  passed: number;
-  failed: number;
-  coverage: number;
-  ai_danger_rank?: 'A' | 'B' | 'C' | 'D' | 'E';
-}
-
-interface DashboardConfig {
-  kpiDataDir: string;
-  outputDir: string;
-  title?: string;
-}
-
-async function generateDashboard(config: DashboardConfig): Promise<void> {
-  console.log(`\n🎨 Quality Dashboard Generation`);
-  console.log(`KPI Data Directory: ${config.kpiDataDir}`);
-  console.log(`Output Directory: ${config.outputDir}\n`);
-
-  // Create output directory
-  mkdirSync(config.outputDir, { recursive: true });
-
-  // Generate HTML dashboard
-  const dashboardHTML = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${config.title || 'Quality Dashboard'} - Copilot Quality Harness</title>
+  <title>Quality Dashboard - Copilot Quality Harness</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
   <style>
     * {
@@ -234,6 +206,11 @@ async function generateDashboard(config: DashboardConfig): Promise<void> {
     .status-fail {
       background: #f8d7da;
       color: #721c24;
+    }
+
+    .status-warn {
+      background: #fff3cd;
+      color: #856404;
     }
 
     .footer {
@@ -450,7 +427,7 @@ async function generateDashboard(config: DashboardConfig): Promise<void> {
       const badge = document.getElementById('aiRankBadge');
       const rank = data.latestKPI.ai_danger_rank;
       if (rank) {
-        badge.innerHTML = `<div class="ai-danger-badge ${rankMap[rank]}">Rank ${rank}</div>`;
+        badge.innerHTML = '<div class="ai-danger-badge ' + rankMap[rank] + '">Rank ' + rank + '</div>';
       }
 
       const lastUpdated = new Date(data.latestKPI.timestamp);
@@ -555,20 +532,37 @@ async function generateDashboard(config: DashboardConfig): Promise<void> {
       // Test results table
       const tbody = document.getElementById('testResultsBody');
       tbody.innerHTML = '';
-      
-      // Add 5 sample rows
-      for (let i = 0; i < 5; i++) {
+      // Add up to 5 sample rows
+      const rowCount = Math.min(5, data.passRateTrend.length, data.coverageTrend.length);
+      const statusMap = {
+        'A': 'status-pass',
+        'B': 'status-pass',
+        'C': 'status-warn',
+        'D': 'status-warn',
+        'E': 'status-fail'
+      };
+
+      for (let i = 0; i < rowCount; i++) {
         const row = document.createElement('tr');
-        const date = new Date(data.passRateTrend[data.passRateTrend.length - 1 - i].date);
-        row.innerHTML = `
-          <td>${date.toLocaleDateString('ja-JP')}</td>
-          <td>${150}</td>
-          <td>${138}</td>
-          <td>${12}</td>
-          <td><span class="trend-up">${data.passRateTrend[data.passRateTrend.length - 1 - i].rate}%</span></td>
-          <td>${data.coverageTrend[data.coverageTrend.length - 1 - i].coverage}%</td>
-          <td><span class="status-badge status-pass">Rank B</span></td>
-        `;
+        const dateStr = data.passRateTrend[data.passRateTrend.length - 1 - i].date;
+        const date = new Date(dateStr + 'T00:00:00');
+        const passRate = data.passRateTrend[data.passRateTrend.length - 1 - i].rate;
+        const coverage = data.coverageTrend[data.coverageTrend.length - 1 - i].coverage;
+
+        // Calculate rank based on pass rate and coverage
+        let rank = 'A';
+        if (passRate < 85 || coverage < 75) rank = 'E';
+        else if (passRate < 90 || coverage < 80) rank = 'D';
+        else if (passRate < 95 || coverage < 85) rank = 'C';
+        else if (passRate < 98 || coverage < 90) rank = 'B';
+
+        row.innerHTML = '<td>' + date.toLocaleDateString('ja-JP') + '</td>' +
+          '<td>150</td>' +
+          '<td>138</td>' +
+          '<td>12</td>' +
+          '<td><span class="trend-up">' + passRate + '%</span></td>' +
+          '<td>' + coverage + '%</td>' +
+          '<td><span class="status-badge ' + statusMap[rank] + '">Rank ' + rank + '</span></td>';
         tbody.appendChild(row);
       }
 
@@ -578,13 +572,11 @@ async function generateDashboard(config: DashboardConfig): Promise<void> {
       data.qualityCharacteristics.forEach(char => {
         const passRate = Math.round((char.passed / char.total) * 100);
         const row = document.createElement('tr');
-        row.innerHTML = `
-          <td><strong>${char.name}</strong></td>
-          <td>${char.description}</td>
-          <td>${char.total}</td>
-          <td>${char.passed}</td>
-          <td><span class="status-badge ${passRate === 100 ? 'status-pass' : 'status-fail'}">${passRate}%</span></td>
-        `;
+        row.innerHTML = '<td><strong>' + char.name + '</strong></td>' +
+          '<td>' + char.description + '</td>' +
+          '<td>' + char.total + '</td>' +
+          '<td>' + char.passed + '</td>' +
+          '<td><span class="status-badge ' + (passRate === 100 ? 'status-pass' : 'status-fail') + '">' + passRate + '%</span></td>';
         charBody.appendChild(row);
       });
     }
@@ -600,39 +592,4 @@ async function generateDashboard(config: DashboardConfig): Promise<void> {
     document.addEventListener('DOMContentLoaded', initDashboard);
   </script>
 </body>
-</html>`;
-
-  const dashboardPath = join(config.outputDir, 'index.html');
-  writeFileSync(dashboardPath, dashboardHTML);
-  console.log(`✅ Dashboard HTML: ${dashboardPath}`);
-
-  // Create sample data file
-  const sampleKPIData = {
-    timestamp: new Date().toISOString(),
-    pass_rate: 92,
-    test_count: 150,
-    passed: 138,
-    failed: 12,
-    coverage: 85,
-    ai_danger_rank: 'B'
-  };
-
-  const dataPath = join(config.outputDir, 'data', 'latest-kpi.json');
-  mkdirSync(dirname(dataPath), { recursive: true });
-  writeFileSync(dataPath, JSON.stringify(sampleKPIData, null, 2));
-  console.log(`✅ Sample KPI data: ${dataPath}`);
-
-  console.log(`\n✅ Dashboard generation complete!`);
-  console.log(`📍 View dashboard at: file://${dashboardPath}\n`);
-}
-
-// CLI Interface
-const args = process.argv.slice(2);
-const kpiDataDir = args[0] || join(process.cwd(), 'qa', 'dashboard-data');
-const outputDir = args[1] || join(process.cwd(), 'docs', 'dashboard');
-const title = args[2] || 'Quality Dashboard';
-
-generateDashboard({ kpiDataDir, outputDir, title }).catch((err) => {
-  console.error('❌ Dashboard generation failed:', err.message);
-  process.exit(1);
-});
+</html>

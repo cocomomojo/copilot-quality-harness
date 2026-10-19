@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "mode": "simple",
+  "generatedAt": "2026-10-19T12:02:58.950Z",
+  "testPerspectives": [
+    {
+      "characteristic_id": "functional-suitability",
+      "characteristic_name": "機能適合性 (Functional Suitability)",
+      "description": "ソフトウェアが指定された条件下で、指定された用途に対して、必要な機能を提供する程度",
+      "sub_characteristics": [
+        {
+          "completeness": "完全性 - すべての指定された機能がシステムに実装されているか"
+        },
+        {
+          "correctness": "正確性 - システムが期待通りの結果を提供するか"
+        },
+        {
+          "appropriateness": "適切性 - システムが指定された タスク と目的を達成できるか"
+        }
+      ],
+      "test_perspectives": [
+        "happy-path-testing",
+        "boundary-value-testing",
+        "input-validation",
+        "error-handling",
+        "feature-completeness",
+        "data-integrity",
+        "api-contract-testing"
+      ],
+      "expected_test_items": 6
+    },
+    {
+      "characteristic_id": "performance-efficiency",
+      "characteristic_name": "性能効率 (Performance Efficiency)",
+      "description": "使用されるリソースの量に関連した、要求された程度の性能を提供する程度",
+      "sub_characteristics": [
+        {
+          "time_behaviour": "時間的振る舞い - 機能の処理時間と応答時間が適切か"
+        },
+        {
+          "resource_utilization": "リソース利用 - CPU、メモリ、ディスク等の効率的な利用"
+        },
+        {
+          "capacity": "容量 - システムが処理できるデータ量や同時ユーザー数"
+        }
+      ],
+      "test_perspectives": [
+        "response-time-testing",
+        "load-testing",
+        "stress-testing",
+        "memory-profiling",
+        "cpu-profiling",
+        "throughput-testing"
+      ],
+      "expected_test_items": 6
+    },
+    {
+      "characteristic_id": "compatibility",
+      "characteristic_name": "互換性 (Compatibility)",
+      "description": "他のシステムとの交換可能性とシステムとの共存が可能な程度",
+      "sub_characteristics": [
+        {
+          "co-existence": "共存 - 他のソフトウェアと同じ環境で実行可能か"
+        },
+        {
+          "interoperability": "相互運用性 - システム間でデータ交換・連携が可能か"
+        }
+      ],
+      "test_perspectives": [
+        "cross-browser-testing",
+        "cross-platform-testing",
+        "version-compatibility",
+        "api-version-compatibility",
+        "database-compatibility"
+      ],
+      "expected_test_items": 6
+    },
+    {
+      "characteristic_id": "usability",
+      "characteristic_name": "ユーザビリティ (Usability)",
+      "description": "指定されたユーザーが指定された環境下で効果的かつ効率的に使用できる程度",
+      "sub_characteristics": [
+        {
+          "recognizability": "認識可能性 - ユーザーがシステムの目的を理解できるか"
+        },
+        {
+          "learnability": "学習容易性 - ユーザーがシステムの使用方法を学習しやすいか"
+        },
+        {
+          "operability": "操作可能性 - ユーザーがシステムを操作しやすいか"
+        },
+        {
+          "user_error_protection": "ユーザーエラー保護 - ユーザーの誤操作を防止できるか"
+        },
+        {
+          "user_interface_aesthetics": "UI美的性 - UIが美的で好ましいか"
+        },
+        {
+          "accessibility": "アクセシビリティ - 様々な能力のユーザーが利用可能か"
+        }
+      ],
+      "test_perspectives": [
+        "ui-display-testing",
+        "user-flow-testing",
+        "accessibility-testing",
+        "localization-testing",
+        "user-experience-testing",
+        "error-message-clarity"
+      ],
+      "expected_test_items": 6
+    },
+    {
+      "characteristic_id": "reliability",
+      "characteristic_name": "信頼性 (Reliability)",
+      "description": "指定された時間と条件下で、指定された性能レベルを維持する程度",
+      "sub_characteristics": [
+        {
+          "maturity": "成熟度 - システムが通常の状況で欠陥なく機能するか"
+        },
+        {
+          "availability": "可用性 - システムが要求時に利用可能か"
+        },
+        {
+          "fault_tolerance": "障害許容性 - システムが障害状態で機能し続けるか"
+        },
+        {
+          "recoverability": "復旧可能性 - 障害時にシステムが回復できるか"
+        }
+      ],
+      "test_perspectives": [
+        "regression-testing",
+        "crash-testing",
+        "recovery-testing",
+        "failover-testing",
+        "data-corruption-testing",
+        "degradation-testing"
+      ],
+      "expected_test_items": 6
+    },
+    {
+      "characteristic_id": "security",
+      "characteristic_name": "セキュリティ (Security)",
+      "description": "データと情報を保護する程度で、不正アクセスおよび使用から保護される",
+      "sub_characteristics": [
+        {
+          "confidentiality": "機密性 - データが権限のない者にアクセスされないか"
+        },
+        {
+          "integrity": "整合性 - データが不正に改変されないか"
+        },
+        {
+          "non-repudiation": "否認防止 - ユーザーが自分の行動を否認できないか"
+        },
+        {
+          "accountability": "責任追跡性 - ユーザーの行動が記録・追跡可能か"
+        },
+        {
+          "authenticity": "真正性 - ユーザーまたはデバイスの身元が確認可能か"
+        }
+      ],
+      "test_perspectives": [
+        "authentication-testing",
+        "authorization-testing",
+        "encryption-testing",
+        "injection-attack-testing",
+        "session-management-testing",
+        "data-exposure-testing",
+        "pii-protection-testing"
+      ],
+      "expected_test_items": 6
+    },
+    {
+      "characteristic_id": "maintainability",
+      "characteristic_name": "保守性 (Maintainability)",
+      "description": "欠陥を特定・除去または性能を改善するためにシステムを修正できる程度",
+      "sub_characteristics": [
+        {
+          "modularity": "モジュール性 - システムが独立した機能単位に分割できるか"
+        },
+        {
+          "reusability": "再利用性 - コンポーネントが他のプロジェクトで再利用可能か"
+        },
+        {
+          "analyzability": "分析可能性 - 欠陥の原因を特定しやすいか"
+        },
+        {
+          "modifiability": "修正可能性 - 要件変更に対応しやすいか"
+        },
+        {
+          "testability": "テスト容易性 - テストを実施しやすいか"
+        }
+      ],
+      "test_perspectives": [
+        "code-quality-testing",
+        "logging-testing",
+        "documentation-testing",
+        "refactoring-validation",
+        "unit-test-coverage",
+        "integration-test-coverage"
+      ],
+      "expected_test_items": 6
+    },
+    {
+      "characteristic_id": "portability",
+      "characteristic_name": "移植性 (Portability)",
+      "description": "異なるハードウェア、ソフトウェア環境へシステムを移行できる程度",
+      "sub_characteristics": [
+        {
+          "adaptability": "適応性 - 異なる環境に適応できるか"
+        },
+        {
+          "installability": "インストール可能性 - 新しい環境にインストールしやすいか"
+        },
+        {
+          "replaceability": "置き換え可能性 - 別のシステムに置き換えやすいか"
+        }
+      ],
+      "test_perspectives": [
+        "os-compatibility-testing",
+        "browser-compatibility-testing",
+        "deployment-testing",
+        "migration-testing",
+        "environment-variable-testing"
+      ],
+      "expected_test_items": 6
+    }
+  ]
+}

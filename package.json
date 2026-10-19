@@ -27,7 +27,7 @@
     "sanitize-trace": "ts-node scripts/pii-filter.ts",
     "generate:quality-items": "ts-node scripts/generate-quality-characteristics.ts",
     "generate:quality-items:help": "echo 'Usage: npm run generate:quality-items -- [mode] [outputDir]' && echo 'Modes: simple (default), detailed' && echo 'Example: npm run generate:quality-items -- detailed qa/quality-characteristics/generated'",
-    "generate:dashboard": "ts-node scripts/generate-dashboard.ts",
+    "generate:dashboard": "node scripts/generate-dashboard.mjs",
     "generate:dashboard:help": "echo 'Usage: npm run generate:dashboard -- [kpiDataDir] [outputDir] [title]' && echo 'Example: npm run generate:dashboard -- qa/dashboard-data docs/dashboard Quality-Dashboard'"
   },
   "devDependencies": {
