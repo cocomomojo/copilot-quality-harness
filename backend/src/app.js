@@ -8,13 +8,13 @@ export function createApp(db = createDatabase()) {
 
   app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
   app.get('/api/checks', (_request, response) => {
-    response.json(db.prepare('SELECT id, name, status, created_at AS createdAt FROM checks ORDER BY id DESC').all());
+    response.json(db.prepare("SELECT id, name, status, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS createdAt FROM checks ORDER BY id DESC").all());
   });
   app.post('/api/checks', (request, response) => {
     const name = typeof request.body?.name === 'string' ? request.body.name.trim() : '';
     if (!name || name.length > 120) return response.status(400).json({ error: 'name must be between 1 and 120 characters' });
     const result = db.prepare('INSERT INTO checks (name) VALUES (?)').run(name);
-    return response.status(201).json(db.prepare('SELECT id, name, status, created_at AS createdAt FROM checks WHERE id = ?').get(result.lastInsertRowid));
+    return response.status(201).json(db.prepare("SELECT id, name, status, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS createdAt FROM checks WHERE id = ?").get(result.lastInsertRowid));
   });
   // copilot-generated: URL validator endpoint
   app.post('/api/validators/check-url', (request, response) => {
@@ -33,7 +33,7 @@ export function createApp(db = createDatabase()) {
   // 4. Use HTTPS and secure session management
   app.get('/api/user/me', (request, response) => {
     try {
-      const user = db.prepare('SELECT id, email, name, created_at, updated_at FROM users ORDER BY rowid DESC LIMIT 1').get();
+      const user = db.prepare("SELECT id, email, name, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS created_at, strftime('%Y-%m-%dT%H:%M:%SZ', updated_at) AS updated_at FROM users ORDER BY rowid DESC LIMIT 1").get();
       if (!user) {
         return response.status(404).json({ error: 'User not found' });
       }
