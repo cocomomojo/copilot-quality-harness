@@ -543,7 +543,8 @@ async function generateDashboard(config) {
       // Add 5 sample rows
       for (let i = 0; i < 5; i++) {
         const row = document.createElement('tr');
-        const date = new Date(data.passRateTrend[data.passRateTrend.length - 1 - i].date);
+        const dateStr = data.passRateTrend[data.passRateTrend.length - 1 - i].date;
+        const date = new Date(dateStr + 'T00:00:00');
         row.innerHTML = '<td>' + date.toLocaleDateString('ja-JP') + '</td>' +
           '<td>150</td>' +
           '<td>138</td>' +
