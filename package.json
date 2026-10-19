@@ -24,7 +24,11 @@
     "generate-tests": "ts-node scripts/generate-tests-from-spec.ts",
     "generate-tests:help": "echo 'Usage: npm run generate-tests -- <spec-file-path>' && echo 'Example: npm run generate-tests -- tests/specs/user-registration.yml' && echo 'Outputs: UT, E2E, and Mock files'",
     "collect-kpi": "node ops/kpi-collector.js",
-    "sanitize-trace": "ts-node scripts/pii-filter.ts"
+    "sanitize-trace": "ts-node scripts/pii-filter.ts",
+    "generate:quality-items": "ts-node scripts/generate-quality-characteristics.ts",
+    "generate:quality-items:help": "echo 'Usage: npm run generate:quality-items -- [mode] [outputDir]' && echo 'Modes: simple (default), detailed' && echo 'Example: npm run generate:quality-items -- detailed qa/quality-characteristics/generated'",
+    "generate:dashboard": "ts-node scripts/generate-dashboard.ts",
+    "generate:dashboard:help": "echo 'Usage: npm run generate:dashboard -- [kpiDataDir] [outputDir] [title]' && echo 'Example: npm run generate:dashboard -- qa/dashboard-data docs/dashboard Quality-Dashboard'"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
@@ -34,6 +38,7 @@
     "ts-node": "^10.9.2",
     "@types/node": "^20.11.0",
     "adm-zip": "^0.5.10",
-    "@types/adm-zip": "^0.5.5"
+    "@types/adm-zip": "^0.5.5",
+    "yaml": "^2.3.0"
   }
 }

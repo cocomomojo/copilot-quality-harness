@@ -1,0 +1,151 @@
+name: Generate Quality Items
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "テスト項目の生成モード"
+        required: true
+        default: "simple"
+        type: choice
+        options:
+          - simple
+          - detailed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate-quality-items:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Generate quality characteristics (テスト観点・項目の生成)
+        id: generate
+        run: |
+          mkdir -p qa/quality-characteristics/generated
+          ts-node scripts/generate-quality-characteristics.ts "${{ github.event.inputs.mode }}" "qa/quality-characteristics/generated"
+      
+      - name: Create branch and commit changes
+        id: commit
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          # Create feature branch
+          BRANCH_NAME="feature/quality-items-${{ github.event.inputs.mode }}-$(date +%s)"
+          git checkout -b "$BRANCH_NAME"
+          
+          # Add generated files
+          git add qa/quality-characteristics/generated/
+          
+          # Commit if there are changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            echo "branch_name=" >> $GITHUB_OUTPUT
+          else
+            git commit -m "🧪 Generate ${{ github.event.inputs.mode }} mode quality test items (ISO/IEC 25010)"
+            git push origin "$BRANCH_NAME"
+            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create pull request
+        if: steps.commit.outputs.branch_name != ''
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const mode = '${{ github.event.inputs.mode }}';
+            const branchName = '${{ steps.commit.outputs.branch_name }}';
+            
+            const body = `## 🧪 ISO/IEC 25010 品質特性ベースのテスト項目自動生成
+
+**生成モード**: ${mode}
+
+### 📋 生成内容
+
+- ✅ テスト観点シート (JSON)
+- ✅ テスト項目集 (YAML)
+- ✅ テスト項目集 (JSON)
+
+### 📊 統計情報
+
+モード別テスト項目数:
+- **簡易モード**: 6～10 項目/特性 (合計 ~50-80 項目)
+- **詳細モード**: 15～25 項目/特性 (合計 ~120-200 項目)
+
+### 📁 出力ファイル
+
+- \`qa/quality-characteristics/generated/test-perspectives-${mode}.json\` — テスト観点シート
+- \`qa/quality-characteristics/generated/test-items-${mode}.yml\` — テスト項目集 (YAML)
+- \`qa/quality-characteristics/generated/test-items-${mode}.json\` — テスト項目集 (JSON)
+
+### ✨ 品質特性（ISO/IEC 25010）
+
+- 機能適合性 (Functional Suitability)
+- 性能効率 (Performance Efficiency)
+- 互換性 (Compatibility)
+- ユーザビリティ (Usability)
+- 信頼性 (Reliability)
+- セキュリティ (Security)
+- 保守性 (Maintainability)
+- 移植性 (Portability)
+
+### 🔗 参考
+
+- [ISO/IEC 25010 Product Quality Model](https://www.iso.org/standard/35733.html)
+- [テスト管理ガイド](../../qa/test-management/)`;
+
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: \`🧪 Generate \${mode} mode quality test items\`,
+              body: body,
+              head: branchName,
+              base: context.ref || 'main',
+              draft: false
+            });
+
+            console.log('Created PR #' + pr.data.number);
+            
+            // Add labels
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.data.number,
+                labels: ['automated', 'quality', 'test-generation']
+              });
+            } catch (e) {
+              console.log('Could not add labels:', e.message);
+            }
+      
+      - name: Upload generated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-items-${{ github.event.inputs.mode }}
+          path: qa/quality-characteristics/generated/
+          retention-days: 30
+      
+      - name: Summary
+        run: |
+          echo "## ✅ Quality Items Generation Complete"
+          echo ""
+          echo "**Mode**: ${{ github.event.inputs.mode }}"
+          echo "**Generated Files**:"
+          echo "- Test perspectives sheet (JSON)"
+          echo "- Test items (YAML)"
+          echo "- Test items (JSON)"
+          echo ""
+          echo "All files available in artifacts section."
