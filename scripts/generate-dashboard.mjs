@@ -1,4 +1,4 @@
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 async function generateDashboard(config) {
@@ -587,8 +587,8 @@ async function generateDashboard(config) {
   writeFileSync(dashboardPath, dashboardHTML);
   console.log(`✅ Dashboard HTML: ${dashboardPath}`);
 
-  // Create sample data file
-  const sampleKPIData = {
+  // Try to read KPI data from the specified directory, fall back to sample data
+  let kpiData = {
     timestamp: new Date().toISOString(),
     pass_rate: 92,
     test_count: 150,
@@ -598,10 +598,19 @@ async function generateDashboard(config) {
     ai_danger_rank: 'B'
   };
 
+  try {
+    const kpiDataPath = join(config.kpiDataDir, 'latest-kpi.json');
+    const kpiDataContent = readFileSync(kpiDataPath, 'utf-8');
+    kpiData = JSON.parse(kpiDataContent);
+    console.log(`📖 Loaded KPI data from: ${kpiDataPath}`);
+  } catch (error) {
+    console.log(`📊 Using sample KPI data (${config.kpiDataDir}/latest-kpi.json not found)`);
+  }
+
   const dataPath = join(config.outputDir, 'data', 'latest-kpi.json');
   mkdirSync(dirname(dataPath), { recursive: true });
-  writeFileSync(dataPath, JSON.stringify(sampleKPIData, null, 2));
-  console.log(`✅ Sample KPI data: ${dataPath}`);
+  writeFileSync(dataPath, JSON.stringify(kpiData, null, 2));
+  console.log(`✅ KPI data: ${dataPath}`);
 
   console.log(`\n✅ Dashboard generation complete!`);
   console.log(`📍 View dashboard at: file://${dashboardPath}\n`);
