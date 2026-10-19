@@ -540,8 +540,9 @@ async function generateDashboard(config) {
       const tbody = document.getElementById('testResultsBody');
       tbody.innerHTML = '';
       
-      // Add 5 sample rows
-      for (let i = 0; i < 5; i++) {
+      // Add up to 5 sample rows
+      const rowCount = Math.min(5, data.passRateTrend.length, data.coverageTrend.length);
+      for (let i = 0; i < rowCount; i++) {
         const row = document.createElement('tr');
         const dateStr = data.passRateTrend[data.passRateTrend.length - 1 - i].date;
         const date = new Date(dateStr + 'T00:00:00');
