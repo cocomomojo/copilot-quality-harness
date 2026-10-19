@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Footer from './components/Footer.jsx';
 
 export default function App() {
   const [checks, setChecks] = useState([]);
@@ -48,6 +49,7 @@ export default function App() {
           <ul>{checks.map((check) => <li key={check.id}><span>{check.name}</span><small>{check.status}</small></li>)}</ul>
         )}
       </section>
+      <Footer />
     </main>
   );
 }

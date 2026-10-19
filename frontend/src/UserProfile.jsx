@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { formatAccountCreatedDate, fetchUserProfile } from './utils/dateFormatter.js';
+import Footer from './components/Footer.jsx';
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -69,6 +70,7 @@ export default function UserProfile() {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

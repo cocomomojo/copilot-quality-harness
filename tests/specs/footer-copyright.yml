@@ -1,0 +1,283 @@
+# テスト設計テンプレ - フッター コピーライト表記
+# 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
+# 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
+# Issue: Closes cocomomojo/copilot-quality-harness#23
+
+test_spec:
+  # ============================================================
+  # 基本情報
+  # ============================================================
+  feature: "フッター - コピーライト表記表示"
+  description: "アプリケーション全体のフッターに表示されているコピーライト表記を「© 2026 Copilot Quality Harness」として表示する機能"
+  component: "frontend/src/components/Footer"
+  requires_human_approval: false
+  # ⚠️  セキュリティ変更ではないため false に設定
+
+  # ============================================================
+  # ユニットテスト (UT) 定義
+  # ============================================================
+  ut:
+    - id: "UT-001"
+      title: "Footer コンポーネント: コピーライト表記が正しく存在する"
+      category: "component_rendering"
+      function: "Footer"
+      input: {}
+      expected_output:
+        success: true
+        contains_text: "© 2026 Copilot Quality Harness"
+        element_present: "footer"
+      mock_dependencies: []
+
+    - id: "UT-002"
+      title: "Footer コンポーネント: 正しい HTML 要素で構成されている"
+      category: "markup_validation"
+      function: "Footer"
+      input: {}
+      expected_output:
+        success: true
+        tag_name: "footer"
+        has_paragraph: true
+      mock_dependencies: []
+
+    - id: "UT-003"
+      title: "Footer コンポーネント: 正しいクラス名が付与されている"
+      category: "markup_validation"
+      function: "Footer"
+      input: {}
+      expected_output:
+        success: true
+        class_name: "footer"
+      mock_dependencies: []
+
+  # ============================================================
+  # エンドツーエンドテスト (E2E) 定義
+  # ============================================================
+  e2e:
+    - id: "E2E-001"
+      title: "正常系: Quality checks 画面にフッター表示"
+      description: "シナリオ 1：ユーザーが Quality checks 画面を表示したとき、画面最下部のフッター領域に「© 2026 Copilot Quality Harness」が正しく表示される"
+      priority: "critical"
+      preconditions:
+        - action: "navigate"
+          target: "http://localhost:3000/"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/"
+          expected:
+            - text_present: "Quality checks"
+
+        - step_id: 2
+          action: "scroll_to_bottom"
+          expected:
+            - footer_visible: true
+
+        - step_id: 3
+          action: "assert_text"
+          target: "© 2026 Copilot Quality Harness"
+          timeout_ms: 3000
+          expected:
+            - text_present: true
+
+        - step_id: 4
+          action: "assert_element_present"
+          selector: "footer"
+          expected:
+            - element_present: true
+            - element_visible: true
+
+    - id: "E2E-002"
+      title: "正常系: プロフィール画面にフッター表示"
+      description: "シナリオ 2：ユーザーがプロフィール画面を表示したとき、画面最下部のフッター領域に「© 2026 Copilot Quality Harness」が正しく表示される"
+      priority: "critical"
+      preconditions:
+        - action: "seed_db"
+          data: "user_with_profile.sql"
+        - action: "login"
+          user_email: "testuser@example.com"
+          user_password: "TestPassword123!"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/profile"
+          expected:
+            - text_present: "プロフィール"
+
+        - step_id: 2
+          action: "scroll_to_bottom"
+          expected:
+            - footer_visible: true
+
+        - step_id: 3
+          action: "assert_text"
+          target: "© 2026 Copilot Quality Harness"
+          timeout_ms: 3000
+          expected:
+            - text_present: true
+
+        - step_id: 4
+          action: "assert_element_present"
+          selector: "footer"
+          expected:
+            - element_present: true
+            - element_visible: true
+
+    - id: "E2E-003"
+      title: "正常系: フッター要素の位置確認"
+      description: "フッターが常にページの最下部に配置されていることを確認"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/"
+          expected:
+            - http_status: 200
+
+        - step_id: 2
+          action: "get_element_position"
+          selector: "footer"
+          expected:
+            - position_type: "static_or_relative"
+
+        - step_id: 3
+          action: "assert_element_property"
+          selector: "footer"
+          property: "textContent"
+          value: "© 2026 Copilot Quality Harness"
+          expected:
+            - property_matches: true
+
+    - id: "E2E-004"
+      title: "正常系: 複数ページでのフッター一貫性確認"
+      description: "異なるページでもフッター表記が一貫していることを確認"
+      priority: "high"
+      preconditions:
+        - action: "seed_db"
+          data: "user_with_profile.sql"
+        - action: "login"
+          user_email: "testuser@example.com"
+          user_password: "TestPassword123!"
+      steps:
+        - step_id: 1
+          action: "navigate"
+          target: "http://localhost:3000/"
+          expected:
+            - text_present: "Quality checks"
+
+        - step_id: 2
+          action: "scroll_to_bottom"
+          expected:
+            - footer_visible: true
+
+        - step_id: 3
+          action: "assert_text"
+          target: "© 2026 Copilot Quality Harness"
+          expected:
+            - text_present: true
+
+        - step_id: 4
+          action: "navigate"
+          target: "http://localhost:3000/profile"
+          expected:
+            - text_present: "プロフィール"
+
+        - step_id: 5
+          action: "scroll_to_bottom"
+          expected:
+            - footer_visible: true
+
+        - step_id: 6
+          action: "assert_text"
+          target: "© 2026 Copilot Quality Harness"
+          expected:
+            - text_present: true
+
+  # ============================================================
+  # モック設定（E2E/UT 共通）
+  # ============================================================
+  mocks:
+    - name: "user_api"
+      endpoint: "GET /api/user/me"
+      description: "ユーザープロフィール取得 API のモック"
+      behaviors:
+        - name: "return_user_profile"
+          status: 200
+          response_template:
+            id: "user-123"
+            email: "testuser@example.com"
+            name: "Test User"
+            created_at: "2026-10-18T10:00:00Z"
+
+  # ============================================================
+  # シード値（再現性確保用）
+  # ============================================================
+  seeds:
+    - name: "base_seed"
+      value: 20261019
+      description: "基本シード値（テストデータ生成用）"
+    - name: "user_id_seed"
+      value: "user-123"
+      description: "テストユーザー ID の基本シード"
+
+  # ============================================================
+  # 環境変数・設定
+  # ============================================================
+  environment:
+    API_BASE_URL: "http://localhost:3000"
+    FOOTER_COPYRIGHT_TEXT: "© 2026 Copilot Quality Harness"
+    TEST_DB_URL: "sqlite:///:memory:"
+
+  # ============================================================
+  # UT カバレッジ要件
+  # ============================================================
+  coverage_requirements:
+    - component: "frontend/src/components/Footer"
+      target_percentage: 100
+      critical_paths:
+        - "Footer component render"
+        - "Copyright text display"
+
+  # ============================================================
+  # パフォーマンス要件
+  # ============================================================
+  performance:
+    - metric: "footer_render_time_ms"
+      target: 10
+      description: "フッター コンポーネントレンダリング時間（< 10ms）"
+    - metric: "e2e_test_time_s"
+      target: 30
+      description: "E2E テスト実行時間（< 30s）"
+
+  # ============================================================
+  # 実行時オプション
+  # ============================================================
+  execution:
+    timeout_ms: 30000
+    retry_on_flake:
+      enabled: true
+      max_attempts: 3
+      backoff_ms: 1000
+    parallel_execution:
+      enabled: true
+      max_workers: 4
+    failure_mode: "fast_fail"
+
+  # ============================================================
+  # 関連ドキュメント
+  # ============================================================
+  references:
+    - ".github/ISSUE_TEMPLATE/feature.yml"
+    - "CONTRIBUTING.md"
+    - "QA_POLICY.md"
+    - "README.md"
+
+  # ============================================================
+  # 備考（Copilot 用）
+  # ============================================================
+  notes: |
+    - フッターは全ページに共通して表示される
+    - コピーライト表記は「© 2026 Copilot Quality Harness」に統一
+    - E2E テストは必ずモック環境で実行してください（実 API 非依存）
+    - フッターの可視性確認のため、各テストで scroll_to_bottom アクションを実施
+    - 複数ページでのテストにより、フッター表記の一貫性を確認
+    - テスト後は自動で DB がロールバックされます

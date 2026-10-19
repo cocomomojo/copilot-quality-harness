@@ -12,3 +12,5 @@ ul { list-style: none; padding: 0; margin-bottom: 0; }
 li { display: flex; justify-content: space-between; border-top: 1px solid #edf0f6; padding: .9rem 0; }
 small { color: #64708a; }
 .error { color: #a62626; margin-top: 1rem; }
+footer { margin-top: 4rem; padding: 2rem 1.5rem; text-align: center; color: #64708a; font-size: .875rem; border-top: 1px solid #dce2ef; }
+footer p { margin: 0; }
