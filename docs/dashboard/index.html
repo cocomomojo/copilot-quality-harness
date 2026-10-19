@@ -527,20 +527,44 @@
       // Test results table
       const tbody = document.getElementById('testResultsBody');
       tbody.innerHTML = '';
-      
       // Add up to 5 sample rows
       const rowCount = Math.min(5, data.passRateTrend.length, data.coverageTrend.length);
+      const rankMap = {
+        'A': 'rank-a',
+        'B': 'rank-b',
+        'C': 'rank-c',
+        'D': 'rank-d',
+        'E': 'rank-e'
+      };
+      const statusMap = {
+        'A': 'status-pass',
+        'B': 'status-pass',
+        'C': 'status-warn',
+        'D': 'status-warn',
+        'E': 'status-fail'
+      };
+
       for (let i = 0; i < rowCount; i++) {
         const row = document.createElement('tr');
         const dateStr = data.passRateTrend[data.passRateTrend.length - 1 - i].date;
         const date = new Date(dateStr + 'T00:00:00');
+        const passRate = data.passRateTrend[data.passRateTrend.length - 1 - i].rate;
+        const coverage = data.coverageTrend[data.coverageTrend.length - 1 - i].coverage;
+
+        // Calculate rank based on pass rate and coverage
+        let rank = 'A';
+        if (passRate < 85 || coverage < 75) rank = 'E';
+        else if (passRate < 90 || coverage < 80) rank = 'D';
+        else if (passRate < 95 || coverage < 85) rank = 'C';
+        else if (passRate < 98 || coverage < 90) rank = 'B';
+
         row.innerHTML = '<td>' + date.toLocaleDateString('ja-JP') + '</td>' +
           '<td>150</td>' +
           '<td>138</td>' +
           '<td>12</td>' +
-          '<td><span class="trend-up">' + data.passRateTrend[data.passRateTrend.length - 1 - i].rate + '%</span></td>' +
-          '<td>' + data.coverageTrend[data.coverageTrend.length - 1 - i].coverage + '%</td>' +
-          '<td><span class="status-badge status-pass">Rank B</span></td>';
+          '<td><span class="trend-up">' + passRate + '%</span></td>' +
+          '<td>' + coverage + '%</td>' +
+          '<td><span class="status-badge ' + statusMap[rank] + '">Rank ' + rank + '</span></td>';
         tbody.appendChild(row);
       }
 
