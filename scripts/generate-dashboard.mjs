@@ -1,23 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
-interface KPIData {
-  timestamp: string;
-  pass_rate: number;
-  test_count: number;
-  passed: number;
-  failed: number;
-  coverage: number;
-  ai_danger_rank?: 'A' | 'B' | 'C' | 'D' | 'E';
-}
-
-interface DashboardConfig {
-  kpiDataDir: string;
-  outputDir: string;
-  title?: string;
-}
-
-async function generateDashboard(config: DashboardConfig): Promise<void> {
+async function generateDashboard(config) {
   console.log(`\n🎨 Quality Dashboard Generation`);
   console.log(`KPI Data Directory: ${config.kpiDataDir}`);
   console.log(`Output Directory: ${config.outputDir}\n`);
@@ -450,7 +434,7 @@ async function generateDashboard(config: DashboardConfig): Promise<void> {
       const badge = document.getElementById('aiRankBadge');
       const rank = data.latestKPI.ai_danger_rank;
       if (rank) {
-        badge.innerHTML = `<div class="ai-danger-badge ${rankMap[rank]}">Rank ${rank}</div>`;
+        badge.innerHTML = '<div class="ai-danger-badge ' + rankMap[rank] + '">Rank ' + rank + '</div>';
       }
 
       const lastUpdated = new Date(data.latestKPI.timestamp);
@@ -560,15 +544,13 @@ async function generateDashboard(config: DashboardConfig): Promise<void> {
       for (let i = 0; i < 5; i++) {
         const row = document.createElement('tr');
         const date = new Date(data.passRateTrend[data.passRateTrend.length - 1 - i].date);
-        row.innerHTML = `
-          <td>${date.toLocaleDateString('ja-JP')}</td>
-          <td>${150}</td>
-          <td>${138}</td>
-          <td>${12}</td>
-          <td><span class="trend-up">${data.passRateTrend[data.passRateTrend.length - 1 - i].rate}%</span></td>
-          <td>${data.coverageTrend[data.coverageTrend.length - 1 - i].coverage}%</td>
-          <td><span class="status-badge status-pass">Rank B</span></td>
-        `;
+        row.innerHTML = '<td>' + date.toLocaleDateString('ja-JP') + '</td>' +
+          '<td>150</td>' +
+          '<td>138</td>' +
+          '<td>12</td>' +
+          '<td><span class="trend-up">' + data.passRateTrend[data.passRateTrend.length - 1 - i].rate + '%</span></td>' +
+          '<td>' + data.coverageTrend[data.coverageTrend.length - 1 - i].coverage + '%</td>' +
+          '<td><span class="status-badge status-pass">Rank B</span></td>';
         tbody.appendChild(row);
       }
 
@@ -578,13 +560,11 @@ async function generateDashboard(config: DashboardConfig): Promise<void> {
       data.qualityCharacteristics.forEach(char => {
         const passRate = Math.round((char.passed / char.total) * 100);
         const row = document.createElement('tr');
-        row.innerHTML = `
-          <td><strong>${char.name}</strong></td>
-          <td>${char.description}</td>
-          <td>${char.total}</td>
-          <td>${char.passed}</td>
-          <td><span class="status-badge ${passRate === 100 ? 'status-pass' : 'status-fail'}">${passRate}%</span></td>
-        `;
+        row.innerHTML = '<td><strong>' + char.name + '</strong></td>' +
+          '<td>' + char.description + '</td>' +
+          '<td>' + char.total + '</td>' +
+          '<td>' + char.passed + '</td>' +
+          '<td><span class="status-badge ' + (passRate === 100 ? 'status-pass' : 'status-fail') + '">' + passRate + '%</span></td>';
         charBody.appendChild(row);
       });
     }
