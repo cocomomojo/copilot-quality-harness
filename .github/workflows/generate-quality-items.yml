@@ -36,7 +36,7 @@ jobs:
         id: generate
         run: |
           mkdir -p qa/quality-characteristics/generated
-          ts-node scripts/generate-quality-characteristics.ts "${{ github.event.inputs.mode }}" "qa/quality-characteristics/generated"
+          npx ts-node scripts/generate-quality-characteristics.ts "${{ github.event.inputs.mode }}" "qa/quality-characteristics/generated"
       
       - name: Create branch and commit changes
         id: commit
