@@ -33,14 +33,28 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      - name: Download previous KPI history
+      - name: Create data directory
+        run: mkdir -p qa/dashboard-data
+      
+      - name: Download previous KPI history from artifacts
         continue-on-error: true
         run: |
-          mkdir -p qa/dashboard-data
-          # Download the latest kpi-data artifact from previous run
-          gh run list --workflow=update-dashboard.yml --limit=2 --json databaseId -q '.[-2].databaseId' | xargs -I {} \
-            gh run download {} --name kpi-data --dir qa/dashboard-data 2>/dev/null || true
-          ls -la qa/dashboard-data/ || true
+          # Get list of completed successful runs (excluding current)
+          PREV_RUNS=$(gh run list --workflow=update-dashboard.yml --limit=5 \
+            --json databaseId,status,conclusion \
+            -q '.[] | select(.status == "completed" and .conclusion == "success") | .databaseId' \
+            | head -3)
+          
+          echo "Attempting to restore KPI history from previous runs..."
+          for RUN_ID in $PREV_RUNS; do
+            echo "  Trying run: $RUN_ID"
+            if gh run download "$RUN_ID" --name kpi-data --dir qa/dashboard-data/ 2>/dev/null; then
+              if [ -f "qa/dashboard-data/kpi-history.json" ]; then
+                echo "  ✓ Restored kpi-history.json"
+                break
+              fi
+            fi
+          done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       

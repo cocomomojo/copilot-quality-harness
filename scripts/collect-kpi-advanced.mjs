@@ -448,26 +448,29 @@ async function main() {
   // 9. 履歴に追加 (前回のデータを保持)
   let history = [];
   
-  // 前回のワークフローから履歴をダウンロード
-  const previousHistory = downloadPreviousHistory();
-  if (previousHistory && Array.isArray(previousHistory)) {
-    history = previousHistory;
-    console.log(`✓ Loaded ${history.length} records from previous run`);
-  }
-  
-  // ローカルの履歴ファイルも確認（フォールバック）
+  // 優先順位1: ローカルの既存履歴ファイル（workflow が pre-download した可能性）
   if (existsSync(historyFile)) {
     try {
       const localHistory = JSON.parse(readFileSync(historyFile, 'utf-8'));
-      if (Array.isArray(localHistory) && localHistory.length > history.length) {
+      if (Array.isArray(localHistory) && localHistory.length > 0) {
         history = localHistory;
-        console.log(`✓ Using local history with ${history.length} records`);
+        console.log(`✓ Loaded ${history.length} records from local history file`);
       }
     } catch (e) {
-      // ローカルファイルが破損している場合はスキップ
+      console.log(`  ⚠️  Local history file is invalid, skipping`);
     }
   }
   
+  // 優先順位2: ワークフロー実行から artifact をダウンロード
+  if (history.length === 0) {
+    const previousHistory = downloadPreviousHistory();
+    if (previousHistory && Array.isArray(previousHistory)) {
+      history = previousHistory;
+      console.log(`✓ Loaded ${history.length} records from previous workflow artifact`);
+    }
+  }
+  
+  // 新しい記録を追加
   history.push(kpiData);
   
   // 90 日間の履歴を保持
