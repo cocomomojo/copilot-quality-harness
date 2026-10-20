@@ -5,7 +5,11 @@ on:
     inputs:
       issue_number:
         description: 'Issue number with acceptance criteria (Given/When/Then format)'
-        required: true
+        required: false
+        type: string
+      spec_file:
+        description: 'Path to spec file (e.g., tests/specs/user-registration.yml)'
+        required: false
         type: string
 
 permissions:
@@ -15,13 +19,13 @@ permissions:
 
 jobs:
   # ============================================================
-  # ステップ 1: Issue から YML 仕様を生成
+  # ステップ 1: Issue から YML 仕様を生成、または既存の spec_file を使用
   # ============================================================
   generate-spec-yml:
-    name: Generate test spec from Issue
+    name: Generate test spec from Issue or use provided spec file
     runs-on: ubuntu-latest
     outputs:
-      spec_file: ${{ steps.generate.outputs.spec_file }}
+      spec_file: ${{ steps.resolve-spec.outputs.spec_file }}
       feature_name: ${{ steps.generate.outputs.feature_name }}
       spec_content: ${{ steps.generate.outputs.spec_content }}
     steps:
@@ -35,7 +39,21 @@ jobs:
         with:
           node-version: 20
 
+      - name: Resolve spec file
+        id: resolve-spec
+        run: |
+          if [ -n "${{ inputs.spec_file }}" ]; then
+            echo "spec_file=${{ inputs.spec_file }}" >> "$GITHUB_OUTPUT"
+            echo "source=provided" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ inputs.issue_number }}" ]; then
+            echo "source=generated" >> "$GITHUB_OUTPUT"
+          else
+            echo "Error: Either spec_file or issue_number must be provided"
+            exit 1
+          fi
+
       - name: Fetch Issue from GitHub
+        if: steps.resolve-spec.outputs.source == 'generated'
         id: fetch_issue
         env:
           GH_TOKEN: ${{ github.token }}
@@ -45,6 +63,7 @@ jobs:
           echo "issue_file=/tmp/issue.json" >> "$GITHUB_OUTPUT"
 
       - name: Generate test spec YAML from Issue
+        if: steps.resolve-spec.outputs.source == 'generated'
         id: generate
         env:
           ISSUE_NUMBER: ${{ inputs.issue_number }}
@@ -57,7 +76,13 @@ jobs:
             --repo-root "$REPO_ROOT" \
             --output-dir "tests/specs"
 
+      - name: Update spec_file output if generated
+        if: steps.resolve-spec.outputs.source == 'generated'
+        run: |
+          echo "spec_file=${{ steps.generate.outputs.spec_file }}" >> "$GITHUB_OUTPUT"
+
       - name: Commit generated YML to branch
+        if: steps.resolve-spec.outputs.source == 'generated'
         env:
           GIT_AUTHOR_NAME: Copilot
           GIT_AUTHOR_EMAIL: copilot@github.com
