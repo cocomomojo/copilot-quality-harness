@@ -1,1 +1,18 @@
-{"timestamp": "2026-10-19T12:05:26Z", "pass_rate": 92, "test_count": 150, "passed": 138, "failed": 12, "coverage": 85, "ai_danger_rank": "B"}
+{
+  "timestamp": "2026-10-20T07:41:52.204Z",
+  "pass_rate": 92,
+  "test_count": 150,
+  "passed": 138,
+  "failed": 12,
+  "coverage": 0,
+  "ai_danger_rank": "D",
+  "risk_level": "HIGH",
+  "composite_score": 57,
+  "data_source": "GITHUB_API",
+  "details": {
+    "test_jobs": [],
+    "github_run_id": 39387691406
+  },
+  "trend": "STABLE",
+  "trend_details": {}
+}

@@ -648,9 +648,61 @@ async function generateDashboard(config) {
 
     // Initialize dashboard
     function initDashboard() {
-      updateSummary(sampleData);
-      initCharts(sampleData);
-      updateTables(sampleData);
+      // Try to load actual KPI data from data/latest-kpi.json
+      fetch('./data/latest-kpi.json')
+        .then(response => {
+          if (!response.ok) throw new Error('Failed to load KPI data');
+          return response.json();
+        })
+        .then(kpiData => {
+          // Merge actual KPI data with sample data
+          const mergedData = {
+            latestKPI: {
+              ...sampleData.latestKPI,
+              ...kpiData  // Override with real data
+            },
+            passRateTrend: sampleData.passRateTrend,
+            coverageTrend: sampleData.coverageTrend,
+            qualityCharacteristics: sampleData.qualityCharacteristics
+          };
+          
+          // Try to load history for trend visualization
+          return fetch('./data/kpi-history.json')
+            .then(histResponse => {
+              if (histResponse.ok) return histResponse.json();
+              return null;
+            })
+            .then(history => {
+              if (history && Array.isArray(history) && history.length > 0) {
+                // Generate trend data from history
+                mergedData.passRateTrend = history
+                  .slice(-30)  // Last 30 days
+                  .map(h => ({
+                    date: new Date(h.timestamp).toISOString().split('T')[0],
+                    rate: h.pass_rate
+                  }));
+                
+                mergedData.coverageTrend = history
+                  .slice(-30)  // Last 30 days
+                  .map(h => ({
+                    date: new Date(h.timestamp).toISOString().split('T')[0],
+                    coverage: h.coverage
+                  }));
+              }
+              
+              console.log('✅ Loaded actual KPI data:', mergedData.latestKPI);
+              updateSummary(mergedData);
+              initCharts(mergedData);
+              updateTables(mergedData);
+            });
+        })
+        .catch(error => {
+          console.warn('⚠️  Using fallback (sample) data:', error.message);
+          // Fallback to sample data if loading fails
+          updateSummary(sampleData);
+          initCharts(sampleData);
+          updateTables(sampleData);
+        });
     }
 
     // Load on page ready
@@ -687,6 +739,17 @@ async function generateDashboard(config) {
   mkdirSync(dirname(dataPath), { recursive: true });
   writeFileSync(dataPath, JSON.stringify(kpiData, null, 2));
   console.log(`✅ KPI data: ${dataPath}`);
+
+  // Also copy KPI history if available
+  try {
+    const historyPath = join(config.kpiDataDir, 'kpi-history.json');
+    const historyContent = readFileSync(historyPath, 'utf-8');
+    const historyDataPath = join(config.outputDir, 'data', 'kpi-history.json');
+    writeFileSync(historyDataPath, historyContent);
+    console.log(`✅ KPI history: ${historyDataPath}`);
+  } catch (error) {
+    console.log(`ℹ️  KPI history not available yet`);
+  }
 
   console.log(`\n✅ Dashboard generation complete!`);
   console.log(`📍 View dashboard at: file://${dashboardPath}\n`);
