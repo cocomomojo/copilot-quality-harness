@@ -37,7 +37,6 @@
 ---
 
 ### [10] Playwright トレース解析と Copilot 修正案生成
-<<<<<<< HEAD
 **目的**: Playwright テスト失敗を自動解析し、修正案を Draft PR または PR コメントで提案  
 **トリガー**: 手動（workflow_dispatch）/ 自動（pull_request）  
 **成果物**: trace-summary.json, analysis.json, Draft PR / PR コメント  
@@ -82,33 +81,6 @@ gh workflow run copilot-analyze-trace.yml
 - ✅ Phase 2B: Copilot CLI 統合 (PR #8)
 - ✅ Phase 2C: 自動化と最適化 (PR #9)
 - ✅ Phase 2D: 並列処理と統合 (PR #10)
-
-=======
-**目的**: Playwright テスト失敗を自動解析し、修正案を Draft PR で提案  
-**トリガー**: 手動（workflow_dispatch）→ 将来は PR トリガーへ拡張  
-**成果物**: trace-summary.json, analysis.json, Draft PR  
-**実装状態**: ✅ Phase 1 完成（PR #7 マージ済み）、Phase 2 進行中（PR #8）
-
-**ファイル**:
-- `.github/skills/10-playwright-trace-analysis.md` – 詳細ガイド
-- `.github/workflows/copilot-analyze-trace.yml` – ワークフロー定義
-- `scripts/trace-summary.ts` – トレース解析スクリプト
-- `scripts/copilot-client.ts` – Copilot API クライアント（モック）
-- `scripts/create-test-trace.ts` – テスト用 trace.zip 生成
-- `qa/TRACE_ANALYSIS_GUIDE.md` – ユーザーガイド
-- `qa/draft-pr-body.md` – Draft PR テンプレート
-
-**実行方法**:
-```bash
-# 手動トリガー
-gh workflow run copilot-analyze-trace.yml \
-  -f artifact_id=<trace-artifact-id>
-
-# または npm 経由
-npm run analyze:trace -- trace-artifacts/trace.zip
-```
-
->>>>>>> origin/main
 ---
 
 ## 🔄 スキル間の関係図
@@ -227,15 +199,9 @@ gh pr comment <pr-number> --body-file response.md
 
 | スキル | 状態 | 進捗 |
 |--------|------|------|
-<<<<<<< HEAD
 | [00] AI-Powered Failure Analysis | ✅ 完成 | テンプレート・実装例完備（Skill [10] の基礎） |
 | [01] Copilot レビュー指摘対応 | ✅ 完成 | 実装例多数、テンプレート完備 |
 | [10] Playwright トレース解析 | ✅ 完成 | Phase 2A-2D 全完成、本番環境稼働中 |
-=======
-| [00] AI-Powered Failure Analysis | 🟡 計画済み | テンプレート完成、実装待ち |
-| [01] Copilot レビュー指摘対応 | ✅ 完成 | 実装例多数、テンプレート完備 |
-| [10] Playwright トレース解析 | 🟠 進行中 | Phase 1 完成、Phase 2 実装中 |
->>>>>>> origin/main
 
 ---
 
@@ -273,7 +239,6 @@ scripts/                            # 実行スクリプト
 
 ## 🎯 今後の拡張予定
 
-<<<<<<< HEAD
 **Phase 2D Part 3（オプション）**:
 - [10] の実装強化（レート制限とリトライロジック）
 - パフォーマンスメトリクスの自動収集と分析
@@ -289,16 +254,6 @@ scripts/                            # 実行スクリプト
 - 修正案の優先度を自動学習
 - 過去の修正案と類似度マッチング
 - ユーザーフィードバック（有用性スコア）の反映
-=======
-**Phase 2B（2-4週間）**:
-- [00] の実装例を追加（Jest, ビルド, デプロイ）
-- [10] の Phase 2B を実装（実 Copilot API 統合）
-
-**Phase 3（1ヶ月）**:
-- [11] E2E テスト失敗解析スキル
-- [12] パフォーマンス回帰分析スキル
-- [20] セキュリティ脆弱性解析スキル
->>>>>>> origin/main
 
 ---
 
@@ -338,10 +293,5 @@ scripts/                            # 実行スクリプト
 
 ---
 
-<<<<<<< HEAD
 **最終更新**: 2026-10-12 (Phase 2D Part 2 完成後)
 **次回見直し**: Phase 3 計画時
-=======
-**最終更新**: 2026-10-12
-**次回見直し**: Phase 2B 完成後
->>>>>>> origin/main
