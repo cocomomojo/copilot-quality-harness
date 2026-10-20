@@ -17,14 +17,6 @@ permissions:
   pull-requests: write
   actions: read
 
-outputs:
-  quality_items_artifact:
-    description: "生成された品質項目アーティファクト名"
-    value: ${{ jobs.generate-quality-items.outputs.artifact_name }}
-  quality_items_manifest:
-    description: "品質項目マニフェストファイルパス"
-    value: ${{ jobs.generate-quality-items.outputs.manifest_file }}
-
 jobs:
   generate-quality-items:
     runs-on: ubuntu-latest
@@ -33,6 +25,7 @@ jobs:
       manifest_file: qa/quality-characteristics/generated/manifest.json
       spec_file: qa/quality-characteristics/generated/test-items-${{ github.event.inputs.mode }}.yml
       timestamp: ${{ steps.metadata.outputs.timestamp }}
+      run_id: ${{ github.run_id }}
     
     steps:
       - uses: actions/checkout@v4
