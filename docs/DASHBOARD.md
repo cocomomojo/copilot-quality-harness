@@ -275,8 +275,8 @@ if (passRate < 80 || coverage < 70) aiDangerRank = 'E';
 
 - [品質特性ベーステスト項目](../quality-characteristics/)
 - [テスト管理ガイド](../test-management/)
-- [QA ポリシー](../../QA_POLICY.md)
-- [CI/CD パイプライン](../../.github/workflows/)
+- [QA ポリシー](./QA_POLICY.md)
+- [CI/CD パイプライン](../.github/workflows/)
 
 ## 🔗 ワークフロー
 

@@ -237,7 +237,7 @@ npm ci  # package.json の依存をインストール
 - [GitHub Actions Artifacts](https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts)
 - [GitHub API: Create PR](https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request)
 - スキル: `.github/skills/10-playwright-trace-analysis.md`
-- ガイド: `WORKFLOWS_GUIDE.md` (Appendix セクション)
+- ガイド: `docs/WORKFLOWS_GUIDE.md` (Appendix セクション)
 
 ## 🚀 Phase 2 計画（今後の拡張）
 

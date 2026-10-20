@@ -43,7 +43,7 @@
 - [ ] Documentation 完成
   - [ ] README.md に使用方法を追記
   - [ ] CONTRIBUTING.md にラベル・PR 運用を記述
-  - [ ] QA_POLICY.md と整合確認
+  - [ ] docs/QA_POLICY.md と整合確認
 
 - [ ] チェック項目合意
   - [ ] Issue 作成時のテンプレ確認
