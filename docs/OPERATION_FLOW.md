@@ -24,6 +24,7 @@ graph TD
     G --> H["🤖 Copilot AI Review<br/>ai-review.yml"]
     H --> I["🔀 PR マージ判定<br/>人間がレビュー"]
     I --> J["🚀 Pages デプロイ<br/>自動デプロイ"]
+    J --> K["📊 KPI 収集・ダッシュボード<br/>update-dashboard.yml<br/>Pattern 3: GitHub API統合"]
     
     style A fill:#e1f5ff
     style B fill:#f3e5f5
@@ -35,6 +36,7 @@ graph TD
     style H fill:#e0f2f1
     style I fill:#fff9c4
     style J fill:#c8e6c9
+    style K fill:#ffccbc
 ```
 
 ### アーティファクト連鎖（Artifact Chaining）
@@ -830,15 +832,162 @@ on:
 
 ---
 
+## 📊 ステップ 10: リアルタイム品質ダッシュボード（Pattern 3）
+
+### ワークフロー: `update-dashboard.yml` 📊
+
+GitHub API を統合した**リアルタイム KPI 収集とダッシュボード生成**
+
+#### 🎯 機能
+
+**Pattern 3 実装** により以下を自動実行:
+
+1. **GitHub API からテスト結果を取得** (`collect-kpi-advanced.mjs`)
+   - 最新の test-matrix.yml 実行結果を自動分析
+   - テスト合格率、テスト数、失敗数を抽出
+   - コードカバレッジデータを検出
+
+2. **複合スコア計算（AI 危険度ランク）**
+   ```
+   Composite Score = 
+     (Pass Rate × 0.40) +      // テスト品質: 40%
+     (Coverage × 0.30) +       // コードカバレッジ: 30%
+     (Test Volume × 0.20) +    // テスト数: 20%
+     ((100 - Failure Rate) × 0.10)  // 信頼性: 10%
+   
+   ランク判定:
+   - A: 95+ (LOW risk)
+   - B: 80-94 (MEDIUM risk)
+   - C: 70-79 (HIGH risk)
+   - D: 50-69 (VERY HIGH risk)
+   - E: <50 (CRITICAL risk)
+   ```
+
+3. **トレンド分析**
+   - 前回データとの比較
+   - IMPROVING / DECLINING / STABLE の判定
+   - 90 日間の履歴管理
+
+4. **リアルタイムダッシュボード生成**
+   - 日本語UI
+   - テスト合格率推移グラフ
+   - AI 危険度ランク表示
+   - リスクレベルバッジ
+
+5. **GitHub Pages への自動デプロイ**
+   - 毎日 10:00 AM JST に実行
+   - URL: `https://cocomomojo.github.io/copilot-quality-harness/dashboard/`
+
+#### 📥 実行方法
+
+**手動実行**:
+```bash
+gh workflow run update-dashboard.yml --ref main
+```
+
+**スケジュール実行** (毎日 10:00 AM JST):
+```yaml
+on:
+  schedule:
+    - cron: '0 1 * * *'  # UTC 01:00 = JST 10:00
+```
+
+#### 📊 ダッシュボード表示内容
+
+| フィールド | 説明 | 例 |
+|-----------|------|-----|
+| テスト合格率 | pass_rate | 92% |
+| テスト実行数 | test_count | 150 |
+| コードカバレッジ | coverage | 85% |
+| AI 危険度ランク | ai_danger_rank | B |
+| **複合スコア** | composite_score | 57/100 |
+| **リスクレベル** | risk_level | HIGH |
+| **トレンド** | trend | STABLE |
+| データソース | data_source | GITHUB_API |
+
+**太字** = Pattern 3 新フィールド
+
+#### 🔄 処理フロー
+
+```mermaid
+graph TD
+    A["📆 定時 or 手動実行<br/>update-dashboard.yml"] --> B["🔍 GitHub API クエリ<br/>collect-kpi-advanced.mjs"]
+    B --> C["📊 テスト結果を取得<br/>test-matrix.yml 最新実行"]
+    C --> D["📈 複合スコア計算"]
+    D --> E["📉 トレンド分析"]
+    E --> F["🎨 ダッシュボード生成<br/>generate-dashboard.mjs"]
+    F --> G["📦 アーティファクト保存<br/>kpi-data (30日保持)"]
+    G --> H["🚀 GitHub Pages デプロイ"]
+    H --> I["✅ URL で確認<br/>/dashboard/"]
+    
+    style A fill:#fff3e0
+    style B fill:#e3f2fd
+    style C fill:#e3f2fd
+    style D fill:#f3e5f5
+    style E fill:#f3e5f5
+    style F fill:#e8f5e9
+    style G fill:#fce4ec
+    style H fill:#c8e6c9
+    style I fill:#a5d6a7
+```
+
+#### 🔍 KPI データの保存先
+
+**リアルタイム (アーティファクト)**:
+```
+qa/dashboard-data/latest-kpi.json        # 最新 KPI
+qa/dashboard-data/kpi-history.json       # 90日間の履歴
+```
+
+**ダッシュボード**:
+```
+docs/dashboard/index.html                # ダッシュボード HTML
+docs/dashboard/data/latest-kpi.json      # 表示用 KPI データ
+```
+
+#### 🛠️ トラブルシューティング
+
+**Q: Dashboard にデータが表示されない**
+
+A: ワークフロー実行ログを確認
+```bash
+gh run list --workflow update-dashboard.yml --limit 1
+gh run view <RUN_ID> --log | grep -A 5 "collect-kpi-advanced"
+```
+
+**Q: GitHub API エラーが出ている**
+
+A: FALLBACK 値が使用されています（不要な警告）
+```bash
+# デフォルト値で動作していることを確認
+cat qa/dashboard-data/latest-kpi.json | grep data_source
+# → "data_source": "FALLBACK" または "GITHUB_API"
+```
+
+**Q: コードカバレッジが 0% と表示される**
+
+A: Coverage ファイルの場所を確認
+```bash
+# GitHub Actions のログで以下を探す:
+# "📈 Reading coverage data..."
+# "Coverage data not found, using default"
+
+# Coverage ファイルの場所を変更する場合は
+# scripts/collect-kpi-advanced.mjs の COVERAGE_PATHS を編集
+```
+
+---
+
 ## 📚 関連ドキュメント
 
 - [WORKFLOWS_GUIDE.md](./WORKFLOWS_GUIDE.md) — 各ワークフロー詳細
 - [.github/skills/](./github/skills/) — Copilot Skills 定義
 - [QA_POLICY.md](./QA_POLICY.md) — 品質ポリシー
 - [README.md](./README.md) — システム概要
+- [Dashboard](https://cocomomojo.github.io/copilot-quality-harness/dashboard/) — リアルタイムダッシュボード
 
 ---
 
-**Version**: 1.0  
+**Version**: 1.1  
 **Last Updated**: 2026-10-20  
 **Maintainer**: copilot-quality-team
