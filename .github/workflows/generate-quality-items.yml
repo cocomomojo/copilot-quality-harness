@@ -1,6 +1,6 @@
 name: Generate Quality Items
 
-# Workflow for generating quality test items
+# Workflow for generating quality test items and creating pull requests
 on:
   workflow_dispatch:
     inputs:
