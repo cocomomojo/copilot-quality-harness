@@ -27,40 +27,58 @@ function downloadPreviousHistory() {
   try {
     console.log('\n📚 Attempting to download previous KPI history...');
     
-    // 前々回の update-dashboard 実行 ID を取得（最新の1つ前）
-    const runListCmd = `gh run list --workflow=update-dashboard.yml --limit=3 --json databaseId -q '.[].databaseId'`;
-    const runIds = execSync(runListCmd, {
+    // 完了した update-dashboard 実行を取得（最新から順に）
+    const runListCmd = `gh run list --workflow=update-dashboard.yml --limit=10 --json databaseId,status,conclusion -q '.[] | select(.status == "completed" and .conclusion == "success")'`;
+    const runsJson = execSync(runListCmd, {
       encoding: 'utf-8',
       env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
-    }).trim().split('\n').filter(Boolean);
+    }).trim();
     
-    if (runIds.length < 2) {
-      console.log('  ℹ️  No previous run found (first run)');
+    if (!runsJson) {
+      console.log('  ℹ️  No previous successful runs found');
       return null;
     }
     
-    // 前回のアーティファクト ID を取得（最新の1つ前）
-    const previousRunId = runIds[1];
-    console.log(`  Previous run ID: ${previousRunId}`);
-    
-    // kpi-data アーティファクトをダウンロード
-    const downloadCmd = `gh run download ${previousRunId} --name kpi-data --dir /tmp/prev-kpi 2>&1`;
-    try {
-      execSync(downloadCmd, {
-        encoding: 'utf-8',
-        env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
-      });
-      
-      const historyFile = '/tmp/prev-kpi/kpi-history.json';
-      if (existsSync(historyFile)) {
-        const history = JSON.parse(readFileSync(historyFile, 'utf-8'));
-        console.log(`  ✓ Downloaded ${history.length} previous records`);
-        return history;
+    const runs = runsJson.split('\n').map(line => {
+      try {
+        return JSON.parse(line);
+      } catch (e) {
+        return null;
       }
-    } catch (e) {
-      console.log(`  ⚠️  Could not download: ${e.message.split('\n')[0]}`);
+    }).filter(Boolean);
+    
+    if (runs.length === 0) {
+      console.log('  ℹ️  No completed runs found');
+      return null;
     }
     
+    console.log(`  Found ${runs.length} completed runs`);
+    
+    // 最新の完了した実行から kpi-data アーティファクトをダウンロード
+    for (const run of runs) {
+      const previousRunId = run.databaseId;
+      console.log(`  Trying run ID: ${previousRunId}`);
+      
+      try {
+        const downloadCmd = `gh run download ${previousRunId} --name kpi-data --dir /tmp/prev-kpi 2>&1`;
+        execSync(downloadCmd, {
+          encoding: 'utf-8',
+          env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
+        });
+        
+        const historyFile = '/tmp/prev-kpi/kpi-history.json';
+        if (existsSync(historyFile)) {
+          const history = JSON.parse(readFileSync(historyFile, 'utf-8'));
+          console.log(`  ✓ Downloaded ${history.length} previous records from run ${previousRunId}`);
+          return history;
+        }
+      } catch (e) {
+        console.log(`  ⚠️  Run ${previousRunId}: ${e.message.split('\n')[0]}`);
+        continue;
+      }
+    }
+    
+    console.log('  ℹ️  No artifact with kpi-data found in previous runs');
     return null;
   } catch (e) {
     console.log(`  ⚠️  Error downloading history: ${e.message.split('\n')[0]}`);
