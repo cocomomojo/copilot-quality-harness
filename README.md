@@ -12,17 +12,173 @@ Welcome! これは「Playwright テスト失敗分析から Copilot による自
 ---
 
 ## 目次 📚
+- [ざっくり 1 分説明](#ざっくり-1-分説明-)
+- [完全な運用フロー](#完全な運用フロー)
 - [システムアーキテクチャ](#システムアーキテクチャ)
-- [Phase 2: 実装完了](#phase-2-実装完了)
-- [運用フロー（図）](#運用フロー図)
-- [主要ワークフロー一覧](#主要ワークフロー一覧)
-- [簡単な利用手順（手動トリガー）](#簡単な利用手順手動トリガー)
+- [全ワークフロー一覧](#全ワークフロー一覧)
+- [ワークフロー相互関係マッピング](#ワークフロー相互関係マッピング)
+- [簡単な利用手順](#簡単な利用手順)
 - [FAQ / 注意点](#faq--注意点)
 - [ドキュメント](#ドキュメント)
 
 ---
 
-## システムアーキテクチャ 🏗️
+## 完全な運用フロー 🌊
+
+**Issue 作成 → テスト観点 → テスト項目 → 実装 → テストコード → UT → E2E → Pages デプロイ**
+
+詳細な運用ガイドはこちら → **[`OPERATION_FLOW.md`](./OPERATION_FLOW.md)** ⭐ **新規（必読！）**
+
+### ざっくり流れ
+
+```
+Issue 作成（#100）
+  ↓ [M2 Issue Intake] 自動解析
+テスト観点生成（質問事項作成）
+  ↓ [Generate Quality Items] テスト項目自動生成
+テスト仕様 YAML 作成
+  ↓ [Spec to Implementation] UT + E2E コード自動生成
+開発者: 実装 + ローカルテスト
+  ↓ PR 作成
+Test Matrix: UT + E2E 自動実行（8 並列）
+  ↓ Quality Report: PR コメント投稿（自動）
+AI Review: Copilot による品質チェック（自動）
+  ↓ 人間レビュー + マージ
+Pages デプロイ（自動）
+```
+
+---
+
+## 全ワークフロー一覧 📋
+
+### 🔵 テスト設計・実装 ワークフロー
+
+| # | ワークフロー | 役割 | トリガー | 実行時間 |
+|---|----------|------|---------|--------|
+| 1 | **m2-issue-intake.yml** | Issue 自動解析 + テスト観点生成 | Manual | ~30s |
+| 2 | **generate-quality-items.yml** | テスト項目・観点の詳細生成（ISO/IEC 25010） | Manual | ~1m |
+| 3 | **spec-to-implementation.yml** | 仕様 YAML → UT/E2E/実装コード自動生成 | Manual | ~2m |
+
+### 🔷 テスト実行 ワークフロー
+
+| # | ワークフロー | 役割 | トリガー | 実行時間 |
+|---|----------|------|---------|--------|
+| 4 | **test-matrix.yml** | UT + E2E 並列実行（Node 18/20 × 複数種別） | PR / Push | ~30-45s |
+| 5 | **test-coverage-analysis.yml** | カバレッジギャップ検出 | PR / Push | ~20s |
+
+### 🟢 品質レポート・デプロイ ワークフロー
+
+| # | ワークフロー | 役割 | トリガー | 実行時間 |
+|---|----------|------|---------|--------|
+| 6 | **quality-report-pr.yml** | テスト結果集約 + PR コメント投稿 | workflow_run（test-matrix 完了） | ~1m |
+| 7 | **ai-review.yml** | Copilot AI による品質レビュー | PR 作成/更新 | ~2-3m |
+| 8 | **auto-code-review.yml** | Lint + スタイル自動チェック | PR | ~1m |
+| 9 | **update-dashboard.yml** | 品質ダッシュボード自動更新 | workflow_run（quality-schedule 完了） | ~30s |
+
+### 📅 スケジュール・特殊 ワークフロー
+
+| # | ワークフロー | 役割 | トリガー | 実行時間 |
+|---|----------|------|---------|--------|
+| 10 | **quality-schedule.yml** | 週次品質チェック | Cron（毎週金曜 5:00 JST） | ~5m |
+| 11 | **copilot-analyze-trace.yml** | Playwright トレース自動分析（テスト失敗時） | Manual / PR | ~3-4m |
+
+---
+
+## ワークフロー相互関係マッピング 🗺️
+
+```mermaid
+graph LR
+    A["m2-issue-intake<br/>(Manual)"] -->|テスト観点生成| B["generate-quality-items<br/>(Manual)"]
+    B -->|テスト項目確認| C["spec-to-implementation<br/>(Manual)"]
+    C -->|UT/E2E 自動生成| D["test-matrix<br/>(PR/Push)"]
+    D -->|テスト完了| E["quality-report-pr<br/>(workflow_run)"]
+    D -->|並列実行| F["test-coverage-analysis<br/>(PR/Push)"]
+    E -->|品質チェック| G["ai-review<br/>(PR)"]
+    G -->|AI コメント投稿| H["人間レビュー<br/>(Manual)"]
+    H -->|マージ| I["Pages Deploy<br/>(auto)"]
+    J["quality-schedule<br/>(Cron)"] -->|週次チェック| K["update-dashboard<br/>(workflow_run)"]
+    L["copilot-analyze-trace<br/>(Manual)"] -->|失敗分析| M["Draft PR + 修正案<br/>(auto)"]
+    
+    style A fill:#e1f5ff
+    style C fill:#e8f5e9
+    style D fill:#f1f8e9
+    style E fill:#ede7f6
+    style G fill:#e0f2f1
+    style I fill:#c8e6c9
+    style H fill:#fff9c4
+```
+
+---
+
+## ワークフロー入出力仕様（アーティファクト）
+
+### test-matrix.yml の出力
+
+```json
+// Artifacts:
+{
+  "test-results-node18-unit.json": {
+    "passed": 45,
+    "failed": 0,
+    "skipped": 2,
+    "duration": "2.3s",
+    "coverage": { "lines": 92, "branches": 85, "functions": 90 }
+  },
+  "test-results-node20-e2e.json": {
+    "passed": 12,
+    "failed": 0,
+    "duration": "15.4s"
+  }
+}
+```
+
+### quality-report-pr.yml の出力
+
+```markdown
+## ✅ Quality Report
+
+### Test Results Summary
+| Node Version | Unit Tests | E2E Tests | Coverage |
+|--------------|-----------|-----------|----------|
+| 18           | ✅ 45/45   | ✅ 12/12  | 92%      |
+| 20           | ✅ 45/45   | ✅ 12/12  | 91%      |
+
+### 📊 Coverage Status
+- Lines: 92% (target: 80%) ✅
+- Branches: 85% (target: 75%) ✅
+- Functions: 90% (target: 80%) ✅
+
+### ✨ Recommendations
+- Ready to merge
+```
+
+### ai-review.yml の出力
+
+```markdown
+## 🤖 Copilot AI Review
+
+### Security Check
+- ✅ No SQL injection risks
+- ✅ No XSS vulnerabilities
+- ⚠️ CORS: Check Access-Control headers
+
+### Performance
+- ✅ Algorithm complexity: O(n) acceptable
+- ⚠️ Consider caching email validation regex
+
+### Test Coverage
+- ✅ New code: 92% coverage (target: 80%)
+- ⚠️ Edge cases: Add test for empty email
+
+**Recommendation**: Ready to merge with suggested improvements
+**Confidence**: 8.5/10
+```
+
+---
+
+## Phase 2: 実装完了 ✅
+
+### Trace 分析ユースケース（Playwright テスト失敗時）
 
 ```
 Playwright Trace (Single or Multiple)
@@ -49,17 +205,31 @@ Playwright Trace (Single or Multiple)
 ```
 
 ### 主要コンポーネント 🧩
-- `.github/workflows/copilot-analyze-trace.yml` — メインワークフロー（5 ジョブパイプライン）
-- `.github/workflows/test-matrix.yml` — テスト並列実行（8 並列、Node 18/20 × テスト種別）
+
+#### ワークフロー
+- `.github/workflows/copilot-analyze-trace.yml` — Playwright トレース分析（5 ジョブパイプライン）
+- `.github/workflows/test-matrix.yml` — テスト並列実行（8 並列、Node 18/20）
 - `.github/workflows/quality-schedule.yml` — 週次スケジュール実行（毎週金曜 AM 5:00 JST）
+- `.github/workflows/spec-to-implementation.yml` — 仕様 YAML → UT/E2E 自動生成
+- `.github/workflows/m2-issue-intake.yml` — Issue 自動解析
+- `.github/workflows/generate-quality-items.yml` — テスト観点・項目自動生成
+- `.github/workflows/ai-review.yml` — Copilot による品質レビュー
+- `.github/workflows/quality-report-pr.yml` — PR コメント自動生成
+
+#### スクリプト
 - `scripts/trace-summary.ts` — Playwright trace.zip パース & PII フィルタ
 - `scripts/copilot-client.ts` — Copilot CLI ラッパー
 - `scripts/detect-trace-artifacts.ts` — アーティファクト検出
 - `scripts/aggregate-trace-results.ts` — 複数トレース集約 & デダプリケーション
+- `scripts/generate-tests-from-spec.ts` — 仕様 YAML → UT/E2E コード生成
+- `scripts/generate-quality-characteristics.ts` — テスト観点・項目生成（ISO/IEC 25010）
+- `scripts/m2-validation.mjs` — Issue 解析と M2 レポート生成
+- `scripts/pii-filter.ts` — PII（個人情報）自動除去
+
+#### エージェント・拡張
 - `.github/agents/trace-analyzer.md` — Copilot エージェント用プロンプト
 - `.github/extensions/analyze-trace/extension.mjs` — Copilot Canvas 拡張
-
-> Skill は `.github/skills/` に定義済み。実装ガイドは `WORKFLOWS_GUIDE.md` を参照。
+- `.github/skills/` — Copilot Skills 定義
 
 ---
 
@@ -135,6 +305,11 @@ graph TD
 | `auto-code-review.yml` | PR | リント + テスト影響度分析 |
 | `quality-report-pr.yml` | workflow_run | テスト結果集約と PR コメント |
 | `test-coverage-analysis.yml` | Push / PR | テストカバレッジギャップ検出 |
+| `ai-review.yml` | PR | Copilot AI による品質レビュー |
+| `m2-issue-intake.yml` | Manual | Issue 自動解析 + テスト観点生成 |
+| `generate-quality-items.yml` | Manual | テスト項目・観点自動生成（ISO/IEC 25010） |
+| `spec-to-implementation.yml` | Manual | 仕様 YAML → UT/E2E/実装コード自動生成 |
+| `update-dashboard.yml` | workflow_run | ダッシュボード自動更新 |
 
 ### スクリプト
 
@@ -146,49 +321,99 @@ graph TD
 | `scripts/aggregate-trace-results.ts` | 複数トレース集約 & デダプリケーション |
 | `scripts/generate-aggregated-comment.ts` | PR コメント本文生成 |
 | `scripts/create-draft-pr.ts` | Draft PR 作成 |
+| `scripts/generate-tests-from-spec.ts` | 仕様 YAML → UT/E2E コード生成 |
+| `scripts/generate-quality-characteristics.ts` | テスト観点・項目生成 |
+| `scripts/m2-validation.mjs` | Issue 解析と M2 レポート生成 |
+| `scripts/pii-filter.ts` | PII フィルタ処理 |
 
 ---
 
-## 簡単な利用手順（手動トリガー） 🧪
+## 簡単な利用手順 🧪
 
-前提: `COPILOT_GITHUB_TOKEN` が Repository Secrets に設定されていること
+### 標準的なワークフロー（推奨）
 
-### Step 1: テスト実行と Trace 生成
+詳細は **[`OPERATION_FLOW.md`](./OPERATION_FLOW.md)** を参照してください。
+
+#### 1. Issue 作成 (5分)
 ```bash
-npm run test:e2e  # Playwright テスト実行
-# → trace.zip が生成される
+GitHub UI → Issues → New → Acceptance Test Template
 ```
 
-### Step 2: ワークフロー手動トリガー
+#### 2. テスト観点生成 (5分)
 ```bash
+gh workflow run m2-issue-intake.yml -f issue_number=100
+# または GitHub UI → Actions → M2 Issue Intake → Run workflow
+```
+
+#### 3. テスト項目生成 (5分)
+```bash
+gh workflow run generate-quality-items.yml -f mode=detailed
+```
+
+#### 4. テスト仕様作成 (10分)
+```bash
+# tests/specs/feature-name.yml を作成
+# 詳細は OPERATION_FLOW.md → ステップ 4 を参照
+```
+
+#### 5. UT/E2E 自動生成 (5分)
+```bash
+gh workflow run spec-to-implementation.yml -f spec_file='tests/specs/feature-name.yml'
+```
+
+#### 6. 開発実装 (ローカル)
+```bash
+git checkout feature/spec-generated-tests-{timestamp}
+npm run test  # UT 確認
+npm run test:e2e  # E2E 確認
+# 実装コード作成 → テストをパスさせる
+```
+
+#### 7. テスト・品質チェック (自動)
+```bash
+# test-matrix.yml が自動実行される
+# quality-report-pr.yml が自動実行される
+# ai-review.yml が自動実行される
+```
+
+#### 8. PR マージ (手動)
+```bash
+# GitHub UI → PR コメント確認
+# AI Review 確認
+# Merge
+```
+
+#### 9. Pages デプロイ (自動)
+```bash
+# 完了！ https://cocomomojo.github.io/copilot-quality-harness
+```
+
+### Playwright トレース分析（ホットフィックス向け）
+
+テスト失敗時:
+
+```bash
+# Step 1: E2E テストを実行して trace.zip を生成
+npm run test:e2e
+
+# Step 2: ワークフロー手動トリガー
 gh workflow run copilot-analyze-trace.yml \
   -f artifact_name='trace.zip' \
   -f branch='main'
+
+# Step 3: 分析完了待機
+# → Draft PR に修正案が投稿される
+
+# Step 4: PR コメント確認
+# → 修正案を実装
+
+# Step 5: マージ
 ```
 
-または GitHub UI から:
-- **Actions** → **copilot-analyze-trace** → **Run workflow**
-- Artifact 名を指定
-
-### Step 3: 分析完了待機
-- ✅ detect-artifacts: 成果物検出（~30 秒）
-- ✅ analyze-traces (Matrix): 並列分析（~2-4 分）
-- ✅ aggregate-results: 集約（~30 秒）
-- ✅ post-aggregated-comment: PR コメント投稿（~10 秒）
-
-### Step 4: PR コメント確認
-- Draft PR またはコメント PR に修正案が投稿される
-- 各案に：目的・変更箇所・コード・リスク・検証手順
-- 重複なし（デダプリケーション済み）
-
-### Step 5: 人間レビュー
-- コメント確認
-- 修正案を適用するか判断
-- マージ決定（自動マージなし）
-
----
-
 ## FAQ / 注意点 ❗
+
+**Q: 完全な運用フローはどこに？**
+- A: **[`OPERATION_FLOW.md`](./OPERATION_FLOW.md)** を必ず読んでください。Issue 作成 → デプロイまでの完全なステップバイステップが記載されています。
 
 **Q: 自動でマージされますか？**
 - A: いいえ。Copilot は修正案を提案するのみ。マージは必ず人間が行います。
@@ -198,6 +423,18 @@ gh workflow run copilot-analyze-trace.yml \
 
 **Q: API コストはいくら削減されますか？**
 - A: 重複分析の検出により約 30% 削減（85% 類似度で自動デダプリケーション）
+
+**Q: テスト観点（test perspectives）とは？**
+- A: ISO/IEC 25010 品質特性に基づいた「どういった観点からテストするか」という視点。機能性、セキュリティ、パフォーマンスなど。詳細は [OPERATION_FLOW.md - ステップ 3](./OPERATION_FLOW.md#-ステップ-3-テスト観点項目生成) を参照。
+
+**Q: スペック YAML（仕様 YAML）とは？**
+- A: テストケース・実装要件を構造化した YAML ファイル。UT/E2E テストコードを自動生成するための入力。詳細は [OPERATION_FLOW.md - ステップ 4](./OPERATION_FLOW.md#-ステップ-4-仕様-yaml--実装--テストコード自動生成) を参照。
+
+**Q: Pages デプロイはどう設定する？**
+- A: Settings → Pages → Source を「GitHub Actions」に設定。デプロイスクリプト例は [OPERATION_FLOW.md - ステップ 10](./OPERATION_FLOW.md#-ステップ-10-pages-デプロイ自動) を参照。
+
+**Q: 環境変数・シークレットは何が必要？**
+- A: `COPILOT_GITHUB_TOKEN` が必須。詳細は [WORKFLOWS_GUIDE.md - Environment Variables](./WORKFLOWS_GUIDE.md) を参照。
 
 **Q: 失敗トレースが多い場合は？**
 - A: Matrix strategy の max-parallel を調整してください。デフォルト 8 並列。
@@ -212,18 +449,33 @@ gh workflow run copilot-analyze-trace.yml \
 
 ## ドキュメント 📚
 
-| ドキュメント | 内容 |
-|------------|------|
-| `WORKFLOWS_GUIDE.md` | 全ワークフロー完全ガイド（各ステップ・入出力・トラブルシューティング） |
-| `QA_POLICY.md` | 品質方針（テスト戦略・カバレッジ・マージ条件） |
-| `docs/phases/` | Phase 2A-2D の詳細実装レポート |
-| `docs/sessions/` | セッション完了報告書 |
-| `docs/implementation/` | 実装ガイド（Skills, Extensions, Workflows） |
-| `.github/skills/SKILLS_INDEX.md` | スキル一覧 |
+### 🎯 ユーザー向けドキュメント
 
-**詳細はこちら:**
-- Phase 2D 実装: `docs/phases/phase-2d/PHASE2D_COMPLETE_SUMMARY.md`
-- テストシナリオ: `docs/phases/phase-2d/PHASE2D_PART2_TEST_SCENARIOS.md`
+| ドキュメント | 対象 | 内容 |
+|-----------|------|------|
+| **[`OPERATION_FLOW.md`](./OPERATION_FLOW.md)** ⭐ **必読** | 全員 | Issue 作成 → テスト観点 → テスト項目 → 実装 → テストコード → UT → E2E → Pages デプロイの完全ガイド（ユーザー視点） |
+| **[`WORKFLOW_SCRIPT_SKILL_MAPPING.md`](./WORKFLOW_SCRIPT_SKILL_MAPPING.md)** | 開発者 | 各ワークフロー・スクリプト・Skill の関係マッピング表 |
+| **[`ARTIFACTS_SCHEMA.md`](./ARTIFACTS_SCHEMA.md)** | 開発者 | ワークフロー間で受け渡されるアーティファクトの完全スキーマ定義 |
+| [`WORKFLOWS_GUIDE.md`](./WORKFLOWS_GUIDE.md) | 開発者 | 各ワークフローの詳細技術仕様・入出力・トラブルシューティング |
+| [`QA_POLICY.md`](./QA_POLICY.md) | 全員 | 品質方針・テスト戦略・カバレッジ基準・マージ条件 |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | 開発者 | コントリビューションガイド・PR ラベル・チェックリスト |
+| [`.github/auto-merge-policy.md`](.github/auto-merge-policy.md) | リーダー | 自動マージポリシー・セキュリティ実装チェック |
+
+### 📚 技術ドキュメント
+
+| ドキュメント | 内容 |
+|-----------|------|
+| [`docs/SPEC_TO_IMPLEMENTATION_GUIDE.md`](./docs/SPEC_TO_IMPLEMENTATION_GUIDE.md) | 仕様 YAML → UT/E2E/実装 の完全ガイド |
+| [`docs/DASHBOARD.md`](./docs/DASHBOARD.md) | 品質ダッシュボード実装・使用方法 |
+| `docs/phases/phase-2d/PHASE2D_COMPLETE_SUMMARY.md` | Phase 2D 実装完了報告 |
+| `.github/skills/SKILLS_INDEX.md` | Copilot Skills 完全定義 |
+| `.github/agents/trace-analyzer.md` | Trace 分析エージェントプロンプト |
+
+### 🔗 関連リソース
+
+- [QA_POLICY.md](./QA_POLICY.md) — ISO/IEC 25010 品質特性・テスト観点定義
+- [QUALITY_DASHBOARD_IMPLEMENTATION.md](./QUALITY_DASHBOARD_IMPLEMENTATION.md) — ダッシュボード実装詳細
+- [ops/rollout-checklist.md](./ops/rollout-checklist.md) — ロールアウトチェックリスト
 
 ---
 
