@@ -250,34 +250,34 @@ jobs:
             
             const body = `## 📊 品質ダッシュボード更新完了
 
-**実行日時**: ${new Date().toLocaleString('ja-JP')}
+            **実行日時**: ${new Date().toLocaleString('ja-JP')}
 
-### 📈 最新 KPI
+            ### 📈 最新 KPI
 
-| 指標 | 値 |
-|---|---|
-| テスト合格率 | ${kpiData.pass_rate}% |
-| コードカバレッジ | ${kpiData.coverage}% |
-| AI危険度ランク | ${kpiData.ai_danger_rank || '-'} |
-| テスト実行数 | ${kpiData.test_count} |
-| 合格テスト | ${kpiData.passed} |
-| 不合格テスト | ${kpiData.failed} |
+            | 指標 | 値 |
+            |---|---|
+            | テスト合格率 | ${kpiData.pass_rate}% |
+            | コードカバレッジ | ${kpiData.coverage}% |
+            | AI危険度ランク | ${kpiData.ai_danger_rank || '-'} |
+            | テスト実行数 | ${kpiData.test_count} |
+            | 合格テスト | ${kpiData.passed} |
+            | 不合格テスト | ${kpiData.failed} |
 
-### 📍 ダッシュボード
+            ### 📍 ダッシュボード
 
-- 🌐 [GitHub Pages ダッシュボード](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/dashboard/)
-- 📋 [テスト観点シート](./qa/quality-characteristics/)
-- 📦 [KPI データ](./qa/dashboard-data/)
+            - 🌐 [GitHub Pages ダッシュボード](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/dashboard/)
+            - 📋 [テスト観点シート](./qa/quality-characteristics/)
+            - 📦 [KPI データ](./qa/dashboard-data/)
 
-### ✨ 機能
+            ### ✨ 機能
 
-- ✅ テスト合格率の推移グラフ（30日間）
-- ✅ カバレッジ推移グラフ
-- ✅ AI危険度ランク分布
-- ✅ ISO/IEC 25010 品質特性別テスト状況
-- ✅ リアルタイム品質メトリクス
+            - ✅ テスト合格率の推移グラフ（30日間）
+            - ✅ カバレッジ推移グラフ
+            - ✅ AI危険度ランク分布
+            - ✅ ISO/IEC 25010 品質特性別テスト状況
+            - ✅ リアルタイム品質メトリクス
 
-> 自動生成されたレポート — このメッセージは毎日自動更新されます`;
+            > 自動生成されたレポート — このメッセージは毎日自動更新されます`;
 
             try {
               // Find or create quality-dashboard issue

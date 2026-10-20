@@ -247,20 +247,20 @@ jobs:
             
             const body = `## 🚨 Scheduled Quality Check Failed
             
-**Timestamp**: ${new Date().toISOString()}
-**Average Pass Rate**: ${passRate}%
+            **Timestamp**: ${new Date().toISOString()}
+            **Average Pass Rate**: ${passRate}%
 
-### Test Results
-- Check the workflow artifacts for detailed test results
-- Review any failing tests and address issues
+            ### Test Results
+            - Check the workflow artifacts for detailed test results
+            - Review any failing tests and address issues
 
-### Links
-- [Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            ### Links
+            - [Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
-### Next Steps
-1. Review the test failures in the artifacts
-2. Fix failing tests in your code
-3. The next scheduled run will validate the fixes`;
+            ### Next Steps
+            1. Review the test failures in the artifacts
+            2. Fix failing tests in your code
+            3. The next scheduled run will validate the fixes`;
             
             try {
               const issue = await github.rest.issues.create({

@@ -294,19 +294,19 @@ jobs:
         with:
           script: |
             const comment = `
-## 🤖 Auto-Merge Complete
-✅ This PR was automatically merged by Copilot Quality Harness.
+            ## 🤖 Auto-Merge Complete
+            ✅ This PR was automatically merged by Copilot Quality Harness.
 
-### Merge Details
-- **Method**: Squash merge
-- **Merged by**: ${{ github.actor }}
-- **Timestamp**: ${new Date().toISOString()}
+            ### Merge Details
+            - **Method**: Squash merge
+            - **Merged by**: ${{ github.actor }}
+            - **Timestamp**: ${new Date().toISOString()}
 
-### Audit Record
-All merge details have been recorded in \`.github/audit/auto-merge-log.jsonl\`
+            ### Audit Record
+            All merge details have been recorded in \`.github/audit/auto-merge-log.jsonl\`
 
----
-For more info, see [Auto-Merge Policy](.github/auto-merge-policy.md)
+            ---
+            For more info, see [Auto-Merge Policy](.github/auto-merge-policy.md)
             `;
             
             github.rest.issues.createComment({
@@ -337,23 +337,23 @@ For more info, see [Auto-Merge Policy](.github/auto-merge-policy.md)
             const reason = `${{ needs.evaluate-merge-eligibility.outputs.reason }}`;
             
             const comment = `
-## ⚠️  Auto-Merge Not Eligible
+            ## ⚠️  Auto-Merge Not Eligible
 
-**Reason**: ${reason}
+            **Reason**: ${reason}
 
-This PR does not meet the auto-merge criteria and requires manual review.
+            This PR does not meet the auto-merge criteria and requires manual review.
 
-### Auto-Merge Requirements
-- [ ] Changes are documentation/config/lint only
-- [ ] All CI checks pass
-- [ ] Labeled with \`copilot-suggestion\`
-- [ ] Auto-merge checkbox checked in PR body
-- [ ] No code files modified
+            ### Auto-Merge Requirements
+            - [ ] Changes are documentation/config/lint only
+            - [ ] All CI checks pass
+            - [ ] Labeled with \`copilot-suggestion\`
+            - [ ] Auto-merge checkbox checked in PR body
+            - [ ] No code files modified
 
-For details, see [Auto-Merge Policy](.github/auto-merge-policy.md)
+            For details, see [Auto-Merge Policy](.github/auto-merge-policy.md)
 
----
-**Note**: Once issues are resolved, re-run the workflow or push new commits to re-evaluate.
+            ---
+            **Note**: Once issues are resolved, re-run the workflow or push new commits to re-evaluate.
             `;
             
             github.rest.issues.createComment({
