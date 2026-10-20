@@ -1,0 +1,131 @@
+feature: User Registration with Email Validation
+description: |
+  Email validation and password alphanumeric check.
+  Security: Password should not be logged in plain text.
+  PII: Email addresses should be masked in logs.
+
+tests:
+  unit_tests:
+    - id: UT-001
+      title: Valid email acceptance
+      category: validation
+      input: 
+        email: "test@example.com"
+        password: "Password123"
+      expected_output: 
+        valid: true
+        message: ""
+
+    - id: UT-002
+      title: Invalid email rejection
+      category: validation
+      input:
+        email: "invalid-email"
+        password: "Password123"
+      expected_output:
+        valid: false
+        error: "Invalid email format"
+
+    - id: UT-003
+      title: Password must contain letters
+      category: validation
+      input:
+        email: "test@example.com"
+        password: "12345678"
+      expected_output:
+        valid: false
+        error: "Password must contain letters and numbers"
+
+    - id: UT-004
+      title: Password must contain numbers
+      category: validation
+      input:
+        email: "test@example.com"
+        password: "password"
+      expected_output:
+        valid: false
+        error: "Password must contain letters and numbers"
+
+    - id: UT-005
+      title: Password minimum 8 characters
+      category: validation
+      input:
+        email: "test@example.com"
+        password: "Pass1"
+      expected_output:
+        valid: false
+        error: "Password must contain letters and numbers (8+ chars)"
+
+    - id: UT-006
+      title: PII masking in logs
+      category: security
+      input:
+        email: "sensitive@example.com"
+        password: "SecurePass123"
+      expected_output:
+        valid: true
+        log_contains_email: false
+        log_contains_password: false
+
+  e2e_tests:
+    - id: E2E-001
+      title: Complete registration flow with valid data
+      category: functionality
+      steps:
+        - action: "open_registration_form"
+        - action: "enter_email"
+          value: "newuser@example.com"
+        - action: "enter_password"
+          value: "ValidPass123"
+        - action: "submit_form"
+      expected_output:
+        success: true
+        redirect_to: "/dashboard"
+
+    - id: E2E-002
+      title: Registration fails with invalid email
+      category: error_handling
+      steps:
+        - action: "open_registration_form"
+        - action: "enter_email"
+          value: "not-an-email"
+        - action: "enter_password"
+          value: "ValidPass123"
+        - action: "submit_form"
+      expected_output:
+        success: false
+        error_message: "Invalid email format"
+
+    - id: E2E-003
+      title: Registration fails with weak password
+      category: error_handling
+      steps:
+        - action: "open_registration_form"
+        - action: "enter_email"
+          value: "user@example.com"
+        - action: "enter_password"
+          value: "weak"
+        - action: "submit_form"
+      expected_output:
+        success: false
+        error_message: "Password must contain letters and numbers (8+ chars)"
+
+security_requirements:
+  - requirement: "Password must never be logged in plain text"
+    check: "Verify logs do not contain actual password values"
+  
+  - requirement: "Email addresses must be masked in logs"
+    check: "Verify email is masked as 'test***@***' format"
+  
+  - requirement: "Password must be hashed before database storage"
+    check: "Verify bcrypt or equivalent is used"
+
+acceptance_criteria:
+  - criterion: "メールアドレスの妥当性検証が機能する"
+    description: "Valid email formats are accepted, invalid formats are rejected"
+  
+  - criterion: "登録処理が正常に動作する"
+    description: "User can successfully register with valid credentials"
+  
+  - criterion: "機密情報の除外が確認できる"
+    description: "PII (password, email) is not exposed in logs or errors"
