@@ -63,16 +63,20 @@ jobs:
       
       - name: Create pull request
         if: steps.commit.outputs.branch_name != ''
-        continue-on-error: true
         run: |
-          gh pr create \
-            --title "Generate ${{ github.event.inputs.mode }} mode quality test items" \
-            --body "## Quality Items Generation\n\nMode: ${{ github.event.inputs.mode }}\n\n### Generated Files\n- Test perspectives (JSON)\n- Test items (YAML)\n- Test items (JSON)\n\n### Statistics\n- Simple mode: 6-10 items per characteristic\n- Detailed mode: 15-25 items per characteristic" \
-            --head "${{ steps.commit.outputs.branch_name }}" \
-            --base main \
-            --label "automated,quality,test-generation"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "## 📌 Generated Files Available"
+          echo ""
+          echo "Branch: \`${{ steps.commit.outputs.branch_name }}\`"
+          echo ""
+          echo "To create a pull request, visit:"
+          echo "https://github.com/${{ github.repository }}/compare/${{ steps.commit.outputs.branch_name }}"
+          echo ""
+          echo "### Generated Files:"
+          echo "- Test perspectives (JSON)"
+          echo "- Test items (YAML)"
+          echo "- Test items (JSON)"
+          echo ""
+          echo "All files are also available as artifacts: \`quality-items-${{ github.event.inputs.mode }}\`"
       
       - name: Upload generated artifacts
         uses: actions/upload-artifact@v4
