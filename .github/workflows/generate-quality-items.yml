@@ -1,5 +1,6 @@
 name: Generate Quality Items
 
+# Workflow for generating quality test items
 on:
   workflow_dispatch:
     inputs:
