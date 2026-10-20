@@ -21,6 +21,54 @@ const OUTPUT_DIR = process.argv[2] || 'qa/dashboard-data';
 mkdirSync(OUTPUT_DIR, { recursive: true });
 
 /**
+ * 前回のワークフロー実行から kpi-history.json をダウンロード
+ */
+function downloadPreviousHistory() {
+  try {
+    console.log('\n📚 Attempting to download previous KPI history...');
+    
+    // 前々回の update-dashboard 実行 ID を取得（最新の1つ前）
+    const runListCmd = `gh run list --workflow=update-dashboard.yml --limit=3 --json databaseId -q '.[].databaseId'`;
+    const runIds = execSync(runListCmd, {
+      encoding: 'utf-8',
+      env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
+    }).trim().split('\n').filter(Boolean);
+    
+    if (runIds.length < 2) {
+      console.log('  ℹ️  No previous run found (first run)');
+      return null;
+    }
+    
+    // 前回のアーティファクト ID を取得（最新の1つ前）
+    const previousRunId = runIds[1];
+    console.log(`  Previous run ID: ${previousRunId}`);
+    
+    // kpi-data アーティファクトをダウンロード
+    const downloadCmd = `gh run download ${previousRunId} --name kpi-data --dir /tmp/prev-kpi 2>&1`;
+    try {
+      execSync(downloadCmd, {
+        encoding: 'utf-8',
+        env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
+      });
+      
+      const historyFile = '/tmp/prev-kpi/kpi-history.json';
+      if (existsSync(historyFile)) {
+        const history = JSON.parse(readFileSync(historyFile, 'utf-8'));
+        console.log(`  ✓ Downloaded ${history.length} previous records`);
+        return history;
+      }
+    } catch (e) {
+      console.log(`  ⚠️  Could not download: ${e.message.split('\n')[0]}`);
+    }
+    
+    return null;
+  } catch (e) {
+    console.log(`  ⚠️  Error downloading history: ${e.message.split('\n')[0]}`);
+    return null;
+  }
+}
+
+/**
  * test-matrix からアーティファクト経由でテスト結果を取得
  */
 function fetchTestResults() {
@@ -379,13 +427,26 @@ async function main() {
   writeFileSync(latestFile, JSON.stringify(kpiData, null, 2));
   console.log(`\n✓ Saved: ${latestFile}`);
   
-  // 9. 履歴に追加
+  // 9. 履歴に追加 (前回のデータを保持)
   let history = [];
+  
+  // 前回のワークフローから履歴をダウンロード
+  const previousHistory = downloadPreviousHistory();
+  if (previousHistory && Array.isArray(previousHistory)) {
+    history = previousHistory;
+    console.log(`✓ Loaded ${history.length} records from previous run`);
+  }
+  
+  // ローカルの履歴ファイルも確認（フォールバック）
   if (existsSync(historyFile)) {
     try {
-      history = JSON.parse(readFileSync(historyFile, 'utf-8'));
+      const localHistory = JSON.parse(readFileSync(historyFile, 'utf-8'));
+      if (Array.isArray(localHistory) && localHistory.length > history.length) {
+        history = localHistory;
+        console.log(`✓ Using local history with ${history.length} records`);
+      }
     } catch (e) {
-      history = [];
+      // ローカルファイルが破損している場合はスキップ
     }
   }
   
