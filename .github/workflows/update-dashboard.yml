@@ -80,8 +80,11 @@ jobs:
       
       - name: Generate dashboard
         run: |
-          mkdir -p docs/dashboard
+          mkdir -p docs/dashboard/data
           node scripts/generate-dashboard.mjs "qa/dashboard-data" "docs/dashboard" "Quality Dashboard"
+          # Copy KPI data files for dynamic loading
+          cp qa/dashboard-data/latest-kpi.json docs/dashboard/data/ 2>/dev/null || true
+          cp qa/dashboard-data/kpi-history.json docs/dashboard/data/ 2>/dev/null || true
       
       - name: Verify dashboard
         run: |
