@@ -597,10 +597,27 @@
 
       for (let i = 0; i < rowCount; i++) {
         const row = document.createElement('tr');
-        const dateStr = data.passRateTrend[data.passRateTrend.length - 1 - i].date;
+        // Use reverse index to match trend arrays
+        const trendIndex = data.passRateTrend.length - 1 - i;
+        const dateStr = data.passRateTrend[trendIndex].date;
         const date = new Date(dateStr + 'T00:00:00');
-        const passRate = data.passRateTrend[data.passRateTrend.length - 1 - i].rate;
-        const coverage = data.coverageTrend[data.coverageTrend.length - 1 - i].coverage;
+        const passRate = data.passRateTrend[trendIndex].rate;
+        const coverage = data.coverageTrend[trendIndex].coverage;
+        
+        // Get test count, passed, failed from history or use latest KPI
+        let testCount = data.latestKPI.test_count || 0;
+        let passed = data.latestKPI.passed || 0;
+        let failed = data.latestKPI.failed || 0;
+        
+        // If we have detailed history data, find matching date
+        if (data.historyDetail && data.historyDetail.length > 0) {
+          const matchingDetail = data.historyDetail.find(h => h.date === dateStr);
+          if (matchingDetail) {
+            testCount = matchingDetail.test_count || testCount;
+            passed = matchingDetail.passed || passed;
+            failed = matchingDetail.failed || failed;
+          }
+        }
 
         // Calculate rank based on pass rate and coverage
         let rank = 'A';
@@ -610,9 +627,9 @@
         else if (passRate < 98 || coverage < 90) rank = 'B';
 
         row.innerHTML = '<td>' + date.toLocaleDateString('ja-JP') + '</td>' +
-          '<td>150</td>' +
-          '<td>138</td>' +
-          '<td>12</td>' +
+          '<td>' + testCount + '</td>' +
+          '<td>' + passed + '</td>' +
+          '<td>' + failed + '</td>' +
           '<td><span class="trend-up">' + passRate + '%</span></td>' +
           '<td>' + coverage + '%</td>' +
           '<td><span class="status-badge ' + statusMap[rank] + '">Rank ' + rank + '</span></td>';
@@ -675,6 +692,16 @@
                   .map(h => ({
                     date: new Date(h.timestamp).toISOString().split('T')[0],
                     coverage: h.coverage
+                  }));
+                
+                // Store full history for table detail display
+                mergedData.historyDetail = history
+                  .slice(-30)
+                  .map(h => ({
+                    date: new Date(h.timestamp).toISOString().split('T')[0],
+                    test_count: h.test_count,
+                    passed: h.passed,
+                    failed: h.failed
                   }));
               }
               
