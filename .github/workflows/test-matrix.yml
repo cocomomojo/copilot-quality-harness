@@ -33,19 +33,19 @@ jobs:
       
       - name: Run unit tests
         if: matrix.test-type == 'unit'
-        id: test
+        id: test-unit
         continue-on-error: true
         run: npm test 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
       
       - name: Run API tests
         if: matrix.test-type == 'api'
-        id: test
+        id: test-api
         continue-on-error: true
         run: npm run test:api 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
       
       - name: Run E2E tests
         if: matrix.test-type == 'e2e'
-        id: test
+        id: test-e2e
         continue-on-error: true
         run: |
           npx playwright install --with-deps chromium
@@ -53,7 +53,7 @@ jobs:
       
       - name: Run advanced tests
         if: matrix.test-type == 'advanced'
-        id: test
+        id: test-advanced
         continue-on-error: true
         run: npm run test:advanced 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
       
