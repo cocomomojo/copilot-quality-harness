@@ -63,6 +63,7 @@ jobs:
       
       - name: Create pull request
         if: steps.commit.outputs.branch_name != ''
+        continue-on-error: true
         run: |
           gh pr create \
             --title "Generate ${{ github.event.inputs.mode }} mode quality test items" \
