@@ -1,0 +1,41 @@
+title: Copilot Quality Harness
+description: Enterprise-Grade Artifact-Based Workflow Chaining System
+theme: jekyll-theme-slate
+show_downloads: false
+
+# GitHub Pages configuration
+plugins:
+  - jekyll-gist
+  - jekyll-github-metadata
+  - jekyll-mentions
+  - jekyll-relative-links
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+relative_links:
+  enabled: true
+  collections: true
+
+include:
+  - _pages
+
+exclude:
+  - node_modules
+  - vendor
+
+# Site configuration
+url: https://cocomomojo.github.io/copilot-quality-harness
+baseurl: /copilot-quality-harness
+
+# Build settings
+markdown: kramdown
+kramdown:
+  parse_block_html: true
+  parse_inline_html: true
+
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:name/
