@@ -434,7 +434,7 @@ gh workflow run copilot-analyze-trace.yml \
 - A: Settings → Pages → Source を「GitHub Actions」に設定。デプロイスクリプト例は [docs/OPERATION_FLOW.md - ステップ 10](./docs/OPERATION_FLOW.md#-ステップ-10-pages-デプロイ自動) を参照。
 
 **Q: 環境変数・シークレットは何が必要？**
-- A: `COPILOT_GITHUB_TOKEN` が必須。詳細は [WORKFLOWS_GUIDE.md - Environment Variables](./WORKFLOWS_GUIDE.md) を参照。
+- A: `COPILOT_GITHUB_TOKEN` が必須。詳細は [WORKFLOWS_GUIDE.md - Environment Variables](./docs/WORKFLOWS_GUIDE.md) を参照。
 
 **Q: 失敗トレースが多い場合は？**
 - A: Matrix strategy の max-parallel を調整してください。デフォルト 8 並列。
@@ -456,9 +456,9 @@ gh workflow run copilot-analyze-trace.yml \
 | **[`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)** ⭐ **必読** | 全員 | Issue 作成 → テスト観点 → テスト項目 → 実装 → テストコード → UT → E2E → Pages デプロイの完全ガイド（ユーザー視点） |
 | **[`docs/WORKFLOW_SCRIPT_SKILL_MAPPING.md`](./docs/WORKFLOW_SCRIPT_SKILL_MAPPING.md)** | 開発者 | 各ワークフロー・スクリプト・Skill の関係マッピング表 |
 | **[`docs/ARTIFACTS_SCHEMA.md`](./docs/ARTIFACTS_SCHEMA.md)** | 開発者 | ワークフロー間で受け渡されるアーティファクトの完全スキーマ定義 |
-| [`WORKFLOWS_GUIDE.md`](./WORKFLOWS_GUIDE.md) | 開発者 | 各ワークフローの詳細技術仕様・入出力・トラブルシューティング |
-| [`QA_POLICY.md`](./QA_POLICY.md) | 全員 | 品質方針・テスト戦略・カバレッジ基準・マージ条件 |
-| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | 開発者 | コントリビューションガイド・PR ラベル・チェックリスト |
+| [`WORKFLOWS_GUIDE.md`](./docs/WORKFLOWS_GUIDE.md) | 開発者 | 各ワークフローの詳細技術仕様・入出力・トラブルシューティング |
+| [`QA_POLICY.md`](./docs/QA_POLICY.md) | 全員 | 品質方針・テスト戦略・カバレッジ基準・マージ条件 |
+| [`CONTRIBUTING.md`](./docs/CONTRIBUTING.md) | 開発者 | コントリビューションガイド・PR ラベル・チェックリスト |
 | [`.github/auto-merge-policy.md`](.github/auto-merge-policy.md) | リーダー | 自動マージポリシー・セキュリティ実装チェック |
 
 ### 📚 技術ドキュメント
@@ -473,8 +473,8 @@ gh workflow run copilot-analyze-trace.yml \
 
 ### 🔗 関連リソース
 
-- [QA_POLICY.md](./QA_POLICY.md) — ISO/IEC 25010 品質特性・テスト観点定義
-- [QUALITY_DASHBOARD_IMPLEMENTATION.md](./QUALITY_DASHBOARD_IMPLEMENTATION.md) — ダッシュボード実装詳細
+- [QA_POLICY.md](./docs/QA_POLICY.md) — ISO/IEC 25010 品質特性・テスト観点定義
+- [QUALITY_DASHBOARD_IMPLEMENTATION.md](./docs/QUALITY_DASHBOARD_IMPLEMENTATION.md) — ダッシュボード実装詳細
 - [ops/rollout-checklist.md](./ops/rollout-checklist.md) — ロールアウトチェックリスト
 
 ---

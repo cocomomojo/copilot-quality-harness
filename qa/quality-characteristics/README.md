@@ -222,7 +222,7 @@ npm run generate:dashboard
 - [テスト管理ガイド](../test-management/)
 - [品質ダッシュボード](../../docs/dashboard/)
 - [CI/CD パイプライン](../../.github/workflows/)
-- [QA ポリシー](../../QA_POLICY.md)
+- [QA ポリシー](../../docs/QA_POLICY.md)
 
 ## 📞 サポート
 

@@ -426,7 +426,7 @@ AUTO_MERGE_ENABLED       # true/false で自動マージの有効化
 - [テスト設計テンプレ](tests/specs/acceptance-example.yml)
 - [自動マージポリシー](.github/auto-merge-policy.md)
 - [Copilot Skills](.copilot/skills.json)
-- [QA ポリシー](QA_POLICY.md)
+- [QA ポリシー](./QA_POLICY.md)
 
 ---
 
