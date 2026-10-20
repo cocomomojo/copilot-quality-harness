@@ -1,6 +1,5 @@
 name: Generate Quality Items
 
-# Workflow for generating quality test items and creating pull requests
 on:
   workflow_dispatch:
     inputs:
@@ -65,14 +64,14 @@ jobs:
       - name: Create pull request
         if: steps.commit.outputs.branch_name != ''
         run: |
-         gh pr create \
-           --title "Generate ${{ github.event.inputs.mode }} mode quality test items" \
-           --body "## Quality Items Generation\n\nMode: ${{ github.event.inputs.mode }}\n\n### Generated Files\n- Test perspectives (JSON)\n- Test items (YAML)\n- Test items (JSON)\n\n### Statistics\n- Simple mode: 6-10 items per characteristic\n- Detailed mode: 15-25 items per characteristic" \
-           --head "${{ steps.commit.outputs.branch_name }}" \
-           --base main \
-           --label "automated,quality,test-generation"
-       env:
-         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gh pr create \
+            --title "Generate ${{ github.event.inputs.mode }} mode quality test items" \
+            --body "## Quality Items Generation\n\nMode: ${{ github.event.inputs.mode }}\n\n### Generated Files\n- Test perspectives (JSON)\n- Test items (YAML)\n- Test items (JSON)\n\n### Statistics\n- Simple mode: 6-10 items per characteristic\n- Detailed mode: 15-25 items per characteristic" \
+            --head "${{ steps.commit.outputs.branch_name }}" \
+            --base main \
+            --label "automated,quality,test-generation"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Upload generated artifacts
         uses: actions/upload-artifact@v4
@@ -91,11 +90,11 @@ jobs:
           echo "- Test items (YAML)"
           echo "- Test items (JSON)"
           echo ""
-         if [ -n "${{ steps.commit.outputs.branch_name }}" ]; then
-           echo "**Pull Request**: Created from branch `${{ steps.commit.outputs.branch_name }}`"
-           echo "- Visit https://github.com/${{ github.repository }}/compare/${{ steps.commit.outputs.branch_name }} to view and create a PR"
-         else
-           echo "⚠️ No changes were made - no files were generated"
-         fi
-         echo ""
-         echo "All generated files available in artifacts section."
+          if [ -n "${{ steps.commit.outputs.branch_name }}" ]; then
+            echo "**Pull Request**: Created from branch \`${{ steps.commit.outputs.branch_name }}\`"
+            echo "- Visit https://github.com/${{ github.repository }}/compare/${{ steps.commit.outputs.branch_name }} to view and create a PR"
+          else
+            echo "⚠️ No changes were made - no files were generated"
+          fi
+          echo ""
+          echo "All generated files available in artifacts section."
