@@ -1,3 +1,8 @@
+---
+layout: default
+title: Contributing Guide
+---
+
 # Contributing Guide
 
 このドキュメントは、**Copilot による自動化を活用しながら品質を担保する開発フロー** を説明します。  

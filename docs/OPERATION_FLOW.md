@@ -1,3 +1,8 @@
+---
+layout: default
+title: 🌊 Copilot Quality Harness - 運用フロー完全ガイド
+---
+
 # 🌊 Copilot Quality Harness - 運用フロー完全ガイド
 
 ユーザー視点での完全な「Issue 作成 → テスト設計 → 実装 → テスト実行 → デプロイ」ワークフロー

@@ -1,3 +1,8 @@
+---
+layout: default
+title: 🔍 Copilot Quality Harness 統合検証レポート
+---
+
 # 🔍 Copilot Quality Harness 統合検証レポート
 
 **実施日時**: 2026-10-18 00:30:00 - 00:32:00 (UTC)

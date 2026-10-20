@@ -1,7 +1,8 @@
 title: Copilot Quality Harness
-description: Enterprise-Grade Artifact-Based Workflow Chaining System
+description: エンタープライズ向けアーティファクトベース ワークフロー チェーンシステム
 theme: jekyll-theme-slate
 show_downloads: false
+lang: ja
 
 # GitHub Pages configuration
 plugins:
@@ -23,6 +24,8 @@ include:
 exclude:
   - node_modules
   - vendor
+  - .vscode
+  - .copilot
 
 # Site configuration
 url: https://cocomomojo.github.io/copilot-quality-harness
@@ -33,8 +36,13 @@ markdown: kramdown
 kramdown:
   parse_block_html: true
   parse_inline_html: true
+  input: GFM
+  hard_wrap: true
 
-# Collections
+# Markdown configuration
+markdown_ext: md,markdown,mdown,mkdn,mkd,ldown
+
+# Collections - Enable markdown files as pages
 collections:
   pages:
     output: true

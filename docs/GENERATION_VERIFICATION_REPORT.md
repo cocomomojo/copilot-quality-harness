@@ -1,3 +1,8 @@
+---
+layout: default
+title: Implementation Generation Verification Report
+---
+
 # Implementation Generation Verification Report
 # プロフィール画面アカウント作成日表示機能の実装検証レポート
 

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Spec-to-Implementation 統合ワークフロー
+---
+
 # Spec-to-Implementation 統合ワークフロー
 
 ## 概要

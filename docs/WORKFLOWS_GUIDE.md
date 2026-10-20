@@ -1,3 +1,8 @@
+---
+layout: default
+title: Dynamic Workflows CI/CD Implementation Guide
+---
+
 # Dynamic Workflows CI/CD Implementation Guide
 
 This document describes the Dynamic Workflows CI/CD system implemented for the copilot-quality-harness project.
