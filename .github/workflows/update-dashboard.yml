@@ -42,90 +42,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Collect KPI data
+      - name: Collect KPI data (Advanced Pattern 3)
         id: collect
-        run: |
-          # Create directory for KPI data
-          mkdir -p qa/dashboard-data
-          
-          # Generate current KPI data
-          node << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-          
-          // Collect test results from recent CI runs
-          const testResultsDir = 'qa/test-management/reports';
-          let passRate = 85;
-          let testCount = 150;
-          let passed = 127;
-          let failed = 23;
-          let coverage = 82;
-          
-          // Try to read actual test results if available
-          if (fs.existsSync(testResultsDir)) {
-            try {
-              const files = fs.readdirSync(testResultsDir);
-              const jsonFiles = files.filter(f => f.endsWith('.json'));
-              if (jsonFiles.length > 0) {
-                const latestFile = jsonFiles[jsonFiles.length - 1];
-                const data = JSON.parse(fs.readFileSync(path.join(testResultsDir, latestFile), 'utf-8'));
-                if (data.summary) {
-                  passRate = data.summary.pass_rate || passRate;
-                  testCount = data.summary.total_tests || testCount;
-                  passed = data.summary.total_passed || passed;
-                  failed = data.summary.total_failed || failed;
-                }
-              }
-            } catch (e) {
-              console.log('Could not parse test results:', e.message);
-            }
-          }
-          
-          // Determine AI danger rank based on pass rate and coverage
-          let aiDangerRank = 'A';
-          if (passRate < 80 || coverage < 70) aiDangerRank = 'E';
-          else if (passRate < 85 || coverage < 75) aiDangerRank = 'D';
-          else if (passRate < 90 || coverage < 80) aiDangerRank = 'C';
-          else if (passRate < 95 || coverage < 85) aiDangerRank = 'B';
-          
-          const kpiData = {
-            timestamp: new Date().toISOString(),
-            pass_rate: passRate,
-            test_count: testCount,
-            passed: passed,
-            failed: failed,
-            coverage: coverage,
-            ai_danger_rank: aiDangerRank
-          };
-          
-          // Write current KPI
-          fs.writeFileSync('qa/dashboard-data/latest-kpi.json', JSON.stringify(kpiData, null, 2));
-          
-          // Append to history
-          const historyFile = 'qa/dashboard-data/kpi-history.json';
-          let history = [];
-          if (fs.existsSync(historyFile)) {
-            try {
-              history = JSON.parse(fs.readFileSync(historyFile, 'utf-8'));
-            } catch (e) {
-              history = [];
-            }
-          }
-          
-          history.push(kpiData);
-          // Keep last 90 days
-          if (history.length > 90) {
-            history = history.slice(-90);
-          }
-          
-          fs.writeFileSync(historyFile, JSON.stringify(history, null, 2));
-          
-          console.log('KPI Data collected:', JSON.stringify(kpiData, null, 2));
-          
-          // Write to GITHUB_OUTPUT
-          const output = 'kpi_data=' + JSON.stringify(kpiData).replace(/"/g, '\\"') + '\n';
-          fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
-          EOF
+        run: node scripts/collect-kpi-advanced.mjs qa/dashboard-data
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
       
       - name: Upload KPI data
         uses: actions/upload-artifact@v4
