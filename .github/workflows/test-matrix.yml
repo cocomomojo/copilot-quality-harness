@@ -212,7 +212,7 @@ jobs:
         id: test_status
         run: |
           if [ -f test-matrix-summary.json ]; then
-            STATUS=$(jq -r '.total_failed > 0 ? "failed" : "passed"' test-matrix-summary.json)
+            STATUS=$(node -e "const data = require('./test-matrix-summary.json'); console.log(data.total_failed > 0 ? 'failed' : 'passed')")
             echo "status=$STATUS" >> $GITHUB_OUTPUT
           fi
         shell: bash
