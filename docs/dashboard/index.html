@@ -278,6 +278,24 @@
         <div class="value" id="aiRank">-</div>
         <div id="aiRankBadge"></div>
       </div>
+
+      <div class="summary-card">
+        <h3>複合スコア（Pattern 3）</h3>
+        <div class="value" id="compositeScore">-</div>
+        <div class="unit">/100</div>
+      </div>
+
+      <div class="summary-card">
+        <h3>リスクレベル</h3>
+        <div class="value" id="riskLevel">-</div>
+        <div id="riskLevelBadge"></div>
+      </div>
+
+      <div class="summary-card">
+        <h3>トレンド</h3>
+        <div class="value" id="trend">-</div>
+        <div id="trendIcon" style="font-size: 1.5em; margin-top: 10px;"></div>
+      </div>
     </div>
 
     <div class="charts-grid">
@@ -368,6 +386,10 @@
         failed: 12,
         coverage: 85,
         ai_danger_rank: 'B',
+        composite_score: 75,
+        risk_level: 'MEDIUM',
+        trend: 'STABLE',
+        data_source: 'FALLBACK',
         timestamp: new Date().toISOString()
       },
       passRateTrend: [
@@ -416,6 +438,37 @@
       document.getElementById('testCount').textContent = data.latestKPI.test_count;
       document.getElementById('coverage').textContent = data.latestKPI.coverage;
       document.getElementById('aiRank').textContent = data.latestKPI.ai_danger_rank || '-';
+      
+      // Pattern 3 新フィールド
+      const compositeScore = data.latestKPI.composite_score || '-';
+      document.getElementById('compositeScore').textContent = compositeScore;
+      
+      const riskLevel = data.latestKPI.risk_level || '-';
+      document.getElementById('riskLevel').textContent = riskLevel;
+      
+      const riskLevelBadge = document.getElementById('riskLevelBadge');
+      if (riskLevel && riskLevel !== '-') {
+        const riskColors = {
+          'LOW': 'rank-a',
+          'MEDIUM': 'rank-c',
+          'HIGH': 'rank-d',
+          'CRITICAL': 'rank-e'
+        };
+        riskLevelBadge.innerHTML = '<div class="ai-danger-badge ' + (riskColors[riskLevel] || 'rank-d') + '">' + riskLevel + '</div>';
+      }
+      
+      const trend = data.latestKPI.trend || '-';
+      document.getElementById('trend').textContent = trend;
+      
+      const trendIcon = document.getElementById('trendIcon');
+      if (trend && trend !== '-') {
+        const trendEmojis = {
+          'IMPROVING': '📈 向上中',
+          'DECLINING': '📉 低下中',
+          'STABLE': '➡️ 安定'
+        };
+        trendIcon.innerHTML = trendEmojis[trend] || trend;
+      }
 
       const rankMap = {
         'A': 'rank-a',
