@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-10-20T05:50:29Z",
+  "workflow_run_id": 39377013016,
+  "mode": "simple",
+  "files": {
+    "test_perspectives": "test-perspectives-simple.json",
+    "test_items_yaml": "test-items-simple.yml",
+    "test_items_json": "test-items-simple.json"
+  },
+  "artifact_name": "quality-items-simple",
+  "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/39377013016"
+}
