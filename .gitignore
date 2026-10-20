@@ -5,6 +5,5 @@ playwright-report/
 test-results/
 backend/data/
 qa/test-management/reports/test-result.json
-# Generated KPI and dashboard data (workflow-generated, not for version control)
+# Generated KPI and dashboard data (workflow-generated, persisted in git for GitHub Pages deployment)
 qa/dashboard-data/*.json
-docs/dashboard/data/*.json
