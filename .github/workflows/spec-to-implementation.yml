@@ -11,11 +11,20 @@ on:
         description: 'Path to spec file (e.g., tests/specs/user-registration.yml)'
         required: false
         type: string
+      quality_items_artifact:
+        description: 'Quality items artifact name from generate-quality-items workflow (e.g., quality-items-simple)'
+        required: false
+        type: string
+      quality_items_run_id:
+        description: 'GitHub Run ID from generate-quality-items workflow to download artifact'
+        required: false
+        type: string
 
 permissions:
   contents: write
   issues: write
   pull-requests: write
+  actions: read
 
 jobs:
   # ============================================================
@@ -28,6 +37,8 @@ jobs:
       spec_file: ${{ steps.resolve-spec.outputs.spec_file }}
       feature_name: ${{ steps.generate.outputs.feature_name }}
       spec_content: ${{ steps.generate.outputs.spec_content }}
+      quality_items_path: ${{ steps.download-quality-items.outputs.artifact_path }}
+      quality_items_manifest: ${{ steps.download-quality-items.outputs.manifest_path }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,6 +62,34 @@ jobs:
             echo "Error: Either spec_file or issue_number must be provided"
             exit 1
           fi
+
+      - name: Download quality items artifact (if provided)
+        if: inputs.quality_items_artifact != '' && inputs.quality_items_run_id != ''
+        id: download-quality-items
+        run: |
+          echo "📦 Downloading quality items artifact..."
+          echo "Artifact: ${{ inputs.quality_items_artifact }}"
+          echo "Run ID: ${{ inputs.quality_items_run_id }}"
+          
+          mkdir -p qa/quality-items-input
+          gh run download "${{ inputs.quality_items_run_id }}" \
+            --name "${{ inputs.quality_items_artifact }}" \
+            --dir qa/quality-items-input
+          
+          # Output paths for next steps
+          echo "artifact_path=qa/quality-items-input" >> "$GITHUB_OUTPUT"
+          echo "manifest_path=qa/quality-items-input/manifest.json" >> "$GITHUB_OUTPUT"
+          
+          echo ""
+          echo "✅ Quality items downloaded successfully"
+          if [ -f qa/quality-items-input/manifest.json ]; then
+            echo ""
+            echo "📋 Manifest content:"
+            cat qa/quality-items-input/manifest.json
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+        continue-on-error: true
 
       - name: Fetch Issue from GitHub
         if: steps.resolve-spec.outputs.source == 'generated'

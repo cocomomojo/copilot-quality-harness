@@ -15,10 +15,24 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: read
+
+outputs:
+  quality_items_artifact:
+    description: "生成された品質項目アーティファクト名"
+    value: ${{ jobs.generate-quality-items.outputs.artifact_name }}
+  quality_items_manifest:
+    description: "品質項目マニフェストファイルパス"
+    value: ${{ jobs.generate-quality-items.outputs.manifest_file }}
 
 jobs:
   generate-quality-items:
     runs-on: ubuntu-latest
+    outputs:
+      artifact_name: quality-items-${{ github.event.inputs.mode }}
+      manifest_file: qa/quality-characteristics/generated/manifest.json
+      spec_file: qa/quality-characteristics/generated/test-items-${{ github.event.inputs.mode }}.yml
+      timestamp: ${{ steps.metadata.outputs.timestamp }}
     
     steps:
       - uses: actions/checkout@v4
@@ -37,6 +51,35 @@ jobs:
         run: |
           mkdir -p qa/quality-characteristics/generated
           npx ts-node scripts/generate-quality-characteristics.ts "${{ github.event.inputs.mode }}" "qa/quality-characteristics/generated"
+      
+      - name: Generate metadata and manifest
+        id: metadata
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          WORKFLOW_RUN_ID=${{ github.run_id }}
+          MODE="${{ github.event.inputs.mode }}"
+          
+          echo "timestamp=$TIMESTAMP" >> "$GITHUB_OUTPUT"
+          echo "workflow_run_id=$WORKFLOW_RUN_ID" >> "$GITHUB_OUTPUT"
+          
+          # Create manifest.json for artifact tracking
+          cat > qa/quality-characteristics/generated/manifest.json << EOF
+          {
+            "version": "1.0",
+            "generated_at": "$TIMESTAMP",
+            "workflow_run_id": $WORKFLOW_RUN_ID,
+            "mode": "$MODE",
+            "files": {
+              "test_perspectives": "test-perspectives-${MODE}.json",
+              "test_items_yaml": "test-items-${MODE}.yml",
+              "test_items_json": "test-items-${MODE}.json"
+            },
+            "artifact_name": "quality-items-${MODE}",
+            "github_run_url": "https://github.com/${{ github.repository }}/actions/runs/$WORKFLOW_RUN_ID"
+          }
+          EOF
+          
+          echo "Manifest created at: qa/quality-characteristics/generated/manifest.json"
       
       - name: Create branch and commit changes
         id: commit
@@ -61,22 +104,25 @@ jobs:
             echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
           fi
       
-      - name: Create pull request
-        if: steps.commit.outputs.branch_name != ''
+      - name: Publish artifact metadata
         run: |
-          echo "## 📌 Generated Files Available"
+          echo "## 📦 Artifact Published"
           echo ""
-          echo "Branch: \`${{ steps.commit.outputs.branch_name }}\`"
+          echo "**Artifact Name**: quality-items-${{ github.event.inputs.mode }}"
+          echo "**Workflow Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "**Manifest**: qa/quality-characteristics/generated/manifest.json"
           echo ""
-          echo "To create a pull request, visit:"
-          echo "https://github.com/${{ github.repository }}/compare/${{ steps.commit.outputs.branch_name }}"
+          echo "### Files in Artifact:"
+          echo "- \`test-perspectives-${{ github.event.inputs.mode }}.json\`"
+          echo "- \`test-items-${{ github.event.inputs.mode }}.yml\`"
+          echo "- \`test-items-${{ github.event.inputs.mode }}.json\`"
+          echo "- \`manifest.json\`"
           echo ""
-          echo "### Generated Files:"
-          echo "- Test perspectives (JSON)"
-          echo "- Test items (YAML)"
-          echo "- Test items (JSON)"
-          echo ""
-          echo "All files are also available as artifacts: \`quality-items-${{ github.event.inputs.mode }}\`"
+          echo "### Usage in Next Workflow:"
+          echo "To use this artifact in another workflow:"
+          echo "\`\`\`bash"
+          echo "gh run download ${{ github.run_id }} --name quality-items-${{ github.event.inputs.mode }}"
+          echo "\`\`\`"
       
       - name: Upload generated artifacts
         uses: actions/upload-artifact@v4
@@ -84,22 +130,29 @@ jobs:
           name: quality-items-${{ github.event.inputs.mode }}
           path: qa/quality-characteristics/generated/
           retention-days: 30
+          if-no-files-found: error
       
       - name: Summary
         run: |
           echo "## ✅ Quality Items Generation Complete"
           echo ""
           echo "**Mode**: ${{ github.event.inputs.mode }}"
-          echo "**Generated Files**:"
+          echo "**Timestamp**: $(cat qa/quality-characteristics/generated/manifest.json | grep -o '"generated_at": "[^"]*"')"
+          echo ""
+          echo "### Generated Files:"
           echo "- Test perspectives sheet (JSON)"
           echo "- Test items (YAML)"
           echo "- Test items (JSON)"
+          echo "- Manifest (JSON)"
           echo ""
           if [ -n "${{ steps.commit.outputs.branch_name }}" ]; then
-            echo "**Pull Request**: Created from branch \`${{ steps.commit.outputs.branch_name }}\`"
-            echo "- Visit https://github.com/${{ github.repository }}/compare/${{ steps.commit.outputs.branch_name }} to view and create a PR"
+            echo "**Git Branch**: \`${{ steps.commit.outputs.branch_name }}\`"
+            echo "**PR Link**: https://github.com/${{ github.repository }}/compare/${{ steps.commit.outputs.branch_name }}"
           else
             echo "⚠️ No changes were made - no files were generated"
           fi
           echo ""
-          echo "All generated files available in artifacts section."
+          echo "### Artifact Storage:"
+          echo "✅ All files stored in artifact: \`quality-items-${{ github.event.inputs.mode }}\`"
+          echo "✅ Manifest for tracking: \`manifest.json\`"
+          echo "✅ Retention period: 30 days"
