@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * Advanced KPI Collection Script
+ * Advanced KPI Collection Script - Pattern 3
  * 
- * パターン 3 実装: GitHub API から実テスト結果を自動取得
- * - 最新ワークフロー実行結果を取得
- * - テストカバレッジを動的計測
- * - AI danger rank を複合指標で計算
- * - トレンド分析とアラート機能
+ * リアルタイム実テスト結果の自動収集
+ * - test-matrix.yml からの実テスト結果を読み込み
+ * - GitHub API からテスト実行詳細を取得
+ * - 複合スコアで AI 危険度ランクを計算
+ * - トレンド分析と 90 日履歴管理
+ * 
+ * Mock データは完全排除 - 実データのみ使用
  */
 
 import { execSync } from 'node:child_process';
@@ -21,82 +23,158 @@ const OUTPUT_DIR = process.argv[2] || 'qa/dashboard-data';
 mkdirSync(OUTPUT_DIR, { recursive: true });
 
 /**
- * GitHub API を使用してテストワークフロー実行結果を取得
+ * test-matrix からアーティファクト経由でテスト結果を取得
  */
 async function fetchTestResults() {
-  console.log('\n📊 Fetching test results from GitHub API...');
+  console.log('\n📊 Fetching actual test results from artifacts...');
   
   try {
-    // テストワークフロー（test-matrix.yml など）の最新実行を取得
-    const cmd = `gh run list --workflow=test-matrix.yml --limit=5 --json databaseId,conclusion,status,createdAt -q '.[] | select(.conclusion != null)'`;
+    // 最新の test-matrix 実行を取得
+    const cmd = `gh run list --workflow=test-matrix.yml --limit=1 --json databaseId,conclusion,status,createdAt -q '.[] | select(.conclusion != null)'`;
     
     const output = execSync(cmd, { 
       encoding: 'utf-8',
       env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
     });
     
-    const runs = output.trim().split('\n')
-      .filter(line => line.trim())
-      .map((line, idx) => {
-        try {
-          return JSON.parse(line);
-        } catch (e) {
-          console.log(`Warning: Could not parse line ${idx}: ${line}`);
-          return null;
-        }
-      })
-      .filter(r => r !== null);
+    const run = JSON.parse(output.trim());
     
-    if (runs.length === 0) {
+    if (!run) {
       console.log('⚠️  No completed test runs found');
       return null;
     }
     
-    const latestRun = runs[0];
-    console.log(`✓ Latest run ID: ${latestRun.databaseId}`);
-    console.log(`  Status: ${latestRun.conclusion}`);
+    const runId = run.databaseId;
+    console.log(`✓ Latest test-matrix run: ${runId}`);
+    console.log(`  Status: ${run.conclusion}`);
     
-    // 実行結果の詳細を取得
-    const jobsCmd = `gh run view ${latestRun.databaseId} --json jobs -q '.jobs[]'`;
+    // test-matrix-summary を探してダウンロード
+    console.log(`  Searching for test-matrix-summary artifact...`);
+    
+    try {
+      // Artifact をローカルにダウンロード
+      const downloadDir = '/tmp/test-results-$$';
+      execSync(`gh run download ${runId} --name test-matrix-summary --dir ${downloadDir} 2>/dev/null || true`, {
+        env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
+      });
+      
+      const summaryPath = `${downloadDir}/test-matrix-summary.json`;
+      if (existsSync(summaryPath)) {
+        console.log(`  ✓ Found test-matrix-summary.json`);
+        const summary = JSON.parse(readFileSync(summaryPath, 'utf-8'));
+        return {
+          runId,
+          conclusion: run.conclusion,
+          createdAt: run.createdAt,
+          summary: summary,
+          source: 'test-matrix-artifact'
+        };
+      }
+    } catch (e) {
+      // artifact がなければ continue
+    }
+    
+    // Fallback: GitHub API で直接ジョブ情報を取得
+    console.log(`  Fallback: Fetching job details from API...`);
+    const jobsCmd = `gh run view ${runId} --json jobs -q '.jobs[]'`;
     const jobsOutput = execSync(jobsCmd, {
       encoding: 'utf-8',
       env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
     });
     
-    let testJobs = [];
+    let jobs = [];
     jobsOutput.trim().split('\n')
       .filter(line => line.trim())
-      .forEach((line, idx) => {
+      .forEach(line => {
         try {
-          testJobs.push(JSON.parse(line));
+          jobs.push(JSON.parse(line));
         } catch (e) {
-          console.log(`Warning: Could not parse job line ${idx}`);
+          // skip
         }
       });
     
     return {
-      runId: latestRun.databaseId,
-      conclusion: latestRun.conclusion,
-      createdAt: latestRun.createdAt,
-      jobs: testJobs
+      runId,
+      conclusion: run.conclusion,
+      createdAt: run.createdAt,
+      jobs: jobs,
+      source: 'github-api'
     };
   } catch (error) {
-    console.log('⚠️  Error fetching from GitHub API:', error.message);
+    console.log('⚠️  Error fetching test results:', error.message);
     return null;
   }
 }
 
 /**
- * テストジョブの結果をパース
+ * テスト結果を実データから解析
  */
-function parseTestResults(testRun) {
-  console.log('\n🔍 Parsing test results...');
+function parseTestResults(testData) {
+  console.log('\n🔍 Parsing actual test results...');
+  
+  if (!testData) {
+    console.log('❌ No test data available');
+    return null;
+  }
   
   let totalTests = 0;
   let passedTests = 0;
   let failedTests = 0;
-  let testCoverage = 0;
-  let jobDetails = [];
+  let passRate = 0;
+  
+  if (testData.source === 'test-matrix-artifact' && testData.summary) {
+    // test-matrix-summary から実データを取得
+    const summary = testData.summary;
+    totalTests = summary.total_tests || 0;
+    passedTests = summary.total_passed || 0;
+    failedTests = summary.total_failed || 0;
+    passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
+    
+    console.log(`  ✓ Total tests: ${totalTests}`);
+    console.log(`  ✓ Passed: ${passedTests}`);
+    console.log(`  ✓ Failed: ${failedTests}`);
+    console.log(`  ✓ Pass rate: ${passRate}%`);
+    
+    return {
+      totalTests,
+      passedTests,
+      failedTests,
+      passRate,
+      source: 'test-matrix'
+    };
+  } else if (testData.source === 'github-api' && testData.jobs) {
+    // GitHub API ジョブから推定
+    const jobs = testData.jobs;
+    const testJobs = jobs.filter(j => 
+      j.name && (j.name.includes('test') || j.name.includes('Test'))
+    );
+    
+    totalTests = testJobs.length;
+    passedTests = testJobs.filter(j => j.conclusion === 'success').length;
+    failedTests = testJobs.filter(j => j.conclusion === 'failure').length;
+    passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
+    
+    if (totalTests > 0) {
+      console.log(`  ✓ Test jobs found: ${totalTests}`);
+      console.log(`  ✓ Passed: ${passedTests}`);
+      console.log(`  ✓ Failed: ${failedTests}`);
+    } else {
+      console.log(`  ⚠️  No test jobs found in workflow`);
+      return null;
+    }
+    
+    return {
+      totalTests,
+      passedTests,
+      failedTests,
+      passRate,
+      source: 'github-api'
+    };
+  }
+  
+  return null;
+}
+
   
   if (!testRun || !testRun.jobs) {
     console.log('⚠️  No test jobs found');
@@ -286,31 +364,43 @@ function analyzeTrend(currentData, historyFile) {
  */
 async function main() {
   console.log('🚀 Advanced KPI Collection - Pattern 3 Implementation');
+  console.log('📋 Mode: REAL DATA ONLY (No Mock)');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   
-  // 1. GitHub API からテスト結果を取得
-  const testRun = await fetchTestResults();
+  // 1. テストワークフロー実行から実テスト結果を取得
+  const testData = await fetchTestResults();
+  
+  if (!testData) {
+    console.log('\n❌ FATAL: No test results available');
+    console.log('   Cannot generate KPI without actual test data');
+    console.log('   Ensure test-matrix.yml has completed with results');
+    process.exit(1);
+  }
   
   // 2. テスト結果をパース
-  const testResults = parseTestResults(testRun);
+  const testResults = parseTestResults(testData);
+  
+  if (!testResults) {
+    console.log('\n❌ FATAL: Could not parse test results');
+    console.log('   Test data exists but could not be parsed');
+    process.exit(1);
+  }
   
   // 3. カバレッジデータを読み込む
   const coverage = readCoverageData();
   
-  // 4. デフォルト値をマージ
-  let passRate = testResults.passRate || 92;
-  let testCount = testResults.totalTests || 150;
-  let passed = testResults.passedTests || 138;
-  let failed = testResults.failedTests || 12;
+  // 4. 実テスト結果を使用（Mock データなし）
+  const passRate = testResults.passRate;
+  const testCount = testResults.totalTests;
+  const passed = testResults.passedTests;
+  const failed = testResults.failedTests;
   
-  // GitHub API から取得できなかった場合のフォールバック
-  if (testRun === null) {
-    console.log('\n⚠️  Using fallback values (API unavailable)');
-    passRate = 92;
-    testCount = 150;
-    passed = 138;
-    failed = 12;
-  }
+  console.log(`\n✅ Real test data loaded:`);
+  console.log(`   Pass Rate: ${passRate}%`);
+  console.log(`   Total Tests: ${testCount}`);
+  console.log(`   Passed: ${passed}`);
+  console.log(`   Failed: ${failed}`);
+  console.log(`   Coverage: ${coverage}%`);
   
   // 5. AI Danger Rank を計算
   const { rank, riskLevel, compositeScore } = calculateAIDangerRank(
@@ -331,10 +421,10 @@ async function main() {
     ai_danger_rank: rank,
     risk_level: riskLevel,
     composite_score: Math.round(compositeScore),
-    data_source: testRun ? 'GITHUB_API' : 'FALLBACK',
+    data_source: testData.source === 'test-matrix' ? 'TEST_MATRIX_ARTIFACT' : 'GITHUB_API',
     details: {
-      test_jobs: testResults.jobDetails || [],
-      github_run_id: testRun?.runId || null
+      test_source: testData.source,
+      github_run_id: testData.runId || null
     }
   };
   
