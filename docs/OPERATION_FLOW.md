@@ -6,11 +6,13 @@
 
 ## 📋 全体フロー（ざっくり図）
 
+### 標準フロー
+
 ```mermaid
 graph TD
     A["🔵 Issue 作成<br/>acceptance.md"] --> B["📊 Issue 解析<br/>m2-issue-intake.yml"]
-    B --> C["🧪 テスト観点・項目生成<br/>generate-quality-items.yml"]
-    C --> D["🛠️ 仕様YAML→実装<br/>spec-to-implementation.yml"]
+    B --> C["🧪 テスト観点・項目生成<br/>generate-quality-items.yml<br/>📦 Artifact: quality-items-{mode}"]
+    C -->|artifact + run_id| D["🛠️ 仕様YAML→実装<br/>spec-to-implementation.yml"]
     D --> E["💻 実装 + テストコード<br/>開発者作業"]
     E --> F["✅ テスト実行<br/>test-matrix.yml"]
     F --> G["📈 品質レポート<br/>quality-report-pr.yml"]
@@ -28,6 +30,30 @@ graph TD
     style H fill:#e0f2f1
     style I fill:#fff9c4
     style J fill:#c8e6c9
+```
+
+### アーティファクト連鎖（Artifact Chaining）
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant GQI as generate-quality-items
+    participant Artifact as GitHub Artifact Storage
+    participant S2I as spec-to-implementation
+    
+    User->>GQI: Run workflow (mode=simple/detailed)
+    GQI->>GQI: Generate quality items
+    GQI->>GQI: Create manifest.json
+    GQI->>Artifact: Upload artifact (quality-items-{mode})
+    Artifact-->>GQI: Store (30 days)
+    GQI->>User: Output Run ID
+    
+    User->>S2I: Run with Run ID + artifact name
+    S2I->>Artifact: Download artifact (gh run download)
+    Artifact->>S2I: quality-items-{mode}
+    S2I->>S2I: Load manifest.json
+    S2I->>S2I: Generate implementation
+    S2I->>User: Complete with specs
 ```
 
 ---
@@ -121,52 +147,100 @@ gh workflow run m2-issue-intake.yml \
 
 ---
 
-## 🧪 ステップ 3: テスト観点・項目生成
+## 🧪 ステップ 3: テスト観点・項目生成（アーティファクト生成）
 
 ### 自動生成による テスト観点・項目の定義
 
 **方法 A: 手動トリガー（推奨）**
 ```bash
 gh workflow run generate-quality-items.yml \
-  -f mode=detailed
+  -f mode=simple    # または detailed
 ```
 
 **方法 B: GitHub UI**
 - Actions → Generate Quality Items → Run workflow
 - Mode を選択: `simple` または `detailed`
 
+**方法 C: 自動化スクリプト（推奨）**
+```bash
+.github/scripts/workflow-artifact-chain.sh
+```
+
 ### ワークフロー: `generate-quality-items.yml` 🎯
 
 実行内容:
 - ISO/IEC 25010 品質特性に基づいてテスト観点を生成
 - 機能性、信頼性、セキュリティなど複数の観点を自動生成
-- JSON + YAML 形式で出力
+- JSON + YAML + Manifest JSON 形式で出力
+- **GitHub Artifact に保存（30日保持）**
+- Run ID をコンソールに出力
 
-### 出力例
+### 📦 アーティファクト出力構造
 
-```yaml
-# qa/quality-characteristics/generated/test-perspectives.yml
-
-quality_characteristics:
-  - name: Functionality
-    perspectives:
-      - test_id: "F-001"
-        title: "Email Validation"
-        description: "Valid and invalid email formats are properly handled"
-        test_cases:
-          - "Valid email: user@example.com"
-          - "Invalid email: user@example (missing domain)"
-          - "Edge case: user+tag@example.co.uk"
-  
-  - name: Security
-    perspectives:
-      - test_id: "S-001"
-        title: "SQL Injection Prevention"
-        description: "SQL injection attacks are prevented"
-        test_cases:
-          - "Input: ' OR '1'='1"
-          - "Input: '; DROP TABLE users; --"
 ```
+Artifact Name: quality-items-{mode}  (e.g., quality-items-simple)
+│
+├─ manifest.json ⭐ (メタデータ)
+│  ├─ version: "1.0"
+│  ├─ generated_at: "2026-10-20T05:50:29Z"
+│  ├─ workflow_run_id: 39377013016
+│  ├─ mode: "simple"
+│  ├─ files: { test_perspectives, test_items_yaml, test_items_json }
+│  ├─ artifact_name: "quality-items-simple"
+│  └─ github_run_url: "https://github.com/cocomomojo/..."
+│
+├─ test-perspectives-{mode}.json
+│  └─ ISO/IEC 25010 品質特性定義
+│
+├─ test-items-{mode}.yml
+│  └─ テスト項目の YAML 仕様
+│
+└─ test-items-{mode}.json
+   └─ テスト項目の JSON 仕様
+```
+
+### 実行例 & 出力
+
+```bash
+$ gh workflow run generate-quality-items.yml -f mode=simple
+
+# コンソール出力例:
+# ✅ Quality Items Generation Complete
+# Mode: simple
+# Timestamp: 2026-10-20T05:50:29Z
+# Generated Files:
+# - Test perspectives sheet (JSON)
+# - Test items (YAML)
+# - Test items (JSON)
+# - Manifest (JSON)
+#
+# Artifact Storage:
+# ✅ All files stored in artifact: quality-items-simple
+# ✅ Manifest for tracking: manifest.json
+# ✅ Retention period: 30 days
+```
+
+### アーティファクトの確認
+
+```bash
+# ワークフロー実行一覧から Run ID を取得
+$ gh run list --workflow generate-quality-items.yml --limit 1
+completed  success  Generate Quality Items  main  workflow_dispatch  39377013016  26s
+
+# アーティファクトをダウンロード
+$ gh run download 39377013016 --name quality-items-simple --dir ./qa/
+
+# Manifest を確認
+$ cat ./qa/manifest.json | jq .
+
+# テスト項目を確認
+$ cat ./qa/test-items-simple.yml
+```
+
+### 重要: Run ID は次のステップで必要
+
+**Run ID (`39377013016`) を保存**してください！
+→ ステップ 4 で `quality_items_run_id` として使用します
 
 ---
 
@@ -174,9 +248,66 @@ quality_characteristics:
 
 ### ワークフロー: `spec-to-implementation.yml` 🔧
 
-**事前準備**
+#### 📥 入力オプション
+
+ワークフロー実行時に以下のいずれかを指定:
+
+**オプション A: ステップ 3 のアーティファクトを使用（推奨）**
 ```bash
-# テスト仕様 YAML を作成
+# Run ID と Artifact 名を指定
+gh workflow run spec-to-implementation.yml \
+  -f spec_file='tests/specs/user-registration.yml' \
+  -f quality_items_artifact='quality-items-simple' \
+  -f quality_items_run_id='39377013016'
+```
+
+**オプション B: spec_file のみ（従来方式）**
+```bash
+gh workflow run spec-to-implementation.yml \
+  -f spec_file='tests/specs/user-registration.yml'
+```
+
+**オプション C: Issue から自動生成**
+```bash
+gh workflow run spec-to-implementation.yml \
+  -f issue_number=100
+```
+
+**オプション D: 自動化スクリプト（推奨）**
+```bash
+# ステップ 3 の Run ID を自動取得して実行
+.github/scripts/workflow-artifact-chain.sh
+```
+
+#### 📥 アーティファクト自動ダウンロード
+
+`quality_items_artifact` と `quality_items_run_id` を指定した場合:
+
+```yaml
+- name: Download quality items artifact (if provided)
+  if: inputs.quality_items_artifact != '' && inputs.quality_items_run_id != ''
+  run: |
+    gh run download "${{ inputs.quality_items_run_id }}" \
+      --name "${{ inputs.quality_items_artifact }}" \
+      --dir qa/quality-items-input
+    
+    # Manifest を読み込み
+    cat qa/quality-items-input/manifest.json
+```
+
+ダウンロード後、ワークフロー内で利用可能:
+```bash
+qa/quality-items-input/
+├─ manifest.json
+├─ test-perspectives-simple.json
+├─ test-items-simple.yml
+└─ test-items-simple.json
+```
+
+#### 🔧 実装生成ロジック
+
+**事前準備: spec_file を作成（オプション A を使う場合は不要）**
+```bash
 # tests/specs/user-registration.yml
 
 feature: User Registration
@@ -490,11 +621,11 @@ https://cocomomojo.github.io/copilot-quality-harness/dashboard.html
 
 ## 📊 ワークフロー相互関係マッピング表
 
-| # | ワークフロー | トリガー | 入力 | 出力 | 次ステップ | 依存 |
+| # | ワークフロー | トリガー | 入力 | 🎁 アーティファクト出力 | 次ステップ | 依存 |
 |---|------------|---------|------|------|-----------|------|
 | 1 | m2-issue-intake | Manual（workflow_dispatch） | Issue # | M2 Report JSON | generate-quality-items | - |
-| 2 | generate-quality-items | Manual（workflow_dispatch） | Mode | Quality Items YAML/JSON | Manual: spec-to-implementation | - |
-| 3 | spec-to-implementation | Manual / Cron | Spec YAML | UT/E2E/Mock コード + PR | test-matrix（自動） | - |
+| 2 | **generate-quality-items** | Manual（workflow_dispatch） | Mode (simple/detailed) | **`quality-items-{mode}`**<br/>→ manifest.json<br/>→ test-*.yml/json | Manual: spec-to-implementation <br/> + Run ID 保存 | - |
+| 3 | **spec-to-implementation** | Manual / Cron | **quality_items_artifact** + **quality_items_run_id**<br/>+ Spec YAML<br/>OR issue_number | UT/E2E/Mock コード + PR<br/> + **manifest.json** | test-matrix（自動） | generate-quality-items (optional) |
 | 4 | test-matrix | PR / Push | コード | test-results-*.json | quality-report-pr | - |
 | 5 | quality-report-pr | workflow_run（test-matrix 完了） | Artifacts | PR コメント | ai-review（自動） | test-matrix |
 | 6 | ai-review | PR created/sync | PR diff | AI コメント | Manual: PR マージ | - |
@@ -503,6 +634,37 @@ https://cocomomojo.github.io/copilot-quality-harness/dashboard.html
 | 9 | Pages Deploy | Push to main | ビルド成果物 | Pages URL | - | main ブランチ |
 | 10 | quality-schedule | Cron（毎週金曜 5:00 JST） | - | 週次品質レポート | Dashboard 更新 | - |
 | 11 | copilot-analyze-trace | Manual / PR | trace.zip | 分析 + Draft PR | Manual: PR マージ | - |
+
+### 📌 アーティファクトチェーン仕様
+
+**ステップ 2 → 3 への受け渡し**:
+
+1. `generate-quality-items.yml` 実行後、**Run ID を記録**
+   ```bash
+   $ gh workflow run generate-quality-items.yml -f mode=simple
+   # 出力: Run ID = 39377013016
+   ```
+
+2. `spec-to-implementation.yml` 実行時、Run ID と Artifact 名を指定
+   ```bash
+   $ gh workflow run spec-to-implementation.yml \
+       -f quality_items_artifact='quality-items-simple' \
+       -f quality_items_run_id='39377013016' \
+       -f spec_file='tests/specs/user-registration.yml'
+   ```
+
+3. ワークフロー内で **自動ダウンロード** + manifest 検証
+   ```yaml
+   - run: |
+       gh run download ${{ inputs.quality_items_run_id }} \
+         --name ${{ inputs.quality_items_artifact }} \
+         --dir qa/quality-items-input
+       cat qa/quality-items-input/manifest.json
+   ```
+
+4. **Retention Policy**: 30日間保持（GitHub Actions デフォルト）
+
+**詳細**: [.github/WORKFLOW_ARTIFACT_GUIDE.md](/.github/WORKFLOW_ARTIFACT_GUIDE.md) 参照
 
 ---
 
@@ -588,7 +750,52 @@ https://cocomomojo.github.io/copilot-quality-harness/dashboard.html
 
 ## 🔍 トラブルシューティング
 
-### Q: test-matrix が実行されない
+### アーティファクト・チェーン関連
+
+#### Q: spec-to-implementation でアーティファクトがダウンロードできない
+
+**A**: 以下を確認
+```bash
+# 1. Run ID が正確か確認
+gh run list --workflow generate-quality-items.yml --limit 1
+
+# 2. アーティファクト名が正確か確認
+gh run list-artifacts --run 39377013016
+
+# 3. workflow_dispatch が定義されているか確認
+cat .github/workflows/generate-quality-items.yml | grep -A 5 "on:"
+
+# 4. 手動でダウンロードテスト
+gh run download 39377013016 --name quality-items-simple --dir /tmp/test/
+ls -la /tmp/test/manifest.json
+```
+
+#### Q: manifest.json が見つからない（アーティファクトは存在）
+
+**A**: generate-quality-items ワークフローが完全に実行されているか確認
+```bash
+# ワークフロー実行ログを確認
+gh run view 39377013016 --log
+
+# 以下のステップが完了していることを確認:
+# ✓ Generate metadata
+# ✓ Upload artifacts
+```
+
+#### Q: アーティファクトの保持期間を超過した
+
+**A**: アーティファクトは 30 日間保持（[.github/workflows/generate-quality-items.yml](/.github/workflows/generate-quality-items.yml) で設定可能）
+```bash
+# アーティファクト一覧で保持期間を確認
+gh run list-artifacts --run 39377013016 --json expiresAt
+
+# 古いアーティファクトを削除
+gh run list-artifacts --run <OLD_RUN_ID> --json id --jq '.[].id' | xargs -I {} gh api repos/cocomomojo/copilot-quality-harness/actions/artifacts/{} -X DELETE
+```
+
+### その他のワークフロー関連
+
+#### Q: test-matrix が実行されない
 
 **A**: 以下を確認
 ```yaml
