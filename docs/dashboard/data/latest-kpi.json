@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-10-20T09:21:17.525Z",
+  "pass_rate": 88,
+  "test_count": 8,
+  "passed": 7,
+  "failed": 0,
+  "coverage": 0,
+  "ai_danger_rank": "E",
+  "risk_level": "CRITICAL",
+  "composite_score": 46,
+  "data_source": "GITHUB_API",
+  "details": {
+    "test_source": "github-api",
+    "github_run_id": 39399938763
+  },
+  "trend": "STABLE",
+  "trend_details": {
+    "pass_rate_change": 0,
+    "coverage_change": 0
+  }
+}
