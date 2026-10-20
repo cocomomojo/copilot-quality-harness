@@ -33,6 +33,17 @@ jobs:
       - name: Install dependencies
         run: npm install
       
+      - name: Download previous KPI history
+        continue-on-error: true
+        run: |
+          mkdir -p qa/dashboard-data
+          # Download the latest kpi-data artifact from previous run
+          gh run list --workflow=update-dashboard.yml --limit=2 --json databaseId -q '.[-2].databaseId' | xargs -I {} \
+            gh run download {} --name kpi-data --dir qa/dashboard-data 2>/dev/null || true
+          ls -la qa/dashboard-data/ || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Download latest test results
         id: download
         continue-on-error: true
