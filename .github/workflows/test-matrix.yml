@@ -48,19 +48,25 @@ jobs:
         id: test-e2e
         continue-on-error: true
         run: |
-          echo "📋 Installing Playwright dependencies..."
+          echo "📋【ステップ 1】Playwright ブラウザをインストール..."
           npx playwright install --with-deps chromium
           
-          echo "✅ Verifying Playwright installation..."
+          echo "✅【ステップ 2】インストール確認..."
           npx playwright --version
-          which chromium || echo "⚠️ chromium not in PATH, checking default location..."
-          ls -la ~/.cache/ms-playwright/ 2>/dev/null || echo "⚠️ ~/.cache/ms-playwright not found"
+          
+          echo "📂 キャッシュディレクトリを確認:"
+          ls -la ~/.cache/ms-playwright/chromium* 2>/dev/null || echo "❌ Chromium が見つかりません"
+          find ~/.cache/ms-playwright -name "chrome-headless-shell*" -o -name "chromium*" | head -5
           
           echo ""
-          echo "🚀 Starting E2E tests..."
-          echo "⏳ Playwright will auto-start frontend and backend servers..."
-          echo "   Frontend: npm run dev --workspace frontend (port 5173)"
-          echo "   Backend: npm run start --workspace backend (port 3000)"
+          echo "⚠️【ステップ 3】ブラウザバイナリの権限を確認..."
+          find ~/.cache/ms-playwright -type f -executable -name "chrome*" | head -3
+          
+          echo ""
+          echo "🚀【ステップ 4】E2E テスト実行..."
+          echo "   • フロントエンド: npm run dev --workspace frontend (port 5173)"
+          echo "   • バックエンド: npm run start --workspace backend (port 3000)"
+          echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
           echo ""
           
           npm run test:e2e 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
