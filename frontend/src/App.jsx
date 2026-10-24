@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import Footer from './components/Footer.jsx';
+import UserProfile from './UserProfile.jsx';
 
-export default function App() {
+function QualityChecksPage() {
   const [checks, setChecks] = useState([]);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
@@ -52,4 +53,23 @@ export default function App() {
       <Footer />
     </main>
   );
+}
+
+export default function App() {
+  const [path, setPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setPath(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  if (path === '/profile') {
+    return <UserProfile />;
+  }
+
+  return <QualityChecksPage />;
 }
