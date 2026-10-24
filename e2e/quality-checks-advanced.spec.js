@@ -5,6 +5,7 @@ const ERROR_MESSAGE_INVALID_NAME = 'name must be between 1 and 120 characters';
 test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
   });
 
   test.describe('Error Path Tests', () => {
@@ -108,7 +109,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await input.fill('A');
       await button.click();
       
-      await expect(page.getByText('A')).toBeVisible();
+      // セレクタを詳細化: リスト内の 'A' のみを対象
+      const checksList = page.locator('ul');
+      await expect(checksList.getByText('A', { exact: true })).toBeVisible();
     });
 
     test('trims whitespace from check name', async ({ page }) => {
@@ -144,7 +147,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await input.fill('Test Check');
       await button.click();
       
-      await expect(page.getByText('Test Check')).toBeVisible();
+      // セレクタを詳細化: リスト内の 'Test Check' のみ
+      const checksList = page.locator('ul');
+      await expect(checksList.getByText('Test Check')).toBeVisible();
       
       // Input should still have focus for next entry
       const focusedElement = await page.evaluate(() => document.activeElement?.id);
@@ -246,7 +251,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
   test.describe('Accessibility Tests', () => {
     test('form has proper labels for all inputs', async ({ page }) => {
-      const label = page.getByText('Check name');
+      const label = page.getByRole('heading', { name: 'Quality checks' });
       await expect(label).toBeVisible();
       
       const input = page.getByLabel('Check name');
