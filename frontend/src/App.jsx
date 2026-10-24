@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Footer from './components/Footer.jsx';
+import UserProfile from './UserProfile.jsx';
 
-export default function App() {
+function QualityChecksPage() {
   const [checks, setChecks] = useState([]);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const inputRef = useRef(null);
 
   async function loadChecks() {
     const response = await fetch('/api/checks');
@@ -26,6 +28,10 @@ export default function App() {
     if (!response.ok) { setError(payload.error); return; }
     setChecks((current) => [payload, ...current]);
     setName('');
+    // Focus input after successful submission
+    if (inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 0);
+    }
   }
 
   return (
@@ -38,7 +44,14 @@ export default function App() {
       <form onSubmit={addCheck} aria-label="Add quality check">
         <label htmlFor="check-name">Check name</label>
         <div className="form-row">
-          <input id="check-name" value={name} onChange={(event) => setName(event.target.value)} required maxLength="120" />
+          <input 
+            ref={inputRef}
+            id="check-name" 
+            value={name} 
+            onChange={(event) => setName(event.target.value)} 
+            required 
+            maxLength="120" 
+          />
           <button type="submit">Add check</button>
         </div>
       </form>
@@ -52,4 +65,23 @@ export default function App() {
       <Footer />
     </main>
   );
+}
+
+export default function App() {
+  const [path, setPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setPath(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  if (path === '/profile') {
+    return <UserProfile />;
+  }
+
+  return <QualityChecksPage />;
 }

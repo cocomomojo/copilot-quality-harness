@@ -13,7 +13,8 @@ export default defineConfig({
       reuseExistingServer: true,
       timeout: 120000,  // サーバー起動タイムアウト: 120秒
       stdout: 'pipe',
-      stderr: 'pipe'
+      stderr: 'pipe',
+      env: { NODE_ENV: 'test' }
     },
     { 
       command: 'npm run dev --workspace frontend',
@@ -23,6 +24,10 @@ export default defineConfig({
       stdout: 'pipe',
       stderr: 'pipe'
     }
+  ],
+  reporter: [
+    ['html', { outputFolder: 'playwright-report' }],
+    ['json', { outputFile: 'test-results/summary.json' }]
   ],
   use: {
     baseURL: 'http://127.0.0.1:5173',

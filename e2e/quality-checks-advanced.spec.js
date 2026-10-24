@@ -3,7 +3,12 @@ import { expect, test } from '@playwright/test';
 const ERROR_MESSAGE_INVALID_NAME = 'name must be between 1 and 120 characters';
 
 test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page, request }) => {
+    // Reset checks before each test to avoid accumulation
+    await request.post('http://localhost:3000/api/test/reset-checks').catch(() => {
+      // Endpoint might not be available, continue
+    });
+    
     await page.goto('/');
     await page.waitForLoadState('networkidle');
   });
@@ -223,8 +228,14 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await input.fill('First Check');
       await button.click();
       
+      // Wait for first check to appear before adding second check
+      await expect(page.getByText('First Check')).toBeVisible();
+      
       await input.fill('Second Check');
       await button.click();
+      
+      // Wait for second check to appear before verifying order
+      await expect(page.getByText('Second Check')).toBeVisible();
       
       const checks = page.locator('li');
       const firstCheck = await checks.first().textContent();
