@@ -1,0 +1,31 @@
+
+> copilot-quality-harness@0.1.0 analyze:trace
+> ts-node scripts/trace-summary.ts test-results/
+
+Error analyzing trace: Error: EISDIR: illegal operation on a directory, read
+    at Object.readFileSync (node:fs:448:20)
+    at analyzeTrace (/home/coco/copilot-quality-harness/scripts/trace-summary.ts:111:30)
+    at main (/home/coco/copilot-quality-harness/scripts/trace-summary.ts:193:25)
+    at Object.<anonymous> (/home/coco/copilot-quality-harness/scripts/trace-summary.ts:205:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module.m._compile (/home/coco/copilot-quality-harness/node_modules/ts-node/src/index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Object.require.extensions.<computed> [as .ts] (/home/coco/copilot-quality-harness/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1091:12) {
+  errno: -21,
+  code: 'EISDIR',
+  syscall: 'read'
+}
+✅ Trace summary saved: /home/coco/copilot-quality-harness/trace-summary.json
+{
+  "failure_reason": "Failed to analyze trace: EISDIR: illegal operation on a directory, read",
+  "failing_test": "Unknown",
+  "failing_locator": "Unknown",
+  "top_console_errors": [],
+  "top_network_failures": [],
+  "screenshot_paths": [],
+  "trace_excerpt": "",
+  "failure_category": "unknown",
+  "timestamp": "2026-10-24T11:35:34.335Z"
+}
