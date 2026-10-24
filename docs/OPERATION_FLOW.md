@@ -449,17 +449,17 @@ test.describe('User Registration', () => {
 **ワークフロー: `test-matrix.yml`** 🚀
 
 実行内容:
-- Node 18/20 上で テスト実行
-- 最大 8 並列マトリックス（異なるテスト種別）
+- Node 20 上で テスト実行
+- 最大 4 並列マトリックス（異なるテスト種別）
 - UT + E2E テスト実行
 - テストカバレッジ収集
 
 ```yaml
 # ワークフローの matrix 戦略
 matrix:
-  node-version: [18, 20]
+  node-version: [20]
   test-type: [unit, e2e, integration]
-# 結果: 6 並列ジョブ（2 × 3）
+# 結果: 3 並列ジョブ（1 × 3）
 ```
 
 ### 出力アーティファクト
@@ -493,10 +493,10 @@ matrix:
 ## ✅ Quality Report
 
 ### Test Results
-| Test Type | Node 18 | Node 20 | Status |
-|-----------|---------|---------|--------|
-| Unit Tests | ✅ 45/45 | ✅ 45/45 | PASS |
-| E2E Tests | ✅ 12/12 | ✅ 12/12 | PASS |
+| Test Type | Node 20 | Status |
+|-----------|---------|--------|
+| Unit Tests | ✅ 45/45 | PASS |
+| E2E Tests | ✅ 12/12 | PASS |
 
 ### Coverage
 - Lines: 92% (target: 80%) ✅
@@ -590,7 +590,7 @@ matrix:
 
 | 項目 | 条件 |
 |------|------|
-| **テスト結果** | 全テストパス（Node 18/20 両方） |
+| **テスト結果** | 全テストパス（Node 20） |
 | **カバレッジ** | Lines 80% 以上、Branches 75% 以上 |
 | **AI Review** | セキュリティ: Low 以下、スタイル: 承認可 |
 | **人間レビュー** | 最低 1 人の承認 |

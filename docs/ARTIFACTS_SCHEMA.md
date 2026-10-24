@@ -31,7 +31,7 @@ title: 📦 アーティファクト仕様書
 ```json
 {
   "test_type": "unit",
-  "node_version": "18",
+  "node_version": "20",
   "status": "passed",
   "summary": {
     "passed": 45,
@@ -76,7 +76,7 @@ title: 📦 アーティファクト仕様書
 ```json
 {
   "test_type": "e2e",
-  "node_version": "18",
+  "node_version": "20",
   "status": "passed",
   "summary": {
     "passed": 12,
