@@ -2,7 +2,7 @@
   "summary": {
     "total_analyzed": 44,
     "total_failures": 44,
-    "analysis_timestamp": "2026-10-24T11:37:33.171Z",
+    "analysis_timestamp": "2026-10-24T11:53:42.227Z",
     "categories": 3
   },
   "category_breakdown": {
@@ -48,7 +48,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-created-at.spec.js >> User Profile - Account Created At Display (E2E) >> E2E-005: Handle invalid createdAt format with fallback\n- Location: e2e/profile-created-at.spec.js:116:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.158Z"
+      "timestamp": "2026-10-24T11:53:42.204Z"
     },
     {
       "test_name": "profile-created-at-User-Pr-592f0-m-API-and-display-formatted",
@@ -56,7 +56,7 @@
       "failure_category": "network_error",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-created-at.spec.js >> User Profile - Account Created At Display (E2E) >> E2E-004: Fetch createdAt from API and display formatted\n- Location: e2e/profile-created-at.spec.js:86:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.159Z"
+      "timestamp": "2026-10-24T11:53:42.209Z"
     },
     {
       "test_name": "profile-created-at-User-Pr-6bf16-rofile-with-valid-createdAt",
@@ -64,7 +64,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-created-at.spec.js >> User Profile - Account Created At Display (E2E) >> E2E-001: Display profile with valid createdAt\n- Location: e2e/profile-created-at.spec.js:11:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.159Z"
+      "timestamp": "2026-10-24T11:53:42.209Z"
     },
     {
       "test_name": "profile-created-at-User-Pr-829c3-back-when-createdAt-is-null",
@@ -72,7 +72,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-created-at.spec.js >> User Profile - Account Created At Display (E2E) >> E2E-002: Display fallback when createdAt is null\n- Location: e2e/profile-created-at.spec.js:44:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.159Z"
+      "timestamp": "2026-10-24T11:53:42.209Z"
     },
     {
       "test_name": "profile-created-at-User-Pr-8419c-2E-003-Handle-404-API-error",
@@ -80,7 +80,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-created-at.spec.js >> User Profile - Account Created At Display (E2E) >> E2E-003: Handle 404 API error\n- Location: e2e/profile-created-at.spec.js:75:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.159Z"
+      "timestamp": "2026-10-24T11:53:42.210Z"
     },
     {
       "test_name": "profile-created-at-User-Pr-af5e4-structure-and-accessibility",
@@ -88,7 +88,7 @@
       "failure_category": "element_not_found",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-created-at.spec.js >> User Profile - Account Created At Display (E2E) >> E2E-006: Verify element structure and accessibility\n- Location: e2e/profile-created-at.spec.js:143:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.159Z"
+      "timestamp": "2026-10-24T11:53:42.210Z"
     },
     {
       "test_name": "profile-created-at-User-Pr-eb176-nders-and-state-consistency",
@@ -96,7 +96,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: profile-created-at.spec.js >> User Profile - Account Created At Display (E2E) >> E2E-007: Verify multiple renders and state consistency\n- Location: e2e/profile-created-at.spec.js:166:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.159Z"
+      "timestamp": "2026-10-24T11:53:42.210Z"
     },
     {
       "test_name": "quality-checks-adds-a-qual-35672--through-the-main-user-flow",
@@ -104,7 +104,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks.spec.js >> adds a quality check through the main user flow\n- Location: e2e/quality-checks.spec.js:3:5\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.160Z"
+      "timestamp": "2026-10-24T11:53:42.211Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-026e0-multiple-checks-in-sequence",
@@ -112,7 +112,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> User Interaction Tests >> can add multiple checks in sequence\n- Location: e2e/quality-checks-advanced.spec.js:154:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.160Z"
+      "timestamp": "2026-10-24T11:53:42.211Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-056a5--submission-during-API-call",
@@ -120,7 +120,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> User Interaction Tests >> prevents duplicate submission during API call\n- Location: e2e/quality-checks-advanced.spec.js:172:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.160Z"
+      "timestamp": "2026-10-24T11:53:42.211Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-0692e-after-successful-submission",
@@ -128,7 +128,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> User Interaction Tests >> focuses input after successful submission\n- Location: e2e/quality-checks-advanced.spec.js:140:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.160Z"
+      "timestamp": "2026-10-24T11:53:42.211Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-22b08-ge-when-user-corrects-input",
@@ -136,7 +136,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Error Path Tests >> clears error message when user corrects input\n- Location: e2e/quality-checks-advanced.spec.js:34:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.161Z"
+      "timestamp": "2026-10-24T11:53:42.212Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-26768-epts-check-name-with-quotes",
@@ -144,7 +144,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Input Validation Tests >> accepts check name with quotes\n- Location: e2e/quality-checks-advanced.spec.js:93:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.161Z"
+      "timestamp": "2026-10-24T11:53:42.212Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-28b84-after-successful-submission",
@@ -152,7 +152,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> User Interaction Tests >> form clears after successful submission\n- Location: e2e/quality-checks-advanced.spec.js:127:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.161Z"
+      "timestamp": "2026-10-24T11:53:42.212Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-3ba24-l-completes-reasonably-fast",
@@ -160,7 +160,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Performance Tests >> API call completes reasonably fast\n- Location: e2e/quality-checks-advanced.spec.js:352:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.161Z"
+      "timestamp": "2026-10-24T11:53:42.212Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-3f89b-cks-recorded-yet-when-empty",
@@ -168,7 +168,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> UI State Tests >> displays \"No checks recorded yet\" when empty\n- Location: e2e/quality-checks-advanced.spec.js:314:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.161Z"
+      "timestamp": "2026-10-24T11:53:42.213Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-4014f-m-is-navigable-with-Tab-key",
@@ -176,7 +176,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Accessibility Tests >> form is navigable with Tab key\n- Location: e2e/quality-checks-advanced.spec.js:269:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.162Z"
+      "timestamp": "2026-10-24T11:53:42.213Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-48a90-list-has-accessible-heading",
@@ -184,7 +184,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Accessibility Tests >> checks list has accessible heading\n- Location: e2e/quality-checks-advanced.spec.js:301:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.162Z"
+      "timestamp": "2026-10-24T11:53:42.213Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-4e8b6--check-with-only-whitespace",
@@ -192,7 +192,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Error Path Tests >> displays error when adding check with only whitespace\n- Location: e2e/quality-checks-advanced.spec.js:11:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.162Z"
+      "timestamp": "2026-10-24T11:53:42.213Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-6d8b4-hecks-appear-at-top-of-list",
@@ -200,7 +200,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Data Persistence Tests >> new checks appear at top of list\n- Location: e2e/quality-checks-advanced.spec.js:214:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.162Z"
+      "timestamp": "2026-10-24T11:53:42.214Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-72183-ssage-is-announced-as-alert",
@@ -208,7 +208,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Accessibility Tests >> error message is announced as alert\n- Location: e2e/quality-checks-advanced.spec.js:281:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.162Z"
+      "timestamp": "2026-10-24T11:53:42.214Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-81622-single-character-check-name",
@@ -216,7 +216,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Input Validation Tests >> accepts single character check name\n- Location: e2e/quality-checks-advanced.spec.js:104:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.162Z"
+      "timestamp": "2026-10-24T11:53:42.214Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-8671b-tton-is-keyboard-accessible",
@@ -224,7 +224,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Accessibility Tests >> button is keyboard accessible\n- Location: e2e/quality-checks-advanced.spec.js:256:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.163Z"
+      "timestamp": "2026-10-24T11:53:42.214Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-98746-ame-with-unicode-characters",
@@ -232,7 +232,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Input Validation Tests >> accepts check name with unicode characters\n- Location: e2e/quality-checks-advanced.spec.js:72:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.163Z"
+      "timestamp": "2026-10-24T11:53:42.214Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-9a133--section-has-proper-heading",
@@ -240,7 +240,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Accessibility Tests >> section has proper heading\n- Location: e2e/quality-checks-advanced.spec.js:296:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.163Z"
+      "timestamp": "2026-10-24T11:53:42.215Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-c393b-oads-within-reasonable-time",
@@ -248,7 +248,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Performance Tests >> page loads within reasonable time\n- Location: e2e/quality-checks-advanced.spec.js:343:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.163Z"
+      "timestamp": "2026-10-24T11:53:42.220Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-ca755-ame-with-special-characters",
@@ -256,7 +256,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Input Validation Tests >> accepts check name with special characters\n- Location: e2e/quality-checks-advanced.spec.js:82:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.164Z"
+      "timestamp": "2026-10-24T11:53:42.220Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-cb380-t-field-during-interactions",
@@ -264,7 +264,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> User Interaction Tests >> maintains focus on input field during interactions\n- Location: e2e/quality-checks-advanced.spec.js:187:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.164Z"
+      "timestamp": "2026-10-24T11:53:42.220Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-d7c10-name-exceeds-120-characters",
@@ -272,7 +272,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Error Path Tests >> displays error when name exceeds 120 characters\n- Location: e2e/quality-checks-advanced.spec.js:23:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.164Z"
+      "timestamp": "2026-10-24T11:53:42.220Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-e4632-ror-when-API-is-unavailable",
@@ -280,7 +280,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Error Path Tests >> shows appropriate error when API is unavailable\n- Location: e2e/quality-checks-advanced.spec.js:52:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.164Z"
+      "timestamp": "2026-10-24T11:53:42.221Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-e5219-roper-labels-for-all-inputs",
@@ -288,7 +288,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Accessibility Tests >> form has proper labels for all inputs\n- Location: e2e/quality-checks-advanced.spec.js:248:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.165Z"
+      "timestamp": "2026-10-24T11:53:42.221Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-e77fb--whitespace-from-check-name",
@@ -296,7 +296,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Input Validation Tests >> trims whitespace from check name\n- Location: e2e/quality-checks-advanced.spec.js:114:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.165Z"
+      "timestamp": "2026-10-24T11:53:42.221Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-e8cf2-splays-checks-as-list-items",
@@ -304,7 +304,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> UI State Tests >> displays checks as list items\n- Location: e2e/quality-checks-advanced.spec.js:330:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.165Z"
+      "timestamp": "2026-10-24T11:53:42.221Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-ed218-is-displayed-for-each-check",
@@ -312,7 +312,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Data Persistence Tests >> status is displayed for each check\n- Location: e2e/quality-checks-advanced.spec.js:230:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.166Z"
+      "timestamp": "2026-10-24T11:53:42.221Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-f2913-e-when-first-check-is-added",
@@ -320,7 +320,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> UI State Tests >> removes \"No checks\" message when first check is added\n- Location: e2e/quality-checks-advanced.spec.js:318:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.167Z"
+      "timestamp": "2026-10-24T11:53:42.222Z"
     },
     {
       "test_name": "quality-checks-advanced-Qu-ff926-s-persist-after-page-reload",
@@ -328,7 +328,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-c",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: quality-checks-advanced.spec.js >> Quality Checks UI - Error Scenarios & Edge Cases >> Data Persistence Tests >> checks persist after page reload\n- Location: e2e/quality-checks-advanced.spec.js:198:9\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.167Z"
+      "timestamp": "2026-10-24T11:53:42.222Z"
     },
     {
       "test_name": "url-validator-URL-Validato-5738f-ck-valid-HTTPS-URL-endpoint",
@@ -336,7 +336,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-valid",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-validator.spec.js >> URL Validator API >> E2E-001: Check valid HTTPS URL endpoint\n- Location: e2e/url-validator.spec.js:9:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.167Z"
+      "timestamp": "2026-10-24T11:53:42.222Z"
     },
     {
       "test_name": "url-validator-URL-Validato-6ee2e-02-Check-invalid-URL-format",
@@ -344,7 +344,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-valid",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-validator.spec.js >> URL Validator API >> E2E-002: Check invalid URL format\n- Location: e2e/url-validator.spec.js:21:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.167Z"
+      "timestamp": "2026-10-24T11:53:42.223Z"
     },
     {
       "test_name": "url-validator-URL-Validato-a8e9b-ck-valid-HTTP-URL-with-port",
@@ -352,7 +352,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-valid",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-validator.spec.js >> URL Validator API >> E2E-005: Check valid HTTP URL with port\n- Location: e2e/url-validator.spec.js:57:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.168Z"
+      "timestamp": "2026-10-24T11:53:42.223Z"
     },
     {
       "test_name": "url-validator-URL-Validato-b1ea7-03-Check-empty-string-input",
@@ -360,7 +360,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-valid",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-validator.spec.js >> URL Validator API >> E2E-003: Check empty string input\n- Location: e2e/url-validator.spec.js:33:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.168Z"
+      "timestamp": "2026-10-24T11:53:42.224Z"
     },
     {
       "test_name": "url-validator-URL-Validato-c64d8--006-Check-valid-GitHub-URL",
@@ -368,7 +368,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-valid",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-validator.spec.js >> URL Validator API >> E2E-006: Check valid GitHub URL\n- Location: e2e/url-validator.spec.js:67:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.168Z"
+      "timestamp": "2026-10-24T11:53:42.224Z"
     },
     {
       "test_name": "url-validator-URL-Validato-c88b1-onse-time-performance-check",
@@ -376,7 +376,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-valid",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-validator.spec.js >> URL Validator API >> E2E-008: Response time performance check\n- Location: e2e/url-validator.spec.js:88:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.169Z"
+      "timestamp": "2026-10-24T11:53:42.224Z"
     },
     {
       "test_name": "url-validator-URL-Validato-fe276-k-FTP-protocol-not-allowed-",
@@ -384,7 +384,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-valid",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-validator.spec.js >> URL Validator API >> E2E-007: Check FTP protocol (not allowed)\n- Location: e2e/url-validator.spec.js:77:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.169Z"
+      "timestamp": "2026-10-24T11:53:42.224Z"
     },
     {
       "test_name": "url-validator-URL-Validator-API-E2E-004-Check-null-input",
@@ -392,7 +392,7 @@
       "failure_category": "unknown",
       "error_excerpt": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-valid",
       "full_error": "# Instructions\n\n- Following Playwright test failed.\n- Explain why, be concise, respect Playwright best practices.\n- Provide a snippet of code with the fix, if possible.\n\n# Test info\n\n- Name: url-validator.spec.js >> URL Validator API >> E2E-004: Check null input\n- Location: e2e/url-validator.spec.js:45:7\n\n# Error details\n\n```\nError: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝\n```",
-      "timestamp": "2026-10-24T11:37:33.169Z"
+      "timestamp": "2026-10-24T11:53:42.224Z"
     }
   ]
 }
