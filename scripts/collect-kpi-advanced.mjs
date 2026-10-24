@@ -244,6 +244,8 @@ function readCoverageData() {
   console.log('\n📈 Reading coverage data...');
   
   const possiblePaths = [
+    'backend/coverage/coverage-final.json',
+    'frontend/coverage/coverage-final.json',
     'coverage/coverage-final.json',
     'qa/test-management/coverage.json',
     'coverage-summary.json'

@@ -69,11 +69,17 @@ function findTestResultFiles(): string[] {
         const stat = fs.statSync(entryPath);
         
         if (stat.isDirectory()) {
-          // test-results-node20-e2e/test-result-node20-e2e.json
-          const jsonPath = path.join(entryPath, entry + '.json');
-          if (fs.existsSync(jsonPath)) {
-            files.push(jsonPath);
+          // ディレクトリ内のすべての .json ファイルを探す
+          const dirFiles = fs.readdirSync(entryPath);
+          for (const dirFile of dirFiles) {
+            if (dirFile.endsWith('.json')) {
+              const jsonPath = path.join(entryPath, dirFile);
+              files.push(jsonPath);
+            }
           }
+        } else if (entry.endsWith('.json')) {
+          // ディレクトリではなく、直接 JSON ファイルの場合
+          files.push(entryPath);
         }
       }
     } catch (e) {
