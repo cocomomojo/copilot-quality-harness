@@ -13,7 +13,8 @@ export default defineConfig({
       reuseExistingServer: true,
       timeout: 120000,  // サーバー起動タイムアウト: 120秒
       stdout: 'pipe',
-      stderr: 'pipe'
+      stderr: 'pipe',
+      env: { NODE_ENV: 'test' }
     },
     { 
       command: 'npm run dev --workspace frontend',

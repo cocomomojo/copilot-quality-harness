@@ -60,6 +60,26 @@ export function createApp(db = createDatabase()) {
         return response.status(500).json({ error: 'Failed to seed user' });
       }
     });
+
+    // Test endpoint to clear all checks (E2E test cleanup only)
+    app.post('/api/test/reset-checks', (request, response) => {
+      try {
+        db.prepare('DELETE FROM checks').run();
+        return response.status(200).json({ success: true, message: 'All checks cleared' });
+      } catch (error) {
+        return response.status(500).json({ error: 'Failed to reset checks' });
+      }
+    });
+
+    // Test endpoint to clear all users (E2E test cleanup only)
+    app.post('/api/test/reset-users', (request, response) => {
+      try {
+        db.prepare('DELETE FROM users').run();
+        return response.status(200).json({ success: true, message: 'All users cleared' });
+      } catch (error) {
+        return response.status(500).json({ error: 'Failed to reset users' });
+      }
+    });
   }
   return app;
 }

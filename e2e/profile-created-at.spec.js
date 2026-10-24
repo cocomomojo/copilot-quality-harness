@@ -74,7 +74,12 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
   });
 
   // E2E-003: Error case - API returns 404
-  test('E2E-003: Handle 404 API error', async ({ page }) => {
+  test('E2E-003: Handle 404 API error', async ({ page, request }) => {
+    // Setup: Reset users to ensure no user exists
+    await request.post(`${apiUrl}/api/test/reset-users`, {}).catch(() => {
+      // Endpoint might not exist, continue
+    });
+    
     // Navigate to profile page without user data (uses baseURL from playwright.config.js)
     await page.goto('/profile');
     await page.waitForLoadState('networkidle');
