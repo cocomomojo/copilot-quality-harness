@@ -23,6 +23,7 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
 
     // Navigate to profile page (uses baseURL from playwright.config.js)
     await page.goto('/profile');
+    await page.waitForLoadState('networkidle');
 
     // Verify page title and headings
     await expect(page.getByRole('heading', { name: /プロフィール/i })).toBeVisible();
@@ -56,6 +57,7 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
 
     // Navigate to profile page (uses baseURL from playwright.config.js)
     await page.goto('/profile');
+    await page.waitForLoadState('networkidle');
 
     // Verify page displays
     await expect(page.getByRole('heading', { name: /プロフィール/i })).toBeVisible();
@@ -75,6 +77,7 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
   test('E2E-003: Handle 404 API error', async ({ page }) => {
     // Navigate to profile page without user data (uses baseURL from playwright.config.js)
     await page.goto('/profile');
+    await page.waitForLoadState('networkidle');
 
     // Verify error message is displayed
     await expect(page.locator('[role="alert"]')).toBeVisible({ timeout: 3000 });
@@ -99,6 +102,7 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
 
     // Step 2 & 3: Navigate to profile and verify date format (uses baseURL from playwright.config.js)
     await page.goto('/profile');
+    await page.waitForLoadState('networkidle');
     
     // Verify profile page
     const heading = page.getByRole('heading', { name: /プロフィール/i });
@@ -128,6 +132,7 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
 
     // Navigate to profile (uses baseURL from playwright.config.js)
     await page.goto('/profile');
+    await page.waitForLoadState('networkidle');
 
     // Verify page displays
     const heading = page.getByRole('heading', { name: /プロフィール/i });
