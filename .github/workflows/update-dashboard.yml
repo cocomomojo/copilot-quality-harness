@@ -117,11 +117,31 @@ jobs:
       
       - name: Download Playwright test results
         id: download_playwright
-        uses: actions/download-artifact@v4
-        with:
-          path: ./artifacts
-          pattern: test-results-*
         continue-on-error: true
+        run: |
+          echo "🔍 Looking for latest test run artifacts..."
+          
+          # 最新のテストマトリックス実行を取得
+          LATEST_TEST_RUN=$(gh run list --workflow test-matrix.yml --limit 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
+          
+          if [ -z "$LATEST_TEST_RUN" ]; then
+            echo "⚠️  No previous test run found"
+            exit 0
+          fi
+          
+          echo "📥 Downloading artifacts from test run: $LATEST_TEST_RUN"
+          
+          # 指定された実行からアーティファクトをダウンロード
+          mkdir -p ./artifacts
+          gh run download "$LATEST_TEST_RUN" \
+            --pattern "test-results-*" \
+            --dir ./artifacts \
+            2>/dev/null || echo "ℹ️  Could not download test artifacts"
+          
+          echo "✅ Download complete"
+          ls -la ./artifacts/ || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Generate E2E report
         id: e2e_report
