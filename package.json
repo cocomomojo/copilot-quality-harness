@@ -28,7 +28,11 @@
     "generate:quality-items": "ts-node scripts/generate-quality-characteristics.ts",
     "generate:quality-items:help": "echo 'Usage: npm run generate:quality-items -- [mode] [outputDir]' && echo 'Modes: simple (default), detailed' && echo 'Example: npm run generate:quality-items -- detailed qa/quality-characteristics/generated'",
     "generate:dashboard": "node scripts/generate-dashboard.mjs",
-    "generate:dashboard:help": "echo 'Usage: npm run generate:dashboard -- [kpiDataDir] [outputDir] [title]' && echo 'Example: npm run generate:dashboard -- qa/dashboard-data docs/dashboard Quality-Dashboard'"
+    "generate:dashboard:help": "echo 'Usage: npm run generate:dashboard -- [kpiDataDir] [outputDir] [title]' && echo 'Example: npm run generate:dashboard -- qa/dashboard-data docs/dashboard Quality-Dashboard'",
+    "generate:e2e-report": "ts-node scripts/generate-e2e-report.ts",
+    "generate:e2e-report:help": "echo 'Usage: npm run generate:e2e-report -- [outputDir]' && echo 'Example: npm run generate:e2e-report -- qa/e2e-report' && echo 'Outputs: test-cases.json with detailed test results'",
+    "generate:e2e-details": "node scripts/generate-e2e-details-page.mjs",
+    "generate:e2e-details:help": "echo 'Usage: npm run generate:e2e-details -- [reportDataPath] [outputDir]' && echo 'Example: npm run generate:e2e-details -- qa/e2e-report/test-cases.json docs/reports' && echo 'Outputs: e2e-latest.html interactive details page'"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",

@@ -6,5 +6,10 @@ export default defineConfig({
     { command: 'npm run start --workspace backend', url: 'http://127.0.0.1:3000/api/health', reuseExistingServer: true },
     { command: 'npm run dev --workspace frontend', url: 'http://127.0.0.1:5173', reuseExistingServer: true }
   ],
-  use: { baseURL: 'http://127.0.0.1:5173', trace: 'retain-on-failure', screenshot: 'only-on-failure' }
+  use: {
+    baseURL: 'http://127.0.0.1:5173',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure'
+  }
 });

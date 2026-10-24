@@ -1,0 +1,803 @@
+#!/usr/bin/env node
+
+/**
+ * E2E Details Page Generator
+ * 
+ * 目的: test-cases.json から、インタラクティブなE2E詳細レポートページを生成
+ * 
+ * 入力:
+ *   - qa/e2e-report/test-cases.json (テスト結果JSON)
+ * 
+ * 出力:
+ *   - docs/reports/e2e-latest.html (E2E詳細レポートページ)
+ */
+
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+
+async function generateE2EDetailsPage(config) {
+  console.log(`\n🎬 E2E Details Page Generation`);
+  console.log(`Input: ${config.reportDataPath}`);
+  console.log(`Output: ${config.outputDir}\n`);
+
+  // Create output directory
+  mkdirSync(config.outputDir, { recursive: true });
+
+  // Load test report data
+  let reportData = {
+    timestamp: new Date().toISOString(),
+    totalSuites: 0,
+    totalTests: 0,
+    passed: 0,
+    failed: 0,
+    skipped: 0,
+    passRate: 0,
+    duration: 0,
+    suites: []
+  };
+
+  try {
+    const reportContent = readFileSync(config.reportDataPath, 'utf-8');
+    reportData = JSON.parse(reportContent);
+    console.log(`✅ Loaded test report: ${reportData.totalTests} tests`);
+  } catch (e) {
+    console.warn(`⚠️  Report not found (${config.reportDataPath}), using sample data`);
+  }
+
+  // Generate HTML
+  const pageHTML = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E2E テスト詳細レポート - Copilot Quality Harness</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      color: #333;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      color: #666;
+      font-size: 1em;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .summary-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-left: 5px solid #667eea;
+      text-align: center;
+    }
+
+    .summary-card.success {
+      border-left-color: #51cf66;
+    }
+
+    .summary-card.danger {
+      border-left-color: #ff6b6b;
+    }
+
+    .summary-card.warning {
+      border-left-color: #ffa94d;
+    }
+
+    .summary-card h3 {
+      color: #666;
+      font-size: 0.9em;
+      font-weight: normal;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .summary-card .value {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .summary-card .unit {
+      color: #999;
+      font-size: 0.85em;
+      margin-top: 5px;
+    }
+
+    .controls {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      background: white;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+      border-color: #667eea;
+      background: #667eea;
+      color: white;
+    }
+
+    .filter-btn:hover {
+      border-color: #667eea;
+    }
+
+    .test-suites {
+      display: grid;
+      gap: 20px;
+    }
+
+    .test-suite {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .suite-header {
+      background: #f5f5f5;
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    .suite-header:hover {
+      background: #efefef;
+    }
+
+    .suite-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #333;
+      flex-grow: 1;
+    }
+
+    .suite-stats {
+      display: flex;
+      gap: 20px;
+      font-size: 0.9em;
+      margin-right: 20px;
+    }
+
+    .suite-stats span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stat-passed {
+      color: #51cf66;
+      font-weight: bold;
+    }
+
+    .stat-failed {
+      color: #ff6b6b;
+      font-weight: bold;
+    }
+
+    .stat-skipped {
+      color: #999;
+      font-weight: bold;
+    }
+
+    .suite-toggle {
+      font-size: 1.5em;
+      color: #667eea;
+      transition: transform 0.3s ease;
+    }
+
+    .suite-toggle.expanded {
+      transform: rotate(90deg);
+    }
+
+    .suite-content {
+      padding: 20px;
+      display: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .suite-content.expanded {
+      display: block;
+      max-height: 10000px;
+    }
+
+    .test-item {
+      background: #fafafa;
+      border-left: 4px solid #ddd;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .test-item:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transform: translateX(5px);
+    }
+
+    .test-item.passed {
+      border-left-color: #51cf66;
+      background: #f0fdf4;
+    }
+
+    .test-item.failed {
+      border-left-color: #ff6b6b;
+      background: #fef2f2;
+    }
+
+    .test-item.skipped {
+      border-left-color: #999;
+      background: #f9f9f9;
+    }
+
+    .test-name {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .test-status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .badge-passed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .badge-failed {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .badge-skipped {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+
+    .test-meta {
+      display: flex;
+      gap: 20px;
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .test-details {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+    }
+
+    .test-details.expanded {
+      display: block;
+    }
+
+    .error-message {
+      background: #fff3f3;
+      border-left: 3px solid #ff6b6b;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.85em;
+      color: #721c24;
+    }
+
+    .video-player {
+      margin: 10px 0;
+      max-width: 400px;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 5px;
+      background: #000;
+    }
+
+    .screenshot-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .screenshot-thumb {
+      max-width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .screenshot-thumb:hover {
+      transform: scale(1.05);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .modal-image {
+      max-width: 100%;
+      max-height: 80vh;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      color: #999;
+      font-size: 0.9em;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .suite-stats {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 E2E テスト詳細レポート</h1>
+      <p>Copilot Quality Harness - Playwright 実行結果詳細</p>
+    </header>
+
+    <div class="summary-grid">
+      <div class="summary-card success">
+        <h3>テスト合格率</h3>
+        <div class="value" id="passRate">-</div>
+        <div class="unit">%</div>
+      </div>
+
+      <div class="summary-card">
+        <h3>テスト実行数</h3>
+        <div class="value" id="testCount">-</div>
+        <div class="unit">テスト</div>
+      </div>
+
+      <div class="summary-card success">
+        <h3>合格数</h3>
+        <div class="value" id="passedCount">-</div>
+        <div class="unit">テスト</div>
+      </div>
+
+      <div class="summary-card danger">
+        <h3>失敗数</h3>
+        <div class="value" id="failedCount">-</div>
+        <div class="unit">テスト</div>
+      </div>
+
+      <div class="summary-card warning">
+        <h3>スキップ</h3>
+        <div class="value" id="skippedCount">-</div>
+        <div class="unit">テスト</div>
+      </div>
+
+      <div class="summary-card">
+        <h3>実行時間</h3>
+        <div class="value" id="duration">-</div>
+        <div class="unit">秒</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="filter-btn active" onclick="filterTests('all')">すべて表示</button>
+      <button class="filter-btn" onclick="filterTests('passed')">✅ 合格のみ</button>
+      <button class="filter-btn" onclick="filterTests('failed')">❌ 失敗のみ</button>
+      <button class="filter-btn" onclick="filterTests('skipped')">⏭️ スキップのみ</button>
+    </div>
+
+    <div class="test-suites" id="testSuites">
+      <p style="text-align: center; color: #999; padding: 20px;">テストデータを読み込み中...</p>
+    </div>
+
+    <div class="footer">
+      <p>最終更新: <span id="lastUpdated">-</span></p>
+      <p>Copilot Quality Harness | <a href="https://github.com/cocomomojo/copilot-quality-harness" style="color: #667eea; text-decoration: none;">GitHub</a></p>
+    </div>
+  </div>
+
+  <div id="imageModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <img id="modalImage" class="modal-image" src="" alt="Screenshot">
+    </div>
+  </div>
+
+  <script>
+    // Sample data
+    const sampleData = {
+      timestamp: new Date().toISOString(),
+      totalSuites: 3,
+      totalTests: 15,
+      passed: 14,
+      failed: 1,
+      skipped: 0,
+      passRate: 93,
+      duration: 45230,
+      suites: [
+        {
+          name: 'User Registration',
+          file: 'e2e/user-registration.spec.ts',
+          totalTests: 5,
+          passed: 5,
+          failed: 0,
+          skipped: 0,
+          duration: 12000,
+          tests: [
+            {
+              name: 'should register new user',
+              title: 'should register new user',
+              status: 'passed',
+              duration: 2500,
+              file: 'e2e/user-registration.spec.ts',
+              errors: [],
+              screenshots: [],
+              videos: []
+            }
+          ]
+        }
+      ]
+    };
+
+    let currentFilter = 'all';
+    let reportData = sampleData;
+
+    function initDashboard() {
+      // Try to load actual data
+      fetch('./data/test-cases.json')
+        .then(response => {
+          if (!response.ok) throw new Error('Not found');
+          return response.json();
+        })
+        .then(data => {
+          reportData = data;
+          console.log('✅ Loaded actual report data:', reportData);
+          updateDisplay();
+        })
+        .catch(error => {
+          console.warn('⚠️  Using sample data:', error.message);
+          updateDisplay();
+        });
+    }
+
+    function updateDisplay() {
+      // Update summary cards
+      document.getElementById('passRate').textContent = reportData.passRate;
+      document.getElementById('testCount').textContent = reportData.totalTests;
+      document.getElementById('passedCount').textContent = reportData.passed;
+      document.getElementById('failedCount').textContent = reportData.failed;
+      document.getElementById('skippedCount').textContent = reportData.skipped;
+      document.getElementById('duration').textContent = (reportData.duration / 1000).toFixed(1);
+
+      // Update timestamp
+      const timestamp = new Date(reportData.timestamp);
+      document.getElementById('lastUpdated').textContent = timestamp.toLocaleString('ja-JP');
+
+      // Render test suites
+      renderTestSuites();
+    }
+
+    function renderTestSuites() {
+      const container = document.getElementById('testSuites');
+      container.innerHTML = '';
+
+      for (const suite of reportData.suites) {
+        const suiteEl = createSuiteElement(suite);
+        container.appendChild(suiteEl);
+      }
+    }
+
+    function createSuiteElement(suite) {
+      const div = document.createElement('div');
+      div.className = 'test-suite';
+      div.id = 'suite-' + suite.name.replace(/\\s+/g, '-').toLowerCase();
+
+      const header = document.createElement('div');
+      header.className = 'suite-header';
+      header.onclick = () => toggleSuite(div);
+
+      const title = document.createElement('div');
+      title.className = 'suite-title';
+      title.textContent = '📄 ' + suite.name;
+
+      const stats = document.createElement('div');
+      stats.className = 'suite-stats';
+
+      stats.innerHTML = \`
+        <span><span class="stat-passed">\${suite.passed}</span> 合格</span>
+        <span><span class="stat-failed">\${suite.failed}</span> 失敗</span>
+        <span class="stat-skipped">\${suite.skipped} スキップ</span>
+        <span>⏱️ \${(suite.duration / 1000).toFixed(1)}s</span>
+      \`;
+
+      const toggle = document.createElement('div');
+      toggle.className = 'suite-toggle';
+      toggle.textContent = '▶';
+
+      header.appendChild(title);
+      header.appendChild(stats);
+      header.appendChild(toggle);
+
+      const content = document.createElement('div');
+      content.className = 'suite-content';
+
+      for (const test of suite.tests) {
+        if (shouldShowTest(test)) {
+          const testEl = createTestElement(test);
+          content.appendChild(testEl);
+        }
+      }
+
+      div.appendChild(header);
+      div.appendChild(content);
+
+      return div;
+    }
+
+    function createTestElement(test) {
+      const div = document.createElement('div');
+      div.className = 'test-item ' + test.status;
+      div.id = 'test-' + test.name.replace(/\\s+/g, '-').toLowerCase();
+      div.onclick = () => toggleTestDetails(div);
+
+      const name = document.createElement('div');
+      name.className = 'test-name';
+      
+      const icon = test.status === 'passed' ? '✅' : (test.status === 'failed' ? '❌' : '⏭️');
+      const badge = document.createElement('span');
+      badge.className = 'test-status-badge badge-' + test.status;
+      badge.textContent = test.status.toUpperCase();
+
+      name.innerHTML = icon + ' ' + test.title;
+      name.appendChild(badge);
+
+      const meta = document.createElement('div');
+      meta.className = 'test-meta';
+      meta.textContent = '⏱️ ' + (test.duration / 1000).toFixed(2) + 's';
+
+      div.appendChild(name);
+      div.appendChild(meta);
+
+      if (test.errors && test.errors.length > 0) {
+        const details = document.createElement('div');
+        details.className = 'test-details';
+        
+        for (const error of test.errors) {
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'error-message';
+          errorDiv.textContent = error;
+          details.appendChild(errorDiv);
+        }
+
+        div.appendChild(details);
+      }
+
+      if (test.videos && test.videos.length > 0) {
+        const videoDiv = document.createElement('div');
+        videoDiv.className = 'video-player';
+        const video = document.createElement('video');
+        video.controls = true;
+        video.src = test.videos[0];
+        videoDiv.appendChild(video);
+        div.appendChild(videoDiv);
+      }
+
+      if (test.screenshots && test.screenshots.length > 0) {
+        const gallery = document.createElement('div');
+        gallery.className = 'screenshot-gallery';
+        
+        for (const screenshot of test.screenshots) {
+          const img = document.createElement('img');
+          img.className = 'screenshot-thumb';
+          img.src = screenshot;
+          img.onclick = (e) => {
+            e.stopPropagation();
+            openModal(screenshot);
+          };
+          gallery.appendChild(img);
+        }
+
+        div.appendChild(gallery);
+      }
+
+      return div;
+    }
+
+    function toggleSuite(element) {
+      const toggle = element.querySelector('.suite-toggle');
+      const content = element.querySelector('.suite-content');
+
+      toggle.classList.toggle('expanded');
+      content.classList.toggle('expanded');
+    }
+
+    function toggleTestDetails(element) {
+      const details = element.querySelector('.test-details');
+      if (details) {
+        details.classList.toggle('expanded');
+      }
+    }
+
+    function filterTests(status) {
+      // Update button states
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      currentFilter = status;
+      renderTestSuites();
+    }
+
+    function shouldShowTest(test) {
+      if (currentFilter === 'all') return true;
+      if (currentFilter === 'passed') return test.status === 'passed';
+      if (currentFilter === 'failed') return test.status === 'failed';
+      if (currentFilter === 'skipped') return test.status === 'skipped';
+      return true;
+    }
+
+    function openModal(imageSrc) {
+      const modal = document.getElementById('imageModal');
+      const img = document.getElementById('modalImage');
+      img.src = imageSrc;
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('imageModal').classList.remove('active');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('imageModal').onclick = function(event) {
+      if (event.target === this) {
+        closeModal();
+      }
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>`;
+
+  const outputPath = join(config.outputDir, 'e2e-latest.html');
+  writeFileSync(outputPath, pageHTML);
+  console.log(`✅ E2E Details Page: ${outputPath}`);
+
+  // Also copy data file if available
+  try {
+    const dataPath = join(config.outputDir, 'data', 'test-cases.json');
+    mkdirSync(dirname(dataPath), { recursive: true });
+    writeFileSync(dataPath, JSON.stringify(reportData, null, 2));
+    console.log(`✅ Data file: ${dataPath}`);
+  } catch (error) {
+    console.log(`ℹ️  Data directory not yet available`);
+  }
+
+  console.log(`\n✅ E2E Details page generation complete!`);
+  console.log(`📍 View at: file://${outputPath}\n`);
+}
+
+// CLI
+const reportDataPath = process.argv[2] || 'qa/e2e-report/test-cases.json';
+const outputDir = process.argv[3] || 'docs/reports';
+const title = process.argv[4] || 'E2E Test Report';
+
+generateE2EDetailsPage({ reportDataPath, outputDir, title }).catch((err) => {
+  console.error('❌ Generation failed:', err.message);
+  process.exit(1);
+});
