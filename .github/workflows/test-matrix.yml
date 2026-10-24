@@ -119,6 +119,18 @@ jobs:
           console.log('Test Results:', JSON.stringify(result));
           EOF
       
+      - name: Verify test result file was created
+        run: |
+          FILE="test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.json"
+          if [ ! -f "$FILE" ]; then
+            echo "❌ ERROR: Test result file not created: $FILE"
+            echo "Current directory contents:"
+            ls -la
+            exit 1
+          fi
+          echo "✅ Test result file created: $FILE"
+          cat "$FILE"
+      
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -134,9 +146,22 @@ jobs:
     
     steps:
       - name: Download all test results
+        id: download_results
         uses: actions/download-artifact@v4
         with:
           path: test-results-all
+      
+      - name: Verify test results were downloaded
+        run: |
+          if [ ! -d "test-results-all" ] || [ -z "$(ls -A test-results-all 2>/dev/null)" ]; then
+            echo "❌ ERROR: No test results downloaded"
+            echo "Current directory contents:"
+            ls -la
+            exit 1
+          fi
+          echo "✅ Test results downloaded"
+          echo "Contents of test-results-all:"
+          find test-results-all -type f -exec echo "  - {}" \;
       
       - name: Generate test matrix summary
         run: |

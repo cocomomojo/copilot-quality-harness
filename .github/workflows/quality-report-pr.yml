@@ -18,13 +18,28 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Download test matrix results
+        id: download
         uses: dawidd6/action-download-artifact@v3
+        continue-on-error: true
         with:
           workflow: test-matrix.yml
           run_id: ${{ github.event.workflow_run.id }}
           path: artifacts
           name_is_regexp: true
           name: 'test-results-.*|test-matrix-summary'
+      
+      - name: Verify artifacts were downloaded
+        run: |
+          if [ ! -d "artifacts" ] || [ -z "$(ls -A artifacts 2>/dev/null)" ]; then
+            echo "❌ ERROR: No artifacts found for workflow run ${{ github.event.workflow_run.id }}"
+            echo "Downloading list of available artifacts..."
+            gh run view ${{ github.event.workflow_run.id }} --repo ${{ github.repository }} --json artifacts || true
+            exit 1
+          fi
+          echo "✅ Artifacts downloaded successfully"
+          ls -la artifacts/
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Upload artifacts for next job
         uses: actions/upload-artifact@v4
@@ -54,6 +69,18 @@ jobs:
         with:
           name: merged-test-results
           path: test-results-data
+      
+      - name: Verify merged results were downloaded
+        run: |
+          if [ ! -d "test-results-data" ] || [ -z "$(ls -A test-results-data 2>/dev/null)" ]; then
+            echo "❌ ERROR: No merged test results found"
+            echo "Current directory contents:"
+            ls -la
+            exit 1
+          fi
+          echo "✅ Merged results downloaded"
+          echo "Contents of test-results-data:"
+          find test-results-data -type f -exec echo "  - {}" \;
       
       - name: Generate quality report
         id: quality_report
