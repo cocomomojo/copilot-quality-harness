@@ -63,7 +63,7 @@ Pages デプロイ（自動）
 
 | # | ワークフロー | 役割 | トリガー | 実行時間 |
 |---|----------|------|---------|--------|
-| 4 | **test-matrix.yml** | UT + E2E 並列実行（Node 18/20 × 複数種別） | PR / Push | ~30-45s |
+| 4 | **test-matrix.yml** | UT + E2E 並列実行（Node 20） | PR / Push | ~30-45s |
 | 5 | **test-coverage-analysis.yml** | カバレッジギャップ検出 | PR / Push | ~20s |
 
 ### 🟢 品質レポート・デプロイ ワークフロー
@@ -208,7 +208,7 @@ Playwright Trace (Single or Multiple)
 
 #### ワークフロー
 - `.github/workflows/copilot-analyze-trace.yml` — Playwright トレース分析（5 ジョブパイプライン）
-- `.github/workflows/test-matrix.yml` — テスト並列実行（8 並列、Node 18/20）
+- `.github/workflows/test-matrix.yml` — テスト並列実行（4 並列、Node 20）
 - `.github/workflows/quality-schedule.yml` — 週次スケジュール実行（毎週金曜 AM 5:00 JST）
 - `.github/workflows/spec-to-implementation.yml` — 仕様 YAML → UT/E2E 自動生成
 - `.github/workflows/m2-issue-intake.yml` — Issue 自動解析
@@ -300,7 +300,7 @@ graph TD
 | ワークフロー | トリガー | 説明 |
 |------------|---------|------|
 | `copilot-analyze-trace.yml` | PR / Manual | Playwright トレース分析（5 ジョブパイプライン） |
-| `test-matrix.yml` | Push / PR | テスト並列実行（8 並列、Node 18/20） |
+| `test-matrix.yml` | Push / PR | テスト並列実行（4 並列、Node 20） |
 | `quality-schedule.yml` | Cron (毎週金曜 5:00 JST) | 週次品質チェック |
 | `auto-code-review.yml` | PR | リント + テスト影響度分析 |
 | `quality-report-pr.yml` | workflow_run | テスト結果集約と PR コメント |

@@ -20,9 +20,9 @@ Five coordinated GitHub Actions workflows provide comprehensive quality assuranc
 PR/Push Event
     ↓
 ┌─────────────────────────────────────┐
-│  test-coverage-analysis.yml         │ ← Analyzes coverage gaps (matrix: Node 18, 20)
+│  test-coverage-analysis.yml         │ ← Analyzes coverage gaps (matrix: Node 20)
 │  auto-code-review.yml               │ ← Extended code review (linting + test impact)
-│  test-matrix.yml                    │ ← Parallel tests (4 × 2 combinations)
+│  test-matrix.yml                    │ ← Parallel tests (1 × 4 combinations)
 └─────────────────────────────────────┘
     ↓
 ┌─────────────────────────────────────┐
@@ -105,9 +105,9 @@ Weekly Friday 5:00 AM JST
 
 **Key Features**:
 - **Matrix Dimensions**:
-  - Node versions: 18, 20
+  - Node versions: 20
   - Test types: unit, api, e2e, advanced
-  - Total: 8 parallel jobs
+  - Total: 4 parallel jobs
 - **Test Execution**: 
   - Each job runs its specific test type
   - E2E installs Playwright dependencies dynamically
@@ -161,7 +161,6 @@ Weekly Friday 5:00 AM JST
   ```
   | Node Version | Unit Tests | API Tests | E2E Tests | Advanced Tests |
   |---|---|---|---|---|
-  | Node 18 | ✅ 25P/0F | ✅ 15P/0F | ⚠️ 20P/1F | ✅ 33P/0F |
   | Node 20 | ✅ 25P/0F | ✅ 15P/0F | ⚠️ 20P/1F | ✅ 32P/0F |
   ```
 - **PR Comment**: Posts comment with:
@@ -181,7 +180,7 @@ Weekly Friday 5:00 AM JST
 
 **Key Features**:
 - **Cron Schedule**: Thursday 20:00 UTC = Friday 5:00 AM JST
-- **Matrix Testing**: Node 18 and 20 with full test suite
+- **Matrix Testing**: Node 20 with full test suite
 - **Comprehensive Analysis**:
   - Runs all test suites sequentially
   - Captures pass rates by node version

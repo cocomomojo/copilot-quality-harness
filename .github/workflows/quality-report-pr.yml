@@ -93,7 +93,7 @@ jobs:
           rows.push('| Node Version | Unit Tests | API Tests | E2E Tests | Advanced Tests |');
           rows.push('|---|---|---|---|---|');
           
-          const nodeVersions = [18, 20];
+          const nodeVersions = [20];
           for (const nodeVer of nodeVersions) {
             const row = [`Node ${nodeVer}`];
             
@@ -210,7 +210,6 @@ jobs:
             } else {
               body.push('| Node Version | Unit Tests | API Tests | E2E Tests | Advanced Tests |');
               body.push('|---|---|---|---|---|');
-              body.push('| Node 18 | ⏳ No data | ⏳ No data | ⏳ No data | ⏳ No data |');
               body.push('| Node 20 | ⏳ No data | ⏳ No data | ⏳ No data | ⏳ No data |');
             }
             body.push('');

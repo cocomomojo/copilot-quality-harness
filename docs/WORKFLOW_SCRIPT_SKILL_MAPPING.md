@@ -120,7 +120,7 @@ Skill: spec_to_tests
 ### 4️⃣ test-matrix.yml
 
 ```
-目的: UT + E2E テストを並列実行（Node 18/20 の複数コンボ）
+目的: UT + E2E テストを並列実行（Node 20）
 ステップ:
   1. Matrix 戦略で複数ジョブを並列実行
   2. UT を実行
@@ -134,7 +134,7 @@ Skill: spec_to_tests
 
 実装状態: ✅ 完全実装
   - Workflow: .github/workflows/test-matrix.yml
-  - Matrix: node-version [18, 20], test-type [unit, e2e]
+  - Matrix: node-version [20], test-type [unit, e2e]
   - アーティファクト: test-results-*, coverage-*
 ```
 

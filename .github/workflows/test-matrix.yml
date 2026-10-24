@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20]
         test-type: [unit, api, e2e, advanced]
       fail-fast: false
     
@@ -176,7 +176,7 @@ jobs:
           };
           
           // Group by node version
-          for (const version of [18, 20]) {
+          for (const version of [20]) {
             const versionResults = allResults.filter(r => r.node_version === version);
             summary.by_node_version[version] = {
               passed_tests: versionResults.reduce((sum, r) => sum + r.passed, 0),
