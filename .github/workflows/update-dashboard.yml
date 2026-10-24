@@ -167,6 +167,13 @@ jobs:
           name: dashboard-html
           path: docs/dashboard/
           retention-days: 30
+      
+      - name: Upload E2E reports artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-reports-html
+          path: docs/reports/
+          retention-days: 30
 
   deploy-pages:
     runs-on: ubuntu-latest
@@ -184,6 +191,13 @@ jobs:
         with:
           name: dashboard-html
           path: docs/dashboard
+      
+      - name: Download E2E reports
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-reports-html
+          path: docs/reports
+        continue-on-error: true
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
