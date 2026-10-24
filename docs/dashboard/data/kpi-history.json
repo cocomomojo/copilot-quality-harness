@@ -250,5 +250,26 @@
       "pass_rate_change": 0,
       "coverage_change": 0
     }
+  },
+  {
+    "timestamp": "2026-10-24T10:14:28.618Z",
+    "pass_rate": 50,
+    "test_count": 4,
+    "passed": 2,
+    "failed": 0,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 31,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 40085088821
+    },
+    "trend": "DECLINING",
+    "trend_details": {
+      "pass_rate_change": -25,
+      "coverage_change": 0
+    }
   }
 ]
