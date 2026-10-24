@@ -162,6 +162,22 @@ jobs:
           name: test-results-node-${{ matrix.node-version }}-${{ matrix.test-type }}
           path: test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.json
           retention-days: 5
+      
+      - name: Upload Playwright report (E2E only)
+        if: always() && matrix.test-type == 'e2e'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-node-${{ matrix.node-version }}
+          path: playwright-report/
+          retention-days: 5
+      
+      - name: Upload E2E test-results (E2E only)
+        if: always() && matrix.test-type == 'e2e'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results-node-${{ matrix.node-version }}
+          path: test-results/
+          retention-days: 5
   
   test-summary:
     runs-on: ubuntu-latest

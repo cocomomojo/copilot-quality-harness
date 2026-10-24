@@ -25,6 +25,10 @@ export default defineConfig({
       stderr: 'pipe'
     }
   ],
+  reporter: [
+    ['html', { outputFolder: 'playwright-report' }],
+    ['json', { outputFile: 'test-results/summary.json' }]
+  ],
   use: {
     baseURL: 'http://127.0.0.1:5173',
     trace: 'retain-on-failure',
