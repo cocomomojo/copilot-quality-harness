@@ -128,7 +128,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "📊 Generating E2E test report..."
-          ts-node scripts/generate-e2e-report.ts qa/e2e-report
+          npx ts-node scripts/generate-e2e-report.ts qa/e2e-report
           
           if [ -f qa/e2e-report/test-cases.json ]; then
             echo "✅ E2E report generated"
