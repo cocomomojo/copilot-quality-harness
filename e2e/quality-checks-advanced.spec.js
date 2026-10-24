@@ -228,8 +228,14 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await input.fill('First Check');
       await button.click();
       
+      // Wait for first check to appear before adding second check
+      await expect(page.getByText('First Check')).toBeVisible();
+      
       await input.fill('Second Check');
       await button.click();
+      
+      // Wait for second check to appear before verifying order
+      await expect(page.getByText('Second Check')).toBeVisible();
       
       const checks = page.locator('li');
       const firstCheck = await checks.first().textContent();
