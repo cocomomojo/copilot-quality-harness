@@ -312,19 +312,19 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
   test.describe('UI State Tests', () => {
     test('displays "No checks recorded yet" when empty', async ({ page }) => {
-      await expect(page.getByText('No checks recorded yet')).toBeVisible();
+      await expect(page.getByText('No checks recorded yet.')).toBeVisible();
     });
 
     test('removes "No checks" message when first check is added', async ({ page }) => {
       const input = page.getByLabel('Check name');
       const button = page.getByRole('button', { name: 'Add check' });
       
-      await expect(page.getByText('No checks recorded yet')).toBeVisible();
+      await expect(page.getByText('No checks recorded yet.')).toBeVisible();
       
       await input.fill('First Check');
       await button.click();
       
-      await expect(page.getByText('No checks recorded yet')).not.toBeVisible();
+      await expect(page.getByText('No checks recorded yet.')).not.toBeVisible();
     });
 
     test('displays checks as list items', async ({ page }) => {
