@@ -48,8 +48,20 @@ jobs:
         id: test-e2e
         continue-on-error: true
         run: |
+          echo "📋 Installing Playwright..."
           npx playwright install --with-deps chromium
+          
+          echo "🚀 Starting E2E tests..."
+          echo "⏳ Playwright will auto-start frontend and backend servers..."
+          echo "   Frontend: npm run dev --workspace frontend (port 5173)"
+          echo "   Backend: npm run start --workspace backend (port 3000)"
+          echo ""
+          
           npm run test:e2e 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          
+          echo ""
+          echo "✅ E2E test execution completed"
+          echo "📊 Test results saved to /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log"
       
       - name: Run advanced tests
         if: matrix.test-type == 'advanced'

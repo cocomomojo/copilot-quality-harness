@@ -3,8 +3,18 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './e2e',
   webServer: [
-    { command: 'npm run start --workspace backend', url: 'http://127.0.0.1:3000/api/health', reuseExistingServer: true },
-    { command: 'npm run dev --workspace frontend', url: 'http://127.0.0.1:5173', reuseExistingServer: true }
+    { 
+      command: 'npm run start --workspace backend', 
+      url: 'http://127.0.0.1:3000/api/health', 
+      reuseExistingServer: true,
+      timeout: 120000  // 120 秒のタイムアウト
+    },
+    { 
+      command: 'npm run dev --workspace frontend', 
+      url: 'http://127.0.0.1:5173', 
+      reuseExistingServer: true,
+      timeout: 120000  // 120 秒のタイムアウト
+    }
   ],
   use: {
     baseURL: 'http://127.0.0.1:5173',
