@@ -7,6 +7,8 @@
     "backend"
   ],
   "scripts": {
+    "postinstall": "npm run playwright:install || true",
+    "playwright:install": "playwright install chromium --with-deps",
     "dev": "concurrently \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
     "build": "npm run build --workspace frontend",
     "test": "npm run test --workspace backend && npm run test --workspace frontend",

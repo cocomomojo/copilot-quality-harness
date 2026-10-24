@@ -29,7 +29,7 @@ jobs:
           cache: npm
       
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       
       - name: Run unit tests
         if: matrix.test-type == 'unit'
@@ -48,9 +48,15 @@ jobs:
         id: test-e2e
         continue-on-error: true
         run: |
-          echo "📋 Installing Playwright..."
+          echo "📋 Installing Playwright dependencies..."
           npx playwright install --with-deps chromium
           
+          echo "✅ Verifying Playwright installation..."
+          npx playwright --version
+          which chromium || echo "⚠️ chromium not in PATH, checking default location..."
+          ls -la ~/.cache/ms-playwright/ 2>/dev/null || echo "⚠️ ~/.cache/ms-playwright not found"
+          
+          echo ""
           echo "🚀 Starting E2E tests..."
           echo "⏳ Playwright will auto-start frontend and backend servers..."
           echo "   Frontend: npm run dev --workspace frontend (port 5173)"
