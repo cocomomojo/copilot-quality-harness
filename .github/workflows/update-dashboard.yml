@@ -214,9 +214,9 @@ jobs:
         continue-on-error: true
         run: |
           echo "🎬 Generating E2E details page..."
-          mkdir -p docs/reports/videos docs/reports/screenshots
+          mkdir -p docs/reports/videos docs/reports/screenshots docs/reports/traces docs/reports/logs
 
-          # Copy media assets with deterministic unique filenames to avoid overwrite (e.g. many video.webm)
+          # Copy media/evidence assets with deterministic unique filenames to avoid overwrite
           while IFS= read -r -d '' FILE; do
             EXT="${FILE##*.}"
             HASH=$(printf '%s' "$FILE" | sha1sum | cut -d' ' -f1)
@@ -226,8 +226,22 @@ jobs:
               cp -f "$FILE" "docs/reports/videos/$TARGET"
             elif [[ "$EXT" =~ ^(png|jpg|jpeg)$ ]]; then
               cp -f "$FILE" "docs/reports/screenshots/$TARGET"
+            elif [[ "$EXT" =~ ^(zip)$ ]]; then
+              cp -f "$FILE" "docs/reports/traces/$TARGET"
+            elif [[ "$EXT" =~ ^(md|txt|log)$ ]]; then
+              cp -f "$FILE" "docs/reports/logs/$TARGET"
             fi
-          done < <(find ./artifacts -type f \( -iname '*.webm' -o -iname '*.mp4' -o -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -print0 2>/dev/null)
+          done < <(find ./artifacts -type f \( -iname '*.webm' -o -iname '*.mp4' -o -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.zip' -o -iname '*.md' -o -iname '*.txt' -o -iname '*.log' \) -print0 2>/dev/null)
+
+          # Publish Playwright official HTML report if artifact was downloaded
+          PLAYWRIGHT_REPORT_DIR=$(find ./artifacts -maxdepth 2 -type f -name index.html -path '*/playwright-report-*/*' | head -1 | xargs -r dirname)
+          if [ -n "$PLAYWRIGHT_REPORT_DIR" ] && [ -d "$PLAYWRIGHT_REPORT_DIR" ]; then
+            echo "📄 Found Playwright report: $PLAYWRIGHT_REPORT_DIR"
+            rm -rf docs/reports/playwright-report
+            cp -R "$PLAYWRIGHT_REPORT_DIR" docs/reports/playwright-report
+          else
+            echo "ℹ️ Playwright HTML report artifact not found"
+          fi
 
           node scripts/generate-e2e-details-page.mjs "qa/e2e-report/test-cases.json" "docs/reports"
           

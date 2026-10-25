@@ -28,6 +28,10 @@ interface TestResult {
   errors?: string[];
   screenshots?: string[];
   videos?: string[];
+  traceFiles?: string[];
+  errorContexts?: string[];
+  stdout?: string[];
+  stderr?: string[];
 }
 
 interface TestSuite {
@@ -156,31 +160,59 @@ function parseTestResults(filePath: string): TestSuite[] {
             for (const spec of suiteLevelOrSpecs.specs) {
               if (spec.tests && Array.isArray(spec.tests)) {
                 for (const test of spec.tests) {
-                  const testStatus = test.results && test.results[0] 
-                    ? (test.results[0].status || 'skipped')
+                  const result = test.results && test.results[0] ? test.results[0] : null;
+                  const attachments = result && Array.isArray(result.attachments) ? result.attachments : [];
+                  const testStatus = result
+                    ? (result.status || 'skipped')
                     : 'skipped';
+
+                  const normalizeAttachmentList = (items: any[], filterFn: (attachment: any) => boolean): string[] => {
+                    return items
+                      .filter(filterFn)
+                      .map((a: any) => normalizeReportAssetPath(a.path) || a.path)
+                      .filter(Boolean);
+                  };
+
+                  const toTextArray = (chunks: any[] | undefined): string[] => {
+                    if (!Array.isArray(chunks)) return [];
+                    return chunks
+                      .map((chunk: any) => {
+                        if (typeof chunk === 'string') return chunk;
+                        if (chunk && typeof chunk.text === 'string') return chunk.text;
+                        if (chunk && typeof chunk.message === 'string') return chunk.message;
+                        return '';
+                      })
+                      .map((text) => text.trim())
+                      .filter(Boolean);
+                  };
                   
                   const testResult: TestResult = {
                     name: spec.title || 'unknown',
                     title: spec.title || 'unknown',
                     status: testStatus as 'passed' | 'failed' | 'skipped' | 'interrupted',
-                    duration: test.results && test.results[0] ? (test.results[0].duration || 0) : 0,
+                    duration: result ? (result.duration || 0) : 0,
                     file: fileName,
-                    errors: test.results && test.results[0] && test.results[0].error
-                      ? [test.results[0].error.message || String(test.results[0].error)]
+                    errors: result && result.error
+                      ? [result.error.message || String(result.error)]
                       : [],
-                    screenshots: test.results && test.results[0] && test.results[0].attachments
-                      ? test.results[0].attachments
-                          .filter((a: any) => a.contentType?.includes('image'))
-                          .map((a: any) => normalizeReportAssetPath(a.path) || a.path)
-                          .filter(Boolean)
-                      : [],
-                    videos: test.results && test.results[0] && test.results[0].attachments
-                      ? test.results[0].attachments
-                          .filter((a: any) => a.contentType?.includes('video'))
-                          .map((a: any) => normalizeReportAssetPath(a.path) || a.path)
-                          .filter(Boolean)
-                      : []
+                    screenshots: normalizeAttachmentList(attachments, (a: any) => a.contentType?.includes('image')),
+                    videos: normalizeAttachmentList(attachments, (a: any) => a.contentType?.includes('video')),
+                    traceFiles: normalizeAttachmentList(
+                      attachments,
+                      (a: any) =>
+                        a.name === 'trace' ||
+                        a.contentType === 'application/zip' ||
+                        /trace\.zip$/i.test(String(a.path || ''))
+                    ),
+                    errorContexts: normalizeAttachmentList(
+                      attachments,
+                      (a: any) =>
+                        a.name === 'error-context' ||
+                        (typeof a.contentType === 'string' && a.contentType.includes('markdown')) ||
+                        /error-context\.(md|txt|log)$/i.test(String(a.path || ''))
+                    ),
+                    stdout: toTextArray(result?.stdout),
+                    stderr: toTextArray(result?.stderr)
                   };
                   tests.push(testResult);
                 }
@@ -268,7 +300,7 @@ function normalizeReportAssetPath(filePath: string | null | undefined): string |
   if (!filePath) return null;
   const normalized = filePath.replace(/\\/g, '/');
   const basename = normalized.split('/').pop();
-  if (!basename || !/\.(webm|mp4|png|jpg|jpeg)$/i.test(basename)) return null;
+  if (!basename || !/\.(webm|mp4|png|jpg|jpeg|zip|md|txt|log)$/i.test(basename)) return null;
 
   if (normalized.startsWith('http://') || normalized.startsWith('https://') || normalized.startsWith('./') || normalized.startsWith('../')) {
     return normalized;

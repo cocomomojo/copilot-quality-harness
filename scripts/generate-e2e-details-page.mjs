@@ -44,11 +44,62 @@ async function generateE2EDetailsPage(config) {
     console.warn(`⚠️  Report not found (${config.reportDataPath}), using sample data`);
   }
 
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function normalizeEvidenceSource(src) {
+    if (!src || typeof src !== 'string') return null;
+    const trimmed = src.trim();
+    if (!trimmed) return null;
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('./') || trimmed.startsWith('../')) {
+      return trimmed;
+    }
+    if (/^(?:[A-Za-z]:\\|\/|\\\\)/.test(trimmed) || trimmed.includes('/home/') || trimmed.includes('/tmp/')) {
+      const basename = trimmed.split('/').pop() || '';
+      if (/\.zip$/i.test(basename)) return `./traces/${basename}`;
+      if (/\.(md|txt|log)$/i.test(basename)) return `./logs/${basename}`;
+      return null;
+    }
+    return trimmed;
+  }
+
   // Helper function to generate test suites HTML
   function generateTestSuitesHTML() {
     if (!reportData.suites || reportData.suites.length === 0) {
       return '<p style="text-align: center; color: #999; padding: 20px;">テストデータがありません</p>';
     }
+
+    const collectFallbackFiles = (dirName, regex, publicPrefix) => {
+      const items = [];
+      const dir = join(config.outputDir, dirName);
+      if (!existsSync(dir)) return items;
+      try {
+        for (const name of readdirSync(dir).filter((n) => regex.test(n)).sort((a, b) => a.localeCompare(b))) {
+          items.push(`${publicPrefix}/${name}`);
+        }
+      } catch {
+        // ignore scan errors
+      }
+      return items;
+    };
+
+    const traceFallbackPool = collectFallbackFiles('traces', /\.zip$/i, './traces');
+    const contextFallbackPool = collectFallbackFiles('logs', /\.(md|txt|log)$/i, './logs');
+    let traceFallbackCursor = 0;
+    let contextFallbackCursor = 0;
+
+    const isLinkAvailable = (relativePath) => {
+      if (!relativePath || typeof relativePath !== 'string') return false;
+      if (!relativePath.startsWith('./')) return true;
+      const filePath = join(config.outputDir, relativePath.slice(2));
+      return existsSync(filePath);
+    };
 
     let html = '';
     for (const suite of reportData.suites) {
@@ -71,6 +122,27 @@ async function generateE2EDetailsPage(config) {
         for (const test of suite.tests) {
           const statusClass = test.status;
           const statusEmoji = test.status === 'passed' ? '✅' : test.status === 'failed' ? '❌' : '⏭️';
+          const traceCandidates = Array.isArray(test.traceFiles) ? test.traceFiles : [];
+          const errorContextCandidates = Array.isArray(test.errorContexts) ? test.errorContexts : [];
+          const stdoutLines = Array.isArray(test.stdout) ? test.stdout : [];
+          const stderrLines = Array.isArray(test.stderr) ? test.stderr : [];
+
+          const normalizedTraceLinks = traceCandidates
+            .map((src) => normalizeEvidenceSource(src))
+            .filter(Boolean)
+            .filter((src) => isLinkAvailable(src));
+          const normalizedContextLinks = errorContextCandidates
+            .map((src) => normalizeEvidenceSource(src))
+            .filter(Boolean)
+            .filter((src) => isLinkAvailable(src));
+
+          if (normalizedTraceLinks.length === 0 && traceFallbackCursor < traceFallbackPool.length) {
+            normalizedTraceLinks.push(traceFallbackPool[traceFallbackCursor++]);
+          }
+          if (normalizedContextLinks.length === 0 && contextFallbackCursor < contextFallbackPool.length) {
+            normalizedContextLinks.push(contextFallbackPool[contextFallbackCursor++]);
+          }
+
           html += `
         <div class="test-item ${statusClass}" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
@@ -86,9 +158,45 @@ async function generateE2EDetailsPage(config) {
           if (test.errors && test.errors.length > 0) {
             html += `<div style="color: #ff6b6b; margin-top: 8px;">`;
             for (const error of test.errors) {
-              html += `<p style="word-break: break-all;">${error}</p>`;
+              html += `<p style="word-break: break-all; white-space: pre-wrap;">${escapeHtml(error)}</p>`;
             }
             html += `</div>`;
+          }
+
+          if (normalizedTraceLinks.length > 0 || normalizedContextLinks.length > 0) {
+            html += `<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;">`;
+            html += `<div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div>`;
+
+            for (const tracePath of normalizedTraceLinks) {
+              const escapedPath = escapeHtml(tracePath);
+              html += `<div style="margin-bottom: 6px;">`;
+              html += `<a href="${escapedPath}" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a>`;
+              html += `<a href="#" onclick="event.stopPropagation(); openTraceViewer('${escapedPath}'); return false;">🔍 Trace Viewerで開く</a>`;
+              html += `</div>`;
+            }
+
+            for (const contextPath of normalizedContextLinks) {
+              const escapedPath = escapeHtml(contextPath);
+              html += `<div style="margin-bottom: 4px;">`;
+              html += `<a href="${escapedPath}" target="_blank" rel="noopener noreferrer">📝 error-context</a>`;
+              html += `</div>`;
+            }
+
+            html += `</div>`;
+          }
+
+          if (stdoutLines.length > 0) {
+            html += `<details style="margin-top: 10px;" onclick="event.stopPropagation()">`;
+            html += `<summary style="font-size: 0.85em; color: #444;">📤 Stdout (${stdoutLines.length} lines)</summary>`;
+            html += `<pre style="margin-top: 6px; background: #f8f9fa; padding: 8px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap;">${escapeHtml(stdoutLines.join('\n'))}</pre>`;
+            html += `</details>`;
+          }
+
+          if (stderrLines.length > 0) {
+            html += `<details style="margin-top: 10px;" onclick="event.stopPropagation()">`;
+            html += `<summary style="font-size: 0.85em; color: #b02a37;">📥 Stderr (${stderrLines.length} lines)</summary>`;
+            html += `<pre style="margin-top: 6px; background: #fff3f3; padding: 8px; border-radius: 4px; overflow-x: auto; white-space: pre-wrap;">${escapeHtml(stderrLines.join('\n'))}</pre>`;
+            html += `</details>`;
           }
           
           if (test.screenshots && test.screenshots.length > 0) {
@@ -218,13 +326,18 @@ async function generateE2EDetailsPage(config) {
 
   function generateEvidenceLinksHTML() {
     const runId = reportData?.metadata?.test_run_id;
+    const playwrightReportExists = existsSync(join(config.outputDir, 'playwright-report', 'index.html'));
     const runLink = runId
       ? `<li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/runs/${runId}" target="_blank" rel="noopener noreferrer">🧪 Test Matrix Run #${runId}</a>（ログ・Artifacts）</li>`
       : '<li>🧪 Test Matrix Run: 取得不可（手動生成または旧フォーマット）</li>';
+    const playwrightReportLink = playwrightReportExists
+      ? '<li><a href="./playwright-report/index.html" target="_blank" rel="noopener noreferrer">🧭 Playwright公式HTMLレポート</a>（手順ログ/エラー/trace導線）</li>'
+      : '<li>🧭 Playwright公式HTMLレポート: 取得不可</li>';
 
     return `
       <ul style="margin-left: 1.2rem; color: #555; line-height: 1.8;">
         ${runLink}
+        ${playwrightReportLink}
         <li><a href="./data/test-cases.json" target="_blank" rel="noopener noreferrer">📄 test-cases.json</a>（E2E集計データ）</li>
         <li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/workflows/test-matrix.yml" target="_blank" rel="noopener noreferrer">⚙️ Test Matrix Workflow</a></li>
       </ul>
@@ -781,6 +894,12 @@ async function generateE2EDetailsPage(config) {
 
     function closeModal() {
       document.getElementById('imageModal').classList.remove('active');
+    }
+
+    function openTraceViewer(traceRelativePath) {
+      const traceAbsoluteUrl = new URL(traceRelativePath, window.location.href).href;
+      const viewerUrl = 'https://trace.playwright.dev/?trace=' + encodeURIComponent(traceAbsoluteUrl);
+      window.open(viewerUrl, '_blank', 'noopener,noreferrer');
     }
 
     // Close modal when clicking outside
