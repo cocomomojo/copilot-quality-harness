@@ -7,7 +7,9 @@ form, section { background: white; border: 1px solid #dce2ef; border-radius: 12p
 label { display: block; font-weight: 700; margin-bottom: .5rem; }
 .form-row { display: flex; gap: .75rem; }
 input { flex: 1; border: 1px solid #aeb9d0; border-radius: 6px; padding: .7rem; font: inherit; }
-button { border: 0; border-radius: 6px; padding: .7rem 1rem; color: white; background: #5268d8; font: inherit; font-weight: 700; cursor: pointer; }
+button { border: 0; border-radius: 6px; padding: .7rem 1rem; color: white; background: #5268d8; font: inherit; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
+button:hover { background: #3d4fa8; }
+button:focus { outline: 3px solid #5268d8; outline-offset: 2px; }
 ul { list-style: none; padding: 0; margin-bottom: 0; }
 li { display: flex; justify-content: space-between; border-top: 1px solid #edf0f6; padding: .9rem 0; }
 small { color: #64708a; }
