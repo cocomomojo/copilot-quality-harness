@@ -3,7 +3,7 @@
   "description": "Copilot 用 skill 定義。テスト設計YAML → テストコード、trace → 修正提案、PR メタデータの一貫性を担保するプロンプトとルール",
   "metadata": {
     "owner": "copilot-quality-team",
-    "last_updated": "2026-10-18",
+    "last_updated": "2026-10-25",
     "approval_required": true
   },
   "skills": {
@@ -187,7 +187,8 @@
         "PII（メール・IP・トークン）は絶対に含めない",
         "生成物は必ず seed 値を使用し、hardcoded value を避ける",
         "出力は JSON または Markdown 形式",
-        "エラーメッセージに機密情報を含めない"
+        "エラーメッセージに機密情報を含めない",
+        "KPI と E2E レポートは同一 Test Matrix run_id の実測値を参照する"
       ]
     },
     "quality_gates": {
@@ -197,6 +198,8 @@
         "UT: カバレッジ ≥ 90%（対象モジュール）",
         "E2E: すべてのステップが mock を使用",
         "E2E: タイムアウト・リトライが明示",
+        "E2E: 実行エビデンス（動画、失敗時スクリーンショット、trace/log）を保存",
+        "Report: latest-kpi.details.github_run_id と test-cases.metadata.test_run_id が一致",
         "実装: TypeScript strict エラー 0",
         "実装: SAST で脆弱性 0",
         "PR: `requires_human_approval: false` のみ auto-merge 対象"

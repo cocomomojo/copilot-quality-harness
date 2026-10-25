@@ -6,6 +6,23 @@
 
 ## 📚 スキル一覧
 
+### [05] Test Execution and Evidence（実行証跡の整合）
+**目的**: テスト結果の真実源を CI 実測値に固定し、同一 run_id で証跡（結果JSON・coverage・動画・trace・ログ）を整合させる  
+**対象**: test-matrix 実行結果、update-dashboard 連携、E2E 詳細レポート  
+**トリガー**: 実装後の検証、レポート生成時、品質ゲート判定時  
+**成果物**: 一貫した run_id を持つ KPI / E2E レポート / 実行証跡  
+**実装状態**: ✅ 運用中（2026-10-25 更新）
+
+**ファイル**:
+- `.github/skills/05-test-execution-and-evidence.md` – 実行ルール
+- `.github/workflows/test-matrix.yml` – 真実源（Artifacts）
+- `.github/workflows/update-dashboard.yml` – 同一 run_id で KPI/E2E 生成
+
+**重要ルール**:
+- KPI と E2E レポートは同一 Test Matrix run_id を使用する
+- coverage=0 フォールバック時は source 情報を残す
+- E2E ページから Run URL / test-cases.json / Workflow URL を辿れること
+
 ### [00] AI-Powered Automated Failure Analysis (汎用テンプレート)
 **目的**: 任意の CI/CD 失敗ログを AI が自動解析し、修正案を生成  
 **対象**: テスト失敗、ビルド失敗、デプロイ失敗、E2E テスト失敗など  
@@ -293,5 +310,5 @@ scripts/                            # 実行スクリプト
 
 ---
 
-**最終更新**: 2026-10-12 (Phase 2D Part 2 完成後)
+**最終更新**: 2026-10-25
 **次回見直し**: Phase 3 計画時

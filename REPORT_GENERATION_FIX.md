@@ -403,3 +403,26 @@ GitHub Actions ワークフロー実行時に以下を確認：
 **修正日:** 2026-10-25  
 **コミット:** 4d595c1  
 **検証済み:** ✅ ローカル実行確認済み
+
+---
+
+## 追補（2026-10-25）: run_id 整合と証跡導線の再強化
+
+本ドキュメント公開後、以下の運用改善を追加実装。
+
+1. `update-dashboard.yml` で **Test Matrix run_id を明示解決**
+  - `workflow_run` が Test Matrix の場合はイベント run_id を優先
+  - KPI 収集と E2E レポート生成が同一 run_id を参照
+
+2. `collect-kpi-advanced.mjs` の coverage 抽出強化
+  - `coverage-summary.json` / `coverage-final.json` の両形式を扱う
+  - `details.coverage_source` を出力し、0%フォールバック理由を追跡可能化
+
+3. E2E 動画の同名衝突対策
+  - `video.webm` 上書きを防ぐため、コピー時に一意ファイル名へ変換
+  - E2E 詳細ページに「実行エビデンス」セクションを追加
+    - Test Matrix Run URL
+    - `test-cases.json` URL
+    - Workflow URL
+
+これにより、KPI・E2E・公開ページの整合性と監査可能性をさらに向上。

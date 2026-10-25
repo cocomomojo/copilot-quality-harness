@@ -23,7 +23,9 @@ title: 🗺️ ワークフロー・スクリプト・Skill マッピング表
 | **8** | **📈 品質レポート** | `quality-report-pr.yml` | `generate-aggregated-comment.ts` | - | Artifacts | PR Comment | ✅ 実装 |
 | **9** | **🤖 AI Review** | `ai-review.yml` | - | - | PR diff | AI Comment | ✅ 実装 |
 | **10** | **📊 Trace分析** | `copilot-analyze-trace.yml` | `trace-summary.ts`, `copilot-client.ts`, `aggregate-trace-results.ts` | `trace_analyzer` | trace.zip | 分析結果 + Draft PR | ✅ 実装 |
-| **11** | **📈 ダッシュボード** | `update-dashboard.yml` | `generate-dashboard.mjs` | - | KPI データ | dashboard.html | ✅ 実装 |
+| **11** | **📈 ダッシュボード** | `update-dashboard.yml` | `collect-kpi-advanced.mjs`, `generate-dashboard.mjs`, `generate-e2e-report.ts`, `generate-e2e-details-page.mjs` | - | Test Matrix artifacts + KPI履歴 | dashboard + e2e reports | ✅ 実装 |
+
+> 2026-10-25 追記: `update-dashboard.yml` は KPI/E2E 生成で **同一 Test Matrix run_id** を使用する。
 
 ---
 
@@ -270,5 +272,5 @@ Skill: trace_analyzer
 
 ---
 
-**Last Updated**: 2026-10-20  
+**Last Updated**: 2026-10-25  
 **Maintainer**: copilot-quality-team

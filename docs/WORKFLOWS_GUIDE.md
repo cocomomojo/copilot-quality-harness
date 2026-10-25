@@ -7,6 +7,13 @@ title: Dynamic Workflows CI/CD Implementation Guide
 
 This document describes the Dynamic Workflows CI/CD system implemented for the copilot-quality-harness project.
 
+> **Update note (2026-10-25)**
+> Dashboard/E2E report generation was refactored for evidence consistency:
+> - `update-dashboard.yml` resolves a target **Test Matrix run_id**.
+> - KPI collection (`collect-kpi-advanced.mjs`) and E2E report generation (`generate-e2e-report.ts`) use that same run_id.
+> - E2E details page includes evidence links (run URL, JSON data, workflow URL).
+> For dashboard/e2e evidence behavior, prefer this note plus `docs/DASHBOARD.md` and `docs/E2E_REPORTS_GUIDE.md` over older examples below.
+
 **Quick Links**:
 - 📚 [Skills Index](.github/skills/SKILLS_INDEX.md) – 再利用可能なプロセス・パターン一覧
 - 🎯 [Copilot Review Response Skill](.github/skills/01-copilot-review-response-template.md) – PR review 指摘への対応フロー

@@ -7,6 +7,11 @@ title: 品質ダッシュボード
 
 リアルタイムで品質メトリクスとテスト結果を可視化するダッシュボードです。
 
+> **重要（2026-10-25 更新）**
+> - ダッシュボード指標の真実源は **Test Matrix artifacts** です。
+> - KPI 収集（`collect-kpi-advanced.mjs`）と E2E レポート生成は **同一 Test Matrix run_id** を使用します。
+> - これにより「カバレッジ値」「不合格件数」「E2Eレポート件数」の整合性を担保します。
+
 ## 📍 アクセス URL
 
 ```
@@ -65,7 +70,7 @@ https://cocomomojo.github.io/copilot-quality-harness/dashboard/
 
 **トリガー**:
 - 定時スケジュール実行
-- `quality-schedule.yml` ワークフロー完了時
+- `workflow_run`（`Quality Schedule` / `Test Matrix`）
 
 ### 手動実行
 
@@ -101,9 +106,21 @@ docs/dashboard/data/latest-kpi.json
   "passed": 138,
   "failed": 12,
   "coverage": 85,
-  "ai_danger_rank": "B"
+  "ai_danger_rank": "B",
+  "data_source": "TEST_MATRIX_ARTIFACT",
+  "details": {
+    "github_run_id": 40182565160,
+    "coverage_source": "ARTIFACT_RUN:40182565160",
+    "explicit_test_run_id": "40182565160"
+  }
 }
 ```
+
+### 整合性ルール（運用）
+
+1. `details.github_run_id` は Test Matrix 実行 ID を示す
+2. `coverage` は同一 run の coverage artifact 由来を優先する
+3. E2Eレポート（`docs/reports/data/test-cases.json`）の `metadata.test_run_id` と一致していること
 
 ### KPI 履歴 (kpi-history.json)
 
@@ -184,17 +201,15 @@ AI危険度ランク = f(test_pass_rate, code_coverage, issue_count, security_al
 ### ワークフロー連携
 
 ```
-Quality Schedule (毎週金曜)
-         ↓
-   テスト実行
-         ↓
-   KPI 収集
-         ↓
-Update Dashboard (毎日 AM 10:00)
-         ↓
-ダッシュボード生成
-         ↓
-GitHub Pages へデプロイ
+Test Matrix / Quality Schedule
+     ↓
+   Update Dashboard workflow_run
+     ↓
+   Target Test Matrix run_id を確定
+     ↓
+   KPI + E2E を同一 run_id で生成
+     ↓
+   GitHub Pages へデプロイ
 ```
 
 ### データ永続化
@@ -320,10 +335,9 @@ npm run generate:dashboard
 リポジトリ設定確認：
 
 1. Settings → Pages
-2. Source: Deploy from a branch
-3. Branch: main, folder: /docs
+2. Source: GitHub Actions
 
 ---
 
-**最終更新**: 2026-10-19
+**最終更新**: 2026-10-25
 **自動生成**: GitHub Actions ワークフローによって自動更新されます

@@ -1,5 +1,10 @@
 # E2E Test Reports と実装動画の表示機能
 
+> **重要（2026-10-25 更新）**
+> - E2E レポート生成は Test Matrix と同一 `run_id` を使って実行されます。
+> - 動画/画像アセットは同名衝突（例: `video.webm`）を避けるため、コピー時に一意名へ変換します。
+> - 詳細ページには「実行エビデンス」セクション（Run URL / JSON / Workflow）を表示します。
+
 ## 概要
 
 このプロジェクトは、Playwright E2E テストの実行結果を GitHub Pages に自動的に出力し、ダッシュボードから詳細なレポートへアクセスできるようにしています。
@@ -19,6 +24,7 @@
 - **ブラウザ内ビデオプレーヤー**: 追加インストール不要で動画を再生
 - **複数フォーマット対応**: WebM、MP4 形式をサポート
 - **リモート表示**: GitHub Pages でリモート環境から動画を視聴可能
+- **証跡リンク統合**: Test Matrix 実行ログ・JSON・Workflow へ直接遷移可能
 
 ## ファイル構成
 
@@ -85,6 +91,9 @@ GitHub Actions `update-dashboard.yml` ワークフローが以下を自動実行
   "skipped": 1,
   "passRate": 0.833,
   "duration": 45000,
+  "metadata": {
+    "test_run_id": "40182565160"
+  },
   "suites": [
     {
       "name": "Quality Checks",
@@ -103,13 +112,19 @@ GitHub Actions `update-dashboard.yml` ワークフローが以下を自動実行
           "file": "e2e/quality-checks.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": ["video-filename.webm"]
+          "videos": ["./videos/9e07...abc.webm"]
         }
       ]
     }
   ]
 }
 ```
+
+## 🔐 整合性ポリシー
+
+1. `metadata.test_run_id` は KPI 側 `details.github_run_id` と一致すること
+2. `videos[]` は固有パスを優先し、汎用 `./video.webm` への収束を避けること
+3. 実行エビデンス（Run URL, test-cases.json）をページ内から辿れること
 
 ## トラブルシューティング
 
@@ -120,6 +135,8 @@ GitHub Actions `update-dashboard.yml` ワークフローが以下を自動実行
    - `playwright.config.js` で設定確認
 2. `./test-results/videos/` に動画ファイルが存在するか確認
 3. サポートされた形式（WebM、MP4）か確認
+4. `docs/reports/videos/` に一意ファイル名で配置されているか確認
+5. `docs/reports/data/test-cases.json` の `videos[]` が実在ファイルを指しているか確認
 
 ### レポート JSON が生成されない
 
@@ -148,6 +165,9 @@ GitHub Actions `update-dashboard.yml` ワークフローが以下を自動実行
   with:
     path: ./artifacts
     pattern: test-results-*
+
+- name: Resolve target Test Matrix run ID
+  # workflow_run 起点では同一 run_id を利用
 
 - name: Generate E2E report
   run: ts-node scripts/generate-e2e-report.ts qa/e2e-report
@@ -187,4 +207,8 @@ retention-days: 30  # 30 日間保持
 - [Playwright テスト実行](../OPERATION_FLOW.md)
 - [ダッシュボード](../QUALITY_DASHBOARD_IMPLEMENTATION.md)
 - [Quality Report Generation](../GENERATION_VERIFICATION_REPORT.md)
+
+---
+
+**最終更新**: 2026-10-25
 
