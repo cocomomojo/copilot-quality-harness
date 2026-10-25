@@ -16,6 +16,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       
       - name: Download test matrix results
         id: download
@@ -54,6 +56,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -91,6 +95,12 @@ jobs:
           
           const resultsDir = 'test-results-data';
           const results = {};
+          let matrixSummary = null;
+          const traceability = {
+            perspective_count: 0,
+            quality_items_count: 0,
+            spec_issue_mapping: []
+          };
           
           // Parse all JSON files
           function readJsonFiles(dir, prefix = '') {
@@ -102,6 +112,8 @@ jobs:
                 
                 if (stat.isDirectory()) {
                   readJsonFiles(filePath, prefix + file + '/');
+                } else if (file === 'test-matrix-summary.json') {
+                  matrixSummary = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
                 } else if (file.endsWith('.json') && file.includes('test-result')) {
                   const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
                   const key = `node${data.node_version}-${data.test_type}`;
@@ -114,6 +126,55 @@ jobs:
           }
           
           readJsonFiles(resultsDir);
+
+          function resolveTraceability() {
+            const generatedDir = 'qa/quality-characteristics/generated';
+            if (fs.existsSync(generatedDir)) {
+              for (const file of fs.readdirSync(generatedDir)) {
+                const fullPath = path.join(generatedDir, file);
+                if (!fs.statSync(fullPath).isFile()) continue;
+                if (file.startsWith('test-perspectives-') && file.endsWith('.json')) {
+                  try {
+                    const data = JSON.parse(fs.readFileSync(fullPath, 'utf-8'));
+                    traceability.perspective_count = data.testPerspectives?.length || 0;
+                  } catch (e) {
+                    console.warn('Could not parse test perspectives JSON:', e.message);
+                  }
+                }
+                if (file.startsWith('test-items-') && file.endsWith('.json')) {
+                  try {
+                    const data = JSON.parse(fs.readFileSync(fullPath, 'utf-8'));
+                    traceability.quality_items_count = data.testItems?.length || 0;
+                  } catch (e) {
+                    console.warn('Could not parse test items JSON:', e.message);
+                  }
+                }
+              }
+            }
+
+            const specsDir = 'tests/specs';
+            if (!fs.existsSync(specsDir)) return;
+            for (const specFile of fs.readdirSync(specsDir)) {
+              if (!specFile.endsWith('.yml') && !specFile.endsWith('.yaml')) continue;
+              const fullPath = path.join(specsDir, specFile);
+              const content = fs.readFileSync(fullPath, 'utf-8');
+              const issueMatches = [...content.matchAll(/#\s*Issue:\s*Closes\s+#(\d+)/gi)];
+              if (issueMatches.length === 0) continue;
+
+              const utCount = (content.match(/^\s*-\s+id:\s*"UT-/gm) || []).length;
+              const e2eCount = (content.match(/^\s*-\s+id:\s*"E2E-/gm) || []).length;
+              for (const issueMatch of issueMatches) {
+                traceability.spec_issue_mapping.push({
+                  issue: Number(issueMatch[1]),
+                  spec_file: specFile,
+                  ut_cases: utCount,
+                  e2e_cases: e2eCount
+                });
+              }
+            }
+          }
+
+          resolveTraceability();
           
           // Create markdown table
           const rows = [];
@@ -143,8 +204,9 @@ jobs:
           
           // Calculate summary
           const allPassed = Object.values(results).length > 0 && Object.values(results).every(r => r.status === 'passed' || r.status === 'unknown');
-          const totalTests = Object.values(results).reduce((sum, r) => sum + r.passed + r.failed, 0);
-          const totalPassed = Object.values(results).reduce((sum, r) => sum + r.passed, 0);
+          const totalTests = matrixSummary?.total_tests ?? Object.values(results).reduce((sum, r) => sum + r.passed + r.failed, 0);
+          const totalPassed = matrixSummary?.total_passed ?? Object.values(results).reduce((sum, r) => sum + r.passed, 0);
+          const totalFailed = matrixSummary?.total_failed ?? (totalTests - totalPassed);
           const passRate = totalTests > 0 ? Math.round((totalPassed / totalTests) * 100) : 100;
           
           fs.writeFileSync('quality-report-table.md', table);
@@ -153,8 +215,10 @@ jobs:
             pass_rate: passRate,
             total_tests: totalTests,
             total_passed: totalPassed,
-            total_failed: totalTests - totalPassed,
+            total_failed: totalFailed,
             table: table,
+            matrix_summary: matrixSummary,
+            traceability,
             timestamp: new Date().toISOString()
           }, null, 2));
           
@@ -207,6 +271,7 @@ jobs:
           script: |
             const fs = require('fs');
             const reportPath = 'report-data/quality-report-summary.json';
+            const prNumber = Number('${{ steps.find_pr.outputs.pr_number }}');
             
             let summary = { 
               all_passed: false, 
@@ -214,7 +279,12 @@ jobs:
               total_tests: 0,
               total_passed: 0,
               total_failed: 0,
-              table: ''
+              table: '',
+              traceability: {
+                perspective_count: 0,
+                quality_items_count: 0,
+                spec_issue_mapping: []
+              }
             };
             try {
               if (fs.existsSync(reportPath)) {
@@ -240,6 +310,72 @@ jobs:
               body.push('| Node 20 | ⏳ No data | ⏳ No data | ⏳ No data | ⏳ No data |');
             }
             body.push('');
+            body.push('### 🔗 Issue Traceability');
+            body.push('');
+
+            let linkedIssues = [];
+            let implementationFiles = [];
+            try {
+              const pr = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber
+              });
+              const issueMatches = `${pr.data.body || ''}`.match(/(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s+#(\d+)/gi) || [];
+              linkedIssues = issueMatches.map((match) => Number(match.match(/#(\d+)/)?.[1])).filter(Boolean);
+              linkedIssues = [...new Set(linkedIssues)];
+              const files = await github.paginate(github.rest.pulls.listFiles, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100
+              });
+              implementationFiles = files.map((file) => file.filename);
+            } catch (e) {
+              console.error('Could not fetch PR details for traceability:', e.message);
+            }
+
+            const issueCases = new Map();
+            for (const mapping of summary.traceability?.spec_issue_mapping || []) {
+              if (!mapping?.issue) continue;
+              const key = Number(mapping.issue);
+              const current = issueCases.get(key) || { ut: 0, e2e: 0, specs: new Set() };
+              current.ut += Number(mapping.ut_cases || 0);
+              current.e2e += Number(mapping.e2e_cases || 0);
+              if (mapping.spec_file) current.specs.add(mapping.spec_file);
+              issueCases.set(key, current);
+            }
+
+            const reportIssues = linkedIssues.length > 0
+              ? linkedIssues
+              : [...issueCases.keys()];
+
+            body.push('| Issue | テスト観点 | テスト項目 | 実装 | テスト実行 |');
+            body.push('|---|---|---|---|---|');
+            if (reportIssues.length === 0) {
+              body.push(`| _未紐付け_ | ${summary.traceability?.perspective_count || 0} perspectives | ${summary.traceability?.quality_items_count || 0} quality items | ${implementationFiles.length} files changed in PR | Pass rate ${summary.pass_rate}% (${summary.total_passed}/${summary.total_tests}) |`);
+            } else {
+              for (const issueNo of reportIssues) {
+                const issueData = issueCases.get(issueNo) || { ut: 0, e2e: 0, specs: new Set() };
+                const specLabel = issueData.specs.size > 0
+                  ? `${issueData.specs.size} spec(s)`
+                  : 'spec not detected';
+                const itemLabel = `UT ${issueData.ut} / E2E ${issueData.e2e}, quality items ${summary.traceability?.quality_items_count || 0}`;
+                body.push(`| #${issueNo} | ${summary.traceability?.perspective_count || 0} perspectives | ${itemLabel} (${specLabel}) | ${implementationFiles.length} files changed in PR | Pass rate ${summary.pass_rate}% (${summary.total_passed}/${summary.total_tests}) |`);
+              }
+            }
+
+            if (implementationFiles.length > 0) {
+              body.push('');
+              body.push(`Implementation files (${implementationFiles.length}):`);
+              for (const file of implementationFiles.slice(0, 8)) {
+                body.push(`- \`${file}\``);
+              }
+              if (implementationFiles.length > 8) {
+                body.push(`- ...and ${implementationFiles.length - 8} more files`);
+              }
+            }
+            body.push('');
             body.push('---');
             body.push(`_Report generated at ${summary.timestamp || new Date().toISOString()}_`);
             
@@ -247,10 +383,10 @@ jobs:
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: ${{ steps.find_pr.outputs.pr_number }},
+                issue_number: prNumber,
                 body: body.join('\n')
               });
-              console.log('Posted quality report to PR #${{ steps.find_pr.outputs.pr_number }}');
+              console.log(`Posted quality report to PR #${prNumber}`);
             } catch (e) {
               console.error('Could not post comment:', e.message);
             }

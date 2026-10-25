@@ -188,6 +188,11 @@ graph LR
 | 18           | ✅ 45/45   | ✅ 12/12  | 92%      |
 | 20           | ✅ 45/45   | ✅ 12/12  | 91%      |
 
+### 🔗 Issue Traceability
+| Issue | テスト観点 | テスト項目 | 実装 | テスト実行 |
+|---|---|---|---|---|
+| #123 | 8 perspectives | UT 7 / E2E 4, quality items 48 (1 spec) | 6 files changed in PR | Pass rate 97% (67/69) |
+
 ### 📊 Coverage Status
 - Lines: 92% (target: 80%) ✅
 - Branches: 85% (target: 75%) ✅

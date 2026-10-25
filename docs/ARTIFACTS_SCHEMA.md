@@ -174,6 +174,37 @@ Quality Report PR が生成する JSON レポート（PR コメントと同内�
 }
 ```
 
+現在の `quality-report-pr.yml` では、実際には `quality-report-summary.json` を生成し、以下のトレーサビリティ情報を含みます。
+
+```json
+{
+  "all_passed": true,
+  "pass_rate": 97,
+  "total_tests": 69,
+  "total_passed": 67,
+  "total_failed": 2,
+  "table": "| Node Version | Unit Tests | API Tests | E2E Tests | Advanced Tests | ...",
+  "matrix_summary": {
+    "total_combinations": 4,
+    "by_test_type": {
+      "unit": { "passed_tests": 45, "failed_tests": 0, "status": "all_passed" }
+    }
+  },
+  "traceability": {
+    "perspective_count": 8,
+    "quality_items_count": 48,
+    "spec_issue_mapping": [
+      {
+        "issue": 100,
+        "spec_file": "user-registration.yml",
+        "ut_cases": 7,
+        "e2e_cases": 4
+      }
+    ]
+  }
+}
+```
+
 ---
 
 ## Spec to Implementation Artifacts
