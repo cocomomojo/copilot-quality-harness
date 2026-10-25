@@ -14,13 +14,13 @@ jobs:
   "AI Review":
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Prepare script directory
-        run: mkdir -p .github/scripts
 
       - name: Run AI review script
         id: ai_review
@@ -35,7 +35,7 @@ jobs:
       - name: Post AI Review comment
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
             const resultPath = '/tmp/ai_review_result.json';
