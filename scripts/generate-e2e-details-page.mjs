@@ -72,7 +72,7 @@ async function generateE2EDetailsPage(config) {
           const statusClass = test.status;
           const statusEmoji = test.status === 'passed' ? '✅' : test.status === 'failed' ? '❌' : '⏭️';
           html += `
-        <div class="test-item ${statusClass}">
+        <div class="test-item ${statusClass}" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
             ${statusEmoji} ${test.name}
             <span class="test-status-badge" style="background: ${statusColor}; color: white;">
