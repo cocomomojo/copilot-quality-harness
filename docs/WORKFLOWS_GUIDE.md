@@ -7,6 +7,36 @@ title: Dynamic Workflows CI/CD Implementation Guide
 
 This document describes the Dynamic Workflows CI/CD system implemented for the copilot-quality-harness project.
 
+---
+
+## 🇯🇵 日本語クイックナビ（最初にここだけ読めばOK）
+
+このドキュメントは技術詳細が多いため、まずは以下の順番で読むのがおすすめです。
+
+1. **全体の流れを把握** → このセクション（日本語クイックナビ）
+2. **実行順の詳細** → [`docs/OPERATION_FLOW.md`](./OPERATION_FLOW.md)
+3. **E2E証跡の見方** → [`docs/E2E_REPORTS_GUIDE.md`](./E2E_REPORTS_GUIDE.md)
+4. **ダッシュボードの見方** → [`docs/DASHBOARD.md`](./DASHBOARD.md)
+
+### 🧭 どの workflow をいつ使う？（初心者向け）
+
+| 目的 | 使う workflow | いつ実行されるか | 確認する場所 |
+|---|---|---|---|
+| PR の基本テストを回す | `test-matrix.yml` | PR / Push 時に自動 | Actions 実行結果、artifact |
+| カバレッジ差分を確認 | `test-coverage-analysis.yml` | PR / Push 時に自動 | PR コメント、coverage artifact |
+| テスト結果をPRに要約投稿 | `quality-report-pr.yml` | `test-matrix` 完了後に自動 | PR コメント |
+| AI観点のコードレビュー | `ai-review.yml` | PR 更新時に自動 | PR コメント |
+| 週次で品質を定期点検 | `quality-schedule.yml` | 毎週（金曜AM 5:00 JST） | Actions + issue自動作成 |
+| ダッシュボード更新 | `update-dashboard.yml` | スケジュール/手動/連鎖実行 | Pages の dashboard |
+
+### 🚨 まず覚える運用ルール
+
+- `test-matrix` の結果（同一 `run_id`）を基準に KPI と E2E レポートを整合させる
+- AI コメントは「提案」。**最終判断とマージは人間が実施**
+- 失敗時は video だけでなく **trace / error-context / stdout/stderr** を確認
+
+> 以降は原文（英語中心）の詳細仕様です。運用チーム向けに情報を保持しています。
+
 > **Update note (2026-10-25)**
 > Dashboard/E2E report generation was refactored for evidence consistency:
 > - `update-dashboard.yml` resolves a target **Test Matrix run_id**.
