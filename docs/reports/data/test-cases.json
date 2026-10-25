@@ -1,106 +1,108 @@
 {
-  "timestamp": "2026-10-25T10:19:46.957Z",
+  "timestamp": "2026-10-25T10:29:01.822Z",
   "totalSuites": 3,
   "totalTests": 19,
-  "passed": 0,
-  "failed": 19,
+  "passed": 19,
+  "failed": 0,
   "skipped": 0,
-  "passRate": 0,
-  "duration": 286,
-  "metadata": {},
+  "passRate": 100,
+  "duration": 36914,
+  "metadata": {
+    "test_run_id": "40184603854"
+  },
   "suites": [
     {
       "name": "User Profile - Account Created At Display (E2E)",
       "file": "profile-created-at.spec.js",
       "totalTests": 7,
-      "passed": 0,
-      "failed": 7,
+      "passed": 7,
+      "failed": 0,
       "skipped": 0,
-      "duration": 141,
+      "duration": 21833,
       "tests": [
         {
           "name": "E2E-001: Display profile with valid createdAt",
           "title": "E2E-001: Display profile with valid createdAt",
-          "status": "failed",
-          "duration": 24,
+          "status": "passed",
+          "duration": 1479,
           "file": "profile-created-at.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-002: Display fallback when createdAt is null",
           "title": "E2E-002: Display fallback when createdAt is null",
-          "status": "failed",
-          "duration": 16,
+          "status": "passed",
+          "duration": 1353,
           "file": "profile-created-at.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-003: Handle 404 API error",
           "title": "E2E-003: Handle 404 API error",
-          "status": "failed",
-          "duration": 25,
+          "status": "passed",
+          "duration": 1427,
           "file": "profile-created-at.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-004: Fetch createdAt from API and display formatted",
           "title": "E2E-004: Fetch createdAt from API and display formatted",
-          "status": "failed",
-          "duration": 40,
+          "status": "passed",
+          "duration": 1304,
           "file": "profile-created-at.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-005: Handle invalid createdAt format with fallback",
           "title": "E2E-005: Handle invalid createdAt format with fallback",
-          "status": "failed",
-          "duration": 11,
+          "status": "passed",
+          "duration": 1343,
           "file": "profile-created-at.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-006: Verify element structure and accessibility",
           "title": "E2E-006: Verify element structure and accessibility",
-          "status": "failed",
-          "duration": 11,
+          "status": "passed",
+          "duration": 1343,
           "file": "profile-created-at.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-007: Verify multiple renders and state consistency",
           "title": "E2E-007: Verify multiple renders and state consistency",
-          "status": "failed",
-          "duration": 14,
+          "status": "passed",
+          "duration": 13584,
           "file": "profile-created-at.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         }
       ]
     },
@@ -108,58 +110,58 @@
       "name": "Error Path Tests",
       "file": "quality-checks-advanced.spec.js",
       "totalTests": 4,
-      "passed": 0,
-      "failed": 4,
+      "passed": 4,
+      "failed": 0,
       "skipped": 0,
-      "duration": 44,
+      "duration": 13685,
       "tests": [
         {
           "name": "displays error when adding check with only whitespace",
           "title": "displays error when adding check with only whitespace",
-          "status": "failed",
-          "duration": 12,
+          "status": "passed",
+          "duration": 3424,
           "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "displays error when name exceeds 120 characters",
           "title": "displays error when name exceeds 120 characters",
-          "status": "failed",
-          "duration": 10,
+          "status": "passed",
+          "duration": 2317,
           "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "clears error message when user corrects input",
           "title": "clears error message when user corrects input",
-          "status": "failed",
-          "duration": 13,
+          "status": "passed",
+          "duration": 5486,
           "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "shows appropriate error when API is unavailable",
           "title": "shows appropriate error when API is unavailable",
-          "status": "failed",
-          "duration": 9,
+          "status": "passed",
+          "duration": 2458,
           "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         }
       ]
     },
@@ -167,106 +169,106 @@
       "name": "URL Validator API",
       "file": "url-validator.spec.js",
       "totalTests": 8,
-      "passed": 0,
-      "failed": 8,
+      "passed": 8,
+      "failed": 0,
       "skipped": 0,
-      "duration": 101,
+      "duration": 1396,
       "tests": [
         {
           "name": "E2E-001: Check valid HTTPS URL endpoint",
           "title": "E2E-001: Check valid HTTPS URL endpoint",
-          "status": "failed",
-          "duration": 10,
+          "status": "passed",
+          "duration": 200,
           "file": "url-validator.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-002: Check invalid URL format",
           "title": "E2E-002: Check invalid URL format",
-          "status": "failed",
-          "duration": 12,
+          "status": "passed",
+          "duration": 208,
           "file": "url-validator.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-003: Check empty string input",
           "title": "E2E-003: Check empty string input",
-          "status": "failed",
-          "duration": 18,
+          "status": "passed",
+          "duration": 119,
           "file": "url-validator.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-004: Check null input",
           "title": "E2E-004: Check null input",
-          "status": "failed",
-          "duration": 10,
+          "status": "passed",
+          "duration": 186,
           "file": "url-validator.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-005: Check valid HTTP URL with port",
           "title": "E2E-005: Check valid HTTP URL with port",
-          "status": "failed",
-          "duration": 18,
+          "status": "passed",
+          "duration": 162,
           "file": "url-validator.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-006: Check valid GitHub URL",
           "title": "E2E-006: Check valid GitHub URL",
-          "status": "failed",
-          "duration": 11,
+          "status": "passed",
+          "duration": 185,
           "file": "url-validator.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-007: Check FTP protocol (not allowed)",
           "title": "E2E-007: Check FTP protocol (not allowed)",
-          "status": "failed",
-          "duration": 10,
+          "status": "passed",
+          "duration": 168,
           "file": "url-validator.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         },
         {
           "name": "E2E-008: Response time performance check",
           "title": "E2E-008: Response time performance check",
-          "status": "failed",
-          "duration": 12,
+          "status": "passed",
+          "duration": 168,
           "file": "url-validator.spec.js",
-          "errors": [
-            "Error: browserType.launch: Executable doesn't exist at /home/coco/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
-          ],
+          "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "./video.webm"
+          ]
         }
       ]
     }
