@@ -45,9 +45,28 @@ This document describes the Dynamic Workflows CI/CD system implemented for the c
 > For dashboard/e2e evidence behavior, prefer this note plus `docs/DASHBOARD.md` and `docs/E2E_REPORTS_GUIDE.md` over older examples below.
 
 **Quick Links**:
-- 📚 [Skills Index](.github/skills/SKILLS_INDEX.md) – 再利用可能なプロセス・パターン一覧
-- 🎯 [Copilot Review Response Skill](.github/skills/01-copilot-review-response-template.md) – PR review 指摘への対応フロー
-- 🔍 [Playwright Trace Analysis Skill](.github/skills/10-playwright-trace-analysis.md) – テスト失敗の自動解析
+- 📚 [Skills Index](../.github/skills/SKILLS_INDEX.md) – 再利用可能なプロセス・パターン一覧
+- 🎯 [Copilot Review Response Skill](../.github/skills/01-copilot-review-response-template.md) – PR review 指摘への対応フロー
+- 🔍 [Playwright Trace Analysis Skill](../.github/skills/10-playwright-trace-analysis.md) – テスト失敗の自動解析
+
+## ✅ 10分運用チェックリスト（日本語）
+
+リリース前・レビュー前に、最低限ここだけ確認すれば「見落とし」を減らせます。
+
+| チェック項目 | 合格条件 | 見る場所 |
+|---|---|---|
+| `test-matrix` | Failed が 0 | Actions 実行画面 |
+| `quality-report-pr` | PR コメント投稿済み | PR タイムライン |
+| `ai-review` | 重大リスクなし（要確認コメント対応済み） | PR コメント |
+| E2E 証跡 | `trace` / `error-context` / `stdout/stderr` 参照可能 | `e2e-latest.html` |
+| KPI 整合 | 同一 `run_id` に紐づく値で表示 | Dashboard + E2E report |
+
+### 失敗時の最短アクション
+
+1. まず `test-matrix` の失敗ジョブを特定
+2. 同ジョブ artifact（json / trace / logs）を確認
+3. `E2E_REPORTS_GUIDE.md` の証跡導線から trace を開く
+4. 修正後に再実行し、`quality-report-pr` と dashboard の整合を確認
 
 ## Overview
 
