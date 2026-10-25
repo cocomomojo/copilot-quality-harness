@@ -159,7 +159,7 @@ async function generateE2EDetailsPage(config) {
             💡 動画を記録するには、<code style="background: #e8e8e8; padding: 2px 6px; border-radius: 3px;">playwright.config.js</code> で以下を設定してください:
           </p>
           <pre style="background: #e8e8e8; padding: 10px; border-radius: 5px; text-align: left; overflow-x: auto; margin-top: 10px;"><code>use: {
-  video: 'on'
+  video: 'on' // または 'retain-on-failure'
 }</code></pre>
         </div>
 `;

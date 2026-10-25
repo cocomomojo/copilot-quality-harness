@@ -6,7 +6,7 @@ on:
     - cron: '0 1 * * *'
   workflow_dispatch: {}
   workflow_run:
-    workflows: ["Quality Schedule"]
+    workflows: ["Quality Schedule", "Test Matrix"]
     types: [completed]
 
 permissions:

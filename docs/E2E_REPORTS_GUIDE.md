@@ -115,7 +115,8 @@ GitHub Actions `update-dashboard.yml` ワークフローが以下を自動実行
 
 ### テスト動画が表示されない
 
-1. Playwright テスト実行時に `video: 'retain-on-failure'` が有効か確認
+1. Playwright テスト実行時に `video: 'on'` または `video: 'retain-on-failure'` が有効か確認
+   - 例: `use: { video: 'on' // または 'retain-on-failure' }`
    - `playwright.config.js` で設定確認
 2. `./test-results/videos/` に動画ファイルが存在するか確認
 3. サポートされた形式（WebM、MP4）か確認
