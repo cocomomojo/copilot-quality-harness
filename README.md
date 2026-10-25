@@ -26,6 +26,8 @@ Welcome! これは「Playwright テスト失敗分析から Copilot による自
 | 5 | PR を更新して `test-matrix` 実行 | 10分 | Actions が成功し、レポートが出る |
 
 > 詳細手順は [`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md) の「ステップ 1〜10」を順に実行すれば OK です。
+>
+> レビュー直前の最終確認は [`docs/WORKFLOWS_GUIDE.md`](./docs/WORKFLOWS_GUIDE.md) 内の **「✅ 10分運用チェックリスト（日本語）」** を使うと迷いません。
 
 ### 読み順ガイド 📚
 
@@ -33,6 +35,7 @@ Welcome! これは「Playwright テスト失敗分析から Copilot による自
 2. **実作業を順番どおり進めたい** → [`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)
 3. **E2E証跡（動画/trace/log）を見たい** → [`docs/E2E_REPORTS_GUIDE.md`](./docs/E2E_REPORTS_GUIDE.md)
 4. **ワークフロー内部を詳しく知りたい** → [`docs/WORKFLOWS_GUIDE.md`](./docs/WORKFLOWS_GUIDE.md)
+5. **PR前の最終確認をしたい** → `docs/WORKFLOWS_GUIDE.md` の「✅ 10分運用チェックリスト（日本語）」
 
 ### 用語ミニ辞典 🧩
 
