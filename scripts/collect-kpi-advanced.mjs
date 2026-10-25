@@ -190,6 +190,22 @@ function parseTestResults(testData) {
     totalTests = summary.total_tests || 0;
     passedTests = summary.total_passed || 0;
     failedTests = summary.total_failed || 0;
+    
+    // total_tests が null/0 の場合は by_test_type から計算
+    if (totalTests === 0 && summary.by_test_type) {
+      console.log(`  ℹ️  Using by_test_type breakdown (total_tests is null/0)`);
+      passedTests = 0;
+      failedTests = 0;
+      for (const type of ['unit', 'api', 'e2e', 'advanced']) {
+        const typeData = summary.by_test_type[type];
+        if (typeData) {
+          passedTests += typeData.passed_tests || 0;
+          failedTests += typeData.failed_tests || 0;
+        }
+      }
+      totalTests = passedTests + failedTests;
+    }
+    
     passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
     
     console.log(`  ✓ Total tests: ${totalTests}`);
@@ -244,11 +260,12 @@ function readCoverageData() {
   console.log('\n📈 Reading coverage data...');
   
   const possiblePaths = [
-    'backend/coverage/coverage-final.json',
+    'frontend/coverage/coverage-summary.json',
+    'backend/coverage/coverage-summary.json',
     'frontend/coverage/coverage-final.json',
+    'backend/coverage/coverage-final.json',
     'coverage/coverage-final.json',
-    'qa/test-management/coverage.json',
-    'coverage-summary.json'
+    'qa/test-management/coverage.json'
   ];
   
   for (const path of possiblePaths) {
@@ -258,7 +275,7 @@ function readCoverageData() {
         
         if (data.total && data.total.lines) {
           const coverage = Math.round(data.total.lines.pct);
-          console.log(`  Coverage: ${coverage}%`);
+          console.log(`  ✓ Found coverage: ${coverage}% (from ${path})`);
           return coverage;
         }
         
@@ -267,7 +284,7 @@ function readCoverageData() {
           return data.coverage;
         }
       } catch (e) {
-        console.log(`  Warning: Could not parse ${path}`);
+        // Continue to next path
       }
     }
   }

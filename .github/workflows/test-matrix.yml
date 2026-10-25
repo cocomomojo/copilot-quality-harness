@@ -212,20 +212,38 @@ jobs:
           const resultsDir = 'test-results-all';
           const allResults = [];
           
+          console.log('📂 Reading test results from:', resultsDir);
+          if (!fs.existsSync(resultsDir)) {
+            console.error('❌ Directory not found:', resultsDir);
+            process.exit(1);
+          }
+          
+          const dirs = fs.readdirSync(resultsDir);
+          console.log('Found directories:', dirs);
+          
           // Collect all test results
-          for (const dir of fs.readdirSync(resultsDir)) {
+          for (const dir of dirs) {
             const dirPath = path.join(resultsDir, dir);
-            const jsonFile = path.join(dirPath, dir.replace('test-results-', '') + '.json');
+            console.log('  Processing:', dir);
             
             try {
               const files = fs.readdirSync(dirPath);
+              console.log('    Files:', files);
+              
               const jsonPath = path.join(dirPath, files[0]);
-              const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+              const rawData = fs.readFileSync(jsonPath, 'utf-8');
+              console.log('    Content:', rawData.substring(0, 200));
+              
+              const data = JSON.parse(rawData);
+              console.log('    ✓ Parsed:', { test_type: data.test_type, node_version: data.node_version, passed: data.passed, failed: data.failed });
               allResults.push(data);
             } catch (e) {
-              console.error('Error reading', dir);
+              console.error('    ❌ Error:', e.message);
             }
           }
+          
+          console.log('\\n📊 Total results collected:', allResults.length);
+          console.log('Results:', JSON.stringify(allResults.map(r => ({ test_type: r.test_type, passed: r.passed, failed: r.failed })), null, 2));
           
           // Generate summary
           const summary = {
@@ -233,9 +251,9 @@ jobs:
             total_combinations: allResults.length,
             passed_combinations: allResults.filter(r => r.status === 'passed').length,
             failed_combinations: allResults.filter(r => r.status === 'failed').length,
-            total_tests: allResults.reduce((sum, r) => sum + r.passed + r.failed, 0),
-            total_passed: allResults.reduce((sum, r) => sum + r.passed, 0),
-            total_failed: allResults.reduce((sum, r) => sum + r.failed, 0),
+            total_tests: allResults.reduce((sum, r) => sum + (r.passed || 0) + (r.failed || 0), 0),
+            total_passed: allResults.reduce((sum, r) => sum + (r.passed || 0), 0),
+            total_failed: allResults.reduce((sum, r) => sum + (r.failed || 0), 0),
             by_node_version: {},
             by_test_type: {}
           };
@@ -244,8 +262,8 @@ jobs:
           for (const version of [20]) {
             const versionResults = allResults.filter(r => r.node_version === version);
             summary.by_node_version[version] = {
-              passed_tests: versionResults.reduce((sum, r) => sum + r.passed, 0),
-              failed_tests: versionResults.reduce((sum, r) => sum + r.failed, 0),
+              passed_tests: versionResults.reduce((sum, r) => sum + (r.passed || 0), 0),
+              failed_tests: versionResults.reduce((sum, r) => sum + (r.failed || 0), 0),
               status: versionResults.every(r => r.status === 'passed') ? 'all_passed' : 'some_failed'
             };
           }
@@ -254,13 +272,13 @@ jobs:
           for (const type of ['unit', 'api', 'e2e', 'advanced']) {
             const typeResults = allResults.filter(r => r.test_type === type);
             summary.by_test_type[type] = {
-              passed_tests: typeResults.reduce((sum, r) => sum + r.passed, 0),
-              failed_tests: typeResults.reduce((sum, r) => sum + r.failed, 0),
+              passed_tests: typeResults.reduce((sum, r) => sum + (r.passed || 0), 0),
+              failed_tests: typeResults.reduce((sum, r) => sum + (r.failed || 0), 0),
               status: typeResults.every(r => r.status === 'passed') ? 'all_passed' : 'some_failed'
             };
           }
           
-          console.log('Test Matrix Summary:');
+          console.log('\\n✅ Test Matrix Summary:');
           console.log(JSON.stringify(summary, null, 2));
           
           fs.writeFileSync('test-matrix-summary.json', JSON.stringify(summary, null, 2));
