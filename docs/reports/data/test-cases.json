@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-10-25T08:00:41.319Z",
+  "timestamp": "2026-10-25T08:13:41.149Z",
   "totalSuites": 3,
   "totalTests": 19,
   "passed": 19,
   "failed": 0,
   "skipped": 0,
   "passRate": 100,
-  "duration": 20124,
+  "duration": 20260,
   "suites": [
     {
       "name": "User Profile - Account Created At Display (E2E)",
@@ -15,77 +15,91 @@
       "passed": 7,
       "failed": 0,
       "skipped": 0,
-      "duration": 15235,
+      "duration": 15343,
       "tests": [
         {
           "name": "E2E-001: Display profile with valid createdAt",
           "title": "E2E-001: Display profile with valid createdAt",
           "status": "passed",
-          "duration": 970,
+          "duration": 1010,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/profile-created-at-User-Pr-6bf16-rofile-with-valid-createdAt/video.webm"
+          ]
         },
         {
           "name": "E2E-002: Display fallback when createdAt is null",
           "title": "E2E-002: Display fallback when createdAt is null",
           "status": "passed",
-          "duration": 830,
+          "duration": 848,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/profile-created-at-User-Pr-829c3-back-when-createdAt-is-null/video.webm"
+          ]
         },
         {
           "name": "E2E-003: Handle 404 API error",
           "title": "E2E-003: Handle 404 API error",
           "status": "passed",
-          "duration": 942,
+          "duration": 970,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/profile-created-at-User-Pr-8419c-2E-003-Handle-404-API-error/video.webm"
+          ]
         },
         {
           "name": "E2E-004: Fetch createdAt from API and display formatted",
           "title": "E2E-004: Fetch createdAt from API and display formatted",
           "status": "passed",
-          "duration": 838,
+          "duration": 842,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/profile-created-at-User-Pr-592f0-m-API-and-display-formatted/video.webm"
+          ]
         },
         {
           "name": "E2E-005: Handle invalid createdAt format with fallback",
           "title": "E2E-005: Handle invalid createdAt format with fallback",
           "status": "passed",
-          "duration": 823,
+          "duration": 795,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/profile-created-at-User-Pr-418f6-atedAt-format-with-fallback/video.webm"
+          ]
         },
         {
           "name": "E2E-006: Verify element structure and accessibility",
           "title": "E2E-006: Verify element structure and accessibility",
           "status": "passed",
-          "duration": 324,
+          "duration": 317,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/profile-created-at-User-Pr-af5e4-structure-and-accessibility/video.webm"
+          ]
         },
         {
           "name": "E2E-007: Verify multiple renders and state consistency",
           "title": "E2E-007: Verify multiple renders and state consistency",
           "status": "passed",
-          "duration": 10508,
+          "duration": 10561,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/profile-created-at-User-Pr-eb176-nders-and-state-consistency/video.webm"
+          ]
         }
       ]
     },
@@ -96,47 +110,55 @@
       "passed": 4,
       "failed": 0,
       "skipped": 0,
-      "duration": 3577,
+      "duration": 3616,
       "tests": [
         {
           "name": "displays error when adding check with only whitespace",
           "title": "displays error when adding check with only whitespace",
           "status": "passed",
-          "duration": 910,
+          "duration": 915,
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/quality-checks-advanced-Qu-4e8b6--check-with-only-whitespace/video.webm"
+          ]
         },
         {
           "name": "displays error when name exceeds 120 characters",
           "title": "displays error when name exceeds 120 characters",
           "status": "passed",
-          "duration": 831,
+          "duration": 848,
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/quality-checks-advanced-Qu-d7c10-name-exceeds-120-characters/video.webm"
+          ]
         },
         {
           "name": "clears error message when user corrects input",
           "title": "clears error message when user corrects input",
           "status": "passed",
-          "duration": 948,
+          "duration": 962,
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/quality-checks-advanced-Qu-22b08-ge-when-user-corrects-input/video.webm"
+          ]
         },
         {
           "name": "shows appropriate error when API is unavailable",
           "title": "shows appropriate error when API is unavailable",
           "status": "passed",
-          "duration": 888,
+          "duration": 891,
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/quality-checks-advanced-Qu-e4632-ror-when-API-is-unavailable/video.webm"
+          ]
         }
       ]
     },
@@ -147,7 +169,7 @@
       "passed": 8,
       "failed": 0,
       "skipped": 0,
-      "duration": 1312,
+      "duration": 1301,
       "tests": [
         {
           "name": "E2E-001: Check valid HTTPS URL endpoint",
@@ -157,47 +179,57 @@
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/url-validator-URL-Validato-5738f-ck-valid-HTTPS-URL-endpoint/video.webm"
+          ]
         },
         {
           "name": "E2E-002: Check invalid URL format",
           "title": "E2E-002: Check invalid URL format",
           "status": "passed",
-          "duration": 208,
+          "duration": 187,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/url-validator-URL-Validato-6ee2e-02-Check-invalid-URL-format/video.webm"
+          ]
         },
         {
           "name": "E2E-003: Check empty string input",
           "title": "E2E-003: Check empty string input",
           "status": "passed",
-          "duration": 181,
+          "duration": 176,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/url-validator-URL-Validato-b1ea7-03-Check-empty-string-input/video.webm"
+          ]
         },
         {
           "name": "E2E-004: Check null input",
           "title": "E2E-004: Check null input",
           "status": "passed",
-          "duration": 153,
+          "duration": 157,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/url-validator-URL-Validator-API-E2E-004-Check-null-input/video.webm"
+          ]
         },
         {
           "name": "E2E-005: Check valid HTTP URL with port",
           "title": "E2E-005: Check valid HTTP URL with port",
           "status": "passed",
-          "duration": 159,
+          "duration": 144,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/url-validator-URL-Validato-a8e9b-ck-valid-HTTP-URL-with-port/video.webm"
+          ]
         },
         {
           "name": "E2E-006: Check valid GitHub URL",
@@ -207,27 +239,33 @@
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/url-validator-URL-Validato-c64d8--006-Check-valid-GitHub-URL/video.webm"
+          ]
         },
         {
           "name": "E2E-007: Check FTP protocol (not allowed)",
           "title": "E2E-007: Check FTP protocol (not allowed)",
           "status": "passed",
-          "duration": 157,
+          "duration": 156,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/url-validator-URL-Validato-fe276-k-FTP-protocol-not-allowed-/video.webm"
+          ]
         },
         {
           "name": "E2E-008: Response time performance check",
           "title": "E2E-008: Response time performance check",
           "status": "passed",
-          "duration": 116,
+          "duration": 143,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": []
+          "videos": [
+            "/home/runner/work/copilot-quality-harness/copilot-quality-harness/test-results/url-validator-URL-Validato-c88b1-onse-time-performance-check/video.webm"
+          ]
         }
       ]
     }
