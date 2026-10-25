@@ -9,6 +9,34 @@ title: 🌊 Copilot Quality Harness - 運用フロー完全ガイド
 
 ---
 
+## 🐥 まず 5 分で全体把握（初心者向け）
+
+### このガイドの使い方
+
+- 「まず動かしたい」→ **ステップ 1 → 4 → 6 だけ先に実施**
+- 「運用まで理解したい」→ **ステップ 1〜10 を順番に実施**
+- 「E2E の証跡を見たい」→ ステップ 6 後に `docs/reports/e2e-latest.html` を確認
+
+### 誰が何をする？（役割早見表）
+
+| 役割 | 主な作業 | 使うもの |
+|---|---|---|
+| 👩‍💻 開発者 | Issue 作成、実装、PR 更新 | GitHub UI / ローカル環境 |
+| 🤖 GitHub Actions | テスト実行、KPI 集計、レポート生成 | `test-matrix.yml` / `update-dashboard.yml` |
+| 🧑‍⚖️ レビュアー | AI レビュー確認、最終マージ判断 | PR コメント / Actions 結果 |
+
+### 最短ルート（初回成功パターン）
+
+1. `Issue` を 1 件作成
+2. `m2-issue-intake.yml` を実行
+3. `generate-quality-items.yml` を実行
+4. `spec-to-implementation.yml` を実行
+5. PR を更新して `test-matrix.yml` の成功を確認
+
+> ✅ ここまで完了すれば、基本運用の 80% は体験できています。
+
+---
+
 ## 📋 全体フロー（ざっくり図）
 
 ### 標準フロー

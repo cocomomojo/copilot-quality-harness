@@ -4,6 +4,47 @@ Welcome! これは「Playwright テスト失敗分析から Copilot による自
 
 ---
 
+## 🐣 はじめての方向け（まずここだけ）
+
+「情報が多くてどこから読めばいいか分からない…」という方向けに、最短ルートを先に置きます。
+
+### 最初のゴール
+
+- ✅ Issue を 1 件作る
+- ✅ テスト観点を自動生成する
+- ✅ PR を作って `test-matrix` を通す
+- ✅ ダッシュボード / E2E レポートを確認する
+
+### 30分クイックスタート 🚀
+
+| ステップ | やること | 目安 | 完了の目印 |
+|---|---|---:|---|
+| 1 | Issue 作成（Acceptance Template） | 5分 | Issue が作成される |
+| 2 | `m2-issue-intake.yml` 実行 | 5分 | テスト設計のたたき台が出る |
+| 3 | `generate-quality-items.yml` 実行 | 5分 | quality items artifact が生成される |
+| 4 | `spec-to-implementation.yml` 実行 | 5分 | テストコード付き PR ができる |
+| 5 | PR を更新して `test-matrix` 実行 | 10分 | Actions が成功し、レポートが出る |
+
+> 詳細手順は [`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md) の「ステップ 1〜10」を順に実行すれば OK です。
+
+### 読み順ガイド 📚
+
+1. **全体像だけ知りたい** → この `README.md`
+2. **実作業を順番どおり進めたい** → [`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)
+3. **E2E証跡（動画/trace/log）を見たい** → [`docs/E2E_REPORTS_GUIDE.md`](./docs/E2E_REPORTS_GUIDE.md)
+4. **ワークフロー内部を詳しく知りたい** → [`docs/WORKFLOWS_GUIDE.md`](./docs/WORKFLOWS_GUIDE.md)
+
+### 用語ミニ辞典 🧩
+
+| 用語 | ひとことで言うと |
+|---|---|
+| Test Matrix | 単体/API/E2E などを並列実行する本体テスト workflow |
+| Artifact | workflow 間で受け渡す成果物（JSON, レポート, 動画など） |
+| run_id | 実行ごとの一意ID（KPI と E2E の整合に重要） |
+| E2E Evidence | 動画・trace・error-context・実行ログへの導線 |
+
+---
+
 ## ざっくり 1 分説明 ⏱️
 - **目的**: Playwright トレースから テスト失敗を自動分析 → Copilot が修正案を提示 → 並列処理で 3-4 倍高速化
 - **方針**: AI（Copilot）は「分析・提案」のみ。マージ・確定は人間が行います
@@ -12,6 +53,7 @@ Welcome! これは「Playwright テスト失敗分析から Copilot による自
 ---
 
 ## 目次 📚
+- [はじめての方向け（まずここだけ）](#-はじめての方向けまずここだけ)
 - [ざっくり 1 分説明](#ざっくり-1-分説明-)
 - [完全な運用フロー](#完全な運用フロー)
 - [システムアーキテクチャ](#システムアーキテクチャ)

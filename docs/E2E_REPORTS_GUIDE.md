@@ -9,6 +9,26 @@
 
 このプロジェクトは、Playwright E2E テストの実行結果を GitHub Pages に自動的に出力し、ダッシュボードから詳細なレポートへアクセスできるようにしています。
 
+## 🐣 はじめての人向け：最初に見る場所
+
+### 3 ステップで確認
+
+1. `reports/e2e-latest.html` を開く
+2. テスト名をクリックして詳細を展開する
+3. 「🧾 実行証跡」から `trace.zip` / `error-context` / `Playwright公式HTMLレポート` を開く
+
+### どの情報を見ればよい？（早見表）
+
+| 見たいこと | どこを見る | 目印 |
+|---|---|---|
+| そのテストが成功/失敗したか | テストカード | ✅ / ❌ バッジ |
+| 実行時間 | テスト詳細 | `⏱️ xxxxms` |
+| 失敗理由（人が読める要約） | `error-context` | `📝 error-context` リンク |
+| Playwright の手順・画面遷移 | trace viewer | `🔍 Trace Viewerで開く` |
+| 実行全体のログ/Artifacts | GitHub Actions run | `🧪 Test Matrix Run` リンク |
+
+---
+
 ## 機能
 
 ### 📊 E2E テストレポート
@@ -67,6 +87,15 @@ npm run generate:e2e-details -- qa/e2e-report/test-cases.json docs/reports
 - URL: `/dashboard/` にアクセス
 - 「🎬 E2E テスト実行レポート」セクションから詳細レポートへジャンプ
 - 各テストケースの動画を再生
+
+### 2.5 Playwright 公式レポートで深掘り（おすすめ）
+
+`e2e-latest.html` の **🧾 E2E 実行エビデンス** から、
+`🧭 Playwright公式HTMLレポート` を開くと、公式 UI で詳細調査できます。
+
+- ステップを時系列で確認
+- エラー位置の特定
+- trace への導線利用
 
 ### 3. CI/CD による自動更新
 
