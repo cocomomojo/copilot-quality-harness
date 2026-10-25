@@ -51,6 +51,12 @@ This document describes the Dynamic Workflows CI/CD system implemented for the c
 
 ## Overview
 
+### 日本語サマリー
+
+- PR/Push 時は `test-matrix`・`test-coverage-analysis`・`auto-code-review` が主軸
+- `test-matrix` 完了後に `quality-report-pr` が結果を PR コメントへ集約
+- 週次では `quality-schedule` が定期点検し、問題時は issue を作成
+
 Five coordinated GitHub Actions workflows provide comprehensive quality assurance:
 
 ```
@@ -75,7 +81,17 @@ Weekly Friday 5:00 AM JST
 
 ## Workflow Details
 
+### 日本語サマリー（先に全体）
+
+1. `test-coverage-analysis`: カバレッジ不足やギャップの検出
+2. `auto-code-review`: Lint と変更差分ベースのテスト妥当性確認
+3. `test-matrix`: テスト本体の並列実行（最重要）
+4. `quality-report-pr`: テスト結果の統合レポート投稿
+5. `quality-schedule`: 週次の総合品質監視
+
 ### 1. test-coverage-analysis.yml
+
+**日本語要約**: PR/Push ごとにテスト結果を解析し、カバレッジ不足や危険シグナルを数値化します。
 
 **Purpose**: Analyze test coverage gaps and provide quality metrics.
 
@@ -110,6 +126,8 @@ Weekly Friday 5:00 AM JST
 
 ### 2. auto-code-review.yml
 
+**日本語要約**: 人間レビューを補助するため、Lint とテスト変更のバランスを自動点検します。
+
 **Purpose**: Automated code quality review complementing manual review.
 
 **Trigger Events**:
@@ -133,6 +151,8 @@ Weekly Friday 5:00 AM JST
 - Guidance for developer
 
 ### 3. test-matrix.yml
+
+**日本語要約**: 単体/API/E2E などを並列実行し、最短で失敗箇所を特定する中核 workflow です。
 
 **Purpose**: Execute tests in parallel using matrix strategy for fast feedback.
 
@@ -183,6 +203,8 @@ Weekly Friday 5:00 AM JST
 
 ### 4. quality-report-pr.yml
 
+**日本語要約**: `test-matrix` の結果を集約し、PR で見やすい品質レポートに整形して投稿します。
+
 **Purpose**: Aggregate test results and post quality summary to PR.
 
 **Trigger Events**:
@@ -208,6 +230,8 @@ Weekly Friday 5:00 AM JST
 - **Smart PR Detection**: Finds PR by workflow branch name
 
 ### 5. quality-schedule.yml
+
+**日本語要約**: 週次で品質を定期診断し、劣化を早期に検知するための監視 workflow です。
 
 **Purpose**: Regular comprehensive quality validation (scheduled weekly).
 
@@ -244,6 +268,12 @@ Action Required
 
 ## Integration with Existing Workflows
 
+### 日本語サマリー
+
+- 既存の `ai-review.yml` とは競合せず、役割分担して補完
+- `test-matrix`/`coverage` 系がテスト可視化を担い、品質判断を高速化
+- 既存スクリプトはそのまま活かしつつ、artifact 連携で拡張しやすい構成
+
 ### With ai-review.yml
 - **auto-code-review.yml** complements ai-review.yml (not replacing)
 - Both provide different perspectives on code quality
@@ -261,6 +291,13 @@ Action Required
 - **m2-validation.mjs**: Included in scheduled workflow
 
 ## Dynamic Features
+
+### 日本語サマリー
+
+- 並列実行で速度改善
+- 条件分岐で不要ジョブを抑制
+- 出力値を次ジョブに連携して自動判断
+- artifact 管理で再現性とデバッグ性を向上
 
 ### 1. Matrix Strategy Benefits
 - **Isolation**: Failure in one matrix combo doesn't block others
@@ -285,6 +322,10 @@ Action Required
 
 ## Troubleshooting
 
+### 日本語サマリー
+
+トラブル時はまず「workflow 実行ログ → artifact の有無 → トリガー条件」の順で確認すると最短で原因に到達できます。
+
 ### Matrix job fails for one combo
 - Check artifact for that specific Node version
 - Example: `test-results-node-20-e2e.json`
@@ -306,6 +347,12 @@ Action Required
 - Review coverage-analysis artifact for raw stats
 
 ## Best Practices
+
+### 日本語サマリー
+
+- `test-matrix-summary` を継続監視して劣化を早期検知
+- 週次結果（`quality-schedule`）をチームで定例確認
+- PR コメントの集約表で失敗傾向（test type / version）を把握
 
 1. **Monitor Matrix Results**: Check test-matrix-summary.json trends over time
 2. **Review Weekly Reports**: Friday scheduled run provides trend analysis
