@@ -31,7 +31,9 @@ export default defineConfig({
   ],
   use: {
     baseURL: 'http://127.0.0.1:5173',
-    trace: 'retain-on-failure',
+    // 成功テストのステップ/操作ログ可視化のため常時 trace を収集
+    // 必要に応じて PW_TRACE_MODE=retain-on-failure で切り替え可能
+    trace: process.env.PW_TRACE_MODE || 'on',
     screenshot: 'only-on-failure',
     video: 'on',
     launchOptions: {

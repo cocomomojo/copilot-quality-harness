@@ -184,11 +184,13 @@ Playwright 設定：
 ```javascript
 // playwright.config.js
 use: {
-  video: 'retain-on-failure'  // 失敗時のみ記録
-  // または
-  video: 'on'                  // 全テスト記録
+  video: 'on',                  // 全テスト記録
+  trace: 'on'                   // 成功テスト含むステップ/trace 記録
 }
 ```
+
+> 成功テストでも「Playwright公式レポート相当のステップ証跡」を表示したい場合は `trace: 'on'` を推奨します。  
+> 容量を抑えたい場合は `PW_TRACE_MODE=retain-on-failure` で切り替え可能です。
 
 ### GitHub Actions アーティファクト保持
 
