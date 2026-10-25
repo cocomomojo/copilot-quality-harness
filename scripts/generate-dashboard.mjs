@@ -495,17 +495,42 @@ async function generateDashboard(config) {
     }
 
     // Update summary cards
+    function normalizeKPIRecord(record) {
+      const normalized = { ...(record || {}) };
+      const passed = typeof normalized.passed === 'number' ? normalized.passed : null;
+      const failed = typeof normalized.failed === 'number' ? normalized.failed : null;
+      const explicitCount = typeof normalized.test_count === 'number' ? normalized.test_count : null;
+      const computedCount = (passed !== null && failed !== null) ? (passed + failed) : null;
+      const testCount = explicitCount !== null ? explicitCount : computedCount;
+
+      if (testCount !== null) normalized.test_count = testCount;
+
+      if (passed !== null && failed !== null && testCount && testCount > 0) {
+        normalized.pass_rate = Math.round((passed / testCount) * 100);
+      } else if (typeof normalized.pass_rate !== 'number') {
+        normalized.pass_rate = 0;
+      }
+
+      if (typeof normalized.coverage !== 'number') {
+        normalized.coverage = 0;
+      }
+
+      return normalized;
+    }
+
     function updateSummary(data) {
-      document.getElementById('passRate').textContent = data.latestKPI.pass_rate;
-      document.getElementById('testCount').textContent = data.latestKPI.test_count;
+      const latest = normalizeKPIRecord(data.latestKPI || {});
+
+      document.getElementById('passRate').textContent = latest.pass_rate;
+      document.getElementById('testCount').textContent = latest.test_count || 0;
       document.getElementById('coverage').textContent = data.latestKPI.coverage;
-      document.getElementById('aiRank').textContent = data.latestKPI.ai_danger_rank || '-';
+      document.getElementById('aiRank').textContent = latest.ai_danger_rank || '-';
       
       // Pattern 3 新フィールド
-      const compositeScore = data.latestKPI.composite_score || '-';
+      const compositeScore = latest.composite_score || '-';
       document.getElementById('compositeScore').textContent = compositeScore;
       
-      const riskLevel = data.latestKPI.risk_level || '-';
+      const riskLevel = latest.risk_level || '-';
       document.getElementById('riskLevel').textContent = riskLevel;
       
       const riskLevelBadge = document.getElementById('riskLevelBadge');
@@ -519,7 +544,7 @@ async function generateDashboard(config) {
         riskLevelBadge.innerHTML = '<div class="ai-danger-badge ' + (riskColors[riskLevel] || 'rank-d') + '">' + riskLevel + '</div>';
       }
       
-      const trend = data.latestKPI.trend || '-';
+      const trend = latest.trend || '-';
       document.getElementById('trend').textContent = trend;
       
       const trendIcon = document.getElementById('trendIcon');
@@ -540,12 +565,12 @@ async function generateDashboard(config) {
         'E': 'rank-e'
       };
       const badge = document.getElementById('aiRankBadge');
-      const rank = data.latestKPI.ai_danger_rank;
+      const rank = latest.ai_danger_rank;
       if (rank) {
         badge.innerHTML = '<div class="ai-danger-badge ' + rankMap[rank] + '">Rank ' + rank + '</div>';
       }
 
-      const lastUpdated = new Date(data.latestKPI.timestamp);
+      const lastUpdated = new Date(latest.timestamp);
       document.getElementById('lastUpdated').textContent = formatDateTime(lastUpdated);
     }
 
@@ -577,13 +602,14 @@ async function generateDashboard(config) {
       });
 
       // Test result distribution chart
+      const latest = normalizeKPIRecord(data.latestKPI || {});
       const testResultCtx = document.getElementById('testResultChart').getContext('2d');
       new Chart(testResultCtx, {
         type: 'doughnut',
         data: {
           labels: ['合格', '不合格'],
           datasets: [{
-            data: [data.latestKPI.passed, data.latestKPI.failed],
+            data: [latest.passed || 0, latest.failed || 0],
             backgroundColor: ['#51cf66', '#ff6b6b'],
             borderColor: ['white', 'white'],
             borderWidth: 2
@@ -665,10 +691,14 @@ async function generateDashboard(config) {
 
       for (let i = 0; i < rowCount; i++) {
         const row = document.createElement('tr');
-        const item = historyRows[historyRows.length - 1 - i];
-        const timestamp = item && item.timestamp ? item.timestamp : new Date().toISOString();
-        const passRate = item && typeof item.pass_rate !== 'undefined' ? item.pass_rate : 0;
-        const coverage = item && typeof item.coverage !== 'undefined' ? item.coverage : 0;
+        const rawItem = historyRows[historyRows.length - 1 - i] || {};
+        const item = normalizeKPIRecord(rawItem);
+        const timestamp = item.timestamp ? item.timestamp : new Date().toISOString();
+        const passRate = typeof item.pass_rate !== 'undefined' ? item.pass_rate : 0;
+        const coverage = typeof item.coverage !== 'undefined' ? item.coverage : 0;
+        const testCount = (typeof item.test_count === 'number') ? item.test_count : '-';
+        const passed = (typeof item.passed === 'number') ? item.passed : '-';
+        const failed = (typeof item.failed === 'number') ? item.failed : '-';
 
         let rank = 'A';
         if (passRate < 85 || coverage < 75) rank = 'E';
@@ -677,9 +707,9 @@ async function generateDashboard(config) {
         else if (passRate < 98 || coverage < 90) rank = 'B';
 
         row.innerHTML = '<td>' + formatDateTime(timestamp) + '</td>' +
-          '<td>150</td>' +
-          '<td>138</td>' +
-          '<td>12</td>' +
+          '<td>' + testCount + '</td>' +
+          '<td>' + passed + '</td>' +
+          '<td>' + failed + '</td>' +
           '<td><span class="trend-up">' + passRate + '%</span></td>' +
           '<td>' + coverage + '%</td>' +
           '<td><span class="status-badge ' + statusMap[rank] + '">Rank ' + rank + '</span></td>';
@@ -733,7 +763,10 @@ async function generateDashboard(config) {
                 mergedData.recentRuns = history.slice(-5).map(h => ({
                   timestamp: h.timestamp,
                   pass_rate: h.pass_rate,
-                  coverage: h.coverage
+                  coverage: h.coverage,
+                  test_count: h.test_count,
+                  passed: h.passed,
+                  failed: h.failed
                 }));
 
                 mergedData.passRateTrend = history
