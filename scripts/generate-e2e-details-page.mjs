@@ -44,6 +44,132 @@ async function generateE2EDetailsPage(config) {
     console.warn(`⚠️  Report not found (${config.reportDataPath}), using sample data`);
   }
 
+  // Helper function to generate test suites HTML
+  function generateTestSuitesHTML() {
+    if (!reportData.suites || reportData.suites.length === 0) {
+      return '<p style="text-align: center; color: #999; padding: 20px;">テストデータがありません</p>';
+    }
+
+    let html = '';
+    for (const suite of reportData.suites) {
+      const statusColor = suite.failed > 0 ? '#ff6b6b' : '#51cf66';
+      html += `
+    <div class="test-suite">
+      <div class="suite-header">
+        <div class="suite-title">${suite.name}</div>
+        <div class="suite-stats">
+          <span><span class="stat-passed">✅ ${suite.passed}</span></span>
+          <span><span class="stat-failed">❌ ${suite.failed}</span></span>
+          <span><span class="stat-skipped">⏭️ ${suite.skipped}</span></span>
+        </div>
+        <div class="suite-toggle">▶</div>
+      </div>
+      <div class="suite-content">
+`;
+
+      if (suite.tests && suite.tests.length > 0) {
+        for (const test of suite.tests) {
+          const statusClass = test.status;
+          const statusEmoji = test.status === 'passed' ? '✅' : test.status === 'failed' ? '❌' : '⏭️';
+          html += `
+        <div class="test-item ${statusClass}">
+          <div class="test-name">
+            ${statusEmoji} ${test.name}
+            <span class="test-status-badge" style="background: ${statusColor}; color: white;">
+              ${test.status === 'passed' ? '合格' : test.status === 'failed' ? '失敗' : 'スキップ'}
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ ${test.duration}ms</small>
+`;
+          
+          if (test.errors && test.errors.length > 0) {
+            html += `<div style="color: #ff6b6b; margin-top: 8px;">`;
+            for (const error of test.errors) {
+              html += `<p style="word-break: break-all;">${error}</p>`;
+            }
+            html += `</div>`;
+          }
+          
+          if (test.screenshots && test.screenshots.length > 0) {
+            html += `<div style="margin-top: 10px;">`;
+            for (const screenshot of test.screenshots) {
+              html += `<img src="${screenshot}" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('${screenshot}')">`;
+            }
+            html += `</div>`;
+          }
+          
+          html += `
+          </div>
+        </div>
+`;
+        }
+      }
+
+      html += `
+      </div>
+    </div>
+`;
+    }
+    return html;
+  }
+
+  // Helper function to generate video gallery HTML
+  function generateVideoGalleryHTML() {
+    const videos = [];
+    if (reportData.suites) {
+      for (const suite of reportData.suites) {
+        if (suite.tests) {
+          for (const test of suite.tests) {
+            if (test.videos && test.videos.length > 0) {
+              for (const video of test.videos) {
+                videos.push({
+                  name: test.name,
+                  status: test.status,
+                  src: video,
+                  duration: test.duration
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (videos.length === 0) {
+      return `
+        <div style="text-align: center; padding: 30px; background: #f9f9f9; border-radius: 8px;">
+          <p style="color: #999; font-size: 1.1em; margin-bottom: 10px;">📹 テスト実行動画がありません</p>
+          <p style="color: #bbb; font-size: 0.9em;">
+            💡 動画を記録するには、<code style="background: #e8e8e8; padding: 2px 6px; border-radius: 3px;">playwright.config.js</code> で以下を設定してください:
+          </p>
+          <pre style="background: #e8e8e8; padding: 10px; border-radius: 5px; text-align: left; overflow-x: auto; margin-top: 10px;"><code>use: {
+  video: 'on' // または 'retain-on-failure'
+}</code></pre>
+        </div>
+`;
+    }
+
+    let html = `<div class="video-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">`;
+    for (const video of videos) {
+      const statusEmoji = video.status === 'passed' ? '✅' : video.status === 'failed' ? '❌' : '⏭️';
+      html += `
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="${video.src}" type="video/mp4">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">${statusEmoji} ${video.name}</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ ${video.duration}ms</p>
+        </div>
+      </div>
+`;
+    }
+    html += `</div>`;
+    return html;
+  }
+
   // Generate HTML
   const pageHTML = `<!DOCTYPE html>
 <html lang="ja">
@@ -472,37 +598,37 @@ async function generateE2EDetailsPage(config) {
     <div class="summary-grid">
       <div class="summary-card success">
         <h3>テスト合格率</h3>
-        <div class="value" id="passRate">-</div>
+        <div class="value" id="passRate">${reportData.passRate}</div>
         <div class="unit">%</div>
       </div>
 
       <div class="summary-card">
         <h3>テスト実行数</h3>
-        <div class="value" id="testCount">-</div>
+        <div class="value" id="testCount">${reportData.totalTests}</div>
         <div class="unit">テスト</div>
       </div>
 
       <div class="summary-card success">
         <h3>合格数</h3>
-        <div class="value" id="passedCount">-</div>
+        <div class="value" id="passedCount">${reportData.passed}</div>
         <div class="unit">テスト</div>
       </div>
 
       <div class="summary-card danger">
         <h3>失敗数</h3>
-        <div class="value" id="failedCount">-</div>
+        <div class="value" id="failedCount">${reportData.failed}</div>
         <div class="unit">テスト</div>
       </div>
 
       <div class="summary-card warning">
         <h3>スキップ</h3>
-        <div class="value" id="skippedCount">-</div>
+        <div class="value" id="skippedCount">${reportData.skipped}</div>
         <div class="unit">テスト</div>
       </div>
 
       <div class="summary-card">
         <h3>実行時間</h3>
-        <div class="value" id="duration">-</div>
+        <div class="value" id="duration">${(reportData.duration / 1000).toFixed(1)}</div>
         <div class="unit">秒</div>
       </div>
     </div>
@@ -515,18 +641,18 @@ async function generateE2EDetailsPage(config) {
     </div>
 
     <div class="test-suites" id="testSuites">
-      <p style="text-align: center; color: #999; padding: 20px;">テストデータを読み込み中...</p>
+      ${generateTestSuitesHTML()}
     </div>
 
     <div id="video" class="details-section">
       <h2>🎥 テスト実行動画</h2>
       <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <div id="videoGallery"></div>
+        ${generateVideoGalleryHTML()}
       </div>
     </div>
 
     <div class="footer">
-      <p>最終更新: <span id="lastUpdated">-</span></p>
+      <p>最終更新: <span id="lastUpdated">${new Date(reportData.timestamp).toLocaleString('ja-JP')}</span></p>
       <p>Copilot Quality Harness | <a href="https://github.com/cocomomojo/copilot-quality-harness" style="color: #667eea; text-decoration: none;">GitHub</a></p>
     </div>
   </div>
@@ -539,283 +665,12 @@ async function generateE2EDetailsPage(config) {
   </div>
 
   <script>
-    // Sample data
-    const sampleData = {
-      timestamp: new Date().toISOString(),
-      totalSuites: 3,
-      totalTests: 15,
-      passed: 14,
-      failed: 1,
-      skipped: 0,
-      passRate: 93,
-      duration: 45230,
-      suites: [
-        {
-          name: 'User Registration',
-          file: 'e2e/user-registration.spec.ts',
-          totalTests: 5,
-          passed: 5,
-          failed: 0,
-          skipped: 0,
-          duration: 12000,
-          tests: [
-            {
-              name: 'should register new user',
-              title: 'should register new user',
-              status: 'passed',
-              duration: 2500,
-              file: 'e2e/user-registration.spec.ts',
-              errors: [],
-              screenshots: [],
-              videos: []
-            }
-          ]
-        }
-      ]
-    };
-
+    // Minimal interactive functionality
     let currentFilter = 'all';
-    let reportData = sampleData;
-
-    function initDashboard() {
-      // Try to load actual data
-      fetch('./data/test-cases.json')
-        .then(response => {
-          if (!response.ok) throw new Error('Not found');
-          return response.json();
-        })
-        .then(data => {
-          reportData = data;
-          console.log('✅ Loaded actual report data:', reportData);
-          updateDisplay();
-        })
-        .catch(error => {
-          console.warn('⚠️  Using sample data:', error.message);
-          updateDisplay();
-        });
-    }
-
-    function updateDisplay() {
-      // Update summary cards
-      document.getElementById('passRate').textContent = reportData.passRate;
-      document.getElementById('testCount').textContent = reportData.totalTests;
-      document.getElementById('passedCount').textContent = reportData.passed;
-      document.getElementById('failedCount').textContent = reportData.failed;
-      document.getElementById('skippedCount').textContent = reportData.skipped;
-      document.getElementById('duration').textContent = (reportData.duration / 1000).toFixed(1);
-
-      // Update timestamp
-      const timestamp = new Date(reportData.timestamp);
-      document.getElementById('lastUpdated').textContent = timestamp.toLocaleString('ja-JP');
-
-      // Render test suites
-      renderTestSuites();
-      
-      // Render video gallery
-      renderVideoGallery();
-    }
-
-    function renderVideoGallery() {
-      const gallery = document.getElementById('videoGallery');
-      
-      // Collect all videos from test results
-      const videos = [];
-      for (const suite of reportData.suites) {
-        for (const test of suite.tests || []) {
-          if (test.videos && test.videos.length > 0) {
-            for (const video of test.videos) {
-              videos.push({
-                title: test.title || test.name,
-                path: video,
-                status: test.status,
-                duration: test.duration
-              });
-            }
-          }
-        }
-      }
-
-      if (videos.length === 0) {
-        // プレースホルダー
-        gallery.innerHTML = '<div style="padding: 30px; text-align: center; color: #999;">' +
-          '<p style="font-size: 48px; margin-bottom: 10px;">📹</p>' +
-          '<p style="font-size: 16px; margin-bottom: 20px;">E2E テスト実行動画</p>' +
-          '<p style="font-size: 14px; margin-bottom: 20px;">テストが実行された際のブラウザ画面記録です。</p>' +
-          '<p style="font-size: 12px; color: #ccc;">' +
-          '  現在、動画データが利用可能ではありません。<br/>' +
-          '  テストが失敗した場合に動画が自動的に記録されます。' +
-          '</p>' +
-          '<div style="margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 5px;">' +
-          '  <p style="font-size: 12px; color: #666;">💡 ヒント</p>' +
-          '  <p style="font-size: 12px; color: #666;">' +
-          '    playwright.config.js の video: \'retain-on-failure\' 設定により、<br/>' +
-          '    失敗したテストの動画が自動的に保存されます。' +
-          '  </p>' +
-          '</div>' +
-          '</div>';
-        return;
-      }
-
-      // 動画ギャラリーを表示
-      let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">';
-      
-      for (const video of videos) {
-        const statusIcon = video.status === 'passed' ? '✅' : (video.status === 'failed' ? '❌' : '⏭️');
-        html += '<div style="background: #f5f5f5; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
-          '<div style="background: #000; padding: 10px; color: white; font-size: 12px;">' +
-          statusIcon + ' ' + video.status.toUpperCase() +
-          '</div>' +
-          '<div style="padding: 15px;">' +
-          '<p style="font-weight: bold; margin-bottom: 10px; font-size: 14px;">' +
-          video.title +
-          '</p>' +
-          '<video ' +
-          'style="width: 100%; border-radius: 5px; background: #000; cursor: pointer;" ' +
-          'controls ' +
-          'src="' + video.path + '" ' +
-          'title="再生">' +
-          '</video>' +
-          '<p style="font-size: 12px; color: #999; margin-top: 10px;">' +
-          '⏱️ ' + (video.duration / 1000).toFixed(2) + '秒' +
-          '</p>' +
-          '</div>' +
-          '</div>';
-      }
-      
-      html += '</div>';
-      gallery.innerHTML = html;
-    }
-
-    function renderTestSuites() {
-      const container = document.getElementById('testSuites');
-      container.innerHTML = '';
-
-      for (const suite of reportData.suites) {
-        const suiteEl = createSuiteElement(suite);
-        container.appendChild(suiteEl);
-      }
-    }
-
-    function createSuiteElement(suite) {
-      const div = document.createElement('div');
-      div.className = 'test-suite';
-      div.id = 'suite-' + suite.name.replace(/\\s+/g, '-').toLowerCase();
-
-      const header = document.createElement('div');
-      header.className = 'suite-header';
-      header.onclick = () => toggleSuite(div);
-
-      const title = document.createElement('div');
-      title.className = 'suite-title';
-      title.textContent = '📄 ' + suite.name;
-
-      const stats = document.createElement('div');
-      stats.className = 'suite-stats';
-
-      stats.innerHTML = \`
-        <span><span class="stat-passed">\${suite.passed}</span> 合格</span>
-        <span><span class="stat-failed">\${suite.failed}</span> 失敗</span>
-        <span class="stat-skipped">\${suite.skipped} スキップ</span>
-        <span>⏱️ \${(suite.duration / 1000).toFixed(1)}s</span>
-      \`;
-
-      const toggle = document.createElement('div');
-      toggle.className = 'suite-toggle';
-      toggle.textContent = '▶';
-
-      header.appendChild(title);
-      header.appendChild(stats);
-      header.appendChild(toggle);
-
-      const content = document.createElement('div');
-      content.className = 'suite-content';
-
-      for (const test of suite.tests) {
-        if (shouldShowTest(test)) {
-          const testEl = createTestElement(test);
-          content.appendChild(testEl);
-        }
-      }
-
-      div.appendChild(header);
-      div.appendChild(content);
-
-      return div;
-    }
-
-    function createTestElement(test) {
-      const div = document.createElement('div');
-      div.className = 'test-item ' + test.status;
-      div.id = 'test-' + test.name.replace(/\\s+/g, '-').toLowerCase();
-      div.onclick = () => toggleTestDetails(div);
-
-      const name = document.createElement('div');
-      name.className = 'test-name';
-      
-      const icon = test.status === 'passed' ? '✅' : (test.status === 'failed' ? '❌' : '⏭️');
-      const badge = document.createElement('span');
-      badge.className = 'test-status-badge badge-' + test.status;
-      badge.textContent = test.status.toUpperCase();
-
-      name.innerHTML = icon + ' ' + test.title;
-      name.appendChild(badge);
-
-      const meta = document.createElement('div');
-      meta.className = 'test-meta';
-      meta.textContent = '⏱️ ' + (test.duration / 1000).toFixed(2) + 's';
-
-      div.appendChild(name);
-      div.appendChild(meta);
-
-      if (test.errors && test.errors.length > 0) {
-        const details = document.createElement('div');
-        details.className = 'test-details';
-        
-        for (const error of test.errors) {
-          const errorDiv = document.createElement('div');
-          errorDiv.className = 'error-message';
-          errorDiv.textContent = error;
-          details.appendChild(errorDiv);
-        }
-
-        div.appendChild(details);
-      }
-
-      if (test.videos && test.videos.length > 0) {
-        const videoDiv = document.createElement('div');
-        videoDiv.className = 'video-player';
-        const video = document.createElement('video');
-        video.controls = true;
-        video.src = test.videos[0];
-        videoDiv.appendChild(video);
-        div.appendChild(videoDiv);
-      }
-
-      if (test.screenshots && test.screenshots.length > 0) {
-        const gallery = document.createElement('div');
-        gallery.className = 'screenshot-gallery';
-        
-        for (const screenshot of test.screenshots) {
-          const img = document.createElement('img');
-          img.className = 'screenshot-thumb';
-          img.src = screenshot;
-          img.onclick = (e) => {
-            e.stopPropagation();
-            openModal(screenshot);
-          };
-          gallery.appendChild(img);
-        }
-
-        div.appendChild(gallery);
-      }
-
-      return div;
-    }
 
     function toggleSuite(element) {
       const toggle = element.querySelector('.suite-toggle');
       const content = element.querySelector('.suite-content');
-
       toggle.classList.toggle('expanded');
       content.classList.toggle('expanded');
     }
@@ -828,22 +683,24 @@ async function generateE2EDetailsPage(config) {
     }
 
     function filterTests(status) {
-      // Update button states
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      event.target.classList.add('active');
-
       currentFilter = status;
-      renderTestSuites();
-    }
-
-    function shouldShowTest(test) {
-      if (currentFilter === 'all') return true;
-      if (currentFilter === 'passed') return test.status === 'passed';
-      if (currentFilter === 'failed') return test.status === 'failed';
-      if (currentFilter === 'skipped') return test.status === 'skipped';
-      return true;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const suites = document.querySelectorAll('.test-suite');
+      suites.forEach(suite => {
+        const tests = suite.querySelectorAll('.test-item');
+        let hasVisible = false;
+        tests.forEach(test => {
+          const show = (status === 'all' ||
+            (status === 'passed' && test.classList.contains('passed')) ||
+            (status === 'failed' && test.classList.contains('failed')) ||
+            (status === 'skipped' && test.classList.contains('skipped')));
+          test.style.display = show ? '' : 'none';
+          if (show) hasVisible = true;
+        });
+        suite.style.display = hasVisible ? '' : 'none';
+      });
     }
 
     function openModal(imageSrc) {
@@ -858,14 +715,9 @@ async function generateE2EDetailsPage(config) {
     }
 
     // Close modal when clicking outside
-    document.getElementById('imageModal').onclick = function(event) {
-      if (event.target === this) {
-        closeModal();
-      }
+    document.getElementById('imageModal').onclick = (event) => {
+      if (event.target.id === 'imageModal') closeModal();
     };
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', initDashboard);
   </script>
 </body>
 </html>`;
