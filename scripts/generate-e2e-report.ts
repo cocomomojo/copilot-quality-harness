@@ -158,12 +158,14 @@ function parseTestResults(filePath: string): TestSuite[] {
                     screenshots: test.results && test.results[0] && test.results[0].attachments
                       ? test.results[0].attachments
                           .filter((a: any) => a.contentType?.includes('image'))
-                          .map((a: any) => a.path)
+                          .map((a: any) => normalizeReportAssetPath(a.path) || a.path)
+                          .filter(Boolean)
                       : [],
                     videos: test.results && test.results[0] && test.results[0].attachments
                       ? test.results[0].attachments
                           .filter((a: any) => a.contentType?.includes('video'))
-                          .map((a: any) => a.path)
+                          .map((a: any) => normalizeReportAssetPath(a.path) || a.path)
+                          .filter(Boolean)
                       : []
                   };
                   tests.push(testResult);
@@ -248,6 +250,23 @@ function parseTestResults(filePath: string): TestSuite[] {
   }
 }
 
+function normalizeReportAssetPath(filePath: string | null | undefined): string | null {
+  if (!filePath) return null;
+  const normalized = filePath.replace(/\\/g, '/');
+  const basename = normalized.split('/').pop();
+  if (!basename || !/\.(webm|mp4|png|jpg|jpeg)$/i.test(basename)) return null;
+
+  if (normalized.startsWith('http://') || normalized.startsWith('https://') || normalized.startsWith('./') || normalized.startsWith('../')) {
+    return normalized;
+  }
+
+  if (normalized.startsWith('/') || /^[A-Za-z]:\//.test(normalized) || normalized.includes('/home/') || normalized.includes('/tmp/')) {
+    return `./${basename}`;
+  }
+
+  return normalized;
+}
+
 function findVideoFiles(): Map<string, string> {
   const videoMap = new Map<string, string>();
   const videoDirs = [
@@ -266,11 +285,9 @@ function findVideoFiles(): Map<string, string> {
         for (const entry of entries) {
           if (entry.endsWith('.webm') || entry.endsWith('.mp4')) {
             console.log(`    ✓ ${entry}`);
-            // video file name patterns:
-            // {test-name}-{timestamp}.webm
-            // {test-id}.webm
             const testKey = entry.replace(/\.(webm|mp4)$/, '').split('-')[0];
-            videoMap.set(testKey, path.join(videoDir, entry));
+            const assetPath = normalizeReportAssetPath(path.join(videoDir, entry));
+            if (assetPath) videoMap.set(testKey, assetPath);
           }
         }
       } catch (e) {
@@ -315,8 +332,13 @@ function generateReport(): E2EReport {
   for (const suite of allSuites) {
     for (const test of suite.tests) {
       const videoKey = test.name.replace(/\s+/g, '-').toLowerCase();
-      if (videoMap.has(videoKey)) {
-        test.videos = [videoMap.get(videoKey)!];
+      const mappedVideo = videoMap.get(videoKey);
+      if (mappedVideo) {
+        test.videos = [mappedVideo];
+      } else if (test.videos && test.videos.length > 0) {
+        test.videos = test.videos
+          .map((video) => normalizeReportAssetPath(video) || video)
+          .filter(Boolean);
       }
     }
   }

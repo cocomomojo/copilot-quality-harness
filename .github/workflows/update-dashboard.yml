@@ -189,6 +189,10 @@ jobs:
         continue-on-error: true
         run: |
           echo "🎬 Generating E2E details page..."
+          mkdir -p docs/reports/videos docs/reports/screenshots
+          find ./artifacts -type f \( -iname '*.webm' -o -iname '*.mp4' -o -iname '*.png' -o -iname '*.jpg' \) -exec cp -f {} docs/reports/ \; 2>/dev/null || true
+          find ./artifacts -type f \( -iname '*.webm' -o -iname '*.mp4' \) -exec cp -f {} docs/reports/videos/ \; 2>/dev/null || true
+          find ./artifacts -type f \( -iname '*.png' -o -iname '*.jpg' \) -exec cp -f {} docs/reports/screenshots/ \; 2>/dev/null || true
           node scripts/generate-e2e-details-page.mjs "qa/e2e-report/test-cases.json" "docs/reports"
           
           if [ -f docs/reports/e2e-latest.html ]; then

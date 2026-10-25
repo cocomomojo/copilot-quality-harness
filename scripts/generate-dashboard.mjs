@@ -482,6 +482,18 @@ async function generateDashboard(config) {
       ]
     };
 
+    function formatDateTime(value) {
+      const date = new Date(value);
+      return new Intl.DateTimeFormat('ja-JP', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(date);
+    }
+
     // Update summary cards
     function updateSummary(data) {
       document.getElementById('passRate').textContent = data.latestKPI.pass_rate;
@@ -534,7 +546,7 @@ async function generateDashboard(config) {
       }
 
       const lastUpdated = new Date(data.latestKPI.timestamp);
-      document.getElementById('lastUpdated').textContent = lastUpdated.toLocaleString('ja-JP');
+      document.getElementById('lastUpdated').textContent = formatDateTime(lastUpdated);
     }
 
     // Initialize charts
@@ -635,8 +647,14 @@ async function generateDashboard(config) {
       // Test results table
       const tbody = document.getElementById('testResultsBody');
       tbody.innerHTML = '';
-      // Add up to 5 sample rows
-      const rowCount = Math.min(5, data.passRateTrend.length, data.coverageTrend.length);
+      const historyRows = Array.isArray(data.recentRuns) && data.recentRuns.length > 0
+        ? data.recentRuns
+        : (Array.isArray(data.passRateTrend) ? data.passRateTrend.map((point, idx) => ({
+            timestamp: point.date ? (point.date + 'T00:00:00') : undefined,
+            pass_rate: point.rate,
+            coverage: (data.coverageTrend && data.coverageTrend[idx] ? data.coverageTrend[idx].coverage : null)
+          })) : []);
+      const rowCount = Math.min(5, historyRows.length);
       const statusMap = {
         'A': 'status-pass',
         'B': 'status-pass',
@@ -647,19 +665,18 @@ async function generateDashboard(config) {
 
       for (let i = 0; i < rowCount; i++) {
         const row = document.createElement('tr');
-        const dateStr = data.passRateTrend[data.passRateTrend.length - 1 - i].date;
-        const date = new Date(dateStr + 'T00:00:00');
-        const passRate = data.passRateTrend[data.passRateTrend.length - 1 - i].rate;
-        const coverage = data.coverageTrend[data.coverageTrend.length - 1 - i].coverage;
+        const item = historyRows[historyRows.length - 1 - i];
+        const timestamp = item && item.timestamp ? item.timestamp : new Date().toISOString();
+        const passRate = item && typeof item.pass_rate !== 'undefined' ? item.pass_rate : 0;
+        const coverage = item && typeof item.coverage !== 'undefined' ? item.coverage : 0;
 
-        // Calculate rank based on pass rate and coverage
         let rank = 'A';
         if (passRate < 85 || coverage < 75) rank = 'E';
         else if (passRate < 90 || coverage < 80) rank = 'D';
         else if (passRate < 95 || coverage < 85) rank = 'C';
         else if (passRate < 98 || coverage < 90) rank = 'B';
 
-        row.innerHTML = '<td>' + date.toLocaleDateString('ja-JP') + '</td>' +
+        row.innerHTML = '<td>' + formatDateTime(timestamp) + '</td>' +
           '<td>150</td>' +
           '<td>138</td>' +
           '<td>12</td>' +
@@ -701,6 +718,7 @@ async function generateDashboard(config) {
             },
             passRateTrend: sampleData.passRateTrend,
             coverageTrend: sampleData.coverageTrend,
+            recentRuns: [],
             qualityCharacteristics: sampleData.qualityCharacteristics
           };
           
@@ -712,7 +730,12 @@ async function generateDashboard(config) {
             })
             .then(history => {
               if (history && Array.isArray(history) && history.length > 0) {
-                // Generate trend data from history
+                mergedData.recentRuns = history.slice(-5).map(h => ({
+                  timestamp: h.timestamp,
+                  pass_rate: h.pass_rate,
+                  coverage: h.coverage
+                }));
+
                 mergedData.passRateTrend = history
                   .slice(-30)  // Last 30 days
                   .map(h => ({

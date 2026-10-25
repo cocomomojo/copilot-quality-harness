@@ -115,6 +115,19 @@ async function generateE2EDetailsPage(config) {
   }
 
   // Helper function to generate video gallery HTML
+  function normalizeVideoSource(src) {
+    if (!src || typeof src !== 'string') return null;
+    const trimmed = src.trim();
+    if (!trimmed) return null;
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('./') || trimmed.startsWith('../')) {
+      return trimmed;
+    }
+    if (/^(?:[A-Za-z]:\\|\/|\\\\)/.test(trimmed) || trimmed.includes('/home/') || trimmed.includes('/tmp/')) {
+      return null;
+    }
+    return trimmed;
+  }
+
   function generateVideoGalleryHTML() {
     const videos = [];
     if (reportData.suites) {
@@ -123,10 +136,12 @@ async function generateE2EDetailsPage(config) {
           for (const test of suite.tests) {
             if (test.videos && test.videos.length > 0) {
               for (const video of test.videos) {
+                const src = normalizeVideoSource(video);
+                if (!src) continue;
                 videos.push({
                   name: test.name,
                   status: test.status,
-                  src: video,
+                  src,
                   duration: test.duration
                 });
               }
@@ -144,7 +159,7 @@ async function generateE2EDetailsPage(config) {
             💡 動画を記録するには、<code style="background: #e8e8e8; padding: 2px 6px; border-radius: 3px;">playwright.config.js</code> で以下を設定してください:
           </p>
           <pre style="background: #e8e8e8; padding: 10px; border-radius: 5px; text-align: left; overflow-x: auto; margin-top: 10px;"><code>use: {
-  video: 'retain-on-failure'
+  video: 'on'
 }</code></pre>
         </div>
 `;
@@ -153,10 +168,11 @@ async function generateE2EDetailsPage(config) {
     let html = `<div class="video-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">`;
     for (const video of videos) {
       const statusEmoji = video.status === 'passed' ? '✅' : video.status === 'failed' ? '❌' : '⏭️';
+      const sourceType = video.src.endsWith('.webm') ? 'video/webm' : 'video/mp4';
       html += `
       <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
         <video controls style="width: 100%; background: #000;">
-          <source src="${video.src}" type="video/mp4">
+          <source src="${video.src}" type="${sourceType}">
           お使いのブラウザはビデオタグに対応していません
         </video>
         <div style="padding: 15px;">
