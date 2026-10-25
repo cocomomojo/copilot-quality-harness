@@ -376,5 +376,26 @@
       "pass_rate_change": -75,
       "coverage_change": 0
     }
+  },
+  {
+    "timestamp": "2026-10-25T03:06:28.089Z",
+    "pass_rate": 0,
+    "test_count": 0,
+    "passed": 0,
+    "failed": 0,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 10,
+    "data_source": "TEST_MATRIX_ARTIFACT",
+    "details": {
+      "test_source": "test-matrix-artifact",
+      "github_run_id": 40133529383
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
   }
 ]
