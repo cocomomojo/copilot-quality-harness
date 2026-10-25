@@ -55,7 +55,7 @@ async function generateE2EDetailsPage(config) {
       const statusColor = suite.failed > 0 ? '#ff6b6b' : '#51cf66';
       html += `
     <div class="test-suite">
-      <div class="suite-header">
+      <div class="suite-header" onclick="toggleSuite(this.parentElement)">
         <div class="suite-title">${suite.name}</div>
         <div class="suite-stats">
           <span><span class="stat-passed">✅ ${suite.passed}</span></span>
@@ -144,7 +144,7 @@ async function generateE2EDetailsPage(config) {
             💡 動画を記録するには、<code style="background: #e8e8e8; padding: 2px 6px; border-radius: 3px;">playwright.config.js</code> で以下を設定してください:
           </p>
           <pre style="background: #e8e8e8; padding: 10px; border-radius: 5px; text-align: left; overflow-x: auto; margin-top: 10px;"><code>use: {
-  video: 'on' // または 'retain-on-failure'
+  video: 'retain-on-failure'
 }</code></pre>
         </div>
 `;
@@ -652,7 +652,7 @@ async function generateE2EDetailsPage(config) {
     </div>
 
     <div class="footer">
-      <p>最終更新: <span id="lastUpdated">${new Date(reportData.timestamp).toLocaleString('ja-JP')}</span></p>
+      <p>最終更新: <span id="lastUpdated">${new Date(reportData.timestamp).toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span></p>
       <p>Copilot Quality Harness | <a href="https://github.com/cocomomojo/copilot-quality-harness" style="color: #667eea; text-decoration: none;">GitHub</a></p>
     </div>
   </div>
