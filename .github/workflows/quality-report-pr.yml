@@ -92,6 +92,7 @@ jobs:
           node << 'EOF'
           const fs = require('fs');
           const path = require('path');
+          const yaml = require('js-yaml');
           
           const resultsDir = 'test-results-data';
           const results = {};
@@ -99,6 +100,10 @@ jobs:
           const traceability = {
             perspective_count: 0,
             quality_items_count: 0,
+            perspectives_file: null,
+            test_items_file: null,
+            perspectives_excerpt: [],
+            quality_items_excerpt: [],
             spec_issue_mapping: []
           };
           
@@ -137,6 +142,12 @@ jobs:
                   try {
                     const data = JSON.parse(fs.readFileSync(fullPath, 'utf-8'));
                     traceability.perspective_count = data.testPerspectives?.length || 0;
+                    traceability.perspectives_file = `qa/quality-characteristics/generated/${file}`;
+                    traceability.perspectives_excerpt = (data.testPerspectives || []).slice(0, 8).map((perspective) => ({
+                      characteristic_id: perspective.characteristic_id,
+                      characteristic_name: perspective.characteristic_name,
+                      test_perspectives: (perspective.test_perspectives || []).slice(0, 4)
+                    }));
                   } catch (e) {
                     console.warn('Could not parse test perspectives JSON:', e.message);
                   }
@@ -145,6 +156,12 @@ jobs:
                   try {
                     const data = JSON.parse(fs.readFileSync(fullPath, 'utf-8'));
                     traceability.quality_items_count = data.testItems?.length || 0;
+                    traceability.test_items_file = `qa/quality-characteristics/generated/${file}`;
+                    traceability.quality_items_excerpt = (data.testItems || []).slice(0, 12).map((item) => ({
+                      id: item.id,
+                      perspective: item.perspective,
+                      description: item.description
+                    }));
                   } catch (e) {
                     console.warn('Could not parse test items JSON:', e.message);
                   }
@@ -161,14 +178,31 @@ jobs:
               const issueMatches = [...content.matchAll(/#\s*Issue:\s*Closes\s+#(\d+)/gi)];
               if (issueMatches.length === 0) continue;
 
-              const utCount = (content.match(/^\s*-\s+id:\s*"UT-/gm) || []).length;
-              const e2eCount = (content.match(/^\s*-\s+id:\s*"E2E-/gm) || []).length;
+              let specObject = {};
+              try {
+                specObject = yaml.load(content) || {};
+              } catch (e) {
+                console.warn(`Could not parse spec YAML (${specFile}):`, e.message);
+              }
+
+              const testSpec = specObject.test_spec || {};
+              const utCases = Array.isArray(testSpec.ut) ? testSpec.ut : [];
+              const e2eCases = Array.isArray(testSpec.e2e) ? testSpec.e2e : [];
               for (const issueMatch of issueMatches) {
                 traceability.spec_issue_mapping.push({
                   issue: Number(issueMatch[1]),
-                  spec_file: specFile,
-                  ut_cases: utCount,
-                  e2e_cases: e2eCount
+                  spec_file: `tests/specs/${specFile}`,
+                  feature: testSpec.feature || specFile,
+                  ut_cases: utCases.length,
+                  e2e_cases: e2eCases.length,
+                  ut_details: utCases.slice(0, 6).map((item) => ({
+                    id: item.id,
+                    title: item.title
+                  })),
+                  e2e_details: e2eCases.slice(0, 6).map((item) => ({
+                    id: item.id,
+                    title: item.title
+                  }))
                 });
               }
             }
@@ -283,6 +317,10 @@ jobs:
               traceability: {
                 perspective_count: 0,
                 quality_items_count: 0,
+                perspectives_file: null,
+                test_items_file: null,
+                perspectives_excerpt: [],
+                quality_items_excerpt: [],
                 spec_issue_mapping: []
               }
             };
@@ -312,6 +350,9 @@ jobs:
             body.push('');
             body.push('### 🔗 Issue Traceability');
             body.push('');
+            const headSha = context.payload.workflow_run?.head_sha || context.sha;
+            const toBlobLink = (filePath) =>
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${headSha}/${filePath}`;
 
             let linkedIssues = [];
             let implementationFiles = [];
@@ -339,10 +380,17 @@ jobs:
             for (const mapping of summary.traceability?.spec_issue_mapping || []) {
               if (!mapping?.issue) continue;
               const key = Number(mapping.issue);
-              const current = issueCases.get(key) || { ut: 0, e2e: 0, specs: new Set() };
+              const current = issueCases.get(key) || { ut: 0, e2e: 0, specs: [], utDetails: [], e2eDetails: [] };
               current.ut += Number(mapping.ut_cases || 0);
               current.e2e += Number(mapping.e2e_cases || 0);
-              if (mapping.spec_file) current.specs.add(mapping.spec_file);
+              if (mapping.spec_file) {
+                current.specs.push({
+                  path: mapping.spec_file,
+                  feature: mapping.feature || mapping.spec_file
+                });
+              }
+              current.utDetails.push(...(mapping.ut_details || []));
+              current.e2eDetails.push(...(mapping.e2e_details || []));
               issueCases.set(key, current);
             }
 
@@ -352,16 +400,64 @@ jobs:
 
             body.push('| Issue | テスト観点 | テスト項目 | 実装 | テスト実行 |');
             body.push('|---|---|---|---|---|');
+            const perspectiveLabel = summary.traceability?.perspectives_file
+              ? `${summary.traceability?.perspective_count || 0} perspectives ([detail](${toBlobLink(summary.traceability.perspectives_file)}))`
+              : `${summary.traceability?.perspective_count || 0} perspectives`;
+            const qualityItemsLabel = summary.traceability?.test_items_file
+              ? `${summary.traceability?.quality_items_count || 0} items ([detail](${toBlobLink(summary.traceability.test_items_file)}))`
+              : `${summary.traceability?.quality_items_count || 0} items`;
+
             if (reportIssues.length === 0) {
-              body.push(`| _未紐付け_ | ${summary.traceability?.perspective_count || 0} perspectives | ${summary.traceability?.quality_items_count || 0} quality items | ${implementationFiles.length} files changed in PR | Pass rate ${summary.pass_rate}% (${summary.total_passed}/${summary.total_tests}) |`);
+              body.push(`| _未紐付け_ | ${perspectiveLabel} | ${qualityItemsLabel} | ${implementationFiles.length} files changed in PR | Pass rate ${summary.pass_rate}% (${summary.total_passed}/${summary.total_tests}) |`);
             } else {
               for (const issueNo of reportIssues) {
-                const issueData = issueCases.get(issueNo) || { ut: 0, e2e: 0, specs: new Set() };
-                const specLabel = issueData.specs.size > 0
-                  ? `${issueData.specs.size} spec(s)`
+                const issueData = issueCases.get(issueNo) || { ut: 0, e2e: 0, specs: [], utDetails: [], e2eDetails: [] };
+                const specLabel = issueData.specs.length > 0
+                  ? issueData.specs.slice(0, 2).map((spec) => `[${spec.feature}](${toBlobLink(spec.path)})`).join(', ')
                   : 'spec not detected';
-                const itemLabel = `UT ${issueData.ut} / E2E ${issueData.e2e}, quality items ${summary.traceability?.quality_items_count || 0}`;
-                body.push(`| #${issueNo} | ${summary.traceability?.perspective_count || 0} perspectives | ${itemLabel} (${specLabel}) | ${implementationFiles.length} files changed in PR | Pass rate ${summary.pass_rate}% (${summary.total_passed}/${summary.total_tests}) |`);
+                const itemLabel = `UT ${issueData.ut} / E2E ${issueData.e2e}, ${qualityItemsLabel}`;
+                body.push(`| #${issueNo} | ${perspectiveLabel} | ${itemLabel}<br/>${specLabel} | ${implementationFiles.length} files changed in PR | Pass rate ${summary.pass_rate}% (${summary.total_passed}/${summary.total_tests}) |`);
+              }
+            }
+
+            if ((summary.traceability?.perspectives_excerpt || []).length > 0) {
+              body.push('');
+              body.push('#### テスト観点（具体・抜粋）');
+              for (const perspective of summary.traceability.perspectives_excerpt) {
+                const sub = (perspective.test_perspectives || []).join(', ');
+                body.push(`- **${perspective.characteristic_name}**: ${sub}`);
+              }
+            }
+
+            if ((summary.traceability?.quality_items_excerpt || []).length > 0) {
+              body.push('');
+              body.push('#### テスト項目（具体・抜粋）');
+              for (const item of summary.traceability.quality_items_excerpt.slice(0, 10)) {
+                body.push(`- \`${item.id}\` (${item.perspective}): ${item.description}`);
+              }
+              if (summary.traceability.quality_items_excerpt.length > 10) {
+                body.push(`- ...and ${summary.traceability.quality_items_excerpt.length - 10} more items in excerpt`);
+              }
+            }
+
+            if (reportIssues.length > 0) {
+              body.push('');
+              body.push('#### Issue別UT/E2E詳細（抜粋）');
+              for (const issueNo of reportIssues) {
+                const issueData = issueCases.get(issueNo) || { utDetails: [], e2eDetails: [], specs: [] };
+                body.push(`- **#${issueNo}**`);
+                const specLinks = issueData.specs.slice(0, 3).map((spec) => `[${spec.path}](${toBlobLink(spec.path)})`);
+                if (specLinks.length > 0) {
+                  body.push(`  - Specs: ${specLinks.join(', ')}`);
+                }
+                if (issueData.utDetails.length > 0) {
+                  const utLines = issueData.utDetails.slice(0, 4).map((t) => `\`${t.id}\` ${t.title}`);
+                  body.push(`  - UT: ${utLines.join(' / ')}`);
+                }
+                if (issueData.e2eDetails.length > 0) {
+                  const e2eLines = issueData.e2eDetails.slice(0, 4).map((t) => `\`${t.id}\` ${t.title}`);
+                  body.push(`  - E2E: ${e2eLines.join(' / ')}`);
+                }
               }
             }
 
@@ -369,7 +465,7 @@ jobs:
               body.push('');
               body.push(`Implementation files (${implementationFiles.length}):`);
               for (const file of implementationFiles.slice(0, 8)) {
-                body.push(`- \`${file}\``);
+                body.push(`- [\`${file}\`](${toBlobLink(file)})`);
               }
               if (implementationFiles.length > 8) {
                 body.push(`- ...and ${implementationFiles.length - 8} more files`);

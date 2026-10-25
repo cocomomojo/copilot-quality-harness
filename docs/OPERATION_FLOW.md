@@ -529,7 +529,15 @@ matrix:
 ### 🔗 Issue Traceability
 | Issue | テスト観点 | テスト項目 | 実装 | テスト実行 |
 |---|---|---|---|---|
-| #100 | 8 perspectives | UT 7 / E2E 4, quality items 48 (1 spec) | 6 files changed in PR | Pass rate 97% (67/69) |
+| #100 | 8 perspectives ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-perspectives-simple.json)) | UT 7 / E2E 4, 48 items ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-items-simple.json)) | 6 files changed in PR | Pass rate 97% (67/69) |
+
+#### テスト観点（具体・抜粋）
+- **機能適合性 (Functional Suitability)**: happy-path-testing, boundary-value-testing, input-validation, error-handling
+- **信頼性 (Reliability)**: regression-testing, crash-testing, recovery-testing, degradation-testing
+
+#### テスト項目（具体・抜粋）
+- `FS-001` (happy-path-testing): 正常系: 正常な入力で正しく機能することを確認
+- `R-001` (regression-testing): 回帰テスト: 既存機能が引き続き動作する
 
 ### Coverage
 - Lines: 92% (target: 80%) ✅

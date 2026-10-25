@@ -191,7 +191,15 @@ graph LR
 ### 🔗 Issue Traceability
 | Issue | テスト観点 | テスト項目 | 実装 | テスト実行 |
 |---|---|---|---|---|
-| #123 | 8 perspectives | UT 7 / E2E 4, quality items 48 (1 spec) | 6 files changed in PR | Pass rate 97% (67/69) |
+| #123 | 8 perspectives ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-perspectives-simple.json)) | UT 7 / E2E 4, 48 items ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-items-simple.json)) | 6 files changed in PR | Pass rate 97% (67/69) |
+
+#### テスト観点（具体・抜粋）
+- **機能適合性 (Functional Suitability)**: happy-path-testing, boundary-value-testing, input-validation, error-handling
+- **セキュリティ (Security)**: authentication-testing, authorization-testing, injection-attack-testing, data-exposure-testing
+
+#### テスト項目（具体・抜粋）
+- `FS-001` (happy-path-testing): 正常系: 正常な入力で正しく機能することを確認
+- `FS-003` (input-validation): 入力検証: 無効な入力を適切に処理
 
 ### 📊 Coverage Status
 - Lines: 92% (target: 80%) ✅
