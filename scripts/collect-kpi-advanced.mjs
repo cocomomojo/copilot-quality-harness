@@ -254,18 +254,23 @@ function parseTestResults(testData) {
 }
 
 /**
- * ローカルファイルからカバレッジデータを読み込む
+ * ローカルファイル、またはダウンロードされたアーティファクトからカバレッジデータを読み込む
  */
 function readCoverageData() {
   console.log('\n📈 Reading coverage data...');
   
   const possiblePaths = [
+    // ローカルパス
     'frontend/coverage/coverage-summary.json',
     'backend/coverage/coverage-summary.json',
     'frontend/coverage/coverage-final.json',
     'backend/coverage/coverage-final.json',
     'coverage/coverage-final.json',
-    'qa/test-management/coverage.json'
+    'qa/test-management/coverage.json',
+    // CI からダウンロードされたアーティファクトパス
+    'artifacts/coverage-report-node-20/coverage/coverage-summary.json',
+    'artifacts/coverage-report-node-20/coverage/coverage-final.json',
+    'artifacts/coverage-report-node-20/coverage-final.json'
   ];
   
   for (const path of possiblePaths) {
@@ -289,7 +294,57 @@ function readCoverageData() {
     }
   }
   
-  console.log('  ℹ️  Coverage data not found, using 0%');
+  console.log('  ℹ️  Coverage data not found locally');
+  
+  // アーティファクトから coverage を取得してみる
+  try {
+    console.log('  🔍 Searching in GitHub artifacts...');
+    const cmd = `gh run list --workflow=test-matrix.yml --limit=3 --json databaseId,conclusion,status -q '.[] | select(.conclusion == "success")'`;
+    const runsOutput = execSync(cmd, {
+      encoding: 'utf-8',
+      env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
+    }).trim();
+    
+    if (!runsOutput) {
+      console.log('  ℹ️  No successful test runs found');
+      return 0;
+    }
+    
+    const runs = runsOutput.split('\n').map(line => {
+      try {
+        return JSON.parse(line);
+      } catch (e) {
+        return null;
+      }
+    }).filter(Boolean);
+    
+    for (const run of runs) {
+      try {
+        const tempDir = `/tmp/coverage-${run.databaseId}`;
+        execSync(`gh run download ${run.databaseId} --name coverage-report-node-20 --dir ${tempDir} 2>/dev/null`, {
+          encoding: 'utf-8',
+          env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
+        });
+        
+        // ダウンロードしたファイルから coverage を読み込み
+        const coverageFile = `${tempDir}/coverage/coverage-summary.json`;
+        if (existsSync(coverageFile)) {
+          const data = JSON.parse(readFileSync(coverageFile, 'utf-8'));
+          if (data.total && data.total.lines) {
+            const coverage = Math.round(data.total.lines.pct);
+            console.log(`  ✓ Found coverage: ${coverage}% (from artifact: run ${run.databaseId})`);
+            return coverage;
+          }
+        }
+      } catch (e) {
+        // Continue to next run
+      }
+    }
+  } catch (e) {
+    console.log(`  ⚠️  Could not fetch coverage from artifacts: ${e.message.split('\n')[0]}`);
+  }
+  
+  console.log('  ℹ️  Using 0% as default coverage');
   return 0;
 }
 

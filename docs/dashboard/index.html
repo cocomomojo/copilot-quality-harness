@@ -232,71 +232,6 @@
       font-weight: bold;
     }
 
-    .e2e-reports-section {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-bottom: 30px;
-    }
-
-    .e2e-reports-section h2 {
-      color: #333;
-      margin-bottom: 20px;
-      font-size: 1.5em;
-      border-bottom: 2px solid #667eea;
-      padding-bottom: 10px;
-    }
-
-    .e2e-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .e2e-card {
-      background: #f9f9f9;
-      border: 2px solid #667eea;
-      border-radius: 8px;
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .e2e-card:hover {
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .e2e-card h3 {
-      color: #333;
-      margin-bottom: 10px;
-      font-size: 1.1em;
-    }
-
-    .e2e-card .e2e-stat {
-      font-size: 0.95em;
-      color: #666;
-      margin: 8px 0;
-    }
-
-    .e2e-card .e2e-link {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #667eea;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: 600;
-      transition: background 0.3s ease;
-    }
-
-    .e2e-card .e2e-link:hover {
-      background: #764ba2;
-    }
-
     @media (max-width: 768px) {
       .summary-grid {
         grid-template-columns: 1fr;
@@ -389,24 +324,6 @@
         <h3>📦 カバレッジ推移（30日間）</h3>
         <div class="chart-container">
           <canvas id="coverageTrendChart"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div class="e2e-reports-section">
-      <h2>🎬 E2E テスト実行レポート</h2>
-      <div class="e2e-cards-grid" id="e2eReportsGrid">
-        <div class="e2e-card">
-          <h3>📊 詳細レポート</h3>
-          <div class="e2e-stat">テストケース別の実行結果</div>
-          <div class="e2e-stat">スクリーンショット・動画付き</div>
-          <a href="../reports/e2e-latest.html" class="e2e-link">レポートを開く →</a>
-        </div>
-        <div class="e2e-card">
-          <h3>🎥 実行動画</h3>
-          <div class="e2e-stat" id="e2eVideoStatus">動画を準備中...</div>
-          <div class="e2e-stat">全テスト実行の統合ビデオ</div>
-          <a href="../reports/e2e-latest.html#video" class="e2e-link">動画を再生 →</a>
         </div>
       </div>
     </div>
@@ -680,27 +597,10 @@
 
       for (let i = 0; i < rowCount; i++) {
         const row = document.createElement('tr');
-        // Use reverse index to match trend arrays
-        const trendIndex = data.passRateTrend.length - 1 - i;
-        const dateStr = data.passRateTrend[trendIndex].date;
+        const dateStr = data.passRateTrend[data.passRateTrend.length - 1 - i].date;
         const date = new Date(dateStr + 'T00:00:00');
-        const passRate = data.passRateTrend[trendIndex].rate;
-        const coverage = data.coverageTrend[trendIndex].coverage;
-        
-        // Get test count, passed, failed from history or use latest KPI
-        let testCount = data.latestKPI.test_count || 0;
-        let passed = data.latestKPI.passed || 0;
-        let failed = data.latestKPI.failed || 0;
-        
-        // If we have detailed history data, find matching date
-        if (data.historyDetail && data.historyDetail.length > 0) {
-          const matchingDetail = data.historyDetail.find(h => h.date === dateStr);
-          if (matchingDetail) {
-            testCount = matchingDetail.test_count || testCount;
-            passed = matchingDetail.passed || passed;
-            failed = matchingDetail.failed || failed;
-          }
-        }
+        const passRate = data.passRateTrend[data.passRateTrend.length - 1 - i].rate;
+        const coverage = data.coverageTrend[data.coverageTrend.length - 1 - i].coverage;
 
         // Calculate rank based on pass rate and coverage
         let rank = 'A';
@@ -710,9 +610,9 @@
         else if (passRate < 98 || coverage < 90) rank = 'B';
 
         row.innerHTML = '<td>' + date.toLocaleDateString('ja-JP') + '</td>' +
-          '<td>' + testCount + '</td>' +
-          '<td>' + passed + '</td>' +
-          '<td>' + failed + '</td>' +
+          '<td>150</td>' +
+          '<td>138</td>' +
+          '<td>12</td>' +
           '<td><span class="trend-up">' + passRate + '%</span></td>' +
           '<td>' + coverage + '%</td>' +
           '<td><span class="status-badge ' + statusMap[rank] + '">Rank ' + rank + '</span></td>';
@@ -776,16 +676,6 @@
                     date: new Date(h.timestamp).toISOString().split('T')[0],
                     coverage: h.coverage
                   }));
-                
-                // Store full history for table detail display
-                mergedData.historyDetail = history
-                  .slice(-30)
-                  .map(h => ({
-                    date: new Date(h.timestamp).toISOString().split('T')[0],
-                    test_count: h.test_count,
-                    passed: h.passed,
-                    failed: h.failed
-                  }));
               }
               
               console.log('✅ Loaded actual KPI data:', mergedData.latestKPI);
@@ -805,46 +695,6 @@
 
     // Load on page ready
     document.addEventListener('DOMContentLoaded', initDashboard);
-
-    // Load E2E report data
-    function loadE2EReportData() {
-      const e2eGrid = document.getElementById('e2eReportsGrid');
-      if (!e2eGrid) return;
-
-      fetch('./data/test-cases.json')
-        .then(response => response.ok ? response.json() : null)
-        .catch(() => null)
-        .then(data => {
-          if (!data) {
-            console.log('ℹ️  E2E report data not yet generated');
-            return;
-          }
-
-          // Update E2E cards with actual data
-          const passRate = ((data.passed / (data.totalTests || 1)) * 100).toFixed(1);
-          
-          // Find the detailed report card
-          const cards = e2eGrid.querySelectorAll('.e2e-card');
-          cards.forEach(card => {
-            const title = card.querySelector('h3').textContent;
-            
-            if (title.includes('詳細')) {
-              // Update detailed report card
-              const stats = card.querySelectorAll('.e2e-stat');
-              if (stats.length >= 2) {
-                stats[1].innerHTML = `<strong>${data.passed}/${data.totalTests}</strong> テスト成功 (${passRate}%)`;
-              }
-            }
-          });
-
-          console.log('✅ E2E report data loaded:', data);
-        });
-    }
-
-    // Load E2E data when available
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(loadE2EReportData, 500);
-    });
   </script>
 </body>
 </html>

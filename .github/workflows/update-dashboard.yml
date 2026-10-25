@@ -122,7 +122,7 @@ jobs:
           echo "🔍 Looking for latest test run artifacts..."
           
           # 最新のテストマトリックス実行を取得
-          LATEST_TEST_RUN=$(gh run list --workflow test-matrix.yml --limit 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
+          LATEST_TEST_RUN=$(gh run list --workflow test-matrix.yml --status completed --limit 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
           
           if [ -z "$LATEST_TEST_RUN" ]; then
             echo "⚠️  No previous test run found"
@@ -133,13 +133,39 @@ jobs:
           
           # 指定された実行からアーティファクトをダウンロード
           mkdir -p ./artifacts
+          
+          # すべてのテスト結果アーティファクトをダウンロード
+          echo "  • Downloading test-results-* artifacts..."
           gh run download "$LATEST_TEST_RUN" \
             --pattern "test-results-*" \
-            --dir ./artifacts \
-            2>/dev/null || echo "ℹ️  Could not download test artifacts"
+            --dir ./artifacts || echo "    (no test-results-* found)"
+          
+          # E2Eテスト結果を明示的にダウンロード
+          echo "  • Downloading e2e-test-results-* artifacts..."
+          gh run download "$LATEST_TEST_RUN" \
+            --pattern "e2e-test-results-*" \
+            --dir ./artifacts || echo "    (no e2e-test-results-* found)"
+          
+          # Playwrightレポートをダウンロード
+          echo "  • Downloading playwright-report-* artifacts..."
+          gh run download "$LATEST_TEST_RUN" \
+            --pattern "playwright-report-*" \
+            --dir ./artifacts || echo "    (no playwright-report-* found)"
+          
+          # 動画アーティファクトをダウンロード
+          echo "  • Downloading e2e-videos-* artifacts..."
+          gh run download "$LATEST_TEST_RUN" \
+            --pattern "e2e-videos-*" \
+            --dir ./artifacts || echo "    (no e2e-videos-* found)"
           
           echo "✅ Download complete"
-          ls -la ./artifacts/ || true
+          echo "📋 Artifacts downloaded:"
+          find ./artifacts -type f -name "*.json" | head -20
+          find ./artifacts -type d | head -20
+          
+          if [ ! "$(ls -A ./artifacts)" ]; then
+            echo "⚠️  WARNING: No artifacts found from run $LATEST_TEST_RUN"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       

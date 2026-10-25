@@ -35,7 +35,26 @@ jobs:
         if: matrix.test-type == 'unit'
         id: test-unit
         continue-on-error: true
-        run: npm test 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+        run: |
+          npm test 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          
+          echo "📊 Generating coverage report..."
+          npm run test:coverage 2>&1 || true
+          
+          # Extract coverage percentage
+          if [ -f coverage/coverage-final.json ]; then
+            NODE_PATH=. node -e "
+              const coverage = require('./coverage/coverage-final.json');
+              if (coverage && typeof coverage === 'object') {
+                const lines = Object.values(coverage).map(f => f.s).filter(Boolean).length;
+                const total = Object.values(coverage).length;
+                const pct = total > 0 ? Math.round((lines / total) * 100) : 0;
+                console.log('COVERAGE_PCT=' + pct);
+              }
+            " >> $GITHUB_ENV || echo "COVERAGE_PCT=0" >> $GITHUB_ENV
+          else
+            echo "COVERAGE_PCT=0" >> $GITHUB_ENV
+          fi
       
       - name: Run API tests
         if: matrix.test-type == 'api'
@@ -178,6 +197,24 @@ jobs:
           name: e2e-test-results-node-${{ matrix.node-version }}
           path: test-results/
           retention-days: 5
+      
+      - name: Upload E2E videos separately
+        if: always() && matrix.test-type == 'e2e'
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-videos-node-${{ matrix.node-version }}
+          path: test-results/videos/
+          retention-days: 5
+          if-no-files-found: ignore
+      
+      - name: Upload coverage report (Unit tests only)
+        if: always() && matrix.test-type == 'unit' && hashFiles('coverage/**') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-node-${{ matrix.node-version }}
+          path: coverage/
+          retention-days: 5
+          if-no-files-found: ignore
   
   test-summary:
     runs-on: ubuntu-latest
