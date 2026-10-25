@@ -1,6 +1,6 @@
 schemaVersion: 1
 mode: simple
-generatedAt: 2026-10-19T12:02:58.950Z
+generatedAt: 2026-10-25T23:45:46.196Z
 testItems:
   - id: FS-001
     characteristic_id: functional-suitability
