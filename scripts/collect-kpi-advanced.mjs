@@ -11,8 +11,7 @@
  */
 
 import { execSync } from 'node:child_process';
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 
 const GITHUB_TOKEN = process.env.GH_TOKEN;
 const REPO = process.env.GITHUB_REPOSITORY || 'cocomomojo/copilot-quality-harness';
@@ -313,7 +312,11 @@ function readCoverageData() {
     // CI からダウンロードされたアーティファクトパス
     'artifacts/coverage-report-node-20/coverage/coverage-summary.json',
     'artifacts/coverage-report-node-20/coverage/coverage-final.json',
-    'artifacts/coverage-report-node-20/coverage-final.json'
+    'artifacts/coverage-report-node-20/coverage-final.json',
+    'artifacts/coverage-report-node-20/frontend/coverage/coverage-summary.json',
+    'artifacts/coverage-report-node-20/frontend/coverage/coverage-final.json',
+    'artifacts/coverage-report-node-20/backend/coverage/coverage-summary.json',
+    'artifacts/coverage-report-node-20/backend/coverage/coverage-final.json'
   ];
   
   for (const filePath of possiblePaths) {
@@ -365,6 +368,32 @@ function readCoverageData() {
       }
     }
 
+    const findCoverageFilesRecursively = (dir) => {
+      const result = [];
+      if (!existsSync(dir)) return result;
+      const stack = [dir];
+      while (stack.length > 0) {
+        const current = stack.pop();
+        let entries = [];
+        try {
+          entries = readdirSync(current, { withFileTypes: true });
+        } catch {
+          continue;
+        }
+        for (const entry of entries) {
+          const fullPath = `${current}/${entry.name}`;
+          if (entry.isDirectory()) {
+            stack.push(fullPath);
+            continue;
+          }
+          if (entry.name === 'coverage-summary.json' || entry.name === 'coverage-final.json') {
+            result.push(fullPath);
+          }
+        }
+      }
+      return result;
+    };
+
     for (const run of prioritizedRuns) {
       try {
         const tempDir = `/tmp/coverage-${run.databaseId}`;
@@ -377,10 +406,17 @@ function readCoverageData() {
           `${tempDir}/coverage/coverage-summary.json`,
           `${tempDir}/coverage-summary.json`,
           `${tempDir}/coverage/coverage-final.json`,
-          `${tempDir}/coverage-final.json`
+          `${tempDir}/coverage-final.json`,
+          `${tempDir}/frontend/coverage/coverage-summary.json`,
+          `${tempDir}/frontend/coverage/coverage-final.json`,
+          `${tempDir}/backend/coverage/coverage-summary.json`,
+          `${tempDir}/backend/coverage/coverage-final.json`,
+          ...findCoverageFilesRecursively(tempDir)
         ];
 
-        for (const coverageFile of coverageFiles) {
+        const uniqueCoverageFiles = Array.from(new Set(coverageFiles));
+
+        for (const coverageFile of uniqueCoverageFiles) {
           if (existsSync(coverageFile)) {
             const data = JSON.parse(readFileSync(coverageFile, 'utf-8'));
             const coverage = extractCoverageFromData(data);

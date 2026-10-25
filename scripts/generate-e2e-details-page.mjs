@@ -12,7 +12,7 @@
  *   - docs/reports/e2e-latest.html (E2E詳細レポートページ)
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 async function generateE2EDetailsPage(config) {
@@ -129,22 +129,52 @@ async function generateE2EDetailsPage(config) {
   }
 
   function generateVideoGalleryHTML() {
+    const fallbackVideoPool = [];
+    const fallbackDir = join(config.outputDir, 'videos');
+    if (existsSync(fallbackDir)) {
+      try {
+        const entries = readdirSync(fallbackDir)
+          .filter((name) => /\.(webm|mp4)$/i.test(name))
+          .sort((a, b) => a.localeCompare(b));
+        for (const name of entries) {
+          fallbackVideoPool.push(`./videos/${name}`);
+        }
+      } catch {
+        // ignore fallback scan errors
+      }
+    }
+
+    let fallbackVideoCursor = 0;
+
     const videos = [];
     if (reportData.suites) {
       for (const suite of reportData.suites) {
         if (suite.tests) {
           for (const test of suite.tests) {
-            if (test.videos && test.videos.length > 0) {
-              for (const video of test.videos) {
+            const candidateVideos = Array.isArray(test.videos) ? test.videos : [];
+            let attached = false;
+            if (candidateVideos.length > 0) {
+              for (const video of candidateVideos) {
                 const src = normalizeVideoSource(video);
-                if (!src) continue;
+                const isGeneric = src && /(^|\/)video\.(webm|mp4)$/i.test(src);
+                if (!src || isGeneric) continue;
                 videos.push({
                   name: test.name,
                   status: test.status,
                   src,
                   duration: test.duration
                 });
+                attached = true;
               }
+            }
+
+            if (!attached && fallbackVideoCursor < fallbackVideoPool.length) {
+              videos.push({
+                name: test.name,
+                status: test.status,
+                src: fallbackVideoPool[fallbackVideoCursor++],
+                duration: test.duration
+              });
             }
           }
         }

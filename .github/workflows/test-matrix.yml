@@ -208,11 +208,14 @@ jobs:
           if-no-files-found: ignore
       
       - name: Upload coverage report (Unit tests only)
-        if: always() && matrix.test-type == 'unit' && hashFiles('coverage/**') != ''
+        if: always() && matrix.test-type == 'unit' && (hashFiles('coverage/**') != '' || hashFiles('frontend/coverage/**') != '' || hashFiles('backend/coverage/**') != '')
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-node-${{ matrix.node-version }}
-          path: coverage/
+          path: |
+            coverage/
+            frontend/coverage/
+            backend/coverage/
           retention-days: 5
           if-no-files-found: ignore
   

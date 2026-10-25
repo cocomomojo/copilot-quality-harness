@@ -17,6 +17,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { createHash } from 'crypto';
 
 interface TestResult {
   name: string;
@@ -57,6 +58,13 @@ interface E2EReport {
 
 function isGenericVideoPath(videoPath: string): boolean {
   return /(^|\/)video\.(webm|mp4)$/i.test(videoPath);
+}
+
+function toDeterministicVideoTargetPath(sourcePath: string): string {
+  const ext = sourcePath.toLowerCase().endsWith('.mp4') ? 'mp4' : 'webm';
+  const hashInput = sourcePath.startsWith('./') ? sourcePath : `./${sourcePath}`;
+  const hash = createHash('sha1').update(hashInput).digest('hex');
+  return `./videos/${hash}.${ext}`;
 }
 
 function findTestResultFiles(): string[] {
@@ -273,8 +281,13 @@ function normalizeReportAssetPath(filePath: string | null | undefined): string |
   return normalized;
 }
 
-function findVideoFiles(): string[] {
-  const found = new Set<string>();
+interface VideoCandidate {
+  sourcePath: string;
+  targetPath: string;
+}
+
+function findVideoFiles(): VideoCandidate[] {
+  const found = new Map<string, VideoCandidate>();
   const videoDirs = [
     './test-results/videos',
     './artifacts/e2e-test-results-node-20/videos',  // CI でダウンロードされた位置
@@ -283,16 +296,35 @@ function findVideoFiles(): string[] {
   
   console.log('🎬 Searching for video files...');
   
+  const walk = (dir: string): string[] => {
+    const files: string[] = [];
+    if (!fs.existsSync(dir)) return files;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        files.push(...walk(full));
+      } else if (entry.isFile() && (entry.name.endsWith('.webm') || entry.name.endsWith('.mp4'))) {
+        files.push(full);
+      }
+    }
+    return files;
+  };
+
   for (const videoDir of videoDirs) {
     if (fs.existsSync(videoDir)) {
       console.log(`  📁 ${videoDir}`);
       try {
-        const entries = fs.readdirSync(videoDir);
-        for (const entry of entries) {
-          if (entry.endsWith('.webm') || entry.endsWith('.mp4')) {
-            console.log(`    ✓ ${entry}`);
-            const assetPath = normalizeReportAssetPath(path.join(videoDir, entry));
-            if (assetPath) found.add(assetPath);
+        const files = walk(videoDir);
+        for (const sourcePath of files) {
+          console.log(`    ✓ ${sourcePath}`);
+          const normalizedBase = sourcePath.replace(/\\/g, '/');
+          const normalized = normalizedBase.startsWith('./') ? normalizedBase : `./${normalizedBase}`;
+          const key = normalized.toLowerCase();
+          if (!found.has(key)) {
+            found.set(key, {
+              sourcePath: normalized,
+              targetPath: toDeterministicVideoTargetPath(normalized)
+            });
           }
         }
       } catch (e) {
@@ -301,12 +333,12 @@ function findVideoFiles(): string[] {
     }
   }
 
-  const files = Array.from(found);
+  const files = Array.from(found.values());
   files.sort((a, b) => {
-    const genericA = isGenericVideoPath(a) ? 1 : 0;
-    const genericB = isGenericVideoPath(b) ? 1 : 0;
+    const genericA = isGenericVideoPath(a.sourcePath) ? 1 : 0;
+    const genericB = isGenericVideoPath(b.sourcePath) ? 1 : 0;
     if (genericA !== genericB) return genericA - genericB;
-    return a.localeCompare(b);
+    return a.sourcePath.localeCompare(b.sourcePath);
   });
 
   return files;
@@ -356,7 +388,7 @@ function generateReport(): E2EReport {
       }
 
       if (videoCursor < videoFiles.length) {
-        test.videos = [videoFiles[videoCursor++]];
+        test.videos = [videoFiles[videoCursor++].targetPath];
       } else if (normalizedAttachmentVideos.length > 0) {
         test.videos = [normalizedAttachmentVideos[0]];
       } else {
