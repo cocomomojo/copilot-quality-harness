@@ -28,7 +28,7 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           path: artifacts
           name_is_regexp: true
-          name: 'test-results-.*|test-matrix-summary'
+          name: 'test-results-.*|test-matrix-summary|coverage-report-.*'
       
       - name: Verify artifacts were downloaded
         run: |
@@ -97,6 +97,11 @@ jobs:
           const resultsDir = 'test-results-data';
           const results = {};
           let matrixSummary = null;
+          const coverageThresholds = { lines: 80, branches: 75, functions: 80 };
+          const coverage = {
+            overall: null,
+            files: []
+          };
           const traceability = {
             perspective_count: 0,
             quality_items_count: 0,
@@ -131,6 +136,165 @@ jobs:
           }
           
           readJsonFiles(resultsDir);
+
+          function toPercent(covered, total) {
+            if (!total || total === 0) return 100;
+            return Math.round((covered / total) * 10000) / 100;
+          }
+
+          function normalizeCoveragePath(filePath) {
+            if (!filePath) return filePath;
+            const cwd = process.cwd();
+            let normalized = filePath.replace(/\\/g, '/');
+            if (normalized.startsWith(`${cwd}/`)) {
+              normalized = normalized.slice(cwd.length + 1);
+            }
+            normalized = normalized.replace(/^\/+/, '');
+
+            if (fs.existsSync(normalized)) return normalized;
+            if (normalized.startsWith('src/')) {
+              const backendPath = `backend/${normalized}`;
+              const frontendPath = `frontend/${normalized}`;
+              if (fs.existsSync(backendPath)) return backendPath;
+              if (fs.existsSync(frontendPath)) return frontendPath;
+            }
+            return normalized;
+          }
+
+          function computeCoverageFromFinal(coverageFinal) {
+            const rows = [];
+            for (const [filePath, item] of Object.entries(coverageFinal || {})) {
+              if (!item) continue;
+              const statementTotals = Object.values(item.s || {});
+              const statementsTotal = statementTotals.length;
+              const statementsCovered = statementTotals.filter((count) => count > 0).length;
+              const functionTotals = Object.values(item.f || {});
+              const functionsTotal = functionTotals.length;
+              const functionsCovered = functionTotals.filter((count) => count > 0).length;
+              const branchTotals = Object.values(item.b || {}).flat();
+              const branchesTotal = branchTotals.length;
+              const branchesCovered = branchTotals.filter((count) => count > 0).length;
+
+              rows.push({
+                file: normalizeCoveragePath(filePath),
+                lines: {
+                  covered: statementsCovered,
+                  total: statementsTotal,
+                  pct: toPercent(statementsCovered, statementsTotal)
+                },
+                branches: {
+                  covered: branchesCovered,
+                  total: branchesTotal,
+                  pct: toPercent(branchesCovered, branchesTotal)
+                },
+                functions: {
+                  covered: functionsCovered,
+                  total: functionsTotal,
+                  pct: toPercent(functionsCovered, functionsTotal)
+                }
+              });
+            }
+            return rows;
+          }
+
+          function resolveCoverage() {
+            const coverageRows = new Map();
+            function upsertCoverageRow(row) {
+              if (!row || !row.file) return;
+              coverageRows.set(row.file, row);
+            }
+
+            function readCoverageFiles(dir) {
+              if (!fs.existsSync(dir)) return;
+              for (const file of fs.readdirSync(dir)) {
+                const filePath = path.join(dir, file);
+                const stat = fs.statSync(filePath);
+                if (stat.isDirectory()) {
+                  readCoverageFiles(filePath);
+                  continue;
+                }
+                if (file === 'coverage-summary.json') {
+                  try {
+                    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                    for (const [targetPath, value] of Object.entries(data || {})) {
+                      if (targetPath === 'total' || !value?.lines) continue;
+                      upsertCoverageRow({
+                        file: normalizeCoveragePath(targetPath),
+                        lines: value.lines,
+                        branches: value.branches,
+                        functions: value.functions
+                      });
+                    }
+                  } catch (e) {
+                    console.warn('Could not parse coverage-summary.json:', e.message);
+                  }
+                } else if (file === 'coverage-final.json') {
+                  try {
+                    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                    for (const row of computeCoverageFromFinal(data)) {
+                      upsertCoverageRow(row);
+                    }
+                  } catch (e) {
+                    console.warn('Could not parse coverage-final.json:', e.message);
+                  }
+                }
+              }
+            }
+
+            readCoverageFiles(resultsDir);
+
+            const mergedFiles = [...coverageRows.values()].map((row) => {
+              const linesPct = row.lines?.pct ?? 0;
+              const branchesPct = row.branches?.pct ?? 0;
+              const functionsPct = row.functions?.pct ?? 0;
+              const passed = linesPct >= coverageThresholds.lines
+                && branchesPct >= coverageThresholds.branches
+                && functionsPct >= coverageThresholds.functions;
+              return {
+                path: row.file,
+                lines_pct: linesPct,
+                branches_pct: branchesPct,
+                functions_pct: functionsPct,
+                status: passed ? 'pass' : 'fail'
+              };
+            });
+
+            mergedFiles.sort((a, b) => {
+              if (a.status !== b.status) return a.status === 'fail' ? -1 : 1;
+              return a.path.localeCompare(b.path);
+            });
+
+            const totals = {
+              lines: { covered: 0, total: 0 },
+              branches: { covered: 0, total: 0 },
+              functions: { covered: 0, total: 0 }
+            };
+            for (const row of [...coverageRows.values()]) {
+              totals.lines.covered += row.lines?.covered || 0;
+              totals.lines.total += row.lines?.total || 0;
+              totals.branches.covered += row.branches?.covered || 0;
+              totals.branches.total += row.branches?.total || 0;
+              totals.functions.covered += row.functions?.covered || 0;
+              totals.functions.total += row.functions?.total || 0;
+            }
+
+            coverage.overall = {
+              lines_pct: toPercent(totals.lines.covered, totals.lines.total),
+              branches_pct: toPercent(totals.branches.covered, totals.branches.total),
+              functions_pct: toPercent(totals.functions.covered, totals.functions.total),
+              status:
+                toPercent(totals.lines.covered, totals.lines.total) >= coverageThresholds.lines
+                && toPercent(totals.branches.covered, totals.branches.total) >= coverageThresholds.branches
+                && toPercent(totals.functions.covered, totals.functions.total) >= coverageThresholds.functions
+                  ? 'pass'
+                  : 'fail'
+            };
+            coverage.files = mergedFiles;
+            coverage.non_pass_count = mergedFiles.filter((row) => row.status !== 'pass').length;
+            coverage.thresholds = coverageThresholds;
+          }
+
+          resolveCoverage();
 
           function resolveTraceability() {
             const generatedDir = 'qa/quality-characteristics/generated';
@@ -252,6 +416,7 @@ jobs:
             total_failed: totalFailed,
             table: table,
             matrix_summary: matrixSummary,
+            coverage,
             traceability,
             timestamp: new Date().toISOString()
           }, null, 2));
@@ -314,6 +479,12 @@ jobs:
               total_passed: 0,
               total_failed: 0,
               table: '',
+              coverage: {
+                overall: null,
+                files: [],
+                non_pass_count: 0,
+                thresholds: { lines: 80, branches: 75, functions: 80 }
+              },
               traceability: {
                 perspective_count: 0,
                 quality_items_count: 0,
@@ -340,6 +511,9 @@ jobs:
             body.push('');
             body.push('### Test Results by Matrix');
             body.push('');
+            const headSha = context.payload.workflow_run?.head_sha || context.sha;
+            const toBlobLink = (filePath) =>
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${headSha}/${filePath}`;
             if (summary.table) {
               body.push(summary.table);
             } else {
@@ -348,11 +522,35 @@ jobs:
               body.push('| Node 20 | ⏳ No data | ⏳ No data | ⏳ No data | ⏳ No data |');
             }
             body.push('');
+            body.push('### 📈 Coverage Details');
+            const coverageOverall = summary.coverage?.overall;
+            const coverageThresholds = summary.coverage?.thresholds || { lines: 80, branches: 75, functions: 80 };
+            if (coverageOverall) {
+              const coverageOverallEmoji = coverageOverall.status === 'pass' ? '✅' : '⚠️';
+              body.push(`${coverageOverallEmoji} Overall coverage: lines ${coverageOverall.lines_pct}% / branches ${coverageOverall.branches_pct}% / functions ${coverageOverall.functions_pct}%`);
+              body.push(`Thresholds: lines >= ${coverageThresholds.lines}%, branches >= ${coverageThresholds.branches}%, functions >= ${coverageThresholds.functions}%`);
+            } else {
+              body.push('⏭️ Coverage data not found');
+            }
+            body.push('');
+            if ((summary.coverage?.files || []).length > 0) {
+              body.push('| File | Lines | Branches | Functions | Status |');
+              body.push('|---|---:|---:|---:|---|');
+              for (const row of summary.coverage.files.slice(0, 20)) {
+                const statusIcon = row.status === 'pass' ? '✅ PASS' : '❌ FAIL';
+                body.push(`| [\`${row.path}\`](${toBlobLink(row.path)}) | ${row.lines_pct}% | ${row.branches_pct}% | ${row.functions_pct}% | ${statusIcon} |`);
+              }
+              if (summary.coverage.files.length > 20) {
+                body.push(`| ... | ... | ... | ... | ...and ${summary.coverage.files.length - 20} more files |`);
+              }
+              if ((summary.coverage.non_pass_count || 0) > 0) {
+                body.push('');
+                body.push(`Non-pass coverage files: **${summary.coverage.non_pass_count}**`);
+              }
+            }
+            body.push('');
             body.push('### 🔗 Issue Traceability');
             body.push('');
-            const headSha = context.payload.workflow_run?.head_sha || context.sha;
-            const toBlobLink = (filePath) =>
-              `https://github.com/${context.repo.owner}/${context.repo.repo}/blob/${headSha}/${filePath}`;
 
             let linkedIssues = [];
             let implementationFiles = [];

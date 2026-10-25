@@ -206,6 +206,12 @@ graph LR
 - Branches: 85% (target: 75%) ✅
 - Functions: 90% (target: 80%) ✅
 
+### 📈 Coverage Details (File-level)
+| File | Lines | Branches | Functions | Status |
+|---|---:|---:|---:|---|
+| `frontend/src/App.jsx` | 94.44% | 95.45% | 83.33% | ✅ PASS |
+| `frontend/src/main.jsx` | 0.00% | 0.00% | 0.00% | ❌ FAIL |
+
 ### ✨ Recommendations
 - Ready to merge
 ```
