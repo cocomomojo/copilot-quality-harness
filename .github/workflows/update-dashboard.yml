@@ -20,6 +20,7 @@ jobs:
     
     outputs:
       kpi_data: ${{ steps.collect.outputs.kpi_data }}
+      test_run_id: ${{ steps.resolve_test_run.outputs.test_run_id }}
     
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +36,34 @@ jobs:
       
       - name: Create data directory
         run: mkdir -p qa/dashboard-data
+
+      - name: Resolve target Test Matrix run ID
+        id: resolve_test_run
+        run: |
+          echo "🔎 Resolving target Test Matrix run ID..."
+
+          TARGET_TEST_RUN_ID=""
+
+          if [ "${{ github.event_name }}" = "workflow_run" ] && [ "${{ github.event.workflow_run.name }}" = "Test Matrix" ]; then
+            TARGET_TEST_RUN_ID="${{ github.event.workflow_run.id }}"
+            echo "  ✓ Triggered by Test Matrix run: $TARGET_TEST_RUN_ID"
+          fi
+
+          if [ -z "$TARGET_TEST_RUN_ID" ]; then
+            TARGET_TEST_RUN_ID=$(gh run list --workflow test-matrix.yml --status completed --limit 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
+            if [ -n "$TARGET_TEST_RUN_ID" ]; then
+              echo "  ✓ Fallback latest Test Matrix run: $TARGET_TEST_RUN_ID"
+            fi
+          fi
+
+          if [ -z "$TARGET_TEST_RUN_ID" ]; then
+            echo "⚠️ Could not resolve Test Matrix run ID"
+          fi
+
+          echo "test_run_id=$TARGET_TEST_RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "TEST_MATRIX_RUN_ID=$TARGET_TEST_RUN_ID" >> "$GITHUB_ENV"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Download previous KPI history from artifacts
         continue-on-error: true
@@ -62,21 +91,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Download latest test results
-        id: download
-        continue-on-error: true
-        run: |
-          # Try to download artifacts from recent workflow runs
-          gh run list --limit 5 --json conclusion,artifacts -q '.[].artifacts[]' > artifacts_list.json || echo "[]" > artifacts_list.json
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Collect KPI data (Advanced Pattern 3)
         id: collect
         run: node scripts/collect-kpi-advanced.mjs qa/dashboard-data
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          TEST_MATRIX_RUN_ID: ${{ steps.resolve_test_run.outputs.test_run_id }}
       
       - name: Upload KPI data
         uses: actions/upload-artifact@v4
@@ -119,42 +140,44 @@ jobs:
         id: download_playwright
         continue-on-error: true
         run: |
-          echo "🔍 Looking for latest test run artifacts..."
-          
-          # 最新のテストマトリックス実行を取得
-          LATEST_TEST_RUN=$(gh run list --workflow test-matrix.yml --status completed --limit 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
-          
-          if [ -z "$LATEST_TEST_RUN" ]; then
+          echo "🔍 Resolving target test run artifacts..."
+
+          TARGET_TEST_RUN="${{ needs.collect-kpi.outputs.test_run_id }}"
+          if [ -z "$TARGET_TEST_RUN" ]; then
+            TARGET_TEST_RUN=$(gh run list --workflow test-matrix.yml --status completed --limit 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
+          fi
+
+          if [ -z "$TARGET_TEST_RUN" ]; then
             echo "⚠️  No previous test run found"
             exit 0
           fi
-          
-          echo "📥 Downloading artifacts from test run: $LATEST_TEST_RUN"
+
+          echo "📥 Downloading artifacts from test run: $TARGET_TEST_RUN"
           
           # 指定された実行からアーティファクトをダウンロード
           mkdir -p ./artifacts
           
           # すべてのテスト結果アーティファクトをダウンロード
           echo "  • Downloading test-results-* artifacts..."
-          gh run download "$LATEST_TEST_RUN" \
+          gh run download "$TARGET_TEST_RUN" \
             --pattern "test-results-*" \
             --dir ./artifacts || echo "    (no test-results-* found)"
           
           # E2Eテスト結果を明示的にダウンロード
           echo "  • Downloading e2e-test-results-* artifacts..."
-          gh run download "$LATEST_TEST_RUN" \
+          gh run download "$TARGET_TEST_RUN" \
             --pattern "e2e-test-results-*" \
             --dir ./artifacts || echo "    (no e2e-test-results-* found)"
           
           # Playwrightレポートをダウンロード
           echo "  • Downloading playwright-report-* artifacts..."
-          gh run download "$LATEST_TEST_RUN" \
+          gh run download "$TARGET_TEST_RUN" \
             --pattern "playwright-report-*" \
             --dir ./artifacts || echo "    (no playwright-report-* found)"
           
           # 動画アーティファクトをダウンロード
           echo "  • Downloading e2e-videos-* artifacts..."
-          gh run download "$LATEST_TEST_RUN" \
+          gh run download "$TARGET_TEST_RUN" \
             --pattern "e2e-videos-*" \
             --dir ./artifacts || echo "    (no e2e-videos-* found)"
           
@@ -164,7 +187,7 @@ jobs:
           find ./artifacts -type d | head -20
           
           if [ ! "$(ls -A ./artifacts)" ]; then
-            echo "⚠️  WARNING: No artifacts found from run $LATEST_TEST_RUN"
+            echo "⚠️  WARNING: No artifacts found from run $TARGET_TEST_RUN"
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -183,6 +206,8 @@ jobs:
           else
             echo "⚠️  E2E report not generated (no test results found)"
           fi
+        env:
+          TEST_MATRIX_RUN_ID: ${{ needs.collect-kpi.outputs.test_run_id }}
       
       - name: Generate E2E details page
         id: e2e_page
@@ -190,9 +215,20 @@ jobs:
         run: |
           echo "🎬 Generating E2E details page..."
           mkdir -p docs/reports/videos docs/reports/screenshots
-          find ./artifacts -type f \( -iname '*.webm' -o -iname '*.mp4' -o -iname '*.png' -o -iname '*.jpg' \) -exec cp -f {} docs/reports/ \; 2>/dev/null || true
-          find ./artifacts -type f \( -iname '*.webm' -o -iname '*.mp4' \) -exec cp -f {} docs/reports/videos/ \; 2>/dev/null || true
-          find ./artifacts -type f \( -iname '*.png' -o -iname '*.jpg' \) -exec cp -f {} docs/reports/screenshots/ \; 2>/dev/null || true
+
+          # Copy media assets with deterministic unique filenames to avoid overwrite (e.g. many video.webm)
+          while IFS= read -r -d '' FILE; do
+            EXT="${FILE##*.}"
+            HASH=$(printf '%s' "$FILE" | sha1sum | cut -d' ' -f1)
+            TARGET="${HASH}.${EXT}"
+            cp -f "$FILE" "docs/reports/$TARGET"
+            if [[ "$EXT" =~ ^(webm|mp4)$ ]]; then
+              cp -f "$FILE" "docs/reports/videos/$TARGET"
+            elif [[ "$EXT" =~ ^(png|jpg|jpeg)$ ]]; then
+              cp -f "$FILE" "docs/reports/screenshots/$TARGET"
+            fi
+          done < <(find ./artifacts -type f \( -iname '*.webm' -o -iname '*.mp4' -o -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) -print0 2>/dev/null)
+
           node scripts/generate-e2e-details-page.mjs "qa/e2e-report/test-cases.json" "docs/reports"
           
           if [ -f docs/reports/e2e-latest.html ]; then

@@ -16,6 +16,7 @@ import { mkdirSync } from 'node:fs';
 
 const GITHUB_TOKEN = process.env.GH_TOKEN;
 const REPO = process.env.GITHUB_REPOSITORY || 'cocomomojo/copilot-quality-harness';
+const INPUT_TEST_MATRIX_RUN_ID = process.env.TEST_MATRIX_RUN_ID || '';
 const OUTPUT_DIR = process.argv[2] || 'qa/dashboard-data';
 
 mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -93,15 +94,27 @@ function fetchTestResults() {
   console.log('\n📊 Fetching actual test results from artifacts...');
   
   try {
-    // 最新の test-matrix 実行を取得
-    const cmd = `gh run list --workflow=test-matrix.yml --limit=1 --json databaseId,conclusion,status,createdAt -q '.[] | select(.conclusion != null)'`;
-    
-    const output = execSync(cmd, { 
-      encoding: 'utf-8',
-      env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
-    });
-    
-    const run = JSON.parse(output.trim());
+    let run = null;
+
+    if (INPUT_TEST_MATRIX_RUN_ID) {
+      console.log(`  Using explicit test run ID: ${INPUT_TEST_MATRIX_RUN_ID}`);
+      const viewCmd = `gh run view ${INPUT_TEST_MATRIX_RUN_ID} --json databaseId,conclusion,status,createdAt`;
+      const viewOutput = execSync(viewCmd, {
+        encoding: 'utf-8',
+        env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
+      }).trim();
+      if (viewOutput) {
+        run = JSON.parse(viewOutput);
+      }
+    } else {
+      // 最新の test-matrix 実行を取得
+      const cmd = `gh run list --workflow=test-matrix.yml --limit=1 --json databaseId,conclusion,status,createdAt -q '.[] | select(.conclusion != null)'`;
+      const output = execSync(cmd, {
+        encoding: 'utf-8',
+        env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
+      });
+      run = JSON.parse(output.trim());
+    }
     
     if (!run) {
       console.log('⚠️  No completed test runs found');
@@ -256,6 +269,36 @@ function parseTestResults(testData) {
 /**
  * ローカルファイル、またはダウンロードされたアーティファクトからカバレッジデータを読み込む
  */
+function extractCoverageFromData(data) {
+  if (!data || typeof data !== 'object') return null;
+
+  if (data.total && data.total.lines && typeof data.total.lines.pct === 'number') {
+    return Math.round(data.total.lines.pct);
+  }
+
+  if (typeof data.coverage === 'number') {
+    return Math.round(data.coverage);
+  }
+
+  // coverage-final.json (istanbul) format fallback
+  const files = Object.values(data);
+  if (files.length > 0 && files.every((f) => f && typeof f === 'object' && f.s && typeof f.s === 'object')) {
+    let covered = 0;
+    let total = 0;
+    for (const file of files) {
+      for (const count of Object.values(file.s)) {
+        total += 1;
+        if (typeof count === 'number' && count > 0) covered += 1;
+      }
+    }
+    if (total > 0) {
+      return Math.round((covered / total) * 100);
+    }
+  }
+
+  return null;
+}
+
 function readCoverageData() {
   console.log('\n📈 Reading coverage data...');
   
@@ -273,20 +316,14 @@ function readCoverageData() {
     'artifacts/coverage-report-node-20/coverage-final.json'
   ];
   
-  for (const path of possiblePaths) {
-    if (existsSync(path)) {
+  for (const filePath of possiblePaths) {
+    if (existsSync(filePath)) {
       try {
-        const data = JSON.parse(readFileSync(path, 'utf-8'));
-        
-        if (data.total && data.total.lines) {
-          const coverage = Math.round(data.total.lines.pct);
-          console.log(`  ✓ Found coverage: ${coverage}% (from ${path})`);
-          return coverage;
-        }
-        
-        if (data.coverage !== undefined) {
-          console.log(`  Coverage: ${data.coverage}%`);
-          return data.coverage;
+        const data = JSON.parse(readFileSync(filePath, 'utf-8'));
+        const coverage = extractCoverageFromData(data);
+        if (coverage !== null) {
+          console.log(`  ✓ Found coverage: ${coverage}% (from ${filePath})`);
+          return { coverage, source: `LOCAL_FILE:${filePath}` };
         }
       } catch (e) {
         // Continue to next path
@@ -307,7 +344,7 @@ function readCoverageData() {
     
     if (!runsOutput) {
       console.log('  ℹ️  No successful test runs found');
-      return 0;
+      return { coverage: 0, source: 'NO_SUCCESSFUL_TEST_RUN' };
     }
     
     const runs = runsOutput.split('\n').map(line => {
@@ -318,22 +355,39 @@ function readCoverageData() {
       }
     }).filter(Boolean);
     
+    const prioritizedRuns = [];
+    if (INPUT_TEST_MATRIX_RUN_ID) {
+      prioritizedRuns.push({ databaseId: INPUT_TEST_MATRIX_RUN_ID, conclusion: 'unknown' });
+    }
     for (const run of runs) {
+      if (!prioritizedRuns.find(r => String(r.databaseId) === String(run.databaseId))) {
+        prioritizedRuns.push(run);
+      }
+    }
+
+    for (const run of prioritizedRuns) {
       try {
         const tempDir = `/tmp/coverage-${run.databaseId}`;
         execSync(`gh run download ${run.databaseId} --name coverage-report-node-20 --dir ${tempDir} 2>/dev/null`, {
           encoding: 'utf-8',
           env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
         });
-        
-        // ダウンロードしたファイルから coverage を読み込み
-        const coverageFile = `${tempDir}/coverage/coverage-summary.json`;
-        if (existsSync(coverageFile)) {
-          const data = JSON.parse(readFileSync(coverageFile, 'utf-8'));
-          if (data.total && data.total.lines) {
-            const coverage = Math.round(data.total.lines.pct);
-            console.log(`  ✓ Found coverage: ${coverage}% (from artifact: run ${run.databaseId})`);
-            return coverage;
+
+        const coverageFiles = [
+          `${tempDir}/coverage/coverage-summary.json`,
+          `${tempDir}/coverage-summary.json`,
+          `${tempDir}/coverage/coverage-final.json`,
+          `${tempDir}/coverage-final.json`
+        ];
+
+        for (const coverageFile of coverageFiles) {
+          if (existsSync(coverageFile)) {
+            const data = JSON.parse(readFileSync(coverageFile, 'utf-8'));
+            const coverage = extractCoverageFromData(data);
+            if (coverage !== null) {
+              console.log(`  ✓ Found coverage: ${coverage}% (from artifact: run ${run.databaseId})`);
+              return { coverage, source: `ARTIFACT_RUN:${run.databaseId}` };
+            }
           }
         }
       } catch (e) {
@@ -345,7 +399,7 @@ function readCoverageData() {
   }
   
   console.log('  ℹ️  Using 0% as default coverage');
-  return 0;
+  return { coverage: 0, source: 'DEFAULT_ZERO_FALLBACK' };
 }
 
 /**
@@ -464,7 +518,8 @@ async function main() {
   }
   
   // 3. カバレッジデータを読み込む
-  const coverage = readCoverageData();
+  const coverageInfo = readCoverageData();
+  const coverage = coverageInfo.coverage;
   
   // 4. 実テスト結果を使用（Mock データなし）
   const passRate = testResults.passRate;
@@ -478,6 +533,7 @@ async function main() {
   console.log(`   Passed: ${passed}`);
   console.log(`   Failed: ${failed}`);
   console.log(`   Coverage: ${coverage}%`);
+  console.log(`   Coverage Source: ${coverageInfo.source}`);
   
   // 5. AI Danger Rank を計算
   const { rank, riskLevel, compositeScore } = calculateAIDangerRank(
@@ -501,7 +557,9 @@ async function main() {
     data_source: testData.source === 'test-matrix-artifact' ? 'TEST_MATRIX_ARTIFACT' : 'GITHUB_API',
     details: {
       test_source: testData.source,
-      github_run_id: testData.runId || null
+      github_run_id: testData.runId || null,
+      coverage_source: coverageInfo.source,
+      explicit_test_run_id: INPUT_TEST_MATRIX_RUN_ID || null
     }
   };
   

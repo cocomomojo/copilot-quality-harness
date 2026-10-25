@@ -17,7 +17,6 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
 
 interface TestResult {
   name: string;
@@ -50,7 +49,14 @@ interface E2EReport {
   skipped: number;
   passRate: number;
   duration: number;
+  metadata?: {
+    test_run_id?: string;
+  };
   suites: TestSuite[];
+}
+
+function isGenericVideoPath(videoPath: string): boolean {
+  return /(^|\/)video\.(webm|mp4)$/i.test(videoPath);
 }
 
 function findTestResultFiles(): string[] {
@@ -267,8 +273,8 @@ function normalizeReportAssetPath(filePath: string | null | undefined): string |
   return normalized;
 }
 
-function findVideoFiles(): Map<string, string> {
-  const videoMap = new Map<string, string>();
+function findVideoFiles(): string[] {
+  const found = new Set<string>();
   const videoDirs = [
     './test-results/videos',
     './artifacts/e2e-test-results-node-20/videos',  // CI でダウンロードされた位置
@@ -285,9 +291,8 @@ function findVideoFiles(): Map<string, string> {
         for (const entry of entries) {
           if (entry.endsWith('.webm') || entry.endsWith('.mp4')) {
             console.log(`    ✓ ${entry}`);
-            const testKey = entry.replace(/\.(webm|mp4)$/, '').split('-')[0];
             const assetPath = normalizeReportAssetPath(path.join(videoDir, entry));
-            if (assetPath) videoMap.set(testKey, assetPath);
+            if (assetPath) found.add(assetPath);
           }
         }
       } catch (e) {
@@ -295,8 +300,16 @@ function findVideoFiles(): Map<string, string> {
       }
     }
   }
-  
-  return videoMap;
+
+  const files = Array.from(found);
+  files.sort((a, b) => {
+    const genericA = isGenericVideoPath(a) ? 1 : 0;
+    const genericB = isGenericVideoPath(b) ? 1 : 0;
+    if (genericA !== genericB) return genericA - genericB;
+    return a.localeCompare(b);
+  });
+
+  return files;
 }
 
 function generateReport(): E2EReport {
@@ -309,8 +322,8 @@ function generateReport(): E2EReport {
     console.warn('⚠️  No test result files found. Using empty report.');
   }
   
-  const videoMap = findVideoFiles();
-  console.log(`Found ${videoMap.size} video files\n`);
+  const videoFiles = findVideoFiles();
+  console.log(`Found ${videoFiles.length} video files\n`);
   
   let allSuites: TestSuite[] = [];
   
@@ -329,16 +342,25 @@ function generateReport(): E2EReport {
   const passRate = totalTests > 0 ? Math.round((passed / totalTests) * 100) : 100;
   
   // Attach video files to test results
+  let videoCursor = 0;
   for (const suite of allSuites) {
     for (const test of suite.tests) {
-      const videoKey = test.name.replace(/\s+/g, '-').toLowerCase();
-      const mappedVideo = videoMap.get(videoKey);
-      if (mappedVideo) {
-        test.videos = [mappedVideo];
-      } else if (test.videos && test.videos.length > 0) {
-        test.videos = test.videos
-          .map((video) => normalizeReportAssetPath(video) || video)
-          .filter(Boolean);
+      const normalizedAttachmentVideos = (test.videos || [])
+        .map((video) => normalizeReportAssetPath(video) || video)
+        .filter(Boolean);
+
+      const nonGenericVideos = normalizedAttachmentVideos.filter((video) => !isGenericVideoPath(video));
+      if (nonGenericVideos.length > 0) {
+        test.videos = nonGenericVideos;
+        continue;
+      }
+
+      if (videoCursor < videoFiles.length) {
+        test.videos = [videoFiles[videoCursor++]];
+      } else if (normalizedAttachmentVideos.length > 0) {
+        test.videos = [normalizedAttachmentVideos[0]];
+      } else {
+        test.videos = [];
       }
     }
   }
@@ -352,6 +374,9 @@ function generateReport(): E2EReport {
     skipped,
     passRate,
     duration,
+    metadata: {
+      test_run_id: process.env.TEST_MATRIX_RUN_ID || undefined
+    },
     suites: allSuites
   };
   

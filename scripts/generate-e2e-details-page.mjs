@@ -186,6 +186,21 @@ async function generateE2EDetailsPage(config) {
     return html;
   }
 
+  function generateEvidenceLinksHTML() {
+    const runId = reportData?.metadata?.test_run_id;
+    const runLink = runId
+      ? `<li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/runs/${runId}" target="_blank" rel="noopener noreferrer">🧪 Test Matrix Run #${runId}</a>（ログ・Artifacts）</li>`
+      : '<li>🧪 Test Matrix Run: 取得不可（手動生成または旧フォーマット）</li>';
+
+    return `
+      <ul style="margin-left: 1.2rem; color: #555; line-height: 1.8;">
+        ${runLink}
+        <li><a href="./data/test-cases.json" target="_blank" rel="noopener noreferrer">📄 test-cases.json</a>（E2E集計データ）</li>
+        <li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/workflows/test-matrix.yml" target="_blank" rel="noopener noreferrer">⚙️ Test Matrix Workflow</a></li>
+      </ul>
+    `;
+  }
+
   // Generate HTML
   const pageHTML = `<!DOCTYPE html>
 <html lang="ja">
@@ -664,6 +679,14 @@ async function generateE2EDetailsPage(config) {
       <h2>🎥 テスト実行動画</h2>
       <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
         ${generateVideoGalleryHTML()}
+      </div>
+    </div>
+
+    <div class="details-section">
+      <h2>🧾 E2E 実行エビデンス</h2>
+      <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <p style="color: #666; margin-bottom: 10px;">動画・ログ・集計データへ直接アクセスできます。</p>
+        ${generateEvidenceLinksHTML()}
       </div>
     </div>
 
