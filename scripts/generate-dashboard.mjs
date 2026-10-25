@@ -363,6 +363,44 @@ async function generateDashboard(config) {
     </div>
 
     <div class="details-section">
+      <h2>📋 レポート・テスト結果へのリンク</h2>
+      <div class="summary-grid">
+        <div class="summary-card" style="cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 12px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)';">
+          <a href="../reports/e2e-latest.html" style="text-decoration: none; color: inherit;">
+            <h3>🎬 E2E テスト詳細レポート</h3>
+            <p style="color: #666; margin: 10px 0;">
+              Playwright E2E テスト実行結果の詳細情報。
+              テストケース、実行時間、エラーメッセージなど
+            </p>
+            <p style="color: #667eea; font-weight: bold;">→ レポートを表示</p>
+          </a>
+        </div>
+
+        <div class="summary-card" style="cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 12px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)';">
+          <a href="../reports/e2e-latest.html#video" style="text-decoration: none; color: inherit;">
+            <h3>🎥 E2E テスト実行動画</h3>
+            <p style="color: #666; margin: 10px 0;">
+              E2E テスト実行時のブラウザ画面記録。
+              テスト失敗時のトラブルシューティングに有効
+            </p>
+            <p style="color: #667eea; font-weight: bold;">→ 動画を表示</p>
+          </a>
+        </div>
+
+        <div class="summary-card" style="cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 12px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)';">
+          <a href="https://github.com/cocomomojo/copilot-quality-harness/actions" style="text-decoration: none; color: inherit;">
+            <h3>⚙️ GitHub Actions ワークフロー</h3>
+            <p style="color: #666; margin: 10px 0;">
+              テスト実行、カバレッジ測定、
+              レポート生成の自動ワークフロー実行状況
+            </p>
+            <p style="color: #667eea; font-weight: bold;">→ ワークフロー一覧</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-section">
       <h2>📝 ISO/IEC 25010 品質特性別テスト状況</h2>
       <table id="qualityCharacteristicsTable">
         <thead>
