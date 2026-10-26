@@ -34,9 +34,8 @@ jobs:
     name: Generate test spec from Issue or use provided spec file
     runs-on: ubuntu-latest
     outputs:
-      spec_file: ${{ steps.resolve-spec.outputs.spec_file }}
-      feature_name: ${{ steps.generate.outputs.feature_name }}
-      spec_content: ${{ steps.generate.outputs.spec_content }}
+      spec_file: ${{ steps.final-spec-output.outputs.spec_file || steps.resolve-spec.outputs.spec_file }}
+      feature_name: ${{ steps.generate.outputs.feature_name || steps.resolve-spec.outputs.feature_name }}
       quality_items_path: ${{ steps.download-quality-items.outputs.artifact_path }}
       quality_items_manifest: ${{ steps.download-quality-items.outputs.manifest_path }}
     steps:
@@ -120,9 +119,11 @@ jobs:
             --output-dir "tests/specs"
 
       - name: Update spec_file output if generated
+        id: final-spec-output
         if: steps.resolve-spec.outputs.source == 'generated'
         run: |
           echo "spec_file=${{ steps.generate.outputs.spec_file }}" >> "$GITHUB_OUTPUT"
+          echo "feature_name=${{ steps.generate.outputs.feature_name }}" >> "$GITHUB_OUTPUT"
 
       - name: Commit generated YML to branch
         if: steps.resolve-spec.outputs.source == 'generated'
