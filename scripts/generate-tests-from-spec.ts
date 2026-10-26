@@ -17,7 +17,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import * as yaml from 'js-yaml';
+import YAML from 'yaml';
 
 interface UnitTest {
   id: string;
@@ -52,9 +52,29 @@ interface TestSpec {
   };
   unit_tests?: UnitTest[];
   e2e_tests?: E2ETest[];
+  tests?: {
+    unit_tests?: UnitTest[];
+    e2e_tests?: E2ETest[];
+  };
   mocks?: Array<{ name: string; endpoint: string; behavior: string }>;
   seeds?: Array<{ name: string; value: any }>;
   environment?: Record<string, any>;
+}
+
+function normalizeSpec(rawSpec: any): TestSpec {
+  const spec = rawSpec && rawSpec.test_spec ? rawSpec.test_spec : rawSpec;
+  const tests = spec?.tests || {};
+
+  return {
+    ...spec,
+    feature: spec?.feature || spec?.title || 'generated-feature',
+    description: spec?.description || 'Auto-generated from specification',
+    unit_tests: spec?.unit_tests ?? tests.unit_tests ?? [],
+    e2e_tests: spec?.e2e_tests ?? tests.e2e_tests ?? [],
+    mocks: spec?.mocks ?? [],
+    seeds: spec?.seeds ?? [],
+    environment: spec?.environment ?? {},
+  };
 }
 
 // ============================================================
@@ -221,8 +241,8 @@ export const setupMocks = () => {
 // ============================================================
 
 async function main() {
-  const specPath = process.argv[2];
-  
+  const specPath = process.argv[2]?.trim();
+
   if (!specPath) {
     console.error('Usage: ts-node generate-tests-from-spec.ts <spec-file-path>');
     console.error('Example: ts-node generate-tests-from-spec.ts tests/specs/user-registration.yml');
@@ -237,7 +257,7 @@ async function main() {
   try {
     // 1. YAML を読み込む
     const raw = fs.readFileSync(specPath, 'utf8');
-    const spec = yaml.load(raw) as TestSpec;
+    const spec = normalizeSpec(YAML.parse(raw));
 
     if (!spec.feature) {
       console.error('Error: "feature" field is required in spec');
