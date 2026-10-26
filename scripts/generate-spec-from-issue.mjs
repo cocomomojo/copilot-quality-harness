@@ -59,54 +59,79 @@ function extractAcceptanceCriteria(issueBody) {
    * Then:
    *   - ...
    * \`\`\`
+   *
+   * Markdown 形式でも扱う:
+   * * **Given** ...
+   * * **When** ...
+   * * **Then** ...
    */
   
   const scenarios = [];
+  const blocks = [];
+
   const codeBlockRegex = /^```\s*\n([\s\S]*?)\n```/gm;
-  
   let match;
   while ((match = codeBlockRegex.exec(issueBody)) !== null) {
-    const block = match[1];
+    blocks.push(match[1]);
+  }
+
+  if (blocks.length === 0) {
+    blocks.push(issueBody);
+  }
+
+  for (const block of blocks) {
     const lines = block.split(/\r?\n/);
-    let currentSection = null;
-    let given = '';
-    let whenText = '';
-    const thenResults = [];
+    let currentScenario = null;
 
     for (const line of lines) {
       const trimmed = line.trim();
       if (!trimmed) continue;
 
-      if (/^Given:\s*/.test(trimmed)) {
-        currentSection = 'given';
-        given = trimmed.replace(/^Given:\s*/, '').trim();
+      const scenarioHeading = trimmed.match(/^###\s+.*$/);
+      if (scenarioHeading || /^##\s+/.test(trimmed)) {
+        if (currentScenario && currentScenario.given && currentScenario.when && currentScenario.then.length > 0) {
+          scenarios.push(currentScenario);
+        }
+        currentScenario = null;
+        if (scenarioHeading) {
+          currentScenario = { given: '', when: '', then: [] };
+        }
         continue;
       }
 
-      if (/^When:\s*/.test(trimmed)) {
-        currentSection = 'when';
-        whenText = trimmed.replace(/^When:\s*/, '').trim();
+      if (!currentScenario) {
         continue;
       }
 
-      if (/^Then:\s*/.test(trimmed)) {
-        currentSection = 'then';
-        const thenValue = trimmed.replace(/^Then:\s*/, '').trim();
-        if (thenValue) thenResults.push(thenValue);
+      const givenMatch = trimmed.match(/^\*?\s*(?:\*\*)?Given(?:\*\*)?\s*(?:[:：]\s*)?(.+)$/i)
+        || trimmed.match(/^\*?\s*Given\s*(?:[:：]\s*)?(.+)$/i);
+      if (givenMatch) {
+        currentScenario.given = givenMatch[1].trim();
         continue;
       }
 
-      if (currentSection === 'then' && trimmed.startsWith('-')) {
-        thenResults.push(trimmed.replace(/^-\s*/, '').trim());
+      const whenMatch = trimmed.match(/^\*?\s*(?:\*\*)?When(?:\*\*)?\s*(?:[:：]\s*)?(.+)$/i)
+        || trimmed.match(/^\*?\s*When\s*(?:[:：]\s*)?(.+)$/i);
+      if (whenMatch) {
+        currentScenario.when = whenMatch[1].trim();
+        continue;
+      }
+
+      const thenMatch = trimmed.match(/^\*?\s*(?:\*\*)?Then(?:\*\*)?\s*(?:[:：]\s*)?(.+)$/i)
+        || trimmed.match(/^\*?\s*Then\s*(?:[:：]\s*)?(.+)$/i);
+      if (thenMatch) {
+        const thenValue = thenMatch[1].trim();
+        if (thenValue) currentScenario.then.push(thenValue);
+        continue;
+      }
+
+      if (currentScenario.given && currentScenario.when && /^[-*]\s*/.test(trimmed)) {
+        currentScenario.then.push(trimmed.replace(/^[-*]\s*/, '').trim());
       }
     }
 
-    if (given && whenText && thenResults.length > 0) {
-      scenarios.push({
-        given,
-        when: whenText,
-        then: thenResults
-      });
+    if (currentScenario && currentScenario.given && currentScenario.when && currentScenario.then.length > 0) {
+      scenarios.push(currentScenario);
     }
   }
   
