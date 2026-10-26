@@ -247,6 +247,15 @@ jobs:
           FEATURE_NAME: ${{ needs.generate-spec-yml.outputs.feature_name }}
           BRANCH_NAME: copilot/impl-issue-${{ inputs.issue_number }}
         run: |
+          # Skip if an open PR already exists for this issue or a related branch
+          EXISTING_PR_NUMBER=$(gh pr list --state open --limit 100 --json number,title,body,headRefName --jq '.[] | select((.title|test("Issue #" + env.ISSUE_NUMBER; "i")) or (.body|test("#" + env.ISSUE_NUMBER; "i")) or (.headRefName == "copilot/impl-issue-" + env.ISSUE_NUMBER)) | .number' 2>/dev/null | head -n 1)
+          if [ -n "$EXISTING_PR_NUMBER" ]; then
+            EXISTING_PR_URL="https://github.com/${GITHUB_REPOSITORY}/pull/${EXISTING_PR_NUMBER}"
+            echo "Existing PR already found for Issue #${ISSUE_NUMBER}: ${EXISTING_PR_URL}"
+            echo "pull_request_url=$EXISTING_PR_URL" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           # Create feature branch
           git config user.name "Copilot"
           git config user.email "copilot@github.com"
