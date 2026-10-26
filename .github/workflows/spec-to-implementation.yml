@@ -49,6 +49,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Resolve spec file
         id: resolve-spec
@@ -153,10 +157,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: Setup TypeScript / ts-node
-        run: |
-          npm install -g ts-node typescript
+      - name: Install dependencies
+        run: npm ci
 
       - name: Generate implementation code from spec
         id: impl_gen
@@ -165,6 +169,11 @@ jobs:
           FEATURE_NAME: ${{ needs.generate-spec-yml.outputs.feature_name }}
           REPO_ROOT: ${{ github.workspace }}
         run: |
+          if [ -z "$SPEC_FILE" ]; then
+            echo "Error: SPEC_FILE is empty. The spec file was not generated." >&2
+            exit 1
+          fi
+
           # Generate tests from spec
           npx ts-node scripts/generate-tests-from-spec.ts "$SPEC_FILE"
           echo "Tests generated successfully"

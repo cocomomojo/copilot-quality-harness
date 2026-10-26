@@ -67,16 +67,45 @@ function extractAcceptanceCriteria(issueBody) {
   let match;
   while ((match = codeBlockRegex.exec(issueBody)) !== null) {
     const block = match[1];
-    
-    const givenMatch = block.match(/^Given:\s*(.+)$/m);
-    const whenMatch = block.match(/^When:\s*(.+)$/m);
-    const thenMatch = block.match(/^Then:\s*([\s\S]*?)(?=\n(?:Given|When|$))/m);
-    
-    if (givenMatch && whenMatch && thenMatch) {
+    const lines = block.split(/\r?\n/);
+    let currentSection = null;
+    let given = '';
+    let whenText = '';
+    const thenResults = [];
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+
+      if (/^Given:\s*/.test(trimmed)) {
+        currentSection = 'given';
+        given = trimmed.replace(/^Given:\s*/, '').trim();
+        continue;
+      }
+
+      if (/^When:\s*/.test(trimmed)) {
+        currentSection = 'when';
+        whenText = trimmed.replace(/^When:\s*/, '').trim();
+        continue;
+      }
+
+      if (/^Then:\s*/.test(trimmed)) {
+        currentSection = 'then';
+        const thenValue = trimmed.replace(/^Then:\s*/, '').trim();
+        if (thenValue) thenResults.push(thenValue);
+        continue;
+      }
+
+      if (currentSection === 'then' && trimmed.startsWith('-')) {
+        thenResults.push(trimmed.replace(/^-\s*/, '').trim());
+      }
+    }
+
+    if (given && whenText && thenResults.length > 0) {
       scenarios.push({
-        given: givenMatch[1].trim(),
-        when: whenMatch[1].trim(),
-        then: thenMatch[1].trim().split('\n').filter(line => line.trim().startsWith('-')).map(line => line.replace(/^\s*-\s*/, '').trim())
+        given,
+        when: whenText,
+        then: thenResults
       });
     }
   }
@@ -93,24 +122,33 @@ function generateFeatureName(issueTitle) {
    * Issue タイトルから feature 名を生成します
    * 例: "ユーザー登録フロー" → "user-registration"
    */
-  
-  // Simple conversion: remove Japanese chars and convert to kebab-case
-  const romanized = issueTitle
+
+  const sanitized = String(issueTitle || '')
     .toLowerCase()
-    .replace(/[あ-ん]/g, 'a')
-    .replace(/[ァ-ン]/g, 'a')
-    .replace(/[^\w\s-]/g, '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[ぁ-んァ-ン]/g, '')
+    .replace(/[^\w\s-]/g, ' ')
+    .trim()
     .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '')
     .substring(0, 50);
-  
-  // Fallback: use timestamp
-  return romanized || `feature-${Date.now()}`;
+
+  if (!sanitized || /^a+$/.test(sanitized)) {
+    return `feature-${Date.now()}`;
+  }
+
+  return sanitized;
 }
 
 // ============================================================
 // YML スペック生成
 // ============================================================
+
+function yamlString(value) {
+  return JSON.stringify(String(value ?? ''));
+}
 
 function generateYamlSpec(issue, scenarios) {
   /**
@@ -138,99 +176,75 @@ function generateYamlSpec(issue, scenarios) {
   });
   
   // YAML ヘッダーとコンテンツ
+  const descriptionText = issue.title
+    ? `${issue.title} (generated from issue acceptance criteria)`
+    : 'Auto-generated feature description';
+
   const yamlContent = `# テスト設計テンプレ - ${issue.title}
 # 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
 # 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
 # Issue: Closes ${issue.number ? '#' + issue.number : 'cocomomojo/copilot-quality-harness#XX'}
 # Generated: ${timestamp}
 
-test_spec:
-  # ============================================================
-  # 基本情報
-  # ============================================================
-  feature: "${issue.title}"
-  description: "${issue.body?.substring(0, 200) || 'Auto-generated feature description'}"
-  component: "auto-generated-component"
-  requires_human_approval: false
+feature: ${yamlString(issue.title)}
+description: ${yamlString(descriptionText)}
+component: "auto-generated-component"
+requires_human_approval: false
 
-  # ============================================================
-  # ユニットテスト (UT) 定義
-  # ============================================================
-  ut:
+# ============================================================
+# テスト定義（生成器の期待する形式）
+# ============================================================
+tests:
+  unit_tests:
     - id: "UT-001"
       title: "プレースホルダー: 自動生成用ユニットテスト"
       category: "auto_generated"
-      function: "placeholderFunction"
       input: {}
       expected_output:
         success: true
       mock_dependencies: []
 
-  # ============================================================
-  # エンドツーエンドテスト (E2E) 定義
-  # ============================================================
-  e2e:
+  e2e_tests:
 ${e2eTests.map(test => generateE2EYaml(test)).join('\n')}
 
-  # ============================================================
-  # モック設定（E2E/UT 共通）
-  # ============================================================
-  mocks: []
+mocks: []
 
-  # ============================================================
-  # シード値（再現性確保用）
-  # ============================================================
-  seeds:
-    - name: "base_seed"
-      value: ${Math.floor(Date.now() / 1000)}
-      description: "基本シード値（テストデータ生成用）"
+seeds:
+  - name: "base_seed"
+    value: ${Math.floor(Date.now() / 1000)}
+    description: "基本シード値（テストデータ生成用）"
 
-  # ============================================================
-  # 環境変数・設定
-  # ============================================================
-  environment:
-    API_BASE_URL: "http://localhost:3000"
-    TEST_DB_URL: "sqlite:///:memory:"
+environment:
+  API_BASE_URL: "http://localhost:3000"
+  TEST_DB_URL: "sqlite:///:memory:"
 
-  # ============================================================
-  # UT カバレッジ要件
-  # ============================================================
-  coverage_requirements:
-    - component: "auto-generated-component"
-      target_percentage: 90
-      critical_paths:
-        - "Auto-generated critical path"
+coverage_requirements:
+  - component: "auto-generated-component"
+    target_percentage: 90
+    critical_paths:
+      - "Auto-generated critical path"
 
-  # ============================================================
-  # 実行時オプション
-  # ============================================================
-  execution:
-    timeout_ms: 30000
-    retry_on_flake:
-      enabled: true
-      max_attempts: 3
-      backoff_ms: 1000
-    parallel_execution:
-      enabled: true
-      max_workers: 4
-    failure_mode: "fast_fail"
+execution:
+  timeout_ms: 30000
+  retry_on_flake:
+    enabled: true
+    max_attempts: 3
+    backoff_ms: 1000
+  parallel_execution:
+    enabled: true
+    max_workers: 4
+  failure_mode: "fast_fail"
 
-  # ============================================================
-  # 関連ドキュメント
-  # ============================================================
-  references:
-    - ".github/ISSUE_TEMPLATE/acceptance.md"
-    - "CONTRIBUTING.md"
-    - "QA_POLICY.md"
+references:
+  - ".github/ISSUE_TEMPLATE/acceptance.md"
+  - "CONTRIBUTING.md"
+  - "QA_POLICY.md"
 
-  # ============================================================
-  # 備考（Copilot 用）
-  # ============================================================
-  notes: |
-    - This spec was auto-generated from Issue #${issue.number || 'XX'}
-    - E2E テストは必ずモック環境で実行してください（外部 API 非依存）
-    - テスト後は自動で DB がロールバックされます
-    - 手動でテストケースを追加・修正してください
+notes: |
+  - This spec was auto-generated from Issue #${issue.number || 'XX'}
+  - E2E テストは必ずモック環境で実行してください（外部 API 非依存）
+  - テスト後は自動で DB がロールバックされます
+  - 手動でテストケースを追加・修正してください
 `;
 
   return {
@@ -283,16 +297,16 @@ function generateE2ESteps(scenario) {
 function generateE2EYaml(test) {
   const stepsYaml = test.steps.map(step => 
     `        - step_id: ${step.step_id}
-          action: "${step.action}"
-          target: "${step.target}"
+          action: ${yamlString(step.action)}
+          target: ${yamlString(step.target)}
           expected:
             - assertion_passed: true`
   ).join('\n');
   
-  return `    - id: "${test.id}"
-      title: "${test.title}"
-      description: "${test.description}"
-      priority: "${test.priority}"
+  return `    - id: ${yamlString(test.id)}
+      title: ${yamlString(test.title)}
+      description: ${yamlString(test.description)}
+      priority: ${yamlString(test.priority)}
       steps:
 ${stepsYaml}`;
 }
