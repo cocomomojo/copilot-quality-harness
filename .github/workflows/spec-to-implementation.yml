@@ -125,6 +125,15 @@ jobs:
           echo "spec_file=${{ steps.generate.outputs.spec_file }}" >> "$GITHUB_OUTPUT"
           echo "feature_name=${{ steps.generate.outputs.feature_name }}" >> "$GITHUB_OUTPUT"
 
+      - name: Upload generated spec as artifact
+        if: steps.resolve-spec.outputs.source == 'generated'
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-spec
+          path: ${{ steps.generate.outputs.spec_file }}
+          if-no-files-found: error
+          retention-days: 1
+
       - name: Commit generated YML to branch
         if: steps.resolve-spec.outputs.source == 'generated'
         env:
@@ -163,15 +172,43 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Download generated spec artifact
+        if: ${{ needs.generate-spec-yml.outputs.spec_file != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-spec
+          path: .
+
       - name: Generate implementation code from spec
         id: impl_gen
         env:
           SPEC_FILE: ${{ needs.generate-spec-yml.outputs.spec_file }}
           FEATURE_NAME: ${{ needs.generate-spec-yml.outputs.feature_name }}
           REPO_ROOT: ${{ github.workspace }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           if [ -z "$SPEC_FILE" ]; then
             echo "Error: SPEC_FILE is empty. The spec file was not generated." >&2
+            exit 1
+          fi
+
+          if [ ! -f "$SPEC_FILE" ]; then
+            echo "Spec file not found in checkout. Regenerating from issue number..."
+            if [ -z "$ISSUE_NUMBER" ]; then
+              echo "Issue number is required when the spec artifact is unavailable." >&2
+              exit 1
+            fi
+            gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}" > /tmp/issue.json
+            node scripts/generate-spec-from-issue.mjs \
+              --issue-file /tmp/issue.json \
+              --issue-number "$ISSUE_NUMBER" \
+              --repo-root "$REPO_ROOT" \
+              --output-dir "tests/specs"
+          fi
+
+          if [ ! -f "$SPEC_FILE" ]; then
+            echo "Spec file still not found after regeneration: $SPEC_FILE" >&2
             exit 1
           fi
 
