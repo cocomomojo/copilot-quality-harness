@@ -367,7 +367,7 @@ async function main() {
   const relativeFilePath = path.relative(repoRoot, filePath);
   console.log(`::set-output name=spec_file::${relativeFilePath}`);
   console.log(`::set-output name=feature_name::${spec.featureName}`);
-  
+
   // GitHub Actions output format
   const outputEnv = process.env.GITHUB_OUTPUT;
   if (outputEnv) {
