@@ -1,0 +1,104 @@
+# テスト設計テンプレ - ボタンのホバー（フォーカス）時の視認性改善
+# 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
+# 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
+# Issue: Closes #44
+# Generated: 2026-10-26T01:03:39.882Z
+
+feature: "ボタンのホバー（フォーカス）時の視認性改善"
+description: "ボタンのホバー（フォーカス）時の視認性改善 (generated from issue acceptance criteria)"
+component: "auto-generated-component"
+requires_human_approval: false
+
+# ============================================================
+# テスト定義（生成器の期待する形式）
+# ============================================================
+tests:
+  unit_tests:
+    - id: "UT-001"
+      title: "プレースホルダー: 自動生成用ユニットテスト"
+      category: "auto_generated"
+      input: {}
+      expected_output:
+        success: true
+      mock_dependencies: []
+
+  e2e_tests:
+    - id: "E2E-001"
+      title: "シナリオ 1: アプリケーションのメイン画面（`frontend/src/A..."
+      description: "Given: アプリケーションのメイン画面（`frontend/src/App.jsx`）が表示されているとき\nWhen: ユーザーが主要なボタン（送信、実行など）にマウスカーソルを乗せた（hover）、またはキーボードで選択した（focus）際\nThen: ボタンの背景色が一段階暗く（または明るく）なり、境界線にフォーカスリングが表示されるなど、状態の変化が視覚的に明確に認識できること"
+      priority: "critical"
+      steps:
+        - step_id: 1
+          action: "setup"
+          target: "アプリケーションのメイン画面（`frontend/src/App.jsx`）が表示されているとき"
+          expected:
+            - assertion_passed: true
+        - step_id: 2
+          action: "execute"
+          target: "ユーザーが主要なボタン（送信、実行など）にマウスカーソルを乗せた（hover）、またはキーボードで選択した（focus）際"
+          expected:
+            - assertion_passed: true
+        - step_id: 3
+          action: "assert"
+          target: "ボタンの背景色が一段階暗く（または明るく）なり、境界線にフォーカスリングが表示されるなど、状態の変化が視覚的に明確に認識できること"
+          expected:
+            - assertion_passed: true
+    - id: "E2E-002"
+      title: "シナリオ 2: ボタンのホバースタイルが変更されたとき..."
+      description: "Given: ボタンのホバースタイルが変更されたとき\nWhen: 画面全体のレイアウトや、ボタンをクリックした際の既存の挙動を確認した際\nThen: スタイルの追加によってボタンのサイズや周囲の要素の配置が崩れず、クリック時のJavaScript処理も正常に動作すること"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "setup"
+          target: "ボタンのホバースタイルが変更されたとき"
+          expected:
+            - assertion_passed: true
+        - step_id: 2
+          action: "execute"
+          target: "画面全体のレイアウトや、ボタンをクリックした際の既存の挙動を確認した際"
+          expected:
+            - assertion_passed: true
+        - step_id: 3
+          action: "assert"
+          target: "スタイルの追加によってボタンのサイズや周囲の要素の配置が崩れず、クリック時のJavaScript処理も正常に動作すること"
+          expected:
+            - assertion_passed: true
+
+mocks: []
+
+seeds:
+  - name: "base_seed"
+    value: 1792976619
+    description: "基本シード値（テストデータ生成用）"
+
+environment:
+  API_BASE_URL: "http://localhost:3000"
+  TEST_DB_URL: "sqlite:///:memory:"
+
+coverage_requirements:
+  - component: "auto-generated-component"
+    target_percentage: 90
+    critical_paths:
+      - "Auto-generated critical path"
+
+execution:
+  timeout_ms: 30000
+  retry_on_flake:
+    enabled: true
+    max_attempts: 3
+    backoff_ms: 1000
+  parallel_execution:
+    enabled: true
+    max_workers: 4
+  failure_mode: "fast_fail"
+
+references:
+  - ".github/ISSUE_TEMPLATE/acceptance.md"
+  - "CONTRIBUTING.md"
+  - "QA_POLICY.md"
+
+notes: |
+  - This spec was auto-generated from Issue #44
+  - E2E テストは必ずモック環境で実行してください（外部 API 非依存）
+  - テスト後は自動で DB がロールバックされます
+  - 手動でテストケースを追加・修正してください
