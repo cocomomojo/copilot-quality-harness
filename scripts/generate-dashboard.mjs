@@ -363,6 +363,29 @@ async function generateDashboard(config) {
     </div>
 
     <div class="details-section">
+      <h2>🧩 Issue単位 品質レポート</h2>
+      <table id="issueQualityReportsTable">
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th>PR</th>
+            <th>Pass Rate</th>
+            <th>Coverage（非パス件数）</th>
+            <th>テスト観点 / テスト項目</th>
+            <th>UT / E2E</th>
+            <th>Spec</th>
+            <th>更新日時</th>
+          </tr>
+        </thead>
+        <tbody id="issueReportsBody">
+          <tr>
+            <td colspan="8" style="text-align: center; color: #999;">Issueレポートを読み込み中...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="details-section">
       <h2>📋 レポート・テスト結果へのリンク</h2>
       <div class="summary-grid">
         <div class="summary-card" style="cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 12px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px rgba(0,0,0,0.1)';">
@@ -479,7 +502,8 @@ async function generateDashboard(config) {
         { id: 'security', name: 'セキュリティ', description: 'データと情報を保護する程度', total: 5, passed: 5 },
         { id: 'maintainability', name: '保守性', description: 'システムを修正できる程度', total: 4, passed: 4 },
         { id: 'portability', name: '移植性', description: '異なる環境へシステムを移行できる程度', total: 3, passed: 3 }
-      ]
+      ],
+      issueReports: []
     };
 
     function formatDateTime(value) {
@@ -729,6 +753,57 @@ async function generateDashboard(config) {
           '<td><span class="status-badge ' + (passRate === 100 ? 'status-pass' : 'status-fail') + '">' + passRate + '%</span></td>';
         charBody.appendChild(row);
       });
+
+      updateIssueReportsTable(data.issueReports || []);
+    }
+
+    function updateIssueReportsTable(issueReports) {
+      const body = document.getElementById('issueReportsBody');
+      body.innerHTML = '';
+
+      if (!Array.isArray(issueReports) || issueReports.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = '<td colspan="8" style="text-align:center; color:#999;">Issue単位レポートはまだ生成されていません（Quality Report PR の実行後に表示されます）</td>';
+        body.appendChild(row);
+        return;
+      }
+
+      const sorted = [...issueReports].sort((a, b) => new Date(b.generated_at || 0) - new Date(a.generated_at || 0));
+      const rows = sorted.slice(0, 15);
+      const owner = 'cocomomojo';
+      const repo = 'copilot-quality-harness';
+
+      rows.forEach((report) => {
+        const row = document.createElement('tr');
+        const issueLink = report.issue_number
+          ? '<a href="https://github.com/' + owner + '/' + repo + '/issues/' + report.issue_number + '">#' + report.issue_number + '</a>'
+          : '-';
+        const prLink = report.pr_number
+          ? '<a href="https://github.com/' + owner + '/' + repo + '/pull/' + report.pr_number + '">#' + report.pr_number + '</a>'
+          : '-';
+        const coverageFail = report.coverage?.non_pass_count ?? '-';
+        const perspectives = report.traceability?.perspective_count ?? '-';
+        const testItems = report.traceability?.quality_items_count ?? '-';
+        const utCases = report.traceability?.ut_cases ?? '-';
+        const e2eCases = report.traceability?.e2e_cases ?? '-';
+        const firstSpec = Array.isArray(report.traceability?.spec_files) && report.traceability.spec_files.length > 0
+          ? report.traceability.spec_files[0]
+          : null;
+        const specText = firstSpec?.path
+          ? '<a href="https://github.com/' + owner + '/' + repo + '/blob/main/' + firstSpec.path + '">' + (firstSpec.feature || firstSpec.path) + '</a>'
+          : '-';
+        const updated = report.generated_at ? formatDateTime(report.generated_at) : '-';
+
+        row.innerHTML = '<td>' + issueLink + '</td>' +
+          '<td>' + prLink + '</td>' +
+          '<td>' + (report.pass_rate ?? '-') + '%</td>' +
+          '<td>' + coverageFail + '</td>' +
+          '<td>' + perspectives + ' / ' + testItems + '</td>' +
+          '<td>' + utCases + ' / ' + e2eCases + '</td>' +
+          '<td>' + specText + '</td>' +
+          '<td>' + updated + '</td>';
+        body.appendChild(row);
+      });
     }
 
     // Initialize dashboard
@@ -783,11 +858,25 @@ async function generateDashboard(config) {
                     coverage: h.coverage
                   }));
               }
-              
-              console.log('✅ Loaded actual KPI data:', mergedData.latestKPI);
-              updateSummary(mergedData);
-              initCharts(mergedData);
-              updateTables(mergedData);
+
+              return fetch('./data/issue-reports.json')
+                .then(issueResponse => {
+                  if (!issueResponse.ok) return null;
+                  return issueResponse.json();
+                })
+                .catch(() => null)
+                .then(issueReportData => {
+                  if (issueReportData && Array.isArray(issueReportData.reports)) {
+                    mergedData.issueReports = issueReportData.reports;
+                  } else {
+                    mergedData.issueReports = [];
+                  }
+
+                  console.log('✅ Loaded actual KPI data:', mergedData.latestKPI);
+                  updateSummary(mergedData);
+                  initCharts(mergedData);
+                  updateTables(mergedData);
+                });
             });
         })
         .catch(error => {
@@ -843,6 +932,17 @@ async function generateDashboard(config) {
     console.log(`✅ KPI history: ${historyDataPath}`);
   } catch (error) {
     console.log(`ℹ️  KPI history not available yet`);
+  }
+
+  // Also copy issue-level quality reports if available
+  try {
+    const issueReportsPath = join(config.kpiDataDir, 'issue-reports.json');
+    const issueReportsContent = readFileSync(issueReportsPath, 'utf-8');
+    const issueReportsDataPath = join(config.outputDir, 'data', 'issue-reports.json');
+    writeFileSync(issueReportsDataPath, issueReportsContent);
+    console.log(`✅ Issue reports: ${issueReportsDataPath}`);
+  } catch (error) {
+    console.log(`ℹ️  Issue reports not available yet`);
   }
 
   console.log(`\n✅ Dashboard generation complete!`);
