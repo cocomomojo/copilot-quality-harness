@@ -6,7 +6,7 @@ on:
     - cron: '0 1 * * *'
   workflow_dispatch: {}
   workflow_run:
-    workflows: ["Quality Schedule", "Test Matrix"]
+    workflows: ["Quality Schedule", "Test Matrix", "Quality Report PR"]
     types: [completed]
 
 concurrency:
@@ -131,6 +131,44 @@ jobs:
         with:
           name: kpi-data
           path: qa/dashboard-data
+
+      - name: Download issue quality reports
+        continue-on-error: true
+        run: |
+          echo "🔎 Resolving latest Quality Report PR run for issue-level data..."
+          TARGET_QUALITY_RUN=""
+
+          if [ "${{ github.event_name }}" = "workflow_run" ] && [ "${{ github.event.workflow_run.name }}" = "Quality Report PR" ]; then
+            TARGET_QUALITY_RUN="${{ github.event.workflow_run.id }}"
+            echo "  ✓ Triggered by Quality Report PR run: $TARGET_QUALITY_RUN"
+          fi
+
+          if [ -z "$TARGET_QUALITY_RUN" ]; then
+            TARGET_QUALITY_RUN=$(gh run list --workflow "quality-report-pr.yml" --status completed --limit 20 \
+              --json databaseId,conclusion --jq '.[] | select(.conclusion=="success") | .databaseId' | head -n1 || echo "")
+            if [ -n "$TARGET_QUALITY_RUN" ]; then
+              echo "  ✓ Fallback latest successful Quality Report PR run: $TARGET_QUALITY_RUN"
+            fi
+          fi
+
+          if [ -z "$TARGET_QUALITY_RUN" ]; then
+            echo "⚠️ No Quality Report PR run found. Skipping issue report download."
+            exit 0
+          fi
+
+          mkdir -p qa/dashboard-data/issue-reports
+          if gh run download "$TARGET_QUALITY_RUN" --name issue-quality-reports --dir qa/dashboard-data/issue-reports 2>/dev/null; then
+            if [ -f qa/dashboard-data/issue-reports/issue-reports.json ]; then
+              cp qa/dashboard-data/issue-reports/issue-reports.json qa/dashboard-data/issue-reports.json
+              echo "✅ Issue-level quality reports downloaded"
+            else
+              echo "⚠️ issue-quality-reports artifact found but issue-reports.json missing"
+            fi
+          else
+            echo "⚠️ issue-quality-reports artifact not available in run $TARGET_QUALITY_RUN"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Generate dashboard
         run: |
@@ -139,6 +177,7 @@ jobs:
           # Copy KPI data files for dynamic loading
           cp qa/dashboard-data/latest-kpi.json docs/dashboard/data/ 2>/dev/null || true
           cp qa/dashboard-data/kpi-history.json docs/dashboard/data/ 2>/dev/null || true
+          cp qa/dashboard-data/issue-reports.json docs/dashboard/data/ 2>/dev/null || true
       
       - name: Download Playwright test results
         id: download_playwright
