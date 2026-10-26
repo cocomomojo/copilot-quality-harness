@@ -672,6 +672,44 @@ jobs:
             body.push('');
             body.push('---');
             body.push(`_Report generated at ${summary.timestamp || new Date().toISOString()}_`);
+
+            const issueReportItems = reportIssues.map((issueNo) => {
+              const issueData = issueCases.get(issueNo) || { ut: 0, e2e: 0, specs: [], utDetails: [], e2eDetails: [] };
+              return {
+                issue_number: issueNo,
+                pr_number: prNumber,
+                workflow_run_id: context.runId,
+                generated_at: summary.timestamp || new Date().toISOString(),
+                pass_rate: summary.pass_rate,
+                total_tests: summary.total_tests,
+                total_passed: summary.total_passed,
+                total_failed: summary.total_failed,
+                coverage: summary.coverage || null,
+                traceability: {
+                  perspective_count: summary.traceability?.perspective_count || 0,
+                  quality_items_count: summary.traceability?.quality_items_count || 0,
+                  perspectives_file: summary.traceability?.perspectives_file || null,
+                  test_items_file: summary.traceability?.test_items_file || null,
+                  spec_files: issueData.specs || [],
+                  ut_cases: issueData.ut || 0,
+                  e2e_cases: issueData.e2e || 0,
+                  ut_details: issueData.utDetails || [],
+                  e2e_details: issueData.e2eDetails || []
+                },
+                implementation_files: implementationFiles
+              };
+            });
+
+            fs.mkdirSync('issue-reports', { recursive: true });
+            fs.writeFileSync(
+              'issue-reports/issue-reports.json',
+              JSON.stringify({
+                generated_at: summary.timestamp || new Date().toISOString(),
+                source_pr: prNumber,
+                reports: issueReportItems
+              }, null, 2)
+            );
+            console.log(`Wrote issue report artifact with ${issueReportItems.length} item(s)`);
             
             try {
               await github.rest.issues.createComment({
@@ -684,3 +722,12 @@ jobs:
             } catch (e) {
               console.error('Could not post comment:', e.message);
             }
+
+      - name: Upload issue quality reports
+        if: steps.find_pr.outputs.pr_number
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-quality-reports
+          path: issue-reports/issue-reports.json
+          retention-days: 30
+          if-no-files-found: ignore
