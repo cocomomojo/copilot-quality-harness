@@ -1,9 +1,5 @@
 {
-<<<<<<< Updated upstream
-  "timestamp": "2026-10-26T01:58:25.855Z",
-=======
-  "timestamp": "2026-10-26T02:01:49.618Z",
->>>>>>> Stashed changes
+  "timestamp": "2026-10-27T01:29:17.482Z",
   "pass_rate": 100,
   "test_count": 44,
   "passed": 44,
@@ -15,15 +11,9 @@
   "data_source": "TEST_MATRIX_ARTIFACT",
   "details": {
     "test_source": "test-matrix-artifact",
-<<<<<<< Updated upstream
-    "github_run_id": 40256441751,
-    "coverage_source": "ARTIFACT_RUN:40256441751",
-    "explicit_test_run_id": "40256441751"
-=======
     "github_run_id": 40256510665,
     "coverage_source": "ARTIFACT_RUN:40256510665",
     "explicit_test_run_id": "40256510665"
->>>>>>> Stashed changes
   },
   "trend": "STABLE",
   "trend_details": {
