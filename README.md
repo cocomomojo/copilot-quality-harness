@@ -74,6 +74,12 @@ Welcome! これは「Playwright テスト失敗分析から Copilot による自
 
 詳細な運用ガイドはこちら → **[`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)** ⭐ **新規（必読！）**
 
+### ⭐ Workflow 依存関係を詳しく知りたい方へ
+
+Workflow の重複排除・最適化の詳細について → **[`docs/WORKFLOW_DEPENDENCY_MAP.md`](./docs/WORKFLOW_DEPENDENCY_MAP.md)** 🗺️
+
+このドキュメントでは、12 個すべての workflow の依存チェーン、トリガー条件、改善方針を可視化しています。
+
 ### ざっくり流れ
 
 ```

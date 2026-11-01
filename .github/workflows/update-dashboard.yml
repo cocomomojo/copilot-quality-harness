@@ -3,7 +3,7 @@ name: Update Quality Dashboard
 on:
   workflow_dispatch: {}
   workflow_run:
-    workflows: ["Quality Schedule", "Test Matrix", "Quality Report PR"]
+    workflows: ["Test Matrix"]
     types: [completed]
 
 concurrency:
@@ -175,6 +175,11 @@ jobs:
           cp qa/dashboard-data/latest-kpi.json docs/dashboard/data/ 2>/dev/null || true
           cp qa/dashboard-data/kpi-history.json docs/dashboard/data/ 2>/dev/null || true
           cp qa/dashboard-data/issue-reports.json docs/dashboard/data/ 2>/dev/null || true
+      
+      - name: Generate quality report detail pages
+        continue-on-error: true
+        run: |
+          node scripts/generate-quality-report-details.mjs
       
       - name: Download Playwright test results
         id: download_playwright

@@ -776,7 +776,8 @@ async function generateDashboard(config) {
       rows.forEach((report) => {
         const row = document.createElement('tr');
         const issueLink = report.issue_number
-          ? '<a href="https://github.com/' + owner + '/' + repo + '/issues/' + report.issue_number + '">#' + report.issue_number + '</a>'
+          ? '<a href="https://github.com/' + owner + '/' + repo + '/issues/' + report.issue_number + '">#' + report.issue_number + '</a>' +
+            ' <a href="./details/issue-' + report.issue_number + '-report.html" title="詳細レポート" style="margin-left: 8px; font-size: 12px;">🔍</a>'
           : '-';
         const prLink = report.pr_number
           ? '<a href="https://github.com/' + owner + '/' + repo + '/pull/' + report.pr_number + '">#' + report.pr_number + '</a>'
@@ -792,7 +793,11 @@ async function generateDashboard(config) {
         const specText = firstSpec?.path
           ? '<a href="https://github.com/' + owner + '/' + repo + '/blob/main/' + firstSpec.path + '">' + (firstSpec.feature || firstSpec.path) + '</a>'
           : '-';
-        const updated = report.generated_at ? formatDateTime(report.generated_at) : '-';
+        const updated = report.generated_at 
+          ? (report.github_run_url 
+            ? '<a href="' + report.github_run_url + '">' + formatDateTime(report.generated_at) + '</a>'
+            : formatDateTime(report.generated_at))
+          : '-';
 
         row.innerHTML = '<td>' + issueLink + '</td>' +
           '<td>' + prLink + '</td>' +

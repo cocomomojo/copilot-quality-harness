@@ -13,15 +13,6 @@ on:
         required: false
         type: string
 
-  pull_request:
-    branches: [main]
-    types: [opened, synchronize, reopened]
-    paths:
-      - 'e2e/**'
-      - 'playwright.config.js'
-      - 'frontend/**'
-      - 'backend/**'
-
 permissions:
   contents: read
   actions: read

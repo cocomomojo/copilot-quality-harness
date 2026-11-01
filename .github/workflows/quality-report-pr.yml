@@ -88,6 +88,10 @@ jobs:
       
       - name: Generate quality report
         id: quality_report
+        env:
+          GITHUB_REPO_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPO_NAME: ${{ github.event.repository.name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
           node << 'EOF'
           const fs = require('fs');
@@ -671,14 +675,22 @@ jobs:
             }
             body.push('');
             body.push('---');
-            body.push(`_Report generated at ${summary.timestamp || new Date().toISOString()}_`);
+            const timestamp = summary.timestamp || new Date().toISOString();
+            const formattedTime = new Date(timestamp).toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+            const repoOwner = process.env.GITHUB_REPO_OWNER || 'cocomomojo';
+            const repoName = process.env.GITHUB_REPO_NAME || 'copilot-quality-harness';
+            const runId = process.env.GITHUB_RUN_ID;
+            const runUrl = `https://github.com/${repoOwner}/${repoName}/actions/runs/${runId}`;
+            body.push(`_Report generated at [${formattedTime}](${runUrl})_`);
 
             const issueReportItems = reportIssues.map((issueNo) => {
               const issueData = issueCases.get(issueNo) || { ut: 0, e2e: 0, specs: [], utDetails: [], e2eDetails: [] };
+              const runUrlForReport = `https://github.com/${repoOwner}/${repoName}/actions/runs/${runId}`;
               return {
                 issue_number: issueNo,
                 pr_number: prNumber,
-                workflow_run_id: context.runId,
+                workflow_run_id: runId,
+                github_run_url: runUrlForReport,
                 generated_at: summary.timestamp || new Date().toISOString(),
                 pass_rate: summary.pass_rate,
                 total_tests: summary.total_tests,
