@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-01T10:58:47.901Z",
+  "timestamp": "2026-11-01T11:06:16.458Z",
   "pass_rate": 80,
   "test_count": 5,
   "passed": 4,
@@ -11,9 +11,9 @@
   "data_source": "GITHUB_API",
   "details": {
     "test_source": "github-api",
-    "github_run_id": 41299537621,
+    "github_run_id": 41300094877,
     "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
-    "explicit_test_run_id": "41299537621"
+    "explicit_test_run_id": "41300094877"
   },
   "trend": "STABLE",
   "trend_details": {
