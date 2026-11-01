@@ -203,19 +203,50 @@ function parseTestResults(testData) {
     passedTests = summary.total_passed || 0;
     failedTests = summary.total_failed || 0;
     
-    // total_tests が null/0 の場合は by_test_type から計算
-    if (totalTests === 0 && summary.by_test_type) {
-      console.log(`  ℹ️  Using by_test_type breakdown (total_tests is null/0)`);
-      passedTests = 0;
-      failedTests = 0;
-      for (const type of ['unit', 'api', 'e2e', 'advanced']) {
-        const typeData = summary.by_test_type[type];
-        if (typeData) {
-          passedTests += typeData.passed_tests || 0;
-          failedTests += typeData.failed_tests || 0;
+    // Validation: 合計がゼロの場合は警告して、フォールバック
+    if (totalTests === 0) {
+      console.log(`  ⚠️  WARNING: total_tests is 0 in summary`);
+      console.log(`      This may indicate incomplete test results or artifact corruption`);
+      
+      // フォールバック: by_test_type から計算（ただしvalidation付き）
+      if (summary.by_test_type) {
+        console.log(`  ℹ️  Attempting fallback calculation from by_test_type...`);
+        let fallbackPassed = 0;
+        let fallbackFailed = 0;
+        let typeCount = 0;
+        
+        for (const type of ['unit', 'api', 'e2e', 'advanced']) {
+          const typeData = summary.by_test_type[type];
+          if (typeData && (typeData.passed_tests || typeData.failed_tests)) {
+            fallbackPassed += typeData.passed_tests || 0;
+            fallbackFailed += typeData.failed_tests || 0;
+            typeCount++;
+          }
         }
+        
+        if (typeCount > 0 && (fallbackPassed + fallbackFailed) > 0) {
+          passedTests = fallbackPassed;
+          failedTests = fallbackFailed;
+          totalTests = passedTests + failedTests;
+          console.log(`  ℹ️  Fallback calculation successful: ${totalTests} tests from ${typeCount} test types`);
+        } else {
+          console.log(`  ⚠️  Fallback calculation failed: no valid test data in by_test_type`);
+          console.log(`  ⚠️  This may be caused by test matrix failures or incomplete artifact generation`);
+          // Return early with error to prevent bad data from being recorded
+          return null;
+        }
+      } else {
+        console.log(`  ⚠️  No by_test_type data available for fallback`);
+        return null;
       }
-      totalTests = passedTests + failedTests;
+    }
+    
+    // Final validation: ensure we have reasonable test counts
+    if (totalTests < 5) {
+      console.log(`  ⚠️  WARNING: Unusually low test count (${totalTests})`);
+      console.log(`      This suggests incomplete test results and may indicate a test matrix problem`);
+      console.log(`      Aborting KPI update to prevent corrupted dashboard data`);
+      return null;
     }
     
     passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
@@ -578,6 +609,15 @@ async function main() {
     testCount,
     failed
   );
+  
+  // 6. データの最終検証（ダッシュボード品質を守る）
+  if (testCount < 30) {
+    console.log(`\n⚠️  WARNING: Test count is unusually low (${testCount})`);
+    console.log(`   Expected minimum: 30 tests`);
+    console.log(`   This suggests a test matrix failure or incomplete artifact generation`);
+    console.log(`   Data will NOT be recorded to prevent corrupting dashboard history`);
+    process.exit(0);  // Exit gracefully without recording bad data
+  }
   
   // 6. KPI データを構築
   const kpiData = {
