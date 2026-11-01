@@ -166,6 +166,25 @@ function fetchTestResults() {
       return null;
     }
     
+    // Check matrix completeness: Count test-matrix jobs by type
+    const testMatrixJobs = jobs.filter(j => j.name && j.name.includes('test-matrix'));
+    const testTypeMap = {};
+    for (const job of testMatrixJobs) {
+      const match = job.name.match(/test-matrix \(\d+, (\w+)\)/);
+      if (match) {
+        const testType = match[1];
+        testTypeMap[testType] = (testTypeMap[testType] || 0) + 1;
+      }
+    }
+    
+    const testTypes = Object.keys(testTypeMap);
+    console.log(`  ℹ️  Matrix jobs found: ${testMatrixJobs.length}`);
+    console.log(`     Test types: ${testTypes.join(', ')}`);
+    if (testTypes.length < 4) {
+      console.log(`  ⚠️  INCOMPLETE: Expected 4 test types (unit, api, e2e, advanced), found ${testTypes.length}`);
+      console.log(`     This suggests a test matrix job failure or incomplete execution`);
+    }
+    
     console.log(`  ✓ Fetched ${jobs.length} jobs from API`);
     
     return {
@@ -203,19 +222,64 @@ function parseTestResults(testData) {
     passedTests = summary.total_passed || 0;
     failedTests = summary.total_failed || 0;
     
-    // total_tests が null/0 の場合は by_test_type から計算
-    if (totalTests === 0 && summary.by_test_type) {
-      console.log(`  ℹ️  Using by_test_type breakdown (total_tests is null/0)`);
-      passedTests = 0;
-      failedTests = 0;
-      for (const type of ['unit', 'api', 'e2e', 'advanced']) {
-        const typeData = summary.by_test_type[type];
-        if (typeData) {
-          passedTests += typeData.passed_tests || 0;
-          failedTests += typeData.failed_tests || 0;
+    // Validation: 合計がゼロの場合は警告して、フォールバック
+    if (totalTests === 0) {
+      console.log(`  ⚠️  WARNING: total_tests is 0 in summary`);
+      console.log(`      This may indicate incomplete test results or artifact corruption`);
+      
+      // フォールバック: by_test_type から計算（ただしvalidation付き）
+      if (summary.by_test_type) {
+        console.log(`  ℹ️  Attempting fallback calculation from by_test_type...`);
+        let fallbackPassed = 0;
+        let fallbackFailed = 0;
+        let typeCount = 0;
+        
+        for (const type of ['unit', 'api', 'e2e', 'advanced']) {
+          const typeData = summary.by_test_type[type];
+          if (typeData && (typeData.passed_tests || typeData.failed_tests)) {
+            fallbackPassed += typeData.passed_tests || 0;
+            fallbackFailed += typeData.failed_tests || 0;
+            typeCount++;
+          }
         }
+        
+        // Check completeness from summary
+        if (summary.completeness_check) {
+          const missingTypes = summary.completeness_check.missing_test_types || [];
+          if (missingTypes.length > 0) {
+            console.log(`  ⚠️  INCOMPLETE: Missing test types: ${missingTypes.join(', ')}`);
+            console.log(`      Expected: ${summary.completeness_check.expected_test_types.join(', ')}`);
+            console.log(`      Found: ${summary.completeness_check.found_test_types.join(', ')}`);
+          } else {
+            console.log(`  ✅ Test matrix complete: All ${summary.completeness_check.found_test_types.length} test types present`);
+          }
+        }
+        
+        if (typeCount > 0 && (fallbackPassed + fallbackFailed) > 0) {
+          passedTests = fallbackPassed;
+          failedTests = fallbackFailed;
+          totalTests = passedTests + failedTests;
+          console.log(`  ✓ Fallback calculation successful: ${totalTests} tests from ${typeCount} test types`);
+        } else {
+          console.log(`  ⚠️  Fallback calculation failed: no valid test data in by_test_type`);
+          console.log(`  ⚠️  This may be caused by test matrix failures or incomplete artifact generation`);
+          // Return early with error to prevent bad data from being recorded
+          return null;
+        }
+      } else {
+        console.log(`  ⚠️  No by_test_type data available for fallback`);
+        return null;
       }
-      totalTests = passedTests + failedTests;
+    }
+    
+    // Final validation: warn if test count is very low
+    if (totalTests < 5) {
+      console.log(`\n  ⚠️  WARNING: Very low test count (${totalTests}) - likely incomplete test matrix execution`);
+      console.log(`      Possible causes:`);
+      console.log(`      • Test matrix job failure or cancellation`);
+      console.log(`      • test-matrix-summary.json generation failure`);
+      console.log(`      • GitHub API data incomplete`);
+      console.log(`      Consider checking test-matrix.yml workflow run for errors`);
     }
     
     passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
@@ -639,7 +703,21 @@ async function main() {
   }
   
   // 新しい記録を追加
-  history.push(kpiData);
+  // 但し、1 分以内の重複実行は防ぐ（同じ update-dashboard workflow の重複 trigger を防止）
+  const lastRecord = history.length > 0 ? history[history.length - 1] : null;
+  const lastTimestamp = lastRecord ? new Date(lastRecord.timestamp).getTime() : 0;
+  const currentTimestamp = new Date(kpiData.timestamp).getTime();
+  const timeDiffMinutes = (currentTimestamp - lastTimestamp) / (1000 * 60);
+  
+  if (lastRecord && timeDiffMinutes < 1) {
+    console.log(`\n⚠️  DUPLICATE PREVENTION: Last record was recorded ${timeDiffMinutes.toFixed(2)} minutes ago`);
+    console.log(`   Skipping duplicate recording to prevent identical KPI records`);
+    console.log(`   Previous: test_count=${lastRecord.test_count}, pass_rate=${lastRecord.pass_rate}%`);
+    console.log(`   Current:  test_count=${kpiData.test_count}, pass_rate=${kpiData.pass_rate}%`);
+  } else {
+    history.push(kpiData);
+    console.log(`✓ Added new KPI record (${timeDiffMinutes.toFixed(2)} minutes since last)`);
+  }
   
   // 90 日間の履歴を保持
   if (history.length > 90) {
