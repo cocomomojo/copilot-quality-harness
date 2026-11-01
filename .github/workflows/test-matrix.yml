@@ -421,7 +421,7 @@ jobs:
           console.log('By Test Type:');
           Object.entries(summary.by_test_type).forEach(([type, stats]) => {
             const icon = stats.status === 'missing' ? '❌' : (stats.status === 'all_passed' ? '✅' : '⚠️');
-            console.log(\`  \${icon} \${type}: \${stats.passed_tests} passed, \${stats.failed_tests} failed (\${stats.combinations} combo)\`);
+            console.log('  ' + icon + ' ' + type + ': ' + stats.passed_tests + ' passed, ' + stats.failed_tests + ' failed (' + stats.combinations + ' combo)');
           });
           console.log('');
           console.log('Completeness Check:');
