@@ -243,11 +243,23 @@ function parseTestResults(testData) {
           }
         }
         
+        // Check completeness from summary
+        if (summary.completeness_check) {
+          const missingTypes = summary.completeness_check.missing_test_types || [];
+          if (missingTypes.length > 0) {
+            console.log(`  ⚠️  INCOMPLETE: Missing test types: ${missingTypes.join(', ')}`);
+            console.log(`      Expected: ${summary.completeness_check.expected_test_types.join(', ')}`);
+            console.log(`      Found: ${summary.completeness_check.found_test_types.join(', ')}`);
+          } else {
+            console.log(`  ✅ Test matrix complete: All ${summary.completeness_check.found_test_types.length} test types present`);
+          }
+        }
+        
         if (typeCount > 0 && (fallbackPassed + fallbackFailed) > 0) {
           passedTests = fallbackPassed;
           failedTests = fallbackFailed;
           totalTests = passedTests + failedTests;
-          console.log(`  ℹ️  Fallback calculation successful: ${totalTests} tests from ${typeCount} test types`);
+          console.log(`  ✓ Fallback calculation successful: ${totalTests} tests from ${typeCount} test types`);
         } else {
           console.log(`  ⚠️  Fallback calculation failed: no valid test data in by_test_type`);
           console.log(`  ⚠️  This may be caused by test matrix failures or incomplete artifact generation`);
