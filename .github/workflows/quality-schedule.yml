@@ -53,54 +53,56 @@ jobs:
         run: |
           node << 'EOF'
           const fs = require('fs');
-          
+           
           const results = {
             node_version: '${{ matrix.node-version }}',
             timestamp: new Date().toISOString(),
             test_suites: {}
           };
-          
+           
           const suites = ['all-tests', 'all-tests-api', 'all-tests-advanced', 'e2e-tests'];
           let totalPassed = 0, totalFailed = 0;
-          
+           
           for (const suite of suites) {
             const logFile = `/tmp/${suite}-${{ matrix.node-version }}.log`;
             if (fs.existsSync(logFile)) {
               const content = fs.readFileSync(logFile, 'utf-8');
-              
+               
               // Support both Vitest and Mocha formats
-              const vitestPass = content.match(/✓\s+(\d+)\s+passed/);
-              const vitestFail = content.match(/✖\s+(\d+)\s+failed/);
+              // Vitest formats: "Tests  53 passed (53)" or "✓ 53 passed"
+              // Mocha format: "53 passing"
+              const vitestPass = content.match(/(?:Tests|✓)\s+(\d+)\s+passed/);
+              const vitestFail = content.match(/(?:Tests|✖)\s+(\d+)\s+failed/);
               const mochaPass = content.match(/(\d+)\s+passing/);
               const mochaFail = content.match(/(\d+)\s+failing/);
-              
+               
               const passed = vitestPass ? parseInt(vitestPass[1]) : (mochaPass ? parseInt(mochaPass[1]) : 0);
               const failed = vitestFail ? parseInt(vitestFail[1]) : (mochaFail ? parseInt(mochaFail[1]) : 0);
-              
+               
               results.test_suites[suite] = {
                 passed,
                 failed,
                 status: failed === 0 ? 'passed' : 'failed'
               };
-              
+               
               totalPassed += passed;
               totalFailed += failed;
             }
           }
-          
+           
           results.summary = {
             total_passed: totalPassed,
             total_failed: totalFailed,
             pass_rate: totalPassed + totalFailed > 0 ? Math.round((totalPassed / (totalPassed + totalFailed)) * 100) : 100,
             status: totalFailed === 0 ? 'all_passed' : 'some_failed'
           };
-          
+           
           fs.writeFileSync(`comprehensive-results-${{ matrix.node-version }}.json`, JSON.stringify(results, null, 2));
-          
+           
           // Write output using GITHUB_OUTPUT instead of deprecated set-output
           const output = `status=${results.summary.status}\npass_rate=${results.summary.pass_rate}\n`;
           fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
-          
+           
           console.log('Comprehensive Results:', JSON.stringify(results));
           EOF
       
@@ -135,33 +137,42 @@ jobs:
         run: |
           node << 'EOF'
           const fs = require('fs');
-          
+           
           const logFile = '/tmp/m2-validation.log';
           const m2Results = {
             timestamp: new Date().toISOString(),
-            status: 'unknown',
             passed: 0,
-            failed: 0
+            failed: 0,
+            summary: {}
           };
-          
+           
           if (fs.existsSync(logFile)) {
             const content = fs.readFileSync(logFile, 'utf-8');
-            
+             
             // Parse Node test runner output
             const passMatch = content.match(/(\d+)\s+passed/);
             const failMatch = content.match(/(\d+)\s+failed/);
-            
+             
             m2Results.passed = passMatch ? parseInt(passMatch[1]) : 0;
             m2Results.failed = failMatch ? parseInt(failMatch[1]) : 0;
-            m2Results.status = m2Results.failed === 0 ? 'passed' : 'failed';
           }
-          
+           
+          // Calculate pass rate and status
+          const totalTests = m2Results.passed + m2Results.failed;
+          const passRate = totalTests > 0 ? Math.round((m2Results.passed / totalTests) * 100) : 100;
+          m2Results.summary = {
+            total_passed: m2Results.passed,
+            total_failed: m2Results.failed,
+            pass_rate: passRate,
+            status: m2Results.failed === 0 ? 'all_passed' : 'some_failed'
+          };
+           
           fs.writeFileSync('m2-validation-result.json', JSON.stringify(m2Results));
-          
+           
           // Write output
-          const output = `status=${m2Results.status}\npassed=${m2Results.passed}\nfailed=${m2Results.failed}\n`;
+          const output = `status=${m2Results.summary.status}\npassed=${m2Results.passed}\nfailed=${m2Results.failed}\n`;
           fs.appendFileSync(process.env.GITHUB_OUTPUT, output);
-          
+           
           console.log('M2 Validation:', JSON.stringify(m2Results));
           EOF
       
