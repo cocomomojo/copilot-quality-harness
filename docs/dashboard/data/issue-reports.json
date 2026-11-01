@@ -1,0 +1,120 @@
+{
+  "generated_at": "2026-11-01T09:14:45.450Z",
+  "source_pr": 49,
+  "reports": [
+    {
+      "issue_number": 44,
+      "pr_number": 49,
+      "workflow_run_id": 41292194636,
+      "generated_at": "2026-11-01T09:14:45.450Z",
+      "pass_rate": 100,
+      "total_tests": 44,
+      "total_passed": 44,
+      "total_failed": 0,
+      "coverage": {
+        "overall": {
+          "lines_pct": 89.57,
+          "branches_pct": 89.52,
+          "functions_pct": 83.33,
+          "status": "pass"
+        },
+        "files": [
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/main.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 94.44,
+            "branches_pct": 95.45,
+            "functions_pct": 83.33,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/components/Footer.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/UserProfile.jsx",
+            "lines_pct": 95,
+            "branches_pct": 86.66,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/utils/dateFormatter.js",
+            "lines_pct": 93.33,
+            "branches_pct": 87.09,
+            "functions_pct": 100,
+            "status": "pass"
+          }
+        ],
+        "non_pass_count": 2,
+        "thresholds": {
+          "lines": 80,
+          "branches": 75,
+          "functions": 80
+        }
+      },
+      "traceability": {
+        "perspective_count": 8,
+        "quality_items_count": 34,
+        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
+        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
+        "spec_files": [
+          {
+            "path": "tests/specs/feature-1792976619882.yml",
+            "feature": "feature-1792976619882.yml"
+          }
+        ],
+        "ut_cases": 0,
+        "e2e_cases": 0,
+        "ut_details": [],
+        "e2e_details": []
+      },
+      "implementation_files": [
+        ".github/workflows/quality-report-pr.yml",
+        ".github/workflows/test-matrix.yml",
+        ".github/workflows/update-dashboard.yml",
+        "docs/dashboard/data/kpi-history.json",
+        "docs/dashboard/data/kpi-history.json.bak",
+        "scripts/collect-kpi-advanced.mjs",
+        "scripts/generate-dashboard.mjs"
+      ]
+    }
+  ]
+}
