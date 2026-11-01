@@ -1,9 +1,6 @@
 name: Update Quality Dashboard
 
 on:
-  schedule:
-    # Daily at 10:00 AM JST (01:00 AM UTC)
-    - cron: '0 1 * * *'
   workflow_dispatch: {}
   workflow_run:
     workflows: ["Quality Schedule", "Test Matrix", "Quality Report PR"]
