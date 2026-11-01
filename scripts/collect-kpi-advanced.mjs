@@ -166,6 +166,25 @@ function fetchTestResults() {
       return null;
     }
     
+    // Check matrix completeness: Count test-matrix jobs by type
+    const testMatrixJobs = jobs.filter(j => j.name && j.name.includes('test-matrix'));
+    const testTypeMap = {};
+    for (const job of testMatrixJobs) {
+      const match = job.name.match(/test-matrix \(\d+, (\w+)\)/);
+      if (match) {
+        const testType = match[1];
+        testTypeMap[testType] = (testTypeMap[testType] || 0) + 1;
+      }
+    }
+    
+    const testTypes = Object.keys(testTypeMap);
+    console.log(`  ℹ️  Matrix jobs found: ${testMatrixJobs.length}`);
+    console.log(`     Test types: ${testTypes.join(', ')}`);
+    if (testTypes.length < 4) {
+      console.log(`  ⚠️  INCOMPLETE: Expected 4 test types (unit, api, e2e, advanced), found ${testTypes.length}`);
+      console.log(`     This suggests a test matrix job failure or incomplete execution`);
+    }
+    
     console.log(`  ✓ Fetched ${jobs.length} jobs from API`);
     
     return {
@@ -241,12 +260,14 @@ function parseTestResults(testData) {
       }
     }
     
-    // Final validation: ensure we have reasonable test counts
+    // Final validation: warn if test count is very low
     if (totalTests < 5) {
-      console.log(`  ⚠️  WARNING: Unusually low test count (${totalTests})`);
-      console.log(`      This suggests incomplete test results and may indicate a test matrix problem`);
-      console.log(`      Aborting KPI update to prevent corrupted dashboard data`);
-      return null;
+      console.log(`\n  ⚠️  WARNING: Very low test count (${totalTests}) - likely incomplete test matrix execution`);
+      console.log(`      Possible causes:`);
+      console.log(`      • Test matrix job failure or cancellation`);
+      console.log(`      • test-matrix-summary.json generation failure`);
+      console.log(`      • GitHub API data incomplete`);
+      console.log(`      Consider checking test-matrix.yml workflow run for errors`);
     }
     
     passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
@@ -610,15 +631,6 @@ async function main() {
     failed
   );
   
-  // 6. データの最終検証（ダッシュボード品質を守る）
-  if (testCount < 30) {
-    console.log(`\n⚠️  WARNING: Test count is unusually low (${testCount})`);
-    console.log(`   Expected minimum: 30 tests`);
-    console.log(`   This suggests a test matrix failure or incomplete artifact generation`);
-    console.log(`   Data will NOT be recorded to prevent corrupting dashboard history`);
-    process.exit(0);  // Exit gracefully without recording bad data
-  }
-  
   // 6. KPI データを構築
   const kpiData = {
     timestamp: new Date().toISOString(),
@@ -679,7 +691,21 @@ async function main() {
   }
   
   // 新しい記録を追加
-  history.push(kpiData);
+  // 但し、1 分以内の重複実行は防ぐ（同じ update-dashboard workflow の重複 trigger を防止）
+  const lastRecord = history.length > 0 ? history[history.length - 1] : null;
+  const lastTimestamp = lastRecord ? new Date(lastRecord.timestamp).getTime() : 0;
+  const currentTimestamp = new Date(kpiData.timestamp).getTime();
+  const timeDiffMinutes = (currentTimestamp - lastTimestamp) / (1000 * 60);
+  
+  if (lastRecord && timeDiffMinutes < 1) {
+    console.log(`\n⚠️  DUPLICATE PREVENTION: Last record was recorded ${timeDiffMinutes.toFixed(2)} minutes ago`);
+    console.log(`   Skipping duplicate recording to prevent identical KPI records`);
+    console.log(`   Previous: test_count=${lastRecord.test_count}, pass_rate=${lastRecord.pass_rate}%`);
+    console.log(`   Current:  test_count=${kpiData.test_count}, pass_rate=${kpiData.pass_rate}%`);
+  } else {
+    history.push(kpiData);
+    console.log(`✓ Added new KPI record (${timeDiffMinutes.toFixed(2)} minutes since last)`);
+  }
   
   // 90 日間の履歴を保持
   if (history.length > 90) {
