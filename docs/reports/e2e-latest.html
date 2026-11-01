@@ -431,13 +431,13 @@
 
       <div class="summary-card">
         <h3>テスト実行数</h3>
-        <div class="value" id="testCount">0</div>
+        <div class="value" id="testCount">19</div>
         <div class="unit">テスト</div>
       </div>
 
       <div class="summary-card success">
         <h3>合格数</h3>
-        <div class="value" id="passedCount">0</div>
+        <div class="value" id="passedCount">19</div>
         <div class="unit">テスト</div>
       </div>
 
@@ -455,7 +455,7 @@
 
       <div class="summary-card">
         <h3>実行時間</h3>
-        <div class="value" id="duration">0.0</div>
+        <div class="value" id="duration">36.8</div>
         <div class="unit">秒</div>
       </div>
     </div>
@@ -468,23 +468,514 @@
     </div>
 
     <div class="test-suites" id="testSuites">
-      <p style="text-align: center; color: #999; padding: 20px;">テストデータがありません</p>
+      
+    <div class="test-suite">
+      <div class="suite-header" onclick="toggleSuite(this.parentElement)">
+        <div class="suite-title">User Profile - Account Created At Display (E2E)</div>
+        <div class="suite-stats">
+          <span><span class="stat-passed">✅ 7</span></span>
+          <span><span class="stat-failed">❌ 0</span></span>
+          <span><span class="stat-skipped">⏭️ 0</span></span>
+        </div>
+        <div class="suite-toggle">▶</div>
+      </div>
+      <div class="suite-content">
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-001: Display profile with valid createdAt
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 1470ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-002: Display fallback when createdAt is null
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 1337ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-003: Handle 404 API error
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 1407ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01431c23285e2db74b321c76f97d888578d48693.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01431c23285e2db74b321c76f97d888578d48693.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-004: Fetch createdAt from API and display formatted
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 1290ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-005: Handle invalid createdAt format with fallback
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 1324ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-006: Verify element structure and accessibility
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 1325ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-007: Verify multiple renders and state consistency
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 13513ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01cba3eb8dea743353c913b3588e07ce26aadc4f.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01cba3eb8dea743353c913b3588e07ce26aadc4f.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="test-suite">
+      <div class="suite-header" onclick="toggleSuite(this.parentElement)">
+        <div class="suite-title">Error Path Tests</div>
+        <div class="suite-stats">
+          <span><span class="stat-passed">✅ 4</span></span>
+          <span><span class="stat-failed">❌ 0</span></span>
+          <span><span class="stat-skipped">⏭️ 0</span></span>
+        </div>
+        <div class="suite-toggle">▶</div>
+      </div>
+      <div class="suite-content">
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ displays error when adding check with only whitespace
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 3416ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/021fac403859d167fd42ca33abf4790c2994d077.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/021fac403859d167fd42ca33abf4790c2994d077.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ displays error when name exceeds 120 characters
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 2366ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0246b54ce596fa75d57bed1de55a674927a937fa.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0246b54ce596fa75d57bed1de55a674927a937fa.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ clears error message when user corrects input
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 5433ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/027647e19f0419fc9198f5deade0550de6c5fbd5.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/027647e19f0419fc9198f5deade0550de6c5fbd5.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ shows appropriate error when API is unavailable
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 2429ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/02c89de4cfcf290cc4cc640a9f5a97fb413265c4.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/02c89de4cfcf290cc4cc640a9f5a97fb413265c4.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="test-suite">
+      <div class="suite-header" onclick="toggleSuite(this.parentElement)">
+        <div class="suite-title">URL Validator API</div>
+        <div class="suite-stats">
+          <span><span class="stat-passed">✅ 8</span></span>
+          <span><span class="stat-failed">❌ 0</span></span>
+          <span><span class="stat-skipped">⏭️ 0</span></span>
+        </div>
+        <div class="suite-toggle">▶</div>
+      </div>
+      <div class="suite-content">
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-001: Check valid HTTPS URL endpoint
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 217ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/045cda1e9fd61eec7af9d8f9a9b3ecc17fe59ca7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/045cda1e9fd61eec7af9d8f9a9b3ecc17fe59ca7.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-002: Check invalid URL format
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 230ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/047ba9efacf0c42d7796fa0a09a8b8a1ef48b858.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/047ba9efacf0c42d7796fa0a09a8b8a1ef48b858.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-003: Check empty string input
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 187ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0555216544eae2df2a715521a79d14ab65daa683.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0555216544eae2df2a715521a79d14ab65daa683.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-004: Check null input
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 178ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/060eca919345e0fdf3bc6612a95aa2f8599c6e4d.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/060eca919345e0fdf3bc6612a95aa2f8599c6e4d.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-005: Check valid HTTP URL with port
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 173ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/06848f2be8713a531fbd86102178df8c9f4c4f06.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/06848f2be8713a531fbd86102178df8c9f4c4f06.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-006: Check valid GitHub URL
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 183ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/06fe20a513ab06a926d30ab9e7d8980ba2cf3779.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/06fe20a513ab06a926d30ab9e7d8980ba2cf3779.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-007: Check FTP protocol (not allowed)
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 161ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/07a7de8400e9735306eed9e8fefd961dcda64e3e.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/07a7de8400e9735306eed9e8fefd961dcda64e3e.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ✅ E2E-008: Response time performance check
+            <span class="test-status-badge" style="background: #51cf66; color: white;">
+              合格
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 161ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/07db91bfaf5dd81d54b6ce6886bbf4f7baf2fe51.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/07db91bfaf5dd81d54b6ce6886bbf4f7baf2fe51.zip'); return false;">🔍 Trace Viewerで開く</a></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     </div>
 
     <div id="video" class="details-section">
       <h2>🎥 テスト実行動画</h2>
       <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        
-        <div style="text-align: center; padding: 30px; background: #f9f9f9; border-radius: 8px;">
-          <p style="color: #999; font-size: 1.1em; margin-bottom: 10px;">📹 テスト実行動画がありません</p>
-          <p style="color: #bbb; font-size: 0.9em;">
-            💡 動画を記録するには、<code style="background: #e8e8e8; padding: 2px 6px; border-radius: 3px;">playwright.config.js</code> で以下を設定してください:
-          </p>
-          <pre style="background: #e8e8e8; padding: 10px; border-radius: 5px; text-align: left; overflow-x: auto; margin-top: 10px;"><code>use: {
-  video: 'on' // または 'retain-on-failure'
-}</code></pre>
+        <div class="video-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/00b09e1d1b53731d897bdee2eaf8482a7a951ed4.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-001: Display profile with valid createdAt</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 1470ms</p>
         </div>
+      </div>
 
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/00b5749f8ba5ea76886883c77f539e551985989c.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-002: Display fallback when createdAt is null</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 1337ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/00cfc9c8f66a756a30fb7533b9704934365bdb8b.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-003: Handle 404 API error</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 1407ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/00efb3ce31e8dcc1fc9c06b2b86046ba6896fdeb.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-004: Fetch createdAt from API and display formatted</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 1290ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/01452234729c08fa56dfa8cc8ba737f74d5bb9cb.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-005: Handle invalid createdAt format with fallback</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 1324ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/016830d465904a5bdbe2564c24dcfc40ab9b4bb0.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-006: Verify element structure and accessibility</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 1325ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/01934800262ce82f5ae6cccbe8f68c77f861b9ba.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-007: Verify multiple renders and state consistency</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 13513ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/01af08711488f68ea4b56b9b310951f0f86b7789.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ displays error when adding check with only whitespace</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 3416ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/01c9386b04bdc009f75e3ba84211e486808c1b8d.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ displays error when name exceeds 120 characters</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 2366ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/0297a107abdbd608845c2e2bec3d1eae8c331293.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ clears error message when user corrects input</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 5433ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/02a1a95de501c09600417d7db8e82b84373372e0.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ shows appropriate error when API is unavailable</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 2429ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/02ee545cb38dcb6b1fc557a1e81a1c9b2e3a5962.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-001: Check valid HTTPS URL endpoint</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 217ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/0320a06b33c42eec21ee4a1860e375fa0afe857f.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-002: Check invalid URL format</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 230ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/032845189960196f5f985c7eec0a07767d9035b3.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-003: Check empty string input</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 187ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/039e36c8c2321e5db54e12241caaa668fb839a3b.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-004: Check null input</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 178ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/03ba088aac81091c45d61d8e895a17375db30621.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-005: Check valid HTTP URL with port</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 173ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/03c3b76393c8469f3b7493c2e850995373ec2157.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-006: Check valid GitHub URL</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 183ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/040b1529d3d335e30fdb71de085ac00ffec69c2f.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-007: Check FTP protocol (not allowed)</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 161ms</p>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <video controls style="width: 100%; background: #000;">
+          <source src="./videos/04212ba9c344c76839fcfd45e9600c83cafe8d3d.webm" type="video/webm">
+          お使いのブラウザはビデオタグに対応していません
+        </video>
+        <div style="padding: 15px;">
+          <p style="font-weight: 600; color: #333; margin-bottom: 5px;">✅ E2E-008: Response time performance check</p>
+          <p style="color: #999; font-size: 0.9em;">⏱️ 161ms</p>
+        </div>
+      </div>
+</div>
       </div>
     </div>
 
@@ -494,8 +985,8 @@
         <p style="color: #666; margin-bottom: 10px;">動画・ログ・集計データへ直接アクセスできます。</p>
         
       <ul style="margin-left: 1.2rem; color: #555; line-height: 1.8;">
-        <li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/runs/40256510665" target="_blank" rel="noopener noreferrer">🧪 Test Matrix Run #40256510665</a>（ログ・Artifacts）</li>
-        <li>🧭 Playwright公式HTMLレポート: 取得不可</li>
+        <li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/runs/41287016719" target="_blank" rel="noopener noreferrer">🧪 Test Matrix Run #41287016719</a>（ログ・Artifacts）</li>
+        <li><a href="./playwright-report/index.html" target="_blank" rel="noopener noreferrer">🧭 Playwright公式HTMLレポート</a>（手順ログ/エラー/trace導線）</li>
         <li><a href="./data/test-cases.json" target="_blank" rel="noopener noreferrer">📄 test-cases.json</a>（E2E集計データ）</li>
         <li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/workflows/test-matrix.yml" target="_blank" rel="noopener noreferrer">⚙️ Test Matrix Workflow</a></li>
       </ul>
@@ -504,7 +995,7 @@
     </div>
 
     <div class="footer">
-      <p>最終更新: <span id="lastUpdated">2026/11/01 01:11:33</span></p>
+      <p>最終更新: <span id="lastUpdated">2026/11/01 08:05:35</span></p>
       <p>Copilot Quality Harness | <a href="https://github.com/cocomomojo/copilot-quality-harness" style="color: #667eea; text-decoration: none;">GitHub</a></p>
     </div>
   </div>
