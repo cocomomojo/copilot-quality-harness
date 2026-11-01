@@ -298,6 +298,11 @@ jobs:
             by_test_type: {}
           };
           
+          // Validate total_tests is reasonable
+          if (summary.total_tests === 0 && allResults.length > 0) {
+            console.warn('⚠️  WARNING: total_tests is 0 but results exist - this indicates a problem with test result collection');
+          }
+          
           // Group by node version
           for (const version of [20]) {
             const versionResults = allResults.filter(r => r.node_version === version);
@@ -321,7 +326,14 @@ jobs:
           console.log('\\n✅ Test Matrix Summary:');
           console.log(JSON.stringify(summary, null, 2));
           
-          fs.writeFileSync('test-matrix-summary.json', JSON.stringify(summary, null, 2));
+          // Final validation before writing
+          if (summary.total_tests > 0) {
+            fs.writeFileSync('test-matrix-summary.json', JSON.stringify(summary, null, 2));
+            console.log('✓ Summary saved successfully');
+          } else {
+            console.error('❌ ERROR: Unable to generate valid summary - total_tests must be > 0');
+            process.exit(1);
+          }
           "
       
       - name: Upload test summary
