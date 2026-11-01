@@ -55,7 +55,10 @@ jobs:
           TEST_EXIT_CODE=$?
           echo "✅ Unit tests completed with exit code: $TEST_EXIT_CODE"
           
-          # Extract coverage percentage from coverage reports if available
+          echo "📊 Generating coverage report..."
+          npm run test:coverage 2>&1 || true
+          
+          # Extract coverage percentage
           if [ -f coverage/coverage-final.json ]; then
             NODE_PATH=. node -e "
               const coverage = require('./coverage/coverage-final.json');
