@@ -21,6 +21,48 @@
     }
   },
   {
+    "timestamp": "2026-10-20T09:14:27.564Z",
+    "pass_rate": 88,
+    "test_count": 8,
+    "passed": 7,
+    "failed": 0,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 46,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 39399158630
+    },
+    "trend": "IMPROVING",
+    "trend_details": {
+      "pass_rate_change": 13,
+      "coverage_change": 0
+    }
+  },
+  {
+    "timestamp": "2026-10-20T09:21:17.525Z",
+    "pass_rate": 88,
+    "test_count": 8,
+    "passed": 7,
+    "failed": 0,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 46,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 39399938763
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+  },
+  {
     "timestamp": "2026-10-20T09:22:43.614Z",
     "pass_rate": 75,
     "test_count": 44,
@@ -168,6 +210,27 @@
     }
   },
   {
+    "timestamp": "2026-10-24T09:59:46.399Z",
+    "pass_rate": 75,
+    "test_count": 4,
+    "passed": 3,
+    "failed": 0,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 41,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 40084078820
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+  },
+  {
     "timestamp": "2026-10-24T10:08:50.937Z",
     "pass_rate": 75,
     "test_count": 44,
@@ -185,6 +248,27 @@
     "trend": "STABLE",
     "trend_details": {
       "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+  },
+  {
+    "timestamp": "2026-10-24T10:14:28.618Z",
+    "pass_rate": 50,
+    "test_count": 4,
+    "passed": 2,
+    "failed": 0,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 31,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 40085088821
+    },
+    "trend": "DECLINING",
+    "trend_details": {
+      "pass_rate_change": -25,
       "coverage_change": 0
     }
   },
@@ -1527,6 +1611,52 @@
       "github_run_id": 41293925774,
       "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
       "explicit_test_run_id": "41293925774"
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+  },
+  {
+    "timestamp": "2026-11-01T09:45:52.484Z",
+    "pass_rate": 80,
+    "test_count": 5,
+    "passed": 4,
+    "failed": 1,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 42,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 41293925774,
+      "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
+      "explicit_test_run_id": "41293925774"
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+  },
+  {
+    "timestamp": "2026-11-01T10:58:47.901Z",
+    "pass_rate": 80,
+    "test_count": 5,
+    "passed": 4,
+    "failed": 1,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 42,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 41299537621,
+      "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
+      "explicit_test_run_id": "41299537621"
     },
     "trend": "STABLE",
     "trend_details": {
