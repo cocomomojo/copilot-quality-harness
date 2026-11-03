@@ -78,24 +78,38 @@ jobs:
               core.warning('Issue source was not verified; no Issue comment was posted.');
               return;
             }
+            const statusText = {
+              'safe-proceed': '✅ 自動化可能',
+              'unsafe-stop': '⚠️ 停止中'
+            }[report.status] || report.status;
+            
             const lines = [
-              `## M2 read-only intake: ${report.status}`,
+              `## M2 自動化ワークフロー: ${statusText}`,
               '',
               `Issue: #${report.sourceTrust.issueNumber}`,
-              `Source: \`${report.sourceTrust.repository}\` (verified same-repository payload)`,
-              'Model calls: none',
-              'Source writes, branch creation, and PR creation: none',
-              `Report artifact: [M2 intake run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`
+              `ソース: \`${report.sourceTrust.repository}\` (検証済み)`,
+              'AIモデル呼び出し: なし',
+              'ソース書き込み、ブランチ作成、PR作成: なし',
+              `レポートアーティファクト: [M2 実行結果](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`
             ];
             const reasons = report.stopConditions ?? report.errors ?? [];
             if (reasons.length) {
-              lines.push('', 'Stop details:', ...reasons.map((reason) => `- ${reason}`));
+              lines.push('', '停止理由:', ...reasons.map((reason) => {
+                const ja = {
+                  'missing information: acceptance criteria, test requirements, allowed scope, severity': '不足情報: 受入条件、テスト要求、影響範囲、重大度',
+                  'missing information: acceptance criteria, test requirements, allowed scope': '不足情報: 受入条件、テスト要求、影響範囲',
+                  'missing information: acceptance criteria, test requirements': '不足情報: 受入条件、テスト要求',
+                  'read-only automation has not been approved for this issue': '読み取り専用自動化がこのIssueで承認されていません',
+                  'issue mentions a restricted security, personal-data, payment, or destructive-database scope': 'Issueが制限対象のキーワード（セキュリティ、個人情報、決済、破壊的DB操作）を含んでいます'
+                }[reason];
+                return `- ${ja || reason}`;
+              }));
             }
             if (report.handoff) {
               lines.push(
                 '',
-                `Human-review handoff only: suggested branch \`${report.handoff.suggestedBranch}\`.`,
-                'Implementation is not authorized by this workflow; review the artifact and make any implementation decision manually.'
+                `人間レビュー待機中: 推奨ブランチ \`${report.handoff.suggestedBranch}\``,
+                'このワークフロー内での実装実行は許可されていません。アーティファクトをレビューして、実装判断は手動で行ってください。'
               );
             }
             await github.rest.issues.createComment({
