@@ -196,7 +196,9 @@ export function createIssueContractFromGitHubPayload(payload, expectedRepository
   const acceptanceText = section(sections, ['受入条件', '受け入れ基準', 'acceptance criteria', 'expected behavior', '期待結果']);
   const testText = section(sections, ['テスト要求', 'テスト', 'test requirements', 'tests']);
   const scopeText = section(sections, ['影響範囲', 'scope', '影響範囲とseverity']);
-  const severityText = section(sections, ['リスク', '重大度', 'severity', '影響範囲とseverity']).toLowerCase();
+  const severityRaw = section(sections, ['リスク', '重大度', 'severity', '影響範囲とseverity']).toLowerCase().trim();
+  // セクション内のテキストから最初の有効な単語（severity値）を抽出
+  const severityText = severityRaw.split(/[\s\n-]+/)[0];
   const acceptanceCriteria = criteriaFromMultiHeading(body, ['受入条件', '受け入れ基準', 'acceptance criteria', 'expected behavior', '期待結果']).slice(0, LIMITS.acceptanceCriteria).map((criterion) => criterion.slice(0, LIMITS.criterionCharacters));
   const testRequirements = criteriaFromMultiHeading(body, ['テスト要求', 'テスト', 'test requirements', 'tests']).slice(0, LIMITS.acceptanceCriteria).map((requirement) => requirement.slice(0, LIMITS.criterionCharacters));
   const scope = extractScope(scopeText);
