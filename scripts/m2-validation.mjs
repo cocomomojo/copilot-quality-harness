@@ -20,7 +20,8 @@ export const LIMITS = {
 const SCHEMA_VERSION = 2;
 const SCOPES = new Set(['Frontend', 'Backend', 'API', 'DB', 'Infra', 'Docs']);
 const SEVERITIES = new Set(['low', 'medium', 'high', 'critical']);
-const IGNORED_DIRECTORIES = new Set(['node_modules', '.git', 'dist', 'coverage', 'docs/reports', 'playwright-report', 'test-results', 'artifacts']);
+const IGNORED_DIRECTORIES = new Set(['node_modules', '.git', 'dist', 'coverage']);
+const IGNORED_PATHS = new Set(['docs/reports', 'playwright-report', 'test-results', 'artifacts']);
 
 function sourceErrors(source, issueNumber, expectedRepository) {
   const errors = [];
@@ -282,11 +283,12 @@ function classify(path) {
 
 function walk(root, current = root, files = []) {
   for (const entry of readdirSync(current, { withFileTypes: true }).sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)) {
-    if (entry.isSymbolicLink() || IGNORED_DIRECTORIES.has(entry.name)) continue;
+    const relativePath = relative(root, resolve(current, entry.name)).replaceAll('\\', '/');
+    if (entry.isSymbolicLink() || IGNORED_DIRECTORIES.has(entry.name) || IGNORED_PATHS.has(relativePath)) continue;
     const full = resolve(current, entry.name);
     if (entry.isDirectory()) walk(root, full, files);
     else if (entry.isFile()) {
-      files.push(relative(root, full).replaceAll('\\', '/'));
+      files.push(relativePath);
       if (files.length > LIMITS.repositoryFiles) throw new Error(`repository exceeds the ${LIMITS.repositoryFiles}-file analysis limit`);
     }
   }
