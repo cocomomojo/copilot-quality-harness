@@ -3,6 +3,23 @@ description: 受入条件が確定した機能要求
 title: "[Feature] "
 labels: ["feature", "needs-triage"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        # ⚠️ M2 自動化ワークフロー対応
+        
+        このテンプレートで Issue を作成する場合、**M2 read-only intake ワークフロー**が Issue を検証します。
+        
+        **禁止用語が Issue に含まれていると自動化が停止します：**
+        - `auth`, `authentication`, `authorization`, `認証`, `認可` → 脆弱性リスク
+        - `personal data`, `PII`, `個人情報` → データ漏洩リスク
+        - `payment`, `billing`, `決済`, `請求` → 金銭・詐欺リスク
+        - `DROP TABLE`, `TRUNCATE`, `破壊的 DB` → データロスリスク
+        
+        **詳細は [acceptance テンプレ](acceptance.md) の「禁止用語リスト」を参照してください。**
+        
+        ---
+        
   - type: textarea
     id: background
     attributes: { label: 背景, description: なぜ必要か }
