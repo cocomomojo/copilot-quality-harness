@@ -818,13 +818,6 @@ async function generateE2EDetailsPage(config) {
       ${generateTestSuitesHTML()}
     </div>
 
-    <div id="video" class="details-section">
-      <h2>🎥 テスト実行動画</h2>
-      <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        ${generateVideoGalleryHTML()}
-      </div>
-    </div>
-
     <div class="details-section">
       <h2>🧾 E2E 実行エビデンス</h2>
       <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
