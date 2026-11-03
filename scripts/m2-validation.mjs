@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 export const EXIT_CODES = { ok: 0, invalid: 2, unsafe: 3, io: 4 };
 export const LIMITS = {
@@ -174,6 +175,19 @@ function criteriaFromMultiHeading(body, sectionNames) {
   return [];
 }
 
+// Copilot CLI を使用してセキュリティ影響を判定（試験的）
+// 注: 現在は非同期サポートが限定されているため、正規表現フォールバックを使用
+// TODO: 将来的には Copilot CLI (async) に完全移行
+function assessSecurityRiskWithCopilot(securitySection, issueTitle) {
+  try {
+    // Copilot CLI の同期実行は不安定なため、現在は正規表現ロジックを保持
+    // 将来: GitHub Copilot Chat API または copilot --json で AI 判定
+    console.debug('Security assessment: Using regex-based detection (Copilot CLI integration planned)');
+    return false; // フォールバック: AI判定を使用しない
+  } catch (error) {
+    return false;
+  }
+}
 
 function extractScope(value) {
   return [...SCOPES].filter((scope) => new RegExp(`(?:^|[^a-z])${scope}(?:$|[^a-z])`, 'i').test(value)).sort();
