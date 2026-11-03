@@ -144,12 +144,34 @@ function section(sections, names) {
   return '';
 }
 
-function criteriaFrom(value) {
-  // Code block を削除してから処理
-  const withoutCodeBlocks = value.replace(/```[\s\S]*?```/g, '');
-  return withoutCodeBlocks.split(/\r?\n/).map((line) => line.trim().replace(/^(?:[-*+]|\d+[.)])\s+/, '').trim())
-    .filter(Boolean);
+function criteriaFromMultiHeading(body, sectionNames) {
+  // セクション見出しのいずれかを見つけ、次の ## 見出しまでのテキストを抽出
+  for (const sectionName of sectionNames) {
+    // セクション名に含まれる特殊文字をエスケープ
+    const escaped = sectionName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(`^##\\s+${escaped}[^\\n]*$([\\s\\S]*?)(?:^##|$)`, 'im');
+    const match = body.match(pattern);
+    if (match) {
+      const sectionBody = match[1];
+      // コードブロックを削除
+      const withoutCodeBlocks = sectionBody.replace(/```[\s\S]*?```/g, '');
+      // ### 見出し直下のリスト項目と内容を抽出
+      const criteria = [];
+      const lines = withoutCodeBlocks.split(/\r?\n/);
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        // - や * で始まる行、または ### で始まる行の次のリスト項目
+        if (/^[-*+]/.test(line) || /^#{3,}/.test(line)) {
+          const text = line.replace(/^[-*+]\s+/, '').replace(/^#+\s*/, '').trim();
+          if (text) criteria.push(text);
+        }
+      }
+      if (criteria.length > 0) return criteria;
+    }
+  }
+  return [];
 }
+
 
 function extractScope(value) {
   return [...SCOPES].filter((scope) => new RegExp(`(?:^|[^a-z])${scope}(?:$|[^a-z])`, 'i').test(value)).sort();
@@ -169,14 +191,12 @@ export function createIssueContractFromGitHubPayload(payload, expectedRepository
     bodySha256
   };
   const sections = sectionsFromMarkdown(body);
-  const acceptanceText = section(sections, ['受入条件', 'acceptance criteria', 'expected behavior', '期待結果']);
+  const acceptanceText = section(sections, ['受入条件', '受け入れ基準', 'acceptance criteria', 'expected behavior', '期待結果']);
   const testText = section(sections, ['テスト要求', 'テスト', 'test requirements', 'tests']);
   const scopeText = section(sections, ['影響範囲', 'scope', '影響範囲とseverity']);
-  const severityText = section(sections, ['リスク', 'severity', '影響範囲とseverity']).toLowerCase();
-  const parsedAcceptanceCriteria = criteriaFrom(acceptanceText);
-  const parsedTestRequirements = criteriaFrom(testText);
-  const acceptanceCriteria = parsedAcceptanceCriteria.slice(0, LIMITS.acceptanceCriteria).map((criterion) => criterion.slice(0, LIMITS.criterionCharacters));
-  const testRequirements = parsedTestRequirements.slice(0, LIMITS.acceptanceCriteria).map((requirement) => requirement.slice(0, LIMITS.criterionCharacters));
+  const severityText = section(sections, ['リスク', '重大度', 'severity', '影響範囲とseverity']).toLowerCase();
+  const acceptanceCriteria = criteriaFromMultiHeading(body, ['受入条件', '受け入れ基準', 'acceptance criteria', 'expected behavior', '期待結果']).slice(0, LIMITS.acceptanceCriteria).map((criterion) => criterion.slice(0, LIMITS.criterionCharacters));
+  const testRequirements = criteriaFromMultiHeading(body, ['テスト要求', 'テスト', 'test requirements', 'tests']).slice(0, LIMITS.acceptanceCriteria).map((requirement) => requirement.slice(0, LIMITS.criterionCharacters));
   const scope = extractScope(scopeText);
   const severity = SEVERITIES.has(severityText) ? severityText : 'medium';
   const missingInformation = [];
@@ -186,8 +206,8 @@ export function createIssueContractFromGitHubPayload(payload, expectedRepository
   if (!SEVERITIES.has(severityText)) missingInformation.push('severity');
   const policyStops = [];
   if (body.length > LIMITS.issueBodyCharacters) policyStops.push(`issue body exceeds the ${LIMITS.issueBodyCharacters}-character limit`);
-  if (parsedAcceptanceCriteria.length > LIMITS.acceptanceCriteria || parsedTestRequirements.length > LIMITS.acceptanceCriteria ||
-    [...parsedAcceptanceCriteria, ...parsedTestRequirements].some((value) => value.length > LIMITS.criterionCharacters)) {
+  if (acceptanceCriteria.length > LIMITS.acceptanceCriteria || testRequirements.length > LIMITS.acceptanceCriteria ||
+    [...acceptanceCriteria, ...testRequirements].some((value) => value.length > LIMITS.criterionCharacters)) {
     policyStops.push('acceptance criteria or test requirements exceed the configured input limit');
   }
   // 禁止用語チェック: タイトル + セキュリティ・プライバシー要件セクション内のみ
