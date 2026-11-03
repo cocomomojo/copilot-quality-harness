@@ -149,7 +149,8 @@ function criteriaFromMultiHeading(body, sectionNames) {
   for (const sectionName of sectionNames) {
     // セクション名に含まれる特殊文字をエスケープ
     const escaped = sectionName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const pattern = new RegExp(`^##\\s+${escaped}[^\\n]*$([\\s\\S]*?)(?:^##|$)`, 'im');
+    // 改善: 見出し行の後の改行を含めてキャプチャ、次の##または終端までを抽出
+    const pattern = new RegExp(`^##\\s+${escaped}[^\\n]*\\n([\\s\\S]*?)(?=^##|\\Z)`, 'im');
     const match = body.match(pattern);
     if (match) {
       const sectionBody = match[1];
@@ -161,7 +162,8 @@ function criteriaFromMultiHeading(body, sectionNames) {
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
         // - や * で始まる行、または ### で始まる行の次のリスト項目
-        if (/^[-*+]/.test(line) || /^#{3,}/.test(line)) {
+        // "---" のような区切り線は除外
+        if ((/^[-*+]/.test(line) || /^#{3,}/.test(line)) && !/^-+$/.test(line)) {
           const text = line.replace(/^[-*+]\s+/, '').replace(/^#+\s*/, '').trim();
           if (text) criteria.push(text);
         }
