@@ -35,7 +35,7 @@ export default defineConfig({
     // 必要に応じて PW_TRACE_MODE=retain-on-failure で切り替え可能
     trace: process.env.PW_TRACE_MODE || 'on',
     screenshot: 'only-on-failure',
-    video: 'on',
+    // Note: video は削除。Trace Viewer で十分な情報（動画・ログ・スクリーンショット）が得られるため
     launchOptions: {
       slowMo: 1000
     },
