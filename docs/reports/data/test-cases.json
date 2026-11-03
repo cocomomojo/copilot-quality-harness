@@ -1,14 +1,24 @@
 {
+<<<<<<< Updated upstream
   "timestamp": "2026-11-03T11:15:06.081Z",
+=======
+  "timestamp": "2026-11-03T11:27:12.468Z",
+>>>>>>> Stashed changes
   "totalSuites": 3,
   "totalTests": 19,
   "passed": 19,
   "failed": 0,
   "skipped": 0,
   "passRate": 100,
+<<<<<<< Updated upstream
   "duration": 35180,
   "metadata": {
     "test_run_id": "41625158998"
+=======
+  "duration": 35575,
+  "metadata": {
+    "test_run_id": "41626775311"
+>>>>>>> Stashed changes
   },
   "suites": [
     {
@@ -18,19 +28,25 @@
       "passed": 7,
       "failed": 0,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 20934,
+=======
+      "duration": 21345,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "E2E-001: Display profile with valid createdAt",
           "title": "E2E-001: Display profile with valid createdAt",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1319,
+=======
+          "duration": 1453,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -42,13 +58,15 @@
           "name": "E2E-002: Display fallback when createdAt is null",
           "title": "E2E-002: Display fallback when createdAt is null",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1231,
+=======
+          "duration": 1312,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -60,13 +78,15 @@
           "name": "E2E-003: Handle 404 API error",
           "title": "E2E-003: Handle 404 API error",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1316,
+=======
+          "duration": 1379,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -78,13 +98,15 @@
           "name": "E2E-004: Fetch createdAt from API and display formatted",
           "title": "E2E-004: Fetch createdAt from API and display formatted",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1210,
+=======
+          "duration": 1265,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -96,13 +118,15 @@
           "name": "E2E-005: Handle invalid createdAt format with fallback",
           "title": "E2E-005: Handle invalid createdAt format with fallback",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1263,
+=======
+          "duration": 1296,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -114,13 +138,15 @@
           "name": "E2E-006: Verify element structure and accessibility",
           "title": "E2E-006: Verify element structure and accessibility",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1215,
+=======
+          "duration": 1307,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -132,13 +158,15 @@
           "name": "E2E-007: Verify multiple renders and state consistency",
           "title": "E2E-007: Verify multiple renders and state consistency",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 13380,
+=======
+          "duration": 13333,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -155,19 +183,25 @@
       "passed": 4,
       "failed": 0,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 13121,
+=======
+      "duration": 13542,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "displays error when adding check with only whitespace",
           "title": "displays error when adding check with only whitespace",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 3284,
+=======
+          "duration": 3399,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -179,13 +213,15 @@
           "name": "displays error when name exceeds 120 characters",
           "title": "displays error when name exceeds 120 characters",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 2256,
+=======
+          "duration": 2321,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -197,13 +233,15 @@
           "name": "clears error message when user corrects input",
           "title": "clears error message when user corrects input",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 5289,
+=======
+          "duration": 5434,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -215,13 +253,15 @@
           "name": "shows appropriate error when API is unavailable",
           "title": "shows appropriate error when API is unavailable",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 2292,
+=======
+          "duration": 2388,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -238,19 +278,25 @@
       "passed": 8,
       "failed": 0,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 1125,
+=======
+      "duration": 688,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "E2E-001: Check valid HTTPS URL endpoint",
           "title": "E2E-001: Check valid HTTPS URL endpoint",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 151,
+=======
+          "duration": 88,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -262,13 +308,15 @@
           "name": "E2E-002: Check invalid URL format",
           "title": "E2E-002: Check invalid URL format",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 159,
+=======
+          "duration": 84,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -280,13 +328,15 @@
           "name": "E2E-003: Check empty string input",
           "title": "E2E-003: Check empty string input",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 162,
+=======
+          "duration": 99,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -298,13 +348,15 @@
           "name": "E2E-004: Check null input",
           "title": "E2E-004: Check null input",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 123,
+=======
+          "duration": 82,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -316,13 +368,15 @@
           "name": "E2E-005: Check valid HTTP URL with port",
           "title": "E2E-005: Check valid HTTP URL with port",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 171,
+=======
+          "duration": 83,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -334,13 +388,15 @@
           "name": "E2E-006: Check valid GitHub URL",
           "title": "E2E-006: Check valid GitHub URL",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 121,
+=======
+          "duration": 84,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -352,13 +408,15 @@
           "name": "E2E-007: Check FTP protocol (not allowed)",
           "title": "E2E-007: Check FTP protocol (not allowed)",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 118,
+=======
+          "duration": 84,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
@@ -370,13 +428,15 @@
           "name": "E2E-008: Response time performance check",
           "title": "E2E-008: Response time performance check",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 120,
+=======
+          "duration": 84,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
-          "videos": [
-            "./video.webm"
-          ],
+          "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
