@@ -129,7 +129,7 @@ function sectionsFromMarkdown(body) {
     if (heading) {
       current = heading[1].trim().toLocaleLowerCase('en-US');
       sections.set(current, []);
-    } else if (current) {
+    } else if (current !== null) {
       sections.get(current).push(line);
     }
   }
@@ -145,7 +145,9 @@ function section(sections, names) {
 }
 
 function criteriaFrom(value) {
-  return value.split(/\r?\n/).map((line) => line.trim().replace(/^(?:[-*+]|\d+[.)])\s+/, '').trim())
+  // Code block を削除してから処理
+  const withoutCodeBlocks = value.replace(/```[\s\S]*?```/g, '');
+  return withoutCodeBlocks.split(/\r?\n/).map((line) => line.trim().replace(/^(?:[-*+]|\d+[.)])\s+/, '').trim())
     .filter(Boolean);
 }
 
@@ -188,7 +190,9 @@ export function createIssueContractFromGitHubPayload(payload, expectedRepository
     [...parsedAcceptanceCriteria, ...parsedTestRequirements].some((value) => value.length > LIMITS.criterionCharacters)) {
     policyStops.push('acceptance criteria or test requirements exceed the configured input limit');
   }
-  if (/(?:\bauth(?:entication|orization)?\b|\bpersonal data\b|\bpii\b|\bpayment(?:s)?\b|\bbilling\b|\bdrop\s+table\b|\btruncate\b|\bdestructive\s+(?:database|db)\b|認証|個人情報|決済|破壊的.{0,12}(?:DB|データベース))/i.test(`${payload.title}\n${body}`)) {
+  // 禁止用語チェック: タイトル + セキュリティ・プライバシー要件セクション内のみ
+  const securityPrivacySection = section(sections, ['セキュリティ・プライバシー要件', 'セキュリティ', 'security', 'privacy']);
+  if (/(?:\bauth(?:entication|orization)?\b|\bpersonal data\b|\bpii\b|\bpayment(?:s)?\b|\bbilling\b|\bdrop\s+table\b|\btruncate\b|\bdestructive\s+(?:database|db)\b|認証|個人情報|決済|破壊的.{0,12}(?:DB|データベース))/i.test(`${payload.title}\n${securityPrivacySection}`)) {
     policyStops.push('issue mentions a restricted security, personal-data, payment, or destructive-database scope');
   }
   const issue = {
