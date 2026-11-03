@@ -20,7 +20,7 @@ export const LIMITS = {
 const SCHEMA_VERSION = 2;
 const SCOPES = new Set(['Frontend', 'Backend', 'API', 'DB', 'Infra', 'Docs']);
 const SEVERITIES = new Set(['low', 'medium', 'high', 'critical']);
-const IGNORED_DIRECTORIES = new Set(['node_modules', '.git', 'dist', 'coverage']);
+const IGNORED_DIRECTORIES = new Set(['node_modules', '.git', 'dist', 'coverage', 'docs/reports', 'playwright-report', 'test-results', 'artifacts']);
 
 function sourceErrors(source, issueNumber, expectedRepository) {
   const errors = [];
