@@ -216,7 +216,12 @@ export function createIssueContractFromGitHubPayload(payload, expectedRepository
   }
   // 禁止用語チェック: タイトル + セキュリティ・プライバシー要件セクション内のみ
   const securityPrivacySection = section(sections, ['セキュリティ・プライバシー要件', 'セキュリティ', 'security', 'privacy']);
-  if (/(?:\bauth(?:entication|orization)?\b|\bpersonal data\b|\bpii\b|\bpayment(?:s)?\b|\bbilling\b|\bdrop\s+table\b|\btruncate\b|\bdestructive\s+(?:database|db)\b|認証|個人情報|決済|破壊的.{0,12}(?:DB|データベース))/i.test(`${payload.title}\n${securityPrivacySection}`)) {
+  const textToCheck = `${payload.title}\n${securityPrivacySection}`;
+  
+  // セクション内に「影響なし」「含まない」「変更なし」などの否定表現があれば、キーワード検出をスキップ
+  const hasNegation = /(?:影響なし|含まない|変更なし|変更不可|実装なし|実装不可|除外|不要|不対象|no\s+(?:changes?|modification)|not\s+(?:included?|implemented?)|unchanged)/i.test(securityPrivacySection);
+  
+  if (!hasNegation && /(?:\bauth(?:entication|orization)?\b|\bpersonal data\b|\bpii\b|\bpayment(?:s)?\b|\bbilling\b|\bdrop\s+table\b|\btruncate\b|\bdestructive\s+(?:database|db)\b|認証|個人情報|決済|破壊的.{0,12}(?:DB|データベース))/i.test(textToCheck)) {
     policyStops.push('issue mentions a restricted security, personal-data, payment, or destructive-database scope');
   }
   const issue = {
