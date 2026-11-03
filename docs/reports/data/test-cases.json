@@ -1,14 +1,24 @@
 {
+<<<<<<< Updated upstream
   "timestamp": "2026-11-03T11:00:25.583Z",
+=======
+  "timestamp": "2026-11-03T11:07:28.572Z",
+>>>>>>> Stashed changes
   "totalSuites": 3,
   "totalTests": 19,
   "passed": 19,
   "failed": 0,
   "skipped": 0,
   "passRate": 100,
+<<<<<<< Updated upstream
   "duration": 35882,
   "metadata": {
     "test_run_id": "41623060312"
+=======
+  "duration": 36997,
+  "metadata": {
+    "test_run_id": "41623945918"
+>>>>>>> Stashed changes
   },
   "suites": [
     {
@@ -18,13 +28,21 @@
       "passed": 7,
       "failed": 0,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 20931,
+=======
+      "duration": 21748,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "E2E-001: Display profile with valid createdAt",
           "title": "E2E-001: Display profile with valid createdAt",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1319,
+=======
+          "duration": 1477,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -42,7 +60,11 @@
           "name": "E2E-002: Display fallback when createdAt is null",
           "title": "E2E-002: Display fallback when createdAt is null",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1226,
+=======
+          "duration": 1344,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -60,7 +82,11 @@
           "name": "E2E-003: Handle 404 API error",
           "title": "E2E-003: Handle 404 API error",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1306,
+=======
+          "duration": 1422,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -78,7 +104,11 @@
           "name": "E2E-004: Fetch createdAt from API and display formatted",
           "title": "E2E-004: Fetch createdAt from API and display formatted",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1200,
+=======
+          "duration": 1306,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -96,7 +126,11 @@
           "name": "E2E-005: Handle invalid createdAt format with fallback",
           "title": "E2E-005: Handle invalid createdAt format with fallback",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1213,
+=======
+          "duration": 1334,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -114,7 +148,11 @@
           "name": "E2E-006: Verify element structure and accessibility",
           "title": "E2E-006: Verify element structure and accessibility",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1277,
+=======
+          "duration": 1328,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -132,7 +170,11 @@
           "name": "E2E-007: Verify multiple renders and state consistency",
           "title": "E2E-007: Verify multiple renders and state consistency",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 13390,
+=======
+          "duration": 13537,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -155,13 +197,21 @@
       "passed": 4,
       "failed": 0,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 13870,
+=======
+      "duration": 13744,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "displays error when adding check with only whitespace",
           "title": "displays error when adding check with only whitespace",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 3474,
+=======
+          "duration": 3518,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
@@ -179,7 +229,11 @@
           "name": "displays error when name exceeds 120 characters",
           "title": "displays error when name exceeds 120 characters",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 2557,
+=======
+          "duration": 2338,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
@@ -197,7 +251,11 @@
           "name": "clears error message when user corrects input",
           "title": "clears error message when user corrects input",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 5500,
+=======
+          "duration": 5477,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
@@ -215,7 +273,11 @@
           "name": "shows appropriate error when API is unavailable",
           "title": "shows appropriate error when API is unavailable",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 2339,
+=======
+          "duration": 2411,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [],
           "screenshots": [],
@@ -238,13 +300,21 @@
       "passed": 8,
       "failed": 0,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 1081,
+=======
+      "duration": 1505,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "E2E-001: Check valid HTTPS URL endpoint",
           "title": "E2E-001: Check valid HTTPS URL endpoint",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 162,
+=======
+          "duration": 213,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -262,7 +332,11 @@
           "name": "E2E-002: Check invalid URL format",
           "title": "E2E-002: Check invalid URL format",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 155,
+=======
+          "duration": 232,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -280,7 +354,11 @@
           "name": "E2E-003: Check empty string input",
           "title": "E2E-003: Check empty string input",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 143,
+=======
+          "duration": 208,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -298,7 +376,11 @@
           "name": "E2E-004: Check null input",
           "title": "E2E-004: Check null input",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 134,
+=======
+          "duration": 135,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -316,7 +398,11 @@
           "name": "E2E-005: Check valid HTTP URL with port",
           "title": "E2E-005: Check valid HTTP URL with port",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 134,
+=======
+          "duration": 179,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -334,7 +420,11 @@
           "name": "E2E-006: Check valid GitHub URL",
           "title": "E2E-006: Check valid GitHub URL",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 151,
+=======
+          "duration": 166,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -352,7 +442,11 @@
           "name": "E2E-007: Check FTP protocol (not allowed)",
           "title": "E2E-007: Check FTP protocol (not allowed)",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 97,
+=======
+          "duration": 171,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -370,7 +464,11 @@
           "name": "E2E-008: Response time performance check",
           "title": "E2E-008: Response time performance check",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 105,
+=======
+          "duration": 201,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
