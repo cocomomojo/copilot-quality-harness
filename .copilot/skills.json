@@ -3,7 +3,7 @@
   "description": "Copilot 用 skill 定義。テスト設計YAML → テストコード、trace → 修正提案、PR メタデータの一貫性を担保するプロンプトとルール",
   "metadata": {
     "owner": "copilot-quality-team",
-    "last_updated": "2026-10-25",
+    "last_updated": "2026-11-07",
     "approval_required": true
   },
   "skills": {
@@ -26,7 +26,9 @@
             "category": "string (validation|business_logic|security|error_handling)",
             "input": "object",
             "expected_output": "object",
-            "mock_dependencies": ["string"]
+            "mock_dependencies": [
+              "string"
+            ]
           }
         ],
         "e2e_tests": [
@@ -46,7 +48,9 @@
               "mock_email_service": "boolean",
               "network_conditions": "string"
             },
-            "pre_condition": ["object"]
+            "pre_condition": [
+              "object"
+            ]
           }
         ],
         "mocks": [
@@ -112,9 +116,15 @@
         "failure_reason": "string",
         "failing_test": "string",
         "failing_locator": "string",
-        "top_console_errors": ["string"],
-        "top_network_failures": ["string"],
-        "screenshot_paths": ["string"],
+        "top_console_errors": [
+          "string"
+        ],
+        "top_network_failures": [
+          "string"
+        ],
+        "screenshot_paths": [
+          "string"
+        ],
         "trace_excerpt": "string (max 2000 chars)",
         "failure_category": "string (timeout|network_error|element_not_found|assertion_failure)",
         "risk_level": "string (low|medium|high)"
@@ -146,7 +156,9 @@
         "test_spec": "object (from spec_to_tests skill)",
         "non_functional_requirements": {
           "performance": "object (max_response_ms, etc)",
-          "security": ["string"],
+          "security": [
+            "string"
+          ],
           "availability": "string"
         }
       },
@@ -171,12 +183,68 @@
         "generated_at": "string (ISO 8601)",
         "risk_level": "string (low|medium|high)",
         "requires_human_approval": "boolean",
-        "generated_files": ["string"]
+        "generated_files": [
+          "string"
+        ]
       },
       "prompt_template": "Append an 'Audit Metadata' section to the PR body. Ensure fields are machine-parseable (YAML format). Include:\n- trace_summary_hash\n- copilot_model\n- generated_at\n- risk_level\n- requires_human_approval\n- generated_files (list of files created/modified by Copilot)\n\nFormat as a code block for easy extraction.",
       "output_schema": {
         "pr_body_with_metadata": "string"
       }
+    },
+    "m2_auto_judgment": {
+      "name": "M2 自動実装判定",
+      "purpose": "GitHub Issue の M2 分析レポート（JSON）を入力として、Copilot AI が自動実装の可否を総合的に判定します。セキュリティリスク、スコープ、複雑度、情報完全性などを考慮します。",
+      "input_schema": {
+        "issue": {
+          "title": "string",
+          "description": "string (optional)",
+          "acceptanceCriteria": [
+            "string"
+          ],
+          "testRequirements": [
+            "string"
+          ],
+          "severity": "string (low|medium|high|critical)",
+          "scope": [
+            "string (Frontend|Backend|Database|Infrastructure)"
+          ]
+        },
+        "analysis": {
+          "candidates": [
+            {
+              "path": "string",
+              "classification": "string",
+              "exists": "boolean",
+              "referenceValid": "boolean"
+            }
+          ]
+        }
+      },
+      "output_schema": {
+        "level": "string (safe-proceed|needs-approval|manual-only)",
+        "reason": "string",
+        "factors": [
+          "string"
+        ],
+        "recommendation": "string",
+        "metadata": {
+          "complexity": "number (0-10)",
+          "severity": "string",
+          "scope": [
+            "string"
+          ],
+          "confidence": "number (0.0-1.0)"
+        }
+      },
+      "judgment_levels": {
+        "safe-proceed": "自動実装可能 - Frontend限定、低リスク、情報完全",
+        "needs-approval": "条件付き実装 - 確認が必要だが実装可能",
+        "manual-only": "手動判断必須 - セキュリティ/Backend/情報不足など"
+      },
+      "model": "claude-sonnet-4",
+      "approval_required": false,
+      "documentation": ".copilot/m2-auto-judgment-skill.md"
     }
   },
   "rules": {
