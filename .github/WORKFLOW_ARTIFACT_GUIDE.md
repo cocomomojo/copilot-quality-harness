@@ -4,6 +4,53 @@
 
 このガイドは、ワークフロー間でのアーティファクト受け渡しのベストプラクティスを説明します。
 
+## M2 Issue Intake Workflow: アーティファクト表示形式
+
+### JSON → Markdown 自動変換
+
+M2 自動化ワークフロー (`m2-issue-intake.yml`) は、Issue 分析レポート (JSON) を**自動的に Markdown テーブル形式に変換**して Issue コメントに貼り付けます。
+
+**処理フロー：**
+1. M2 分析エンジンが JSON アーティファクトを生成
+2. `format-m2-report.mjs` が JSON → Markdown に変換
+3. テーブル形式で Issue コメントに追記（レビューしやすい形式）
+
+**生成される Markdown 形式：**
+- **Issue 要件サマリー**: タイトル、重大度、影響範囲
+- **受入条件**: シナリオごとのリスト形式
+- **テスト要求**: 期待される検証項目
+- **分析対象ファイル**: パス、分類、存在確認テーブル
+- **推奨ブランチ**: git checkout コマンド
+
+### 使用方法
+
+#### 手動で JSON を Markdown に変換
+
+```bash
+# スクリプトで JSON レポートを Markdown に変換
+node scripts/format-m2-report.mjs --input m2-report.json --output report.md
+
+# または stdout に出力
+node scripts/format-m2-report.mjs --input m2-report.json
+```
+
+#### ワークフロー内での自動実行
+
+M2 ワークフローは以下のステップで自動実行：
+1. `run: m2-validation.mjs` → JSON レポート生成
+2. `run: format-m2-report.mjs` → Markdown 変換（**新規**）
+3. `github-script` → Issue コメント作成（Markdown テーブル形式）
+
+### アーティファクト JSON の検索
+
+生成された JSON アーティファクトは、Actions ページの「Artifacts」セクションにダウンロード可能：
+
+```
+GitHub Actions → ワークフロー実行 → Artifacts
+  → m2-issue-{ISSUE_NUMBER}-run-{RUN_ID}
+    └── m2-report.json (レポート全体)
+```
+
 ## Workflow Chain: Generate → Consume
 
 ### 1. Generate Quality Items Workflow

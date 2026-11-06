@@ -60,12 +60,24 @@ jobs:
           echo "validation_exit_code=$result" >> "$GITHUB_OUTPUT"
           if [ "$result" -eq 4 ]; then exit 4; fi
           exit 0
-      - name: Comment with the deterministic result
+      - name: Format M2 report as Markdown
         if: always() && steps.analyze.outcome != 'skipped'
+        id: format-report
+        env:
+          REPORT_FILE: ${{ runner.temp }}/m2-report.json
+          MARKDOWN_FILE: ${{ runner.temp }}/m2-report.md
+        run: |
+          node scripts/format-m2-report.mjs \
+            --input "$REPORT_FILE" \
+            --output "$MARKDOWN_FILE"
+          echo "markdown_file=$MARKDOWN_FILE" >> "$GITHUB_OUTPUT"
+      - name: Comment with the deterministic result
+        if: always() && steps.analyze.outcome != 'skipped' && steps.format-report.outcome == 'success'
         uses: actions/github-script@v7
         env:
           ISSUE_NUMBER: ${{ steps.input.outputs.issue_number }}
           REPORT_FILE: ${{ runner.temp }}/m2-report.json
+          MARKDOWN_FILE: ${{ steps.format-report.outputs.markdown_file }}
         with:
           script: |
             const fs = require('node:fs');
@@ -78,9 +90,11 @@ jobs:
               core.warning('Issue source was not verified; no Issue comment was posted.');
               return;
             }
+            
             const statusText = {
               'safe-proceed': '✅ 自動化可能',
-              'unsafe-stop': '⚠️ 停止中'
+              'unsafe-stop': '⚠️ 停止中',
+              'ready-for-human-review': '👤 人間レビュー待機中'
             }[report.status] || report.status;
             
             const lines = [
@@ -90,11 +104,14 @@ jobs:
               `ソース: \`${report.sourceTrust.repository}\` (検証済み)`,
               'AIモデル呼び出し: なし',
               'ソース書き込み、ブランチ作成、PR作成: なし',
-              `レポートアーティファクト: [M2 実行結果](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`
+              `レポートアーティファクト: [M2 実行結果](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
+              ''
             ];
+            
             const reasons = report.stopConditions ?? report.errors ?? [];
             if (reasons.length) {
-              lines.push('', '停止理由:', ...reasons.map((reason) => {
+              lines.push('停止理由:');
+              reasons.forEach((reason) => {
                 const ja = {
                   'missing information: acceptance criteria, test requirements, allowed scope, severity': '不足情報: 受入条件、テスト要求、影響範囲、重大度',
                   'missing information: acceptance criteria, test requirements, allowed scope': '不足情報: 受入条件、テスト要求、影響範囲',
@@ -102,16 +119,25 @@ jobs:
                   'read-only automation has not been approved for this issue': '読み取り専用自動化がこのIssueで承認されていません',
                   'issue mentions a restricted security, personal-data, payment, or destructive-database scope': 'Issueが制限対象のキーワード（セキュリティ、個人情報、決済、破壊的DB操作）を含んでいます'
                 }[reason];
-                return `- ${ja || reason}`;
-              }));
+                lines.push(`- ${ja || reason}`);
+              });
+              lines.push('');
             }
+            
             if (report.handoff) {
-              lines.push(
-                '',
-                `人間レビュー待機中: 推奨ブランチ \`${report.handoff.suggestedBranch}\``,
-                'このワークフロー内での実装実行は許可されていません。アーティファクトをレビューして、実装判断は手動で行ってください。'
-              );
+              lines.push(`推奨ブランチ: \`${report.handoff.suggestedBranch}\``);
+              lines.push('このワークフロー内での実装実行は許可されていません。アーティファクトをレビューして、実装判断は手動で行ってください。');
+              lines.push('');
             }
+            
+            // フォーマット済みレポートを追記
+            if (fs.existsSync(process.env.MARKDOWN_FILE)) {
+              const markdown = fs.readFileSync(process.env.MARKDOWN_FILE, 'utf8');
+              lines.push('---');
+              lines.push('');
+              lines.push(markdown);
+            }
+            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
