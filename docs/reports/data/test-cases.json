@@ -1,14 +1,24 @@
 {
+<<<<<<< Updated upstream
   "timestamp": "2026-11-07T11:08:00.429Z",
+=======
+  "timestamp": "2026-11-07T11:14:10.349Z",
+>>>>>>> Stashed changes
   "totalSuites": 3,
   "totalTests": 19,
   "passed": 12,
   "failed": 7,
   "skipped": 0,
   "passRate": 63,
+<<<<<<< Updated upstream
   "duration": 92540,
   "metadata": {
     "test_run_id": "42366117081"
+=======
+  "duration": 92248,
+  "metadata": {
+    "test_run_id": "42366410243"
+>>>>>>> Stashed changes
   },
   "suites": [
     {
@@ -18,13 +28,21 @@
       "passed": 4,
       "failed": 3,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 47011,
+=======
+      "duration": 46828,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "E2E-001: Display profile with valid createdAt",
           "title": "E2E-001: Display profile with valid createdAt",
           "status": "failed",
+<<<<<<< Updated upstream
           "duration": 6417,
+=======
+          "duration": 6421,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [
             "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /プロフィール/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /プロフィール/i }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /プロフィール/i })\u001b[22m\n"
@@ -46,7 +64,11 @@
           "name": "E2E-002: Display fallback when createdAt is null",
           "title": "E2E-002: Display fallback when createdAt is null",
           "status": "failed",
+<<<<<<< Updated upstream
           "duration": 6399,
+=======
+          "duration": 6388,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [
             "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /プロフィール/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /プロフィール/i }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /プロフィール/i })\u001b[22m\n"
@@ -68,7 +90,11 @@
           "name": "E2E-003: Handle 404 API error",
           "title": "E2E-003: Handle 404 API error",
           "status": "failed",
+<<<<<<< Updated upstream
           "duration": 6744,
+=======
+          "duration": 6637,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [
             "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /プロフィール/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /プロフィール/i }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /プロフィール/i })\u001b[22m\n"
@@ -90,7 +116,11 @@
           "name": "E2E-004: Fetch createdAt from API and display formatted",
           "title": "E2E-004: Fetch createdAt from API and display formatted",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1416,
+=======
+          "duration": 1392,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -106,7 +136,11 @@
           "name": "E2E-005: Handle invalid createdAt format with fallback",
           "title": "E2E-005: Handle invalid createdAt format with fallback",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1347,
+=======
+          "duration": 1339,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -122,7 +156,11 @@
           "name": "E2E-006: Verify element structure and accessibility",
           "title": "E2E-006: Verify element structure and accessibility",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 1335,
+=======
+          "duration": 1324,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -138,7 +176,11 @@
           "name": "E2E-007: Verify multiple renders and state consistency",
           "title": "E2E-007: Verify multiple renders and state consistency",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 23353,
+=======
+          "duration": 23327,
+>>>>>>> Stashed changes
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -159,13 +201,21 @@
       "passed": 0,
       "failed": 4,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 44723,
+=======
+      "duration": 44654,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "displays error when adding check with only whitespace",
           "title": "displays error when adding check with only whitespace",
           "status": "failed",
+<<<<<<< Updated upstream
           "duration": 12355,
+=======
+          "duration": 12337,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [
             "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
@@ -187,7 +237,11 @@
           "name": "displays error when name exceeds 120 characters",
           "title": "displays error when name exceeds 120 characters",
           "status": "failed",
+<<<<<<< Updated upstream
           "duration": 12409,
+=======
+          "duration": 12391,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [
             "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
@@ -209,7 +263,11 @@
           "name": "clears error message when user corrects input",
           "title": "clears error message when user corrects input",
           "status": "failed",
+<<<<<<< Updated upstream
           "duration": 12421,
+=======
+          "duration": 12403,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [
             "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
@@ -231,7 +289,11 @@
           "name": "shows appropriate error when API is unavailable",
           "title": "shows appropriate error when API is unavailable",
           "status": "failed",
+<<<<<<< Updated upstream
           "duration": 7538,
+=======
+          "duration": 7523,
+>>>>>>> Stashed changes
           "file": "quality-checks-advanced.spec.js",
           "errors": [
             "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('alert') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n"
@@ -258,13 +320,21 @@
       "passed": 8,
       "failed": 0,
       "skipped": 0,
+<<<<<<< Updated upstream
       "duration": 806,
+=======
+      "duration": 766,
+>>>>>>> Stashed changes
       "tests": [
         {
           "name": "E2E-001: Check valid HTTPS URL endpoint",
           "title": "E2E-001: Check valid HTTPS URL endpoint",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 158,
+=======
+          "duration": 147,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -280,7 +350,11 @@
           "name": "E2E-002: Check invalid URL format",
           "title": "E2E-002: Check invalid URL format",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 95,
+=======
+          "duration": 85,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -296,7 +370,11 @@
           "name": "E2E-003: Check empty string input",
           "title": "E2E-003: Check empty string input",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 94,
+=======
+          "duration": 91,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -312,7 +390,11 @@
           "name": "E2E-004: Check null input",
           "title": "E2E-004: Check null input",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 88,
+=======
+          "duration": 91,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -328,7 +410,11 @@
           "name": "E2E-005: Check valid HTTP URL with port",
           "title": "E2E-005: Check valid HTTP URL with port",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 94,
+=======
+          "duration": 92,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -344,7 +430,11 @@
           "name": "E2E-006: Check valid GitHub URL",
           "title": "E2E-006: Check valid GitHub URL",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 98,
+=======
+          "duration": 80,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -360,7 +450,11 @@
           "name": "E2E-007: Check FTP protocol (not allowed)",
           "title": "E2E-007: Check FTP protocol (not allowed)",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 97,
+=======
+          "duration": 99,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -376,7 +470,11 @@
           "name": "E2E-008: Response time performance check",
           "title": "E2E-008: Response time performance check",
           "status": "passed",
+<<<<<<< Updated upstream
           "duration": 82,
+=======
+          "duration": 81,
+>>>>>>> Stashed changes
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
