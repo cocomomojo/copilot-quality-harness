@@ -91,10 +91,16 @@ jobs:
           REPORT_FILE: ${{ runner.temp }}/m2-report.json
           JUDGMENT_OUTPUT: ${{ runner.temp }}/judgment.json
         run: |
+          set +e
           echo "⚠️ Using rule-based fallback judgment..."
           node scripts/m2-auto-judgment.mjs \
             --report "$REPORT_FILE" \
             --output "$JUDGMENT_OUTPUT"
+          JUDGMENT_EXIT=$?
+          set -e
+          if [ $JUDGMENT_EXIT -ne 0 ]; then
+            echo "⚠️ Judgment script failed with exit code $JUDGMENT_EXIT (may indicate needs-approval or manual-only)"
+          fi
           echo "✅ Fallback judgment completed"
       - name: Format M2 report as Markdown
         if: always() && steps.analyze.outcome != 'skipped'

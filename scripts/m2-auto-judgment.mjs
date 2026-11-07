@@ -214,12 +214,16 @@ Frontend 限定の ${issue.severity} 重大度実装です。
 if (process.argv[1].endsWith('m2-auto-judgment.mjs')) {
   const args = process.argv.slice(2);
   let reportPath = null;
+  let outputPath = null;
   let threshold = 'moderate';
   let outputFormat = 'json';
   
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--report' && args[i + 1]) {
       reportPath = args[i + 1];
+      i++;
+    } else if (args[i] === '--output' && args[i + 1]) {
+      outputPath = args[i + 1];
       i++;
     } else if (args[i] === '--threshold' && args[i + 1]) {
       threshold = args[i + 1];
@@ -231,7 +235,7 @@ if (process.argv[1].endsWith('m2-auto-judgment.mjs')) {
   }
   
   if (!reportPath) {
-    console.error('使用例: node scripts/m2-auto-judgment.mjs --report m2-report.json [--threshold strict|moderate|loose]');
+    console.error('使用例: node scripts/m2-auto-judgment.mjs --report m2-report.json [--output judgment.json] [--threshold strict|moderate|loose]');
     process.exit(1);
   }
   
@@ -243,6 +247,18 @@ if (process.argv[1].endsWith('m2-auto-judgment.mjs')) {
   const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
   const judgment = judgeAutoImplementation(report, threshold);
   
+  // Output file handling
+  if (outputPath) {
+    try {
+      fs.writeFileSync(outputPath, JSON.stringify(judgment, null, 2));
+      console.log(`✅ Judgment saved to: ${outputPath}`);
+    } catch (err) {
+      console.error(`❌ Failed to write judgment file: ${err.message}`);
+      process.exit(1);
+    }
+  }
+  
+  // Console output
   if (outputFormat === 'json') {
     console.log(JSON.stringify(judgment, null, 2));
   } else if (outputFormat === 'env') {
