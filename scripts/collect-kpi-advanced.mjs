@@ -297,33 +297,34 @@ function parseTestResults(testData) {
       source: 'test-matrix'
     };
   } else if (testData.source === 'github-api' && testData.jobs) {
-    // GitHub API ジョブから推定
+    // GitHub API ジョブから推定（WARNING: 信頼性が低い）
+    console.log(`  ⚠️  FALLBACK: GitHub API data - this counts workflow jobs, NOT actual test cases`);
+    console.log(`  ⚠️  Job count is NOT equivalent to test count (e.g., 1 job can run 50 tests)`);
+    console.log(`  ⚠️  This fallback should only be used when test-matrix-summary.json is unavailable`);
+    console.log(`  ⚠️  This indicates a problem with test-matrix.yml artifact generation`);
+    
+    // GitHub API fallback は信頼度が低いため、test_count が異常に小さい場合は使用しない
     const jobs = testData.jobs;
     const testJobs = jobs.filter(j => 
-      j.name && (j.name.includes('test') || j.name.includes('Test'))
+      j.name && (j.name.includes('test') || j.name.includes('Test')) &&
+      j.name !== 'test-summary'  // test-summary job は統計ではなくレポートジョブ
     );
     
-    totalTests = testJobs.length;
+    totalTests = testJobs.length;  // これはジョブ数であり、テストケース数ではない
     passedTests = testJobs.filter(j => j.conclusion === 'success').length;
     failedTests = testJobs.filter(j => j.conclusion === 'failure').length;
-    passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
     
-    if (totalTests > 0) {
-      console.log(`  ✓ Test jobs found: ${totalTests}`);
-      console.log(`  ✓ Passed: ${passedTests}`);
-      console.log(`  ✓ Failed: ${failedTests}`);
-      
-      return {
-        totalTests,
-        passedTests,
-        failedTests,
-        passRate,
-        source: 'github-api'
-      };
-    } else {
-      console.log(`  ⚠️  No test jobs found in workflow`);
-      return null;
-    }
+    console.log(`  ⚠️  GitHub API results (job count, NOT test count):`);
+    console.log(`      Test jobs: ${totalTests}`);
+    console.log(`      Passed jobs: ${passedTests}`);
+    console.log(`      Failed jobs: ${failedTests}`);
+    
+    // 実テストマトリックスの完了が見つからない場合は FATAL エラー
+    console.log(`  ❌ FATAL: Cannot use GitHub API job count as KPI metric`);
+    console.log(`  ❌ Reason: Job count (${totalTests}) != Test case count`);
+    console.log(`  ❌ Please ensure test-matrix.yml completes and generates test-matrix-summary.json artifact`);
+    
+    return null;  // GitHub API fallback を禁止
   }
   
   return null;
