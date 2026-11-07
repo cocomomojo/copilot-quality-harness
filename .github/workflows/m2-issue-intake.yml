@@ -60,24 +60,86 @@ jobs:
           echo "validation_exit_code=$result" >> "$GITHUB_OUTPUT"
           if [ "$result" -eq 4 ]; then exit 4; fi
           exit 0
+      - name: Run AI judgment with Copilot Skill
+        if: always() && steps.analyze.outcome != 'skipped'
+        id: ai-judgment
+        env:
+          REPORT_FILE: ${{ runner.temp }}/m2-report.json
+          JUDGMENT_OUTPUT: ${{ runner.temp }}/judgment.json
+        run: |
+          set +e
+          
+          # Try to run Copilot Skill-based AI judgment
+          copilot review --skill "m2-auto-judgment" \
+            --input "$REPORT_FILE" \
+            --format json \
+            --output "$JUDGMENT_OUTPUT" 2>&1
+          
+          ai_result=$?
+          if [ $ai_result -eq 0 ]; then
+            echo "ai_judgment_success=true" >> "$GITHUB_OUTPUT"
+            echo "✅ AI judgment completed via Copilot Skill"
+          else
+            echo "ai_judgment_success=false" >> "$GITHUB_OUTPUT"
+            echo "⚠️ AI judgment failed; will use rule-based fallback"
+          fi
+          exit 0
+      - name: Run rule-based judgment as fallback
+        if: always() && steps.analyze.outcome != 'skipped' && steps.ai-judgment.outputs.ai_judgment_success == 'false'
+        id: fallback-judgment
+        env:
+          REPORT_FILE: ${{ runner.temp }}/m2-report.json
+          JUDGMENT_OUTPUT: ${{ runner.temp }}/judgment.json
+        run: |
+          echo "⚠️ Using rule-based fallback judgment..."
+          node scripts/m2-auto-judgment.mjs \
+            --report "$REPORT_FILE" \
+            --output "$JUDGMENT_OUTPUT"
+          echo "✅ Fallback judgment completed"
       - name: Format M2 report as Markdown
         if: always() && steps.analyze.outcome != 'skipped'
         id: format-report
         env:
           REPORT_FILE: ${{ runner.temp }}/m2-report.json
           MARKDOWN_FILE: ${{ runner.temp }}/m2-report.md
+          JUDGMENT_FILE: ${{ runner.temp }}/judgment.json
         run: |
           node scripts/format-m2-report.mjs \
             --input "$REPORT_FILE" \
             --output "$MARKDOWN_FILE"
+          
+          # Add judgment results to markdown if available
+          if [ -f "$JUDGMENT_FILE" ]; then
+            echo "" >> "$MARKDOWN_FILE"
+            echo "---" >> "$MARKDOWN_FILE"
+            echo "" >> "$MARKDOWN_FILE"
+            echo "### AI 自動判定結果" >> "$MARKDOWN_FILE"
+            echo "" >> "$MARKDOWN_FILE"
+            node -e "
+              const fs = require('fs');
+              const judgment = JSON.parse(fs.readFileSync('$JUDGMENT_FILE', 'utf8'));
+              console.log('| 項目 | 値 |');
+              console.log('|------|-----|');
+              console.log('| 判定レベル | \`' + judgment.level + '\` |');
+              console.log('| 判定理由 | ' + (judgment.reason || 'N/A') + ' |');
+              if (judgment.confidence) {
+                console.log('| 確度 | ' + (judgment.confidence * 100).toFixed(1) + '% |');
+              }
+              if (judgment.factors && judgment.factors.length > 0) {
+                console.log('| リスク要因 | ' + judgment.factors.join(', ') + ' |');
+              }
+            " >> "$MARKDOWN_FILE" 2>/dev/null || true
+          fi
+          
           echo "markdown_file=$MARKDOWN_FILE" >> "$GITHUB_OUTPUT"
-      - name: Comment with the deterministic result
+      - name: Comment with AI judgment result
         if: always() && steps.analyze.outcome != 'skipped' && steps.format-report.outcome == 'success'
         uses: actions/github-script@v7
         env:
           ISSUE_NUMBER: ${{ steps.input.outputs.issue_number }}
           REPORT_FILE: ${{ runner.temp }}/m2-report.json
           MARKDOWN_FILE: ${{ steps.format-report.outputs.markdown_file }}
+          JUDGMENT_FILE: ${{ runner.temp }}/judgment.json
         with:
           script: |
             const fs = require('node:fs');
@@ -91,10 +153,24 @@ jobs:
               return;
             }
             
+            // Load AI judgment if available
+            let judgment = null;
+            let aiStatus = 'なし';
+            if (fs.existsSync(process.env.JUDGMENT_FILE)) {
+              try {
+                judgment = JSON.parse(fs.readFileSync(process.env.JUDGMENT_FILE, 'utf8'));
+                aiStatus = judgment.level || '判定失敗';
+              } catch (e) {
+                core.warning('Failed to parse judgment file');
+              }
+            }
+            
             const statusText = {
               'safe-proceed': '✅ 自動化可能',
               'unsafe-stop': '⚠️ 停止中',
-              'ready-for-human-review': '👤 人間レビュー待機中'
+              'ready-for-human-review': '👤 人間レビュー待機中',
+              'needs-approval': '⚠️ 確認待機中',
+              'manual-only': '❌ 手動判断が必須'
             }[report.status] || report.status;
             
             const lines = [
@@ -102,11 +178,31 @@ jobs:
               '',
               `Issue: #${report.sourceTrust.issueNumber}`,
               `ソース: \`${report.sourceTrust.repository}\` (検証済み)`,
-              'AIモデル呼び出し: なし',
+              `AIモデル呼び出し: ${aiStatus}`,
               'ソース書き込み、ブランチ作成、PR作成: なし',
               `レポートアーティファクト: [M2 実行結果](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
               ''
             ];
+            
+            // Add AI judgment details if available
+            if (judgment) {
+              lines.push('### 🤖 AI 自動判定結果');
+              lines.push('');
+              lines.push(`**判定レベル**: \`${judgment.level}\``);
+              lines.push(`**判定理由**: ${judgment.reason || 'N/A'}`);
+              if (judgment.confidence !== undefined) {
+                lines.push(`**確度**: ${(judgment.confidence * 100).toFixed(1)}%`);
+              }
+              if (judgment.factors && judgment.factors.length > 0) {
+                lines.push(`**検出されたリスク要因**: ${judgment.factors.join(', ')}`);
+              }
+              if (judgment.recommendation) {
+                lines.push('');
+                lines.push(`**推奨アクション**:`);
+                lines.push(judgment.recommendation);
+              }
+              lines.push('');
+            }
             
             const reasons = report.stopConditions ?? report.errors ?? [];
             if (reasons.length) {
@@ -144,11 +240,13 @@ jobs:
               issue_number: Number(process.env.ISSUE_NUMBER),
               body: lines.join('\n')
             });
-      - name: Upload M2 report artifact
+      - name: Upload M2 report and judgment artifacts
         if: always() && steps.analyze.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: m2-issue-${{ steps.input.outputs.issue_number }}-run-${{ github.run_id }}
-          path: ${{ runner.temp }}/m2-report.json
+          path: |
+            ${{ runner.temp }}/m2-report.json
+            ${{ runner.temp }}/judgment.json
           if-no-files-found: warn
           retention-days: 14
