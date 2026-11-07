@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-07T08:18:11.405Z",
+  "generated_at": "2026-11-07T22:37:48.737243Z",
   "source_pr": 49,
   "reports": [
     {
@@ -283,6 +283,62 @@
         "frontend/src/components/LoadingSpinner.jsx",
         "frontend/src/App.test.jsx",
         "frontend/src/App-advanced.test.jsx",
+        "frontend/src/components/Footer.test.jsx"
+      ]
+    },
+    {
+      "issue_number": 63,
+      "pr_number": null,
+      "workflow_run_id": 42374236123,
+      "generated_at": "2026-11-07T22:37:48.737190Z",
+      "pass_rate": 100,
+      "total_tests": 3,
+      "total_passed": 3,
+      "total_failed": 0,
+      "coverage": {
+        "overall": {
+          "lines_pct": 100,
+          "branches_pct": 100,
+          "functions_pct": 100,
+          "status": "pass"
+        },
+        "files": [
+          {
+            "path": "frontend/src/components/Footer.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          }
+        ],
+        "non_pass_count": 0,
+        "thresholds": {
+          "lines": 80,
+          "branches": 75,
+          "functions": 80
+        }
+      },
+      "traceability": {
+        "perspective_count": 0,
+        "quality_items_count": 0,
+        "perspectives_file": null,
+        "test_items_file": null,
+        "spec_files": [],
+        "ut_cases": 0,
+        "e2e_cases": 3,
+        "ut_details": [],
+        "e2e_details": [
+          {
+            "test_file": "frontend/src/components/Footer.test.jsx",
+            "test_count": 3,
+            "passed": 3,
+            "failed": 0,
+            "pass_rate": 100
+          }
+        ]
+      },
+      "implementation_files": [
+        "frontend/src/components/Footer.jsx",
         "frontend/src/components/Footer.test.jsx"
       ]
     }
