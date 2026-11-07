@@ -299,15 +299,19 @@ jobs:
               exit 1
             fi
             
+            echo "✅ Branch pushed successfully: $BRANCH_NAME"
+            
             # Create PR with simplified body
+            echo "🔄 Attempting to create PR..."
             PR_URL=$(gh pr create \
               --title "【自動生成】Issue #${ISSUE_NUMBER}: ${FEATURE_NAME} の実装+テスト" \
               --body "Auto-generated implementation, unit tests, and E2E tests based on Issue #${ISSUE_NUMBER} specifications." \
               --head "$BRANCH_NAME" \
               --base main \
               --draft \
-              --label "auto-generated,implementation" 2>&1 | grep -oP 'https://github\.com/[^/]+/[^/]+/pull/\d+' || echo "")
+              --label "auto-generated,implementation" 2>&1 | tee /tmp/pr_output.txt | grep -oP 'https://github\.com/[^/]+/[^/]+/pull/\d+' || echo "")
             
+            echo "📍 PR_URL captured: '$PR_URL'"
             echo "pull_request_url=$PR_URL" >> "$GITHUB_OUTPUT"
           else
             echo "No changes generated, skipping PR creation"
