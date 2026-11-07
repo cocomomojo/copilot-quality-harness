@@ -46,28 +46,23 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-v1
           restore-keys: |
             playwright-${{ runner.os }}-
       
-      - name: Install Playwright browsers (cached)
+      - name: Install Playwright browsers (if cache miss)
         if: matrix.test-type == 'e2e' && steps.cache-playwright.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
+        run: |
+          echo "📦 Installing Playwright browsers (cache miss)..."
+          npx playwright install --with-deps chromium
+          echo "✅ Playwright browsers installed"
       
       - name: Install dependencies
         run: |
-          echo "📦 Installing dependencies..."
-          npm ci || {
-            echo "❌ npm ci failed. Retrying with npm install..."
-            npm install || {
-              echo "❌ npm install also failed. Aborting."
-              exit 1
-            }
-          }
-          echo "✅ Dependencies installed successfully"
-          echo "📋 Node version:"
+          echo "📦 Installing dependencies with npm..."
+          npm ci
+          echo "✅ Dependencies installed"
           node --version
-          echo "📋 npm version:"
           npm --version
       
       - name: Run unit tests
