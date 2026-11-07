@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-11-07T23:25:55.205Z",
+  "timestamp": "2026-11-07T23:35:18.976Z",
   "totalSuites": 3,
   "totalTests": 19,
   "passed": 0,
   "failed": 19,
   "skipped": 0,
   "passRate": 0,
-  "duration": 40,
+  "duration": 39,
   "metadata": {
-    "test_run_id": "42424999016"
+    "test_run_id": "42425486893"
   },
   "suites": [
     {
@@ -18,7 +18,7 @@
       "passed": 0,
       "failed": 7,
       "skipped": 0,
-      "duration": 14,
+      "duration": 15,
       "tests": [
         {
           "name": "E2E-001: Display profile with valid createdAt",
@@ -44,7 +44,7 @@
           "name": "E2E-002: Display fallback when createdAt is null",
           "title": "E2E-002: Display fallback when createdAt is null",
           "status": "failed",
-          "duration": 2,
+          "duration": 3,
           "file": "profile-created-at.spec.js",
           "errors": [
             "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
@@ -260,7 +260,7 @@
       "passed": 0,
       "failed": 8,
       "skipped": 0,
-      "duration": 18,
+      "duration": 16,
       "tests": [
         {
           "name": "E2E-001: Check valid HTTPS URL endpoint",
@@ -366,7 +366,7 @@
           "name": "E2E-006: Check valid GitHub URL",
           "title": "E2E-006: Check valid GitHub URL",
           "status": "failed",
-          "duration": 1,
+          "duration": 2,
           "file": "url-validator.spec.js",
           "errors": [
             "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
@@ -386,7 +386,7 @@
           "name": "E2E-007: Check FTP protocol (not allowed)",
           "title": "E2E-007: Check FTP protocol (not allowed)",
           "status": "failed",
-          "duration": 5,
+          "duration": 2,
           "file": "url-validator.spec.js",
           "errors": [
             "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
