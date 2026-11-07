@@ -102,7 +102,7 @@
           }
         ],
         "ut_cases": 0,
-        "e2e_cases": 0,
+        "e2e_cases": 44,
         "ut_details": [],
         "e2e_details": []
       },
@@ -122,7 +122,7 @@
       "workflow_run_id": null,
       "generated_at": "2026-11-07T08:18:11.405Z",
       "pass_rate": 100,
-      "total_tests": 103,
+      "total_tests": 97,
       "total_passed": 103,
       "total_failed": 0,
       "coverage": {
@@ -230,7 +230,7 @@
           }
         ],
         "ut_cases": 53,
-        "e2e_cases": 50,
+        "e2e_cases": 44,
         "ut_details": [
           {
             "test_file": "backend/src/app.test.js",
