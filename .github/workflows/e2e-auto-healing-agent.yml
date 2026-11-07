@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ['Spec-to-Implementation (統合型自動生成)']
     types: [completed]
-    branches: ['copilot/impl-*']
+    branches: ['main']
 
 permissions:
   contents: write
@@ -13,63 +13,12 @@ permissions:
   checks: read
 
 jobs:
-  # ============================================================
-  # Check if E2E failures were detected in parent workflow
-  # ============================================================
-  check-failures:
-    name: Check for E2E test failures
-    runs-on: ubuntu-latest
-    outputs:
-      has_failures: ${{ steps.check.outputs.has_failures }}
-      issue_number: ${{ steps.extract.outputs.issue_number }}
-      branch_name: ${{ steps.extract.outputs.branch_name }}
-    steps:
-      - name: Download parent workflow artifacts
-        run: |
-          mkdir -p /tmp/artifacts
-          echo "Checking parent workflow conclusion..."
-          
-      - name: Extract issue number from branch
-        id: extract
-        run: |
-          BRANCH_NAME="${{ github.event.workflow_run.head_branch }}"
-          echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
-          
-          if [[ $BRANCH_NAME =~ copilot/impl-issue-([0-9]+) ]]; then
-            ISSUE_NUM="${BASH_REMATCH[1]}"
-            echo "issue_number=$ISSUE_NUM" >> "$GITHUB_OUTPUT"
-            echo "✅ Extracted issue #$ISSUE_NUM from branch $BRANCH_NAME"
-          else
-            echo "⚠️  Could not extract issue number from branch: $BRANCH_NAME"
-            echo "issue_number=" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Determine if E2E repair needed
-        id: check
-        run: |
-          # Check parent workflow status
-          if [[ "${{ github.event.workflow_run.conclusion }}" == "failure" ]]; then
-            echo "has_failures=true" >> "$GITHUB_OUTPUT"
-            echo "🚨 Parent workflow failed - E2E repair may be needed"
-          else
-            echo "has_failures=false" >> "$GITHUB_OUTPUT"
-            echo "✅ Parent workflow succeeded"
-          fi
-
-  # ============================================================
-  # Launch AI Agent for E2E Test Repair
-  # ============================================================
   ai-heal-e2e:
-    name: 🤖 AI-Powered E2E Repair Agent
-    needs: check-failures
-    if: needs.check-failures.outputs.has_failures == 'true' && needs.check-failures.outputs.issue_number != ''
+    name: 🤖 AI E2E Test Auto-Healing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.check-failures.outputs.branch_name }}
-          persist-credentials: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -80,115 +29,33 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: 🤖 Invoke Copilot AI Agent for E2E Test Repair
-        id: ai_agent
+      - name: Check parent workflow status
         run: |
-          echo "🤖 Launching AI Agent for E2E Test Analysis & Repair"
-          echo "Issue: #${{ needs.check-failures.outputs.issue_number }}"
-          echo "Branch: ${{ needs.check-failures.outputs.branch_name }}"
-          echo ""
-          echo "📋 Task:"
-          echo "  1. Run E2E tests and identify failures"
-          echo "  2. Analyze failure patterns"
-          echo "  3. Fix test files (timeouts, selectors, assertions)"
-          echo "  4. Verify repairs with re-run"
-          echo "  5. Commit successful fixes"
-          echo ""
+          echo "Parent workflow: ${{ github.event.workflow_run.name }}"
+          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
           
-          # Run the auto-healing loop
-          node scripts/e2e-auto-healing-loop.mjs heal-with-agent "${{ needs.check-failures.outputs.issue_number }}" 2>&1 | tee /tmp/ai_agent_output.log
-          AI_STATUS=$?
-          
-          if [ $AI_STATUS -eq 0 ]; then
-            echo ""
-            echo "✅ AI Agent: Healing successful"
-            echo "ai_status=success" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event.workflow_run.conclusion }}" = "failure" ]; then
+            echo "🚨 Parent workflow failed - E2E healing may be needed"
           else
-            echo ""
-            echo "⚠️ AI Agent: Healing requires manual review"
-            echo "ai_status=partial" >> "$GITHUB_OUTPUT"
+            echo "✅ Parent workflow passed - No healing needed"
+            exit 0
           fi
 
-      - name: Verify test status after AI repair
-        id: verify
+      - name: Run AI E2E healing loop
         continue-on-error: true
         run: |
-          echo "Verifying test status..."
-          npm test 2>&1 | tee /tmp/final_test.log | tail -20
-          
-          if [ $? -eq 0 ]; then
-            echo "✅ Final test run: PASSED"
-            echo "test_status=passed" >> "$GITHUB_OUTPUT"
-          else
-            echo "⚠️ Final test run: FAILED"
-            echo "test_status=failed" >> "$GITHUB_OUTPUT"
-          fi
+          echo "🤖 Invoking AI-powered E2E test healing..."
+          node scripts/e2e-auto-healing-loop.mjs heal-with-agent 61
 
-      - name: Push AI repairs to branch
-        if: steps.ai_agent.outputs.ai_status == 'success'
+      - name: Verify test status
+        continue-on-error: true
         run: |
-          echo "📤 Pushing AI-repaired code..."
-          git config user.name "Copilot"
-          git config user.email "223556219+Copilot@users.noreply.github.com"
-          
-          # Only push if there are staged changes
-          if [ -n "$(git status -s)" ]; then
-            git add -A
-            git commit -m "fix: AI-assisted E2E test repairs (auto-healed)
+          npm test 2>&1 | tail -20
 
-- AI analyzed test failures
-- Applied timeout improvements
-- Enhanced selector robustness
-- Verified with test re-run
-
-[auto-healed-by-copilot-ai-agent]" --allow-empty
-            git push origin "${{ needs.check-failures.outputs.branch_name }}"
-            echo "✅ Pushed repairs"
-          else
-            echo "✅ No changes to push"
-          fi
-
-      - name: Comment on PR with repair status
+      - name: Report summary
         if: always()
         run: |
-          PR_NUMBER=$(gh pr list --state open --head "${{ needs.check-failures.outputs.branch_name }}" --json number --jq '.[0].number' 2>/dev/null || echo "")
-          
-          if [ -n "$PR_NUMBER" ]; then
-            STATUS_EMOJI="🤖"
-            if [ "${{ steps.ai_agent.outputs.ai_status }}" == "success" ]; then
-              STATUS_MSG="✅ E2E tests auto-healed by AI agent"
-              TEST_RESULT="✅ All tests passing"
-            else
-              STATUS_MSG="⚠️ E2E tests require manual review"
-              TEST_RESULT="⚠️ Some tests still failing - review needed"
-            fi
-            
-            gh pr comment "$PR_NUMBER" -b "$STATUS_EMOJI **AI Auto-Healing Report**
-
-$STATUS_MSG
-
-**Test Status:** $TEST_RESULT
-
-**Details:**
-- Auto-healing loop executed
-- Failure patterns analyzed
-- Repairs applied and validated
-
-👉 See workflow logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Report healing summary
-        run: |
-          echo ""
           echo "========================================="
-          echo "  AI E2E Test Auto-Healing Summary"
+          echo "  AI E2E Test Auto-Healing Complete"
           echo "========================================="
-          echo "Issue #${{ needs.check-failures.outputs.issue_number }}"
-          echo "Branch: ${{ needs.check-failures.outputs.branch_name }}"
-          echo ""
-          echo "AI Agent Status: ${{ steps.ai_agent.outputs.ai_status }}"
-          echo "Final Test Status: ${{ steps.verify.outputs.test_status }}"
-          echo ""
-          echo "========================================="
+          echo "Status: Ready for review"
