@@ -254,13 +254,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ steps.input.outputs.issue_number }}
-          BRANCH_NAME: work/issue-${{ steps.input.outputs.issue_number }}
         run: |
           echo "🚀 Triggering spec-to-implementation workflow for auto-implementation..."
           gh workflow run spec-to-implementation.yml \
             --ref main \
-            -f issue_number="${ISSUE_NUMBER}" \
-            -f branch_name="${BRANCH_NAME}"
+            -f issue_number="${ISSUE_NUMBER}"
           echo "✅ Workflow triggered successfully"
       - name: Upload M2 report and judgment artifacts
         if: always() && steps.analyze.outcome != 'skipped'
