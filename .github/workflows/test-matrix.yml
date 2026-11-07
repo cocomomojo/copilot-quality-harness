@@ -135,10 +135,24 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: API Tests ===================="
-          npm run test:api > test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log 2>&1
-          cat test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          npm run test:api 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           echo "✅ API tests completed"
           echo "🏁 ==================== END: API Tests ===================="
+      
+      - name: Verify API test log was created
+        if: matrix.test-type == 'api'
+        run: |
+          FILE="test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log"
+          echo "🔍 Checking if $FILE exists..."
+          if [ -f "$FILE" ]; then
+            echo "✅ File exists! Size: $(wc -c < "$FILE") bytes"
+            echo "📄 First 200 characters:"
+            head -c 200 "$FILE"
+            echo ""
+          else
+            echo "❌ File does NOT exist"
+            ls -la test-result* || echo "No test-result files found"
+          fi
       
       - name: Run E2E tests
         if: matrix.test-type == 'e2e'
@@ -156,14 +170,28 @@ jobs:
           echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
           echo ""
           
-          npm run test:e2e > test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log 2>&1
-          cat test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          npm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           E2E_EXIT_CODE=$?
           
           echo ""
           echo "✅ E2E test execution completed with exit code: $E2E_EXIT_CODE"
           echo "📊 Test results saved to test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log"
           echo "🏁 ==================== END: E2E Tests ===================="
+      
+      - name: Verify E2E test log was created
+        if: matrix.test-type == 'e2e'
+        run: |
+          FILE="test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log"
+          echo "🔍 Checking if $FILE exists..."
+          if [ -f "$FILE" ]; then
+            echo "✅ File exists! Size: $(wc -c < "$FILE") bytes"
+            echo "📄 Last 300 characters:"
+            tail -c 300 "$FILE"
+            echo ""
+          else
+            echo "❌ File does NOT exist"
+            ls -la test-result* || echo "No test-result files found"
+          fi
       
       - name: Run advanced tests
         if: matrix.test-type == 'advanced'
