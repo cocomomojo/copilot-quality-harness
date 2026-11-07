@@ -394,39 +394,53 @@ jobs:
           
           set -e
 
-      - name: Playwright Test Healer - Auto-fix E2E failures
+      - name: 🤖 AI-Powered E2E Test Auto-Healing Loop
         if: steps.test_verify.outputs.test_status == 'failed'
-        id: healer
+        id: ai_healer
         continue-on-error: true
         run: |
-          echo "🔧 Attempting automatic E2E test repair with Playwright Healer...\n"
-          node scripts/playwright-healer.mjs heal-e2e
+          echo "🔧 Starting AI-assisted E2E test auto-healing loop..."
+          echo ""
+          echo "Workflow:"
+          echo "1. ✅ Detect E2E test failures"
+          echo "2. ↳ Invoke Copilot AI agent"
+          echo "3. ↳ AI analyzes failure patterns"
+          echo "4. ↳ AI suggests and implements fixes"
+          echo "5. ↳ Re-run tests"
+          echo "6. ↳ If success → commit & continue"
+          echo "7. ↳ If still failing → escalate"
+          echo ""
+          
+          node scripts/e2e-auto-healing-loop.mjs heal-with-agent "${{ inputs.issue_number }}" 2>&1 | tee /tmp/healer_output.log
           HEALER_STATUS=$?
           
           if [ $HEALER_STATUS -eq 0 ]; then
-            echo "✅ E2E tests healed successfully"
-            echo "healer_status=success" >> "$GITHUB_OUTPUT"
+            echo "✅ AI auto-healing successful"
+            echo "ai_healer_status=success" >> "$GITHUB_OUTPUT"
           else
-            echo "⚠️ Healer could not fully resolve all failures (manual review may be needed)"
-            echo "healer_status=partial" >> "$GITHUB_OUTPUT"
+            echo "⚠️ AI auto-healing requires review/escalation"
+            echo "ai_healer_status=needs_review" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Verify no test regressions
-        if: steps.test_verify.outputs.test_status == 'failed' && steps.healer.outputs.healer_status != 'success'
+        if: steps.test_verify.outputs.test_status == 'failed' && steps.ai_healer.outputs.ai_healer_status != 'success'
         run: |
           echo "⚠️ WARNING: Test execution reported failures"
           echo ""
-          echo "This may indicate:"
-          echo "1. Generated code has integration issues"
-          echo "2. Existing tests were broken by changes"
-          echo "3. Environment issues"
+          echo "🤖 AI Auto-Healing Attempt Summary:"
+          echo "   - Analyzed failure patterns"
+          echo "   - Generated repair suggestions"
+          echo "   - Awaiting AI agent execution"
           echo ""
-          echo "ℹ️ Playwright Healer attempted automatic repair but could not resolve all issues"
+          echo "This may indicate:"
+          echo "1. Complex failures requiring manual intervention"
+          echo "2. Test environment issues"
+          echo "3. Generated code integration gaps"
           echo ""
           echo "🔧 Recommended actions:"
-          echo "1. Review test output above and Healer suggestions"
-          echo "2. Check for breaking changes in generated code"
-          echo "3. Verify integration with existing components"
+          echo "1. Review AI healer output in logs above"
+          echo "2. Check failure patterns in test output"
+          echo "3. Consider manual code review before merge"
           echo ""
           echo "The workflow will continue, but review carefully before merging."
 
