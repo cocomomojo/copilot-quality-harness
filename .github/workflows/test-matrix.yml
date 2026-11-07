@@ -70,7 +70,7 @@ jobs:
         id: test-unit
         continue-on-error: true
         run: |
-          echo "🚀 ==================== START: Unit Tests ===================="
+          echo "🚀 ==================== START: Unit Tests (v2) ===================="
           echo "Node version: $(node --version)"
           
           # Run backend tests first, then frontend (sequential execution to avoid database contention)
@@ -166,7 +166,7 @@ jobs:
         id: test-advanced
         continue-on-error: true
         run: |
-          echo "🚀 ==================== START: Advanced Tests ===================="
+          echo "🚀 ==================== START: Advanced Tests (v2) ===================="
           
           # Run backend advanced tests first, then frontend (sequential execution to avoid database contention)
           # Use current directory for logs (will be archived with test results)
@@ -196,6 +196,7 @@ jobs:
         id: parse_results
         continue-on-error: true
         run: |
+          # Use external script for parsing (v2)
           node scripts/parse-test-result.js ${{ matrix.node-version }} ${{ matrix.test-type }}
       
       - name: Verify test result file was created
