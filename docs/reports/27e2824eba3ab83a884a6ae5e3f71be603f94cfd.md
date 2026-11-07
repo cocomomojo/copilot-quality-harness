@@ -22,18 +22,45 @@ Call log:
 
 ```yaml
 - generic [ref=e3]:
-  - generic [ref=e4]: "[plugin:vite:import-analysis] Failed to resolve import \"./App.css\" from \"src/App.jsx\". Does the file exist?"
-  - generic [ref=e5]: /home/runner/work/copilot-quality-harness/copilot-quality-harness/frontend/src/App.jsx:4:7
-  - generic [ref=e6]: "19 | import Header from \"./components/Header\"; 20 | import LoadingSpinner from \"./components/LoadingSpinner\"; 21 | import \"./App.css\"; | ^ 22 | function App() { 23 | _s();"
-  - generic [ref=e7]: at TransformPluginContext._formatLog (file:///home/runner/work/copilot-quality-harness/copilot-quality-harness/node_modules/vite/dist/node/chunks/dep-3O3b9SCF.js:42846:41) at TransformPluginContext.error (file:///home/runner/work/copilot-quality-harness/copilot-quality-harness/node_modules/vite/dist/node/chunks/dep-3O3b9SCF.js:42843:16) at normalizeUrl (file:///home/runner/work/copilot-quality-harness/copilot-quality-harness/node_modules/vite/dist/node/chunks/dep-3O3b9SCF.js:40820:23) at process.processTicksAndRejections (node:internal/process/task_queues:95:5) at async file:///home/runner/work/copilot-quality-harness/copilot-quality-harness/node_modules/vite/dist/node/chunks/dep-3O3b9SCF.js:40939:37 at async Promise.all (index 6) at async TransformPluginContext.transform (file:///home/runner/work/copilot-quality-harness/copilot-quality-harness/node_modules/vite/dist/node/chunks/dep-3O3b9SCF.js:40866:7) at async EnvironmentPluginContainer.transform (file:///home/runner/work/copilot-quality-harness/copilot-quality-harness/node_modules/vite/dist/node/chunks/dep-3O3b9SCF.js:42641:18) at async loadAndTransform (file:///home/runner/work/copilot-quality-harness/copilot-quality-harness/node_modules/vite/dist/node/chunks/dep-3O3b9SCF.js:36053:27) at async viteTransformMiddleware (file:///home/runner/work/copilot-quality-harness/copilot-quality-harness/node_modules/vite/dist/node/chunks/dep-3O3b9SCF.js:37550:24
-  - generic [ref=e8]:
-    - text: Click outside, press Esc key, or fix the code to dismiss.You can also disable this overlay by setting
-    - code [ref=e9]: server.hmr.overlay
-    - text: to
-    - code [ref=e10]: "false"
-    - text: in
-    - code [ref=e11]: vite.config.js
-    - text: .
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Copilot Quality Harness" [level=1] [ref=e6]
+      - navigation [ref=e7]:
+        - list [ref=e8]:
+          - listitem [ref=e9]:
+            - link "Home" [ref=e10] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e11]:
+            - link "Quality Checks" [ref=e12] [cursor=pointer]:
+              - /url: /quality-checks
+          - listitem [ref=e13]:
+            - link "URL Validator" [ref=e14] [cursor=pointer]:
+              - /url: /url-validator
+          - listitem [ref=e15]:
+            - link "Dashboard" [ref=e16] [cursor=pointer]:
+              - /url: /dashboard
+          - listitem [ref=e17]:
+            - link "Settings" [ref=e18] [cursor=pointer]:
+              - /url: /settings
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - heading "アプリケーション概要" [level=2] [ref=e21]
+      - paragraph [ref=e22]: Copilot Quality Harness は、自動テスト生成・実行・レポート機能を備えた品質保証ツールです。
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - heading "🔍 品質チェック" [level=3] [ref=e25]
+          - paragraph [ref=e26]: カスタム品質チェック機能で、アプリケーションの品質を即座に検証できます。
+        - generic [ref=e27]:
+          - heading "🌐 URL バリデータ" [level=3] [ref=e28]
+          - paragraph [ref=e29]: Web サイトの URL を検証し、アクセス可能性をチェックします。
+        - generic [ref=e30]:
+          - heading "📊 ダッシュボード" [level=3] [ref=e31]
+          - paragraph [ref=e32]: テスト実行結果とカバレッジ情報をリアルタイムで監視できます。
+        - generic [ref=e33]:
+          - heading "⚙️ 設定" [level=3] [ref=e34]
+          - paragraph [ref=e35]: アプリケーション設定をカスタマイズして、最適な運用をサポートします。
+  - contentinfo [ref=e36]:
+    - paragraph [ref=e37]: © 2026 Copilot Quality Harness
 ```
 
 # Test source

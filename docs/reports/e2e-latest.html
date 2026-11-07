@@ -425,7 +425,7 @@
     <div class="summary-grid">
       <div class="summary-card success">
         <h3>テスト合格率</h3>
-        <div class="value" id="passRate">100</div>
+        <div class="value" id="passRate">63</div>
         <div class="unit">%</div>
       </div>
 
@@ -437,13 +437,13 @@
 
       <div class="summary-card success">
         <h3>合格数</h3>
-        <div class="value" id="passedCount">19</div>
+        <div class="value" id="passedCount">12</div>
         <div class="unit">テスト</div>
       </div>
 
       <div class="summary-card danger">
         <h3>失敗数</h3>
-        <div class="value" id="failedCount">0</div>
+        <div class="value" id="failedCount">7</div>
         <div class="unit">テスト</div>
       </div>
 
@@ -455,7 +455,7 @@
 
       <div class="summary-card">
         <h3>実行時間</h3>
-        <div class="value" id="duration">35.4</div>
+        <div class="value" id="duration">91.9</div>
         <div class="unit">秒</div>
       </div>
     </div>
@@ -473,102 +473,132 @@
       <div class="suite-header" onclick="toggleSuite(this.parentElement)">
         <div class="suite-title">User Profile - Account Created At Display (E2E)</div>
         <div class="suite-stats">
-          <span><span class="stat-passed">✅ 7</span></span>
-          <span><span class="stat-failed">❌ 0</span></span>
+          <span><span class="stat-passed">✅ 4</span></span>
+          <span><span class="stat-failed">❌ 3</span></span>
           <span><span class="stat-skipped">⏭️ 0</span></span>
         </div>
         <div class="suite-toggle">▶</div>
       </div>
       <div class="suite-content">
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-001: Display profile with valid createdAt
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-001: Display profile with valid createdAt
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1423ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00132ac871a4030189fe46861beaf5f44edf685d.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00132ac871a4030189fe46861beaf5f44edf685d.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/05e6258137d4affb3e43c78acd8d5654080acbbf.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 6394ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByRole(&#39;heading&#39;, { name: /プロフィール/i })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+[2m  - Expect &quot;toBeVisible&quot; getByRole(&#39;heading&#39;, { name: /プロフィール/i }) with timeout 5000ms[22m
+[2m  - waiting for getByRole(&#39;heading&#39;, { name: /プロフィール/i })[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00132ac871a4030189fe46861beaf5f44edf685d.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00132ac871a4030189fe46861beaf5f44edf685d.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/03ddeb059858d9389287efd8c11c7231c86980b5.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-002: Display fallback when createdAt is null
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-002: Display fallback when createdAt is null
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1289ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/001e683604dec2b965fc26ed9dbb8e0b3cea77df.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/001e683604dec2b965fc26ed9dbb8e0b3cea77df.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0a6ac073aa664cd6122fec0747518053b98e9a1c.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 6348ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByRole(&#39;heading&#39;, { name: /プロフィール/i })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+[2m  - Expect &quot;toBeVisible&quot; getByRole(&#39;heading&#39;, { name: /プロフィール/i }) with timeout 5000ms[22m
+[2m  - waiting for getByRole(&#39;heading&#39;, { name: /プロフィール/i })[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/001e683604dec2b965fc26ed9dbb8e0b3cea77df.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/001e683604dec2b965fc26ed9dbb8e0b3cea77df.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/05e6258137d4affb3e43c78acd8d5654080acbbf.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-003: Handle 404 API error
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-003: Handle 404 API error
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1376ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0036028e9f8c1079f604d250b945a4864a93d2ce.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0036028e9f8c1079f604d250b945a4864a93d2ce.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0f19c5ca45c3709ce0988ebf0bab932ae0967788.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 6532ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByRole(&#39;heading&#39;, { name: /プロフィール/i })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+[2m  - Expect &quot;toBeVisible&quot; getByRole(&#39;heading&#39;, { name: /プロフィール/i }) with timeout 5000ms[22m
+[2m  - waiting for getByRole(&#39;heading&#39;, { name: /プロフィール/i })[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0036028e9f8c1079f604d250b945a4864a93d2ce.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0036028e9f8c1079f604d250b945a4864a93d2ce.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0a6ac073aa664cd6122fec0747518053b98e9a1c.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
         <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
             ✅ E2E-004: Fetch createdAt from API and display formatted
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               合格
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1258ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00441a3830e4ffbbebf5f2bacb7d5627da0594bf.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00441a3830e4ffbbebf5f2bacb7d5627da0594bf.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/123197e4a2270ac74bf33ea19931fe062fa154f1.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 1420ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00441a3830e4ffbbebf5f2bacb7d5627da0594bf.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00441a3830e4ffbbebf5f2bacb7d5627da0594bf.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0f19c5ca45c3709ce0988ebf0bab932ae0967788.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
         <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
             ✅ E2E-005: Handle invalid createdAt format with fallback
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               合格
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1286ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005165a935e03ddf207a78850cc649882b713606.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005165a935e03ddf207a78850cc649882b713606.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/123272d88c261e1b1c8af07bb81ce2aaa0be4362.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 1334ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005165a935e03ddf207a78850cc649882b713606.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005165a935e03ddf207a78850cc649882b713606.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/123197e4a2270ac74bf33ea19931fe062fa154f1.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
         <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
             ✅ E2E-006: Verify element structure and accessibility
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               合格
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1298ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005e8000e14991195fe16a3570bd99264d947e1a.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005e8000e14991195fe16a3570bd99264d947e1a.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/12a0e205f6a1da0ce06cca0531b4df62048e265f.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 1304ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005e8000e14991195fe16a3570bd99264d947e1a.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005e8000e14991195fe16a3570bd99264d947e1a.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/123272d88c261e1b1c8af07bb81ce2aaa0be4362.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
         <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
             ✅ E2E-007: Verify multiple renders and state consistency
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               合格
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 13311ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/13211c854d34bc81db7664622d2e8f292a2fae55.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 23327ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/12a0e205f6a1da0ce06cca0531b4df62048e265f.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -579,63 +609,82 @@
       <div class="suite-header" onclick="toggleSuite(this.parentElement)">
         <div class="suite-title">Error Path Tests</div>
         <div class="suite-stats">
-          <span><span class="stat-passed">✅ 4</span></span>
-          <span><span class="stat-failed">❌ 0</span></span>
+          <span><span class="stat-passed">✅ 0</span></span>
+          <span><span class="stat-failed">❌ 4</span></span>
           <span><span class="stat-skipped">⏭️ 0</span></span>
         </div>
         <div class="suite-toggle">▶</div>
       </div>
       <div class="suite-content">
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ displays error when adding check with only whitespace
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ displays error when adding check with only whitespace
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 3371ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00768df302012100ad644970d25dd42df773df44.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00768df302012100ad644970d25dd42df773df44.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/13ed9daad01ded0d57f53c2a775d792065f9f7e2.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 12325ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">TimeoutError: locator.fill: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for getByLabel(&#39;Check name&#39;)[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00768df302012100ad644970d25dd42df773df44.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00768df302012100ad644970d25dd42df773df44.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/12b0e1b50f9b310dd9b0f9baa9736e0c2ce0e655.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ displays error when name exceeds 120 characters
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ displays error when name exceeds 120 characters
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 2294ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00823e2e48e814d5ad8fd29252a0d7f6935159c0.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00823e2e48e814d5ad8fd29252a0d7f6935159c0.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/17f50a069f1d8613436cf503d1b27155e2533827.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 12367ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">TimeoutError: locator.fill: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for getByLabel(&#39;Check name&#39;)[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00823e2e48e814d5ad8fd29252a0d7f6935159c0.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00823e2e48e814d5ad8fd29252a0d7f6935159c0.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/13211c854d34bc81db7664622d2e8f292a2fae55.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ clears error message when user corrects input
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ clears error message when user corrects input
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 5426ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1c3e3bf8620508d39bcccf3dae131c08c0ccffbc.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 12369ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">TimeoutError: locator.fill: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for getByLabel(&#39;Check name&#39;)[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/13ed9daad01ded0d57f53c2a775d792065f9f7e2.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ shows appropriate error when API is unavailable
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ shows appropriate error when API is unavailable
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 2376ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00a3fec169ab1c943798373fc2ae11be22009b7b.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00a3fec169ab1c943798373fc2ae11be22009b7b.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1cb6f7d39d71b8af11d7eb123c6f153563c27f4d.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 7472ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+Locator: getByRole(&#39;alert&#39;)
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+[2m  - Expect &quot;toBeVisible&quot; getByRole(&#39;alert&#39;) with timeout 5000ms[22m
+[2m  - waiting for getByRole(&#39;alert&#39;)[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0094d279898dcb11b5c22ab73dfdcec1416451cd.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0094d279898dcb11b5c22ab73dfdcec1416451cd.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/17f50a069f1d8613436cf503d1b27155e2533827.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
@@ -662,8 +711,8 @@
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 90ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00cc206e1bd55f168a6c442120192e03bc2b4154.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00cc206e1bd55f168a6c442120192e03bc2b4154.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1e93a4497cac42f22549ec8828d8d129ef47f02d.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 136ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00a3fec169ab1c943798373fc2ae11be22009b7b.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00a3fec169ab1c943798373fc2ae11be22009b7b.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1bd0b2cd9564f78d0eff7d3d24d25eaef4cb2697.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -675,8 +724,8 @@
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 85ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01069f8b3cea99deedce6bdb28647bccc667d13f.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01069f8b3cea99deedce6bdb28647bccc667d13f.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1fa2e3e12acfb0a057f2644b5bdaac3887cb4f42.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 84ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00cc206e1bd55f168a6c442120192e03bc2b4154.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00cc206e1bd55f168a6c442120192e03bc2b4154.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1c3e3bf8620508d39bcccf3dae131c08c0ccffbc.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -688,8 +737,8 @@
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 85ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01431c23285e2db74b321c76f97d888578d48693.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01431c23285e2db74b321c76f97d888578d48693.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/255e7ad8d503db64cb0083148a1fcbccd52bab47.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 79ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01069f8b3cea99deedce6bdb28647bccc667d13f.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01069f8b3cea99deedce6bdb28647bccc667d13f.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1cb6f7d39d71b8af11d7eb123c6f153563c27f4d.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -701,8 +750,8 @@
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 78ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/272f959e18f8557865601618b270652c2e8299b3.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 77ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01431c23285e2db74b321c76f97d888578d48693.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01431c23285e2db74b321c76f97d888578d48693.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1e93a4497cac42f22549ec8828d8d129ef47f02d.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -714,8 +763,8 @@
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 89ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/27e2824eba3ab83a884a6ae5e3f71be603f94cfd.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 83ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1fa2e3e12acfb0a057f2644b5bdaac3887cb4f42.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -727,8 +776,8 @@
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 79ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d35a91faaa214ec7e076083f0e5d15c7e282e.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d35a91faaa214ec7e076083f0e5d15c7e282e.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/282a0d2539cc5b908e0458e71257ba4357902a5b.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 83ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/2474f82151bcf7dc0c7b7ed1c84434cc81e6e3e1.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -741,7 +790,7 @@
           </div>
           <div class="test-details">
             <small>⏱️ 85ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/2ea2de0fd036ebd372aef3f50a916b2817fd246d.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d35a91faaa214ec7e076083f0e5d15c7e282e.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d35a91faaa214ec7e076083f0e5d15c7e282e.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/255e7ad8d503db64cb0083148a1fcbccd52bab47.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -753,8 +802,8 @@
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 83ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01cba3eb8dea743353c913b3588e07ce26aadc4f.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01cba3eb8dea743353c913b3588e07ce26aadc4f.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/2fddc15ea42256f743edde5c9e7ab6b961fe5ede.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 82ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/272f959e18f8557865601618b270652c2e8299b3.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -769,7 +818,7 @@
         <p style="color: #666; margin-bottom: 10px;">動画・ログ・集計データへ直接アクセスできます。</p>
         
       <ul style="margin-left: 1.2rem; color: #555; line-height: 1.8;">
-        <li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42361867541" target="_blank" rel="noopener noreferrer">🧪 Test Matrix Run #42361867541</a>（ログ・Artifacts）</li>
+        <li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42365011887" target="_blank" rel="noopener noreferrer">🧪 Test Matrix Run #42365011887</a>（ログ・Artifacts）</li>
         <li><a href="./playwright-report/index.html" target="_blank" rel="noopener noreferrer">🧭 Playwright公式HTMLレポート</a>（手順ログ/エラー/trace導線）</li>
         <li><a href="./data/test-cases.json" target="_blank" rel="noopener noreferrer">📄 test-cases.json</a>（E2E集計データ）</li>
         <li><a href="https://github.com/cocomomojo/copilot-quality-harness/actions/workflows/test-matrix.yml" target="_blank" rel="noopener noreferrer">⚙️ Test Matrix Workflow</a></li>
@@ -779,7 +828,7 @@
     </div>
 
     <div class="footer">
-      <p>最終更新: <span id="lastUpdated">2026/11/07 10:03:03</span></p>
+      <p>最終更新: <span id="lastUpdated">2026/11/07 10:51:40</span></p>
       <p>Copilot Quality Harness | <a href="https://github.com/cocomomojo/copilot-quality-harness" style="color: #667eea; text-decoration: none;">GitHub</a></p>
     </div>
   </div>
