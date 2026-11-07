@@ -5,8 +5,8 @@
 # Generated: 2026-11-07T10:26:59.741Z
 
 feature: "【機能追加】Frontend ページ遷移機能の実装"
-description: "【機能追加】Frontend ページ遷移機能の実装 (generated from issue acceptance criteria)"
-component: "auto-generated-component"
+description: "React Router v6 を使用した SPA ページ遷移機能の実装とテスト"
+component: "frontend-navigation"
 requires_human_approval: false
 
 # ============================================================
@@ -15,17 +15,109 @@ requires_human_approval: false
 tests:
   unit_tests:
     - id: "UT-001"
-      title: "プレースホルダー: 自動生成用ユニットテスト"
-      category: "auto_generated"
-      input: {}
+      title: "React Router Setup Test"
+      description: "BrowserRouter が正常に初期化される"
+      category: "router"
+      input:
+        component: "App.jsx"
       expected_output:
         success: true
+      mock_dependencies: ["react-router-dom"]
+      
+    - id: "UT-002"
+      title: "Navigation Component Rendering"
+      description: "ナビゲーションバー（Header）が全ページで正常にレンダリングされる"
+      category: "component"
+      input:
+        component: "Header.jsx"
+        props: {}
+      expected_output:
+        success: true
+        contains: ["Home", "Quality Checks", "URL Validator", "Dashboard", "Settings"]
+      mock_dependencies: ["react-router-dom"]
+      
+    - id: "UT-003"
+      title: "Route Matching Test"
+      description: "URL パスが正しくページコンポーネントにマッピングされる"
+      category: "router"
+      input:
+        paths: ["/", "/quality-checks", "/url-validator", "/dashboard", "/settings"]
+      expected_output:
+        success: true
+        route_count: 5
       mock_dependencies: []
 
   e2e_tests:
+    - id: "E2E-001"
+      title: "Home Page Load"
+      description: "ホームページがアプリケーション起動時に表示される"
+      steps:
+        - action: "navigate"
+          target: "/"
+        - action: "wait_for_element"
+          selector: "h1"
+        - action: "verify"
+          condition: "page_contains_text('アプリケーション概要')"
+      expected: "ホームページが表示される"
+      
+    - id: "E2E-002"
+      title: "Navigation Click Test"
+      description: "ナビゲーションバーのリンクをクリックするとページ遷移する"
+      steps:
+        - action: "navigate"
+          target: "/"
+        - action: "click"
+          selector: "nav a[href='/quality-checks']"
+        - action: "wait_for_url"
+          url_pattern: "/quality-checks"
+        - action: "verify"
+          condition: "page_title_contains('Quality')"
+      expected: "品質チェックページへ遷移"
+      
+    - id: "E2E-003"
+      title: "Browser Back/Forward Navigation"
+      description: "ブラウザの戻る/進むボタンで履歴ナビゲーションが機能する"
+      steps:
+        - action: "navigate"
+          target: "/"
+        - action: "click"
+          selector: "nav a[href='/url-validator']"
+        - action: "verify"
+          condition: "current_url_contains('/url-validator')"
+        - action: "press_key"
+          key: "Alt+Left"
+        - action: "wait_for_url"
+          url_pattern: "/$"
+      expected: "前のページに戻る"
+      
+    - id: "E2E-004"
+      title: "Page Reload State Preservation"
+      description: "ページリロード後も同じページが表示される"
+      steps:
+        - action: "navigate"
+          target: "/dashboard"
+        - action: "reload_page"
+        - action: "verify"
+          condition: "current_url_contains('/dashboard')"
+      expected: "ダッシュボードページがリロード後も表示される"
+      
+    - id: "E2E-005"
+      title: "Invalid Route Handling"
+      description: "無効なURLにアクセスすると 404 ページが表示される"
+      steps:
+        - action: "navigate"
+          target: "/invalid-page"
+        - action: "verify"
+          condition: "page_contains_text('404') || page_contains_text('Not Found')"
+      expected: "404 エラーページが表示される"
 
-
-mocks: []
+mocks:
+  - name: "react_router"
+    module: "react-router-dom"
+    functions:
+      - "useNavigate"
+      - "useParams"
+      - "useLocation"
 
 seeds:
   - name: "base_seed"
