@@ -473,11 +473,14 @@ async function main() {
       ensureAndWriteFile(spinnerStylesPath, spinnerStyles);
     }
 
-    // App.jsx を更新
-    if (requirements.headerRequired || requirements.loadingRequired) {
-      const appComponent = generateUpdatedAppComponent(requirements.headerTitle);
-      const appPath = path.join('frontend', 'src', 'App.jsx');
-      ensureAndWriteFile(appPath, appComponent);
+    // ⚠️ DO NOT automatically generate/overwrite App.jsx
+    // Reason: App.jsx may already contain important application logic that should not be replaced
+    // Components should be integrated manually or through explicit user action
+    const appPath = path.join('frontend', 'src', 'App.jsx');
+    const appExists = fs.existsSync(appPath);
+    
+    if (appExists) {
+      console.log(`\n⚠️  NOTE: App.jsx already exists - skipping generation to preserve existing logic`);
     }
 
     console.log(`\n✅ Implementation generation completed successfully!`);
@@ -490,7 +493,15 @@ async function main() {
       console.log(`   - frontend/src/components/LoadingSpinner.jsx`);
       console.log(`   - frontend/src/components/LoadingSpinner.css`);
     }
-    console.log(`   - frontend/src/App.jsx (updated)`);
+    
+    if (appExists) {
+      console.log(`\n📌 Manual Integration Required:`);
+      console.log(`   To use the generated components in your App.jsx:`);
+      console.log(`   1. Review the new components in frontend/src/components/`);
+      console.log(`   2. Import them in App.jsx: import Header from './components/Header'`);
+      console.log(`   3. Integrate them into your component hierarchy`);
+      console.log(`   4. Run tests to verify integration works correctly`);
+    }
 
     process.exit(0);
   } catch (error) {
