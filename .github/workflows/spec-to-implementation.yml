@@ -306,6 +306,63 @@ jobs:
           echo "=== Generated implementation files ==="
           find . -path "*/node_modules" -prune -o -name "*.jsx" -o -name "*.tsx" -newer /tmp/issue.json -print 2>/dev/null || true
 
+      - name: Validate generated artifacts
+        id: validate_artifacts
+        run: |
+          echo "🔍 Validating generated artifacts..."
+          set +e
+          
+          # Count implementation files
+          IMPL_COUNT=$(find frontend/src/components -type f \( -name "*.jsx" -o -name "*.css" \) 2>/dev/null | wc -l)
+          echo "📊 Implementation files: $IMPL_COUNT"
+          
+          # Count test files
+          UNIT_TEST_COUNT=$(find src/tests/unit tests/unit -type f -name "*.spec.ts" -o -name "*.spec.js" 2>/dev/null | wc -l)
+          E2E_TEST_COUNT=$(find tests/e2e -type f -name "*.spec.ts" -o -name "*.spec.js" 2>/dev/null | wc -l)
+          FIXTURE_COUNT=$(find tests/fixtures -type f -name "*-mocks.ts" -o -name "*-mocks.js" 2>/dev/null | wc -l)
+          
+          TOTAL_TEST_COUNT=$((UNIT_TEST_COUNT + E2E_TEST_COUNT + FIXTURE_COUNT))
+          echo "📊 Test files: $TOTAL_TEST_COUNT (Unit: $UNIT_TEST_COUNT, E2E: $E2E_TEST_COUNT, Fixtures: $FIXTURE_COUNT)"
+          
+          # Validation logic
+          VALIDATION_PASSED=true
+          
+          # 実装ファイルが少なくとも1つは必要
+          if [ $IMPL_COUNT -lt 1 ]; then
+            echo "❌ ERROR: No implementation files generated (expected ≥1, got $IMPL_COUNT)"
+            VALIDATION_PASSED=false
+          else
+            echo "✅ Implementation files found: $IMPL_COUNT"
+          fi
+          
+          # テストファイルが少なくとも1つは必要
+          if [ $TOTAL_TEST_COUNT -lt 1 ]; then
+            echo "❌ ERROR: No test files generated (expected ≥1, got $TOTAL_TEST_COUNT)"
+            VALIDATION_PASSED=false
+          else
+            echo "✅ Test files found: $TOTAL_TEST_COUNT"
+          fi
+          
+          # 実装とテストの両方が必要
+          if [ $IMPL_COUNT -ge 1 ] && [ $TOTAL_TEST_COUNT -ge 1 ]; then
+            echo "✅ Both implementation and test files generated successfully"
+          else
+            echo "❌ ERROR: Missing either implementation or test files"
+            echo "   Implementation: $IMPL_COUNT, Tests: $TOTAL_TEST_COUNT"
+            VALIDATION_PASSED=false
+          fi
+          
+          if [ "$VALIDATION_PASSED" = "true" ]; then
+            echo "✅ Artifact validation PASSED"
+            echo "validation_passed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          else
+            echo "❌ Artifact validation FAILED"
+            echo "validation_passed=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          set -e
+
       - name: Run tests to verify generation
         id: test_verify
         continue-on-error: true
@@ -334,6 +391,24 @@ jobs:
           fi
           
           set -e
+
+      - name: Check artifact validation before PR creation
+        if: steps.validate_artifacts.outputs.validation_passed != 'true'
+        run: |
+          echo "❌ WORKFLOW STOPPED: Artifact validation failed"
+          echo ""
+          echo "⚠️ The generated code does not meet quality requirements:"
+          echo "   - Implementation files are missing or incomplete"
+          echo "   - Test files are missing or incomplete"
+          echo ""
+          echo "Please review the 'Validate generated artifacts' step output above."
+          echo ""
+          echo "🔧 To fix this issue:"
+          echo "   1. Check that both generate-implementation-from-spec.ts and generate-tests-from-spec.ts executed successfully"
+          echo "   2. Verify the spec file (YAML) contains all required information"
+          echo "   3. Check GitHub Actions logs for generation errors"
+          echo ""
+          exit 1
 
       - name: Create PR with generated code
         id: create_pr
@@ -367,6 +442,35 @@ jobs:
           
           # Stage all generated files
           git add -A
+          
+          # Verify staged files
+          echo "📋 Verifying staged files before commit..."
+          STAGED_FILES=$(git diff --cached --name-only | wc -l)
+          IMPL_STAGED=$(git diff --cached --name-only | grep -E "\.jsx|\.tsx|\.css" | wc -l)
+          TEST_STAGED=$(git diff --cached --name-only | grep -E "\.spec\.(ts|js)|-mocks\.(ts|js)" | wc -l)
+          
+          echo "   Total staged files: $STAGED_FILES"
+          echo "   Implementation files: $IMPL_STAGED"
+          echo "   Test files: $TEST_STAGED"
+          
+          if [ $STAGED_FILES -lt 2 ]; then
+            echo "❌ ERROR: Too few files staged for commit ($STAGED_FILES)"
+            echo "   Expected: implementation files + test files"
+            git diff --cached --name-only | head -20
+            exit 1
+          fi
+          
+          if [ $IMPL_STAGED -lt 1 ]; then
+            echo "❌ ERROR: No implementation files staged (expected ≥1)"
+            exit 1
+          fi
+          
+          if [ $TEST_STAGED -lt 1 ]; then
+            echo "❌ ERROR: No test files staged (expected ≥1)"
+            exit 1
+          fi
+          
+          echo "✅ Staged files validation passed"
           
           # Commit if there are changes
           if ! git diff --cached --quiet; then
