@@ -386,11 +386,30 @@ jobs:
           
           if [ $TEST_STATUS -eq 0 ]; then
             echo "✅ Tests completed successfully"
+            echo "test_status=passed" >> "$GITHUB_OUTPUT"
           else
             echo "⚠️ Tests exited with status $TEST_STATUS (may have placeholder tests)"
+            echo "test_status=failed" >> "$GITHUB_OUTPUT"
           fi
           
           set -e
+
+      - name: Verify no test regressions
+        if: steps.test_verify.outputs.test_status == 'failed'
+        run: |
+          echo "⚠️ WARNING: Test execution reported failures"
+          echo ""
+          echo "This may indicate:"
+          echo "1. Generated code has integration issues"
+          echo "2. Existing tests were broken by changes"
+          echo "3. Environment issues"
+          echo ""
+          echo "🔧 Recommended actions:"
+          echo "1. Review test output above"
+          echo "2. Check for breaking changes in generated code"
+          echo "3. Verify integration with existing components"
+          echo ""
+          echo "The workflow will continue, but review carefully before merging."
 
       - name: Check artifact validation before PR creation
         if: steps.validate_artifacts.outputs.validation_passed != 'true'
