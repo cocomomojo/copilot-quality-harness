@@ -87,6 +87,7 @@ jobs:
       - name: Run rule-based judgment as fallback
         if: always() && steps.analyze.outcome != 'skipped' && steps.ai-judgment.outputs.ai_judgment_success == 'false'
         id: fallback-judgment
+        continue-on-error: true
         env:
           REPORT_FILE: ${{ runner.temp }}/m2-report.json
           JUDGMENT_OUTPUT: ${{ runner.temp }}/judgment.json
