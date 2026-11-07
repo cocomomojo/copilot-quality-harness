@@ -1,40 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import LoadingSpinner from './components/LoadingSpinner';
-import './App.css';
+import { useEffect, useRef, useState } from 'react';
+import Footer from './components/Footer.jsx';
+import UserProfile from './UserProfile.jsx';
 
-/**
- * App コンポーネント
- * 
- * アプリケーションのメインコンポーネント
- * ヘッダーナビゲーションおよびローディング表示を統合
- */
-function App() {
-  const [isLoading, setIsLoading] = useState(false);
+function QualityChecksPage() {
+  const [checks, setChecks] = useState([]);
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const inputRef = useRef(null);
 
-  useEffect(() => {
-    // 初期ローディング完了をシミュレート
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
+  async function loadChecks() {
+    const response = await fetch('/api/checks');
+    if (!response.ok) throw new Error('Unable to load quality checks');
+    setChecks(await response.json());
+  }
 
-    return () => clearTimeout(timer);
-  }, []);
+  useEffect(() => { loadChecks().catch((cause) => setError(cause.message)); }, []);
 
-  const handleNavigation = () => {
-    setIsLoading(true);
-    // ナビゲーション処理...
-  };
+  async function addCheck(event) {
+    event.preventDefault();
+    setError('');
+    const response = await fetch('/api/checks', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name })
+    });
+    const payload = await response.json();
+    if (!response.ok) { setError(payload.error); return; }
+    setChecks((current) => [payload, ...current]);
+    setName('');
+    // Focus input after successful submission
+    if (inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 0);
+    }
+  }
 
   return (
-    <div className="app">
-      <Header title="Copilot Quality Harness Dash" />
-      <LoadingSpinner isVisible={isLoading} message="読み込み中..." />
-      <main className="app-content">
-        {/* メインコンテンツ */}
-      </main>
-    </div>
+    <main className="app">
+      <header>
+        <p className="eyebrow">AI development quality harness</p>
+        <h1>Quality checks</h1>
+        <p>Track a small, deterministic checklist before a change reaches review.</p>
+      </header>
+      <form onSubmit={addCheck} aria-label="Add quality check">
+        <label htmlFor="check-name">Check name</label>
+        <div className="form-row">
+          <input 
+            ref={inputRef}
+            id="check-name" 
+            value={name} 
+            onChange={(event) => setName(event.target.value)} 
+            required 
+            maxLength="120" 
+          />
+          <button type="submit">Add check</button>
+        </div>
+      </form>
+      {error && <p role="alert" className="error">{error}</p>}
+      <section aria-labelledby="checks-heading">
+        <h2 id="checks-heading">Current checks</h2>
+        {checks.length === 0 ? <p>No checks recorded yet.</p> : (
+          <ul>{checks.map((check) => <li key={check.id}><span>{check.name}</span><small>{check.status}</small></li>)}</ul>
+        )}
+      </section>
+      <Footer />
+    </main>
   );
 }
 
-export default App;
+export default function App() {
+  const [path, setPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setPath(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  if (path === '/profile') {
+    return <UserProfile />;
+  }
+
+  return <QualityChecksPage />;
+}
