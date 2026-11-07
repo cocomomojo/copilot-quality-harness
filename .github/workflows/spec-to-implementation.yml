@@ -285,13 +285,18 @@ jobs:
             git commit -m "feat: Auto-generate implementation, UT, and E2E tests for Issue #${ISSUE_NUMBER}" \
               --no-verify
             
-            # Try to push with rebase if conflict exists
-            git push origin "$BRANCH_NAME" --no-verify || {
-              echo "Push rejected, attempting to rebase..."
-              git fetch origin "$BRANCH_NAME" --no-verify
-              git rebase origin/"$BRANCH_NAME"
-              git push origin "$BRANCH_NAME" --no-verify --force-with-lease
-            }
+            # Try to push, with fallback for remote conflicts
+            if ! git push origin "$BRANCH_NAME" --no-verify; then
+              echo "⚠️ Push rejected, checking if remote branch exists..."
+              if git fetch origin "$BRANCH_NAME" 2>/dev/null; then
+                echo "✅ Remote branch exists, attempting rebase..."
+                git rebase origin/"$BRANCH_NAME"
+                git push origin "$BRANCH_NAME" --no-verify --force-with-lease
+              else
+                echo "⚠️ Remote branch does not exist, force-pushing new branch..."
+                git push origin "$BRANCH_NAME" --no-verify --force
+              fi
+            fi
             
             # Create PR with simplified body
             PR_URL=$(gh pr create \
