@@ -370,9 +370,9 @@ jobs:
           if [ "$DASHBOARD_CHANGES" -gt 0 ] || [ "$REPORTS_CHANGES" -gt 0 ]; then
             echo "📝 Committing updated dashboard and E2E report data..."
 
-            # Rebase onto latest main before commit to reduce non-fast-forward risk
-            git pull --rebase --autostash origin main || {
-              echo "⚠️ Rebase failed before commit. Skipping push for this run."
+            # Pull latest main using merge (not rebase) to avoid autostash conflicts
+            git pull --no-rebase origin main || {
+              echo "⚠️ Pull failed before commit. Skipping push for this run."
               exit 0
             }
 
@@ -391,9 +391,9 @@ jobs:
                 break
               fi
 
-              echo "⚠️ Push rejected. Rebasing and retrying..."
-              git pull --rebase --autostash origin main || {
-                echo "⚠️ Rebase failed during retry loop."
+              echo "⚠️ Push rejected. Pulling latest and retrying..."
+              git pull --no-rebase origin main || {
+                echo "⚠️ Pull failed during retry loop."
                 break
               }
             done
