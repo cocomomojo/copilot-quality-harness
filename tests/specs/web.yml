@@ -2,7 +2,7 @@
 # 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
 # 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
 # Issue: Closes #56
-# Generated: 2026-11-07T05:08:00.638Z
+# Generated: 2026-11-07T05:23:26.635Z
 
 feature: "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加"
 description: "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加 (generated from issue acceptance criteria)"
@@ -23,13 +23,77 @@ tests:
       mock_dependencies: []
 
   e2e_tests:
-
+    - id: "E2E-001"
+      title: "シナリオ 1: ユーザーがシステムにアクセス可能である..."
+      description: "Given: ユーザーがシステムにアクセス可能である\nWhen: ユーザーがWebアプリ\nThen: 、画面最上部にタイトル \"Copilot Quality Harness Dash\" を持つダーク背景（#1f2937）のヘッダーバーが表示される"
+      priority: "critical"
+      steps:
+        - step_id: 1
+          action: "setup"
+          target: "ユーザーがシステムにアクセス可能である"
+          expected:
+            - assertion_passed: true
+        - step_id: 2
+          action: "execute"
+          target: "ユーザーがWebアプリ"
+          expected:
+            - assertion_passed: true
+        - step_id: 3
+          action: "assert"
+          target: "、画面最上部にタイトル \"Copilot Quality Harness Dash\" を持つダーク背景（#1f2937）のヘッダーバーが表示される"
+          expected:
+            - assertion_passed: true
+    - id: "E2E-002"
+      title: "シナリオ 2: ユーザーがシステムにアクセス可能である..."
+      description: "Given: ユーザーがシステムにアクセス可能である\nWhen: ユーザーが画面上の主要なアクションボタン\nThen: とき、1秒未満の間にローディングアニメーション（スピナー等）が表示される"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "setup"
+          target: "ユーザーがシステムにアクセス可能である"
+          expected:
+            - assertion_passed: true
+        - step_id: 2
+          action: "execute"
+          target: "ユーザーが画面上の主要なアクションボタン"
+          expected:
+            - assertion_passed: true
+        - step_id: 3
+          action: "assert"
+          target: "とき、1秒未満の間にローディングアニメーション（スピナー等）が表示される"
+          expected:
+            - assertion_passed: true
+    - id: "E2E-003"
+      title: "シナリオ 3: システムが準備状態である..."
+      description: "Given: システムが準備状態である\nWhen: 処理終了後\nThen: 本来の処理結果が画面に正しく表示され, 画面崩れやエラーが発生しないこと"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "setup"
+          target: "システムが準備状態である"
+          expected:
+            - assertion_passed: true
+        - step_id: 2
+          action: "execute"
+          target: "処理終了後"
+          expected:
+            - assertion_passed: true
+        - step_id: 3
+          action: "assert"
+          target: "本来の処理結果が画面に正しく表示され"
+          expected:
+            - assertion_passed: true
+        - step_id: 4
+          action: "assert"
+          target: "画面崩れやエラーが発生しないこと"
+          expected:
+            - assertion_passed: true
 
 mocks: []
 
 seeds:
   - name: "base_seed"
-    value: 1794028080
+    value: 1794029006
     description: "基本シード値（テストデータ生成用）"
 
 environment:
