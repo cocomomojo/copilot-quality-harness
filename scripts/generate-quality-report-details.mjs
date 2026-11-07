@@ -183,26 +183,58 @@ async function generateDetailPages() {
     if (traceability?.ut_details && traceability.ut_details.length > 0) {
       testDetailsHtml += `
       <div class="section">
-        <h3>🧪 ユニットテスト詳細（${traceability.ut_details.length} 件）</h3>
-        <ul>
-          ${traceability.ut_details.slice(0, 20).map(t => `
-            <li><code>${escapeHtml(t.id)}</code>: ${escapeHtml(t.title)}</li>
-          `).join('')}
-          ${traceability.ut_details.length > 20 ? `<li><em>...と${traceability.ut_details.length - 20}件</em></li>` : ''}
-        </ul>
+        <h3>🧪 ユニットテスト詳細（${traceability.ut_cases || 0} テスト）</h3>
+        <table class="details-table">
+          <thead>
+            <tr>
+              <th>テストファイル</th>
+              <th>総テスト数</th>
+              <th>合格</th>
+              <th>不合格</th>
+              <th>合格率</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${traceability.ut_details.map(t => `
+              <tr>
+                <td><code>${escapeHtml(t.test_file || '—')}</code></td>
+                <td>${t.test_count || 0}</td>
+                <td><span class="status-pass">${t.passed || 0}</span></td>
+                <td><span class="status-${t.failed > 0 ? 'fail' : 'pass'}">${t.failed || 0}</span></td>
+                <td><span class="metric ${t.pass_rate === 100 ? 'pass' : 'fail'}">${formatPercent(t.pass_rate)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
       </div>
       `;
     }
     if (traceability?.e2e_details && traceability.e2e_details.length > 0) {
       testDetailsHtml += `
       <div class="section">
-        <h3>🎬 E2E テスト詳細（${traceability.e2e_details.length} 件）</h3>
-        <ul>
-          ${traceability.e2e_details.slice(0, 20).map(t => `
-            <li><code>${escapeHtml(t.id)}</code>: ${escapeHtml(t.title)}</li>
-          `).join('')}
-          ${traceability.e2e_details.length > 20 ? `<li><em>...と${traceability.e2e_details.length - 20}件</em></li>` : ''}
-        </ul>
+        <h3>🎬 E2E テスト詳細（${traceability.e2e_cases || 0} テスト）</h3>
+        <table class="details-table">
+          <thead>
+            <tr>
+              <th>テストファイル</th>
+              <th>総テスト数</th>
+              <th>合格</th>
+              <th>不合格</th>
+              <th>合格率</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${traceability.e2e_details.map(t => `
+              <tr>
+                <td><code>${escapeHtml(t.test_file || '—')}</code></td>
+                <td>${t.test_count || 0}</td>
+                <td><span class="status-pass">${t.passed || 0}</span></td>
+                <td><span class="status-${t.failed > 0 ? 'fail' : 'pass'}">${t.failed || 0}</span></td>
+                <td><span class="metric ${t.pass_rate === 100 ? 'pass' : 'fail'}">${formatPercent(t.pass_rate)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
       </div>
       `;
     }

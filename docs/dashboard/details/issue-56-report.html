@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Issue #56 - Quality Report Detail</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f6f8fa;
+      color: #24292e;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background: white;
+      border-bottom: 1px solid #e1e4e8;
+      padding: 20px 0;
+      margin-bottom: 30px;
+      border-radius: 6px;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .header-info {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      font-size: 14px;
+    }
+    .header-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section {
+      background: white;
+      border: 1px solid #e1e4e8;
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #24292e;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      background: #f6f8fa;
+      text-align: left;
+      padding: 12px 8px;
+      border-bottom: 2px solid #e1e4e8;
+      font-weight: 600;
+    }
+    td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #e1e4e8;
+    }
+    tr:hover {
+      background: #f9fafb;
+    }
+    code {
+      background: #f6f8fa;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+    }
+    a {
+      color: #0366d6;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .status-pass {
+      color: #28a745;
+      font-weight: 600;
+    }
+    .status-fail {
+      color: #cb2431;
+      font-weight: 600;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    ul li {
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+    ul li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+    }
+    .metric {
+      display: inline-block;
+      background: #f6f8fa;
+      padding: 6px 12px;
+      border-radius: 3px;
+      margin: 4px 4px 4px 0;
+      font-size: 13px;
+    }
+    .metric.pass {
+      background: #d4edda;
+      color: #155724;
+    }
+    .metric.fail {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #6a737d;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📊 Issue #56 - Quality Report Detail</h1>
+      <div class="header-info">
+        <div class="header-item">
+          <strong>PR:</strong> <a href="https://github.com/cocomomojo/copilot-quality-harness/pull/60" target="_blank">#60</a>
+        </div>
+        <div class="header-item">
+          <strong>Workflow:</strong> -
+        </div>
+        <div class="header-item">
+          <strong>Pass Rate:</strong> <span class="metric pass">100%</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      
+      
+      
+      <div class="section">
+        <h3>📋 仕様ファイル（1 件）</h3>
+        <ul>
+          
+            <li><a href="https://github.com/cocomomojo/copilot-quality-harness/blob/main/tests/specs/web.yml" target="_blank">【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加</a></li>
+          
+        </ul>
+      </div>
+      
+      
+      <div class="section">
+        <h3>🧪 ユニットテスト詳細（53 テスト）</h3>
+        <table class="details-table">
+          <thead>
+            <tr>
+              <th>テストファイル</th>
+              <th>総テスト数</th>
+              <th>合格</th>
+              <th>不合格</th>
+              <th>合格率</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td><code>backend/src/app.test.js</code></td>
+                <td>22</td>
+                <td><span class="status-pass">22</span></td>
+                <td><span class="status-pass">0</span></td>
+                <td><span class="metric pass">100.00%</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>backend/src/utils/validators.spec.js</code></td>
+                <td>15</td>
+                <td><span class="status-pass">15</span></td>
+                <td><span class="status-pass">0</span></td>
+                <td><span class="metric pass">100.00%</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>backend/src/app-advanced.test.js</code></td>
+                <td>16</td>
+                <td><span class="status-pass">16</span></td>
+                <td><span class="status-pass">0</span></td>
+                <td><span class="metric pass">100.00%</span></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="section">
+        <h3>🎬 E2E テスト詳細（50 テスト）</h3>
+        <table class="details-table">
+          <thead>
+            <tr>
+              <th>テストファイル</th>
+              <th>総テスト数</th>
+              <th>合格</th>
+              <th>不合格</th>
+              <th>合格率</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td><code>frontend/src/App.test.jsx</code></td>
+                <td>19</td>
+                <td><span class="status-pass">19</span></td>
+                <td><span class="status-pass">0</span></td>
+                <td><span class="metric pass">100.00%</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>frontend/src/App-advanced.test.jsx</code></td>
+                <td>19</td>
+                <td><span class="status-pass">19</span></td>
+                <td><span class="status-pass">0</span></td>
+                <td><span class="metric pass">100.00%</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>frontend/src/components/Footer.test.jsx</code></td>
+                <td>12</td>
+                <td><span class="status-pass">12</span></td>
+                <td><span class="status-pass">0</span></td>
+                <td><span class="metric pass">100.00%</span></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      
+      
+      <div class="section">
+        <h3>📈 カバレッジ詳細</h3>
+        <p>全体: Lines 81.41% / Branches 89.47% / Functions 82.14%</p>
+        <table class="details-table">
+          <thead>
+            <tr>
+              <th>ファイル</th>
+              <th>Lines</th>
+              <th>Branches</th>
+              <th>Functions</th>
+              <th>ステータス</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td><code>frontend/src/App.jsx</code></td>
+                <td>94.44%</td>
+                <td>95.45%</td>
+                <td>83.33%</td>
+                <td><span class="status-pass">✅</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>frontend/src/UserProfile.jsx</code></td>
+                <td>95.00%</td>
+                <td>84.61%</td>
+                <td>100.00%</td>
+                <td><span class="status-pass">✅</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>frontend/src/components/Footer.jsx</code></td>
+                <td>100.00%</td>
+                <td>100.00%</td>
+                <td>100.00%</td>
+                <td><span class="status-pass">✅</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>frontend/src/utils/dateFormatter.js</code></td>
+                <td>93.33%</td>
+                <td>87.50%</td>
+                <td>100.00%</td>
+                <td><span class="status-pass">✅</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>backend/src/app.js</code></td>
+                <td>82.28%</td>
+                <td>94.74%</td>
+                <td>100.00%</td>
+                <td><span class="status-pass">✅</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>backend/src/db.js</code></td>
+                <td>100.00%</td>
+                <td>100.00%</td>
+                <td>100.00%</td>
+                <td><span class="status-pass">✅</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>backend/src/utils/validators.js</code></td>
+                <td>94.44%</td>
+                <td>92.86%</td>
+                <td>100.00%</td>
+                <td><span class="status-pass">✅</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>backend/src/server.js</code></td>
+                <td>0.00%</td>
+                <td>0.00%</td>
+                <td>0.00%</td>
+                <td><span class="status-fail">❌</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>frontend/src/main.jsx</code></td>
+                <td>0.00%</td>
+                <td>0.00%</td>
+                <td>0.00%</td>
+                <td><span class="status-fail">❌</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>frontend/src/components/Header.jsx</code></td>
+                <td>0.00%</td>
+                <td>0.00%</td>
+                <td>0.00%</td>
+                <td><span class="status-fail">❌</span></td>
+              </tr>
+            
+              <tr>
+                <td><code>frontend/src/components/LoadingSpinner.jsx</code></td>
+                <td>0.00%</td>
+                <td>0.00%</td>
+                <td>0.00%</td>
+                <td><span class="status-fail">❌</span></td>
+              </tr>
+            
+          </tbody>
+        </table>
+        
+      </div>
+      
+    </main>
+
+    <footer>
+      <p>Generated by Copilot Quality Harness</p>
+      <p><a href="../index.html">← Back to Dashboard</a></p>
+    </footer>
+  </div>
+</body>
+</html>
