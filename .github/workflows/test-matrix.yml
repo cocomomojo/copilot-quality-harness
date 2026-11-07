@@ -75,12 +75,12 @@ jobs:
           
           # Run backend tests first, then frontend (sequential execution to avoid database contention)
           echo "📝 Running backend unit tests..."
-          npm run test --workspace backend 2>&1 | tee /tmp/test-result-backend.log
+          npm run test --workspace backend 2>&1 | tee -a /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           BACKEND_EXIT=$?
           
           echo ""
           echo "📝 Running frontend unit tests..."
-          npm run test --workspace frontend 2>&1 | tee /tmp/test-result-frontend.log
+          npm run test --workspace frontend 2>&1 | tee -a /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           FRONTEND_EXIT=$?
           
           # Combine results
@@ -166,12 +166,12 @@ jobs:
           
           # Run backend advanced tests first, then frontend (sequential execution to avoid database contention)
           echo "📝 Running backend advanced tests..."
-          npm run test:advanced --workspace backend 2>&1 | tee /tmp/test-result-backend-advanced.log
+          npm run test:advanced --workspace backend 2>&1 | tee -a /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           BACKEND_ADV_EXIT=$?
           
           echo ""
           echo "📝 Running frontend advanced tests..."
-          npm run test:advanced --workspace frontend 2>&1 | tee /tmp/test-result-frontend-advanced.log
+          npm run test:advanced --workspace frontend 2>&1 | tee -a /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           FRONTEND_ADV_EXIT=$?
           
           # Combine results
