@@ -35,7 +35,9 @@
     "generate:e2e-report": "ts-node scripts/generate-e2e-report.ts",
     "generate:e2e-report:help": "echo 'Usage: npm run generate:e2e-report -- [outputDir]' && echo 'Example: npm run generate:e2e-report -- qa/e2e-report' && echo 'Outputs: test-cases.json with detailed test results'",
     "generate:e2e-details": "node scripts/generate-e2e-details-page.mjs",
-    "generate:e2e-details:help": "echo 'Usage: npm run generate:e2e-details -- [reportDataPath] [outputDir]' && echo 'Example: npm run generate:e2e-details -- qa/e2e-report/test-cases.json docs/reports' && echo 'Outputs: e2e-latest.html interactive details page'"
+    "generate:e2e-details:help": "echo 'Usage: npm run generate:e2e-details -- [reportDataPath] [outputDir]' && echo 'Example: npm run generate:e2e-details -- qa/e2e-report/test-cases.json docs/reports' && echo 'Outputs: e2e-latest.html interactive details page'",
+    "generate:coverage-details": "node scripts/generate-coverage-details.mjs",
+    "generate:coverage-details:help": "echo 'Usage: npm run generate:coverage-details' && echo 'Generates detailed coverage analysis pages for all Issues' && echo 'Outputs: coverage-details.html (global) and coverage-issue-{number}.html (per-issue)'"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
