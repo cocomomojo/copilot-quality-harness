@@ -72,8 +72,24 @@ jobs:
         run: |
           echo "🚀 ==================== START: Unit Tests ===================="
           echo "Node version: $(node --version)"
-          npm test 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
-          TEST_EXIT_CODE=$?
+          
+          # Run backend tests first, then frontend (sequential execution to avoid database contention)
+          echo "📝 Running backend unit tests..."
+          npm run test --workspace backend 2>&1 | tee /tmp/test-result-backend.log
+          BACKEND_EXIT=$?
+          
+          echo ""
+          echo "📝 Running frontend unit tests..."
+          npm run test --workspace frontend 2>&1 | tee /tmp/test-result-frontend.log
+          FRONTEND_EXIT=$?
+          
+          # Combine results
+          if [ $BACKEND_EXIT -ne 0 ] || [ $FRONTEND_EXIT -ne 0 ]; then
+            TEST_EXIT_CODE=1
+          else
+            TEST_EXIT_CODE=0
+          fi
+          
           echo "✅ Unit tests completed with exit code: $TEST_EXIT_CODE"
           
           echo "📊 Generating coverage report..."
@@ -147,8 +163,24 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: Advanced Tests ===================="
-          npm run test:advanced 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
-          ADVANCED_EXIT_CODE=$?
+          
+          # Run backend advanced tests first, then frontend (sequential execution to avoid database contention)
+          echo "📝 Running backend advanced tests..."
+          npm run test:advanced --workspace backend 2>&1 | tee /tmp/test-result-backend-advanced.log
+          BACKEND_ADV_EXIT=$?
+          
+          echo ""
+          echo "📝 Running frontend advanced tests..."
+          npm run test:advanced --workspace frontend 2>&1 | tee /tmp/test-result-frontend-advanced.log
+          FRONTEND_ADV_EXIT=$?
+          
+          # Combine results
+          if [ $BACKEND_ADV_EXIT -ne 0 ] || [ $FRONTEND_ADV_EXIT -ne 0 ]; then
+            ADVANCED_EXIT_CODE=1
+          else
+            ADVANCED_EXIT_CODE=0
+          fi
+          
           echo "✅ Advanced tests completed with exit code: $ADVANCED_EXIT_CODE"
           echo "🏁 ==================== END: Advanced Tests ===================="
       
