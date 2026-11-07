@@ -772,7 +772,7 @@
           : '-';
         const coverageFail = report.coverage?.non_pass_count ?? '-';
         const coverageDisplay = typeof coverageFail === 'number' && report.issue_number
-          ? '<a href="./details/coverage-details.html" title="カバレッジ詳細">' + coverageFail + ' <span style="font-size: 12px;">📊</span></a>'
+          ? '<a href="./details/coverage-issue-' + report.issue_number + '.html" title="Issue #' + report.issue_number + ' カバレッジ詳細">' + coverageFail + ' <span style="font-size: 12px;">📊</span></a>'
           : coverageFail;
         const perspectives = report.traceability?.perspective_count ?? '-';
         const testItems = report.traceability?.quality_items_count ?? '-';
