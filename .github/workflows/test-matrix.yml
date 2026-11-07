@@ -57,10 +57,10 @@ jobs:
           npx playwright install --with-deps chromium
           echo "✅ Playwright browsers installed"
       
-      - name: Install dependencies
+      - name: Install dependencies (without postinstall)
         run: |
-          echo "📦 Installing dependencies with npm..."
-          npm ci
+          echo "📦 Installing dependencies with npm ci..."
+          npm ci --ignore-scripts
           echo "✅ Dependencies installed"
           node --version
           npm --version
