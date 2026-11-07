@@ -771,6 +771,9 @@
           ? '<a href="https://github.com/' + owner + '/' + repo + '/pull/' + report.pr_number + '">#' + report.pr_number + '</a>'
           : '-';
         const coverageFail = report.coverage?.non_pass_count ?? '-';
+        const coverageCell = coverageFail !== '-'
+          ? '<a href="./details/coverage-issue-' + report.issue_number + '.html" title="詳細カバレッジ" style="text-decoration: none; color: inherit;">📊 ' + coverageFail + '</a>'
+          : '<a href="./details/line-coverage.html" title="行単位カバレッジ" style="text-decoration: none; color: inherit;">📊 詳細</a>';
         const perspectives = report.traceability?.perspective_count ?? '-';
         const testItems = report.traceability?.quality_items_count ?? '-';
         const utCases = report.traceability?.ut_cases ?? '-';
@@ -790,7 +793,7 @@
         row.innerHTML = '<td>' + issueLink + '</td>' +
           '<td>' + prLink + '</td>' +
           '<td>' + (report.pass_rate ?? '-') + '%</td>' +
-          '<td>' + coverageFail + '</td>' +
+          '<td>' + coverageCell + '</td>' +
           '<td>' + perspectives + ' / ' + testItems + '</td>' +
           '<td>' + utCases + ' / ' + e2eCases + '</td>' +
           '<td>' + specText + '</td>' +

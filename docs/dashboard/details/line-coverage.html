@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Line Coverage Report</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #eee;
+    }
+    .summary-card {
+      text-align: center;
+    }
+    .summary-card .value {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .summary-card .label {
+      font-size: 14px;
+      color: #666;
+    }
+    .file-section {
+      margin: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .file-header {
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .file-header strong {
+      font-size: 14px;
+    }
+    .file-header .stats {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    .file-content {
+      max-height: 400px;
+      overflow-y: auto;
+      background: #fafafa;
+    }
+    .code-lines {
+      display: block;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .line {
+      display: flex;
+      border-bottom: 1px solid #eee;
+    }
+    .line.covered {
+      background-color: #f0fdf4;
+    }
+    .line.uncovered {
+      background-color: #fef2f2;
+    }
+    .line-num {
+      display: inline-block;
+      width: 50px;
+      padding: 2px 5px;
+      background: #f0f0f0;
+      color: #888;
+      text-align: right;
+      flex-shrink: 0;
+      border-right: 1px solid #ddd;
+    }
+    .line.covered .line-num {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .line.uncovered .line-num {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .line-content {
+      flex: 1;
+      padding: 2px 10px;
+      overflow-x: auto;
+    }
+    .footer {
+      padding: 20px;
+      background: #f9f9f9;
+      border-top: 1px solid #eee;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+    .legend {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      padding: 20px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #eee;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-box {
+      width: 30px;
+      height: 20px;
+      border: 1px solid #ddd;
+    }
+    .legend-box.covered {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .legend-box.uncovered {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+    .error {
+      color: #d32f2f;
+      padding: 10px;
+      background: #ffebee;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📊 Line Coverage Report</h1>
+      <p>Code line-by-line coverage analysis</p>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-card">
+        <div class="label">Total Lines</div>
+        <div class="value">139</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Covered Lines</div>
+        <div class="value" style="color: #27ae60">120</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Uncovered Lines</div>
+        <div class="value" style="color: #e74c3c">19</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">Coverage Rate</div>
+        <div class="value">86%</div>
+      </div>
+    </div>
+    
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-box covered"></div>
+        <span>Covered line (executed in tests)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box uncovered"></div>
+        <span>Uncovered line (not executed)</span>
+      </div>
+    </div>
+    
+    <div class="files">
+      
+    <div class="file-section">
+      <div class="file-header" style="background-color: #27ae60; color: white; padding: 10px;">
+        <strong>/home/coco/copilot-quality-harness/backend/src/app.js</strong>
+        <span class="stats"> | 65/79 lines (82%)</span>
+      </div>
+      <div class="file-content">
+        <pre class="code-lines"><div class="line covered"><span class="line-num">   1</span><span class="line-content">import express from 'express';</span></div><div class="line "><span class="line-num">   2</span><span class="line-content">import { createDatabase } from './db.js';</span></div><div class="line "><span class="line-num">   3</span><span class="line-content">import { isValidURL } from './utils/validators.js';</span></div><div class="line "><span class="line-num">   4</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">   5</span><span class="line-content">export function createApp(db = createDatabase()) {</span></div><div class="line covered"><span class="line-num">   6</span><span class="line-content">  const app = express();</span></div><div class="line covered"><span class="line-num">   7</span><span class="line-content">  app.use(express.json({ limit: '10kb' }));</span></div><div class="line "><span class="line-num">   8</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">   9</span><span class="line-content">  app.get('/api/health', (_request, response) =&gt; response.json({ status: 'ok' }));</span></div><div class="line covered"><span class="line-num">  10</span><span class="line-content">  app.get('/api/checks', (_request, response) =&gt; {</span></div><div class="line covered"><span class="line-num">  11</span><span class="line-content">    response.json(db.prepare(&quot;SELECT id, name, status, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS createdAt FROM checks ORDER BY id DESC&quot;).all());</span></div><div class="line covered"><span class="line-num">  12</span><span class="line-content">  });</span></div><div class="line covered"><span class="line-num">  13</span><span class="line-content">  app.post('/api/checks', (request, response) =&gt; {</span></div><div class="line covered"><span class="line-num">  14</span><span class="line-content">    const name = typeof request.body?.name === 'string' ? request.body.name.trim() : '';</span></div><div class="line covered"><span class="line-num">  15</span><span class="line-content">    if (!name || name.length &gt; 120) return response.status(400).json({ error: 'name must be between 1 and 120 characters' });</span></div><div class="line covered"><span class="line-num">  16</span><span class="line-content">    const result = db.prepare('INSERT INTO checks (name) VALUES (?)').run(name);</span></div><div class="line covered"><span class="line-num">  17</span><span class="line-content">    return response.status(201).json(db.prepare(&quot;SELECT id, name, status, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS createdAt FROM checks WHERE id = ?&quot;).get(result.lastInsertRowid));</span></div><div class="line covered"><span class="line-num">  18</span><span class="line-content">  });</span></div><div class="line covered"><span class="line-num">  19</span><span class="line-content">  // copilot-generated: URL validator endpoint</span></div><div class="line covered"><span class="line-num">  20</span><span class="line-content">  app.post('/api/validators/check-url', (request, response) =&gt; {</span></div><div class="line covered"><span class="line-num">  21</span><span class="line-content">    const url = request.body?.url;</span></div><div class="line covered"><span class="line-num">  22</span><span class="line-content">    const result = isValidURL(url);</span></div><div class="line covered"><span class="line-num">  23</span><span class="line-content">    return response.status(200).json(result);</span></div><div class="line covered"><span class="line-num">  24</span><span class="line-content">  });</span></div><div class="line covered"><span class="line-num">  25</span><span class="line-content">  // copilot-generated: User profile endpoint</span></div><div class="line covered"><span class="line-num">  26</span><span class="line-content">  // ⚠️  SECURITY WARNING: This endpoint returns user data without authentication verification.</span></div><div class="line covered"><span class="line-num">  27</span><span class="line-content">  // This is acceptable ONLY in a development/test harness running locally or in isolated test environments.</span></div><div class="line covered"><span class="line-num">  28</span><span class="line-content">  // DO NOT expose this endpoint to the internet without authentication.</span></div><div class="line covered"><span class="line-num">  29</span><span class="line-content">  // In a production system, this should:</span></div><div class="line covered"><span class="line-num">  30</span><span class="line-content">  // 1. Verify the authenticated user's identity (JWT, session cookie, etc.)</span></div><div class="line covered"><span class="line-num">  31</span><span class="line-content">  // 2. Return only the authenticated user's own profile (not any user in the database)</span></div><div class="line covered"><span class="line-num">  32</span><span class="line-content">  // 3. Include rate limiting to prevent abuse</span></div><div class="line covered"><span class="line-num">  33</span><span class="line-content">  // 4. Use HTTPS and secure session management</span></div><div class="line covered"><span class="line-num">  34</span><span class="line-content">  app.get('/api/user/me', (request, response) =&gt; {</span></div><div class="line covered"><span class="line-num">  35</span><span class="line-content">    try {</span></div><div class="line covered"><span class="line-num">  36</span><span class="line-content">      const user = db.prepare(&quot;SELECT id, email, name, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS created_at, strftime('%Y-%m-%dT%H:%M:%SZ', updated_at) AS updated_at FROM users ORDER BY rowid</span></div><div class="line covered"><span class="line-num">  37</span><span class="line-content">      if (!user) {</span></div><div class="line covered"><span class="line-num">  38</span><span class="line-content">        return response.status(404).json({ error: 'User not found' });</span></div><div class="line covered"><span class="line-num">  39</span><span class="line-content">      }</span></div><div class="line covered"><span class="line-num">  40</span><span class="line-content">      return response.status(200).json(user);</span></div><div class="line covered"><span class="line-num">  41</span><span class="line-content">    } catch (error) {</span></div><div class="line covered"><span class="line-num">  42</span><span class="line-content">      return response.status(500).json({ error: 'Internal Server Error', message: 'Failed to fetch user profile' });</span></div><div class="line covered"><span class="line-num">  43</span><span class="line-content">    }</span></div><div class="line covered"><span class="line-num">  44</span><span class="line-content">  });</span></div><div class="line covered"><span class="line-num">  45</span><span class="line-content">  // copilot-generated: Test endpoint for seeding user data (E2E tests only)</span></div><div class="line covered"><span class="line-num">  46</span><span class="line-content">  // ⚠️  CRITICAL: This endpoint is ONLY available in non-production environments and should NEVER be exposed to the internet.</span></div><div class="line covered"><span class="line-num">  47</span><span class="line-content">  // It allows resetting and reinitializing the entire user database, which is essential for test reproducibility.</span></div><div class="line covered"><span class="line-num">  48</span><span class="line-content">  // The NODE_ENV check ensures it's not registered in production environments.</span></div><div class="line covered"><span class="line-num">  49</span><span class="line-content">  if (process.env.NODE_ENV !== 'production') {</span></div><div class="line covered"><span class="line-num">  50</span><span class="line-content">    app.post('/api/test/seed-user', (request, response) =&gt; {</span></div><div class="line covered"><span class="line-num">  51</span><span class="line-content">      try {</span></div><div class="line covered"><span class="line-num">  52</span><span class="line-content">        const { id, email, name, created_at } = request.body;</span></div><div class="line covered"><span class="line-num">  53</span><span class="line-content">        if (!id || !email || !name) {</span></div><div class="line covered"><span class="line-num">  54</span><span class="line-content">          return response.status(400).json({ error: 'Missing required fields: id, email, name' });</span></div><div class="line covered"><span class="line-num">  55</span><span class="line-content">        }</span></div><div class="line covered"><span class="line-num">  56</span><span class="line-content">        db.prepare('DELETE FROM users').run();</span></div><div class="line covered"><span class="line-num">  57</span><span class="line-content">        db.prepare('INSERT INTO users (id, email, name, created_at) VALUES (?, ?, ?, ?)').run(id, email, name, created_at);</span></div><div class="line covered"><span class="line-num">  58</span><span class="line-content">        return response.status(201).json({ success: true, message: 'User seeded successfully' });</span></div><div class="line covered"><span class="line-num">  59</span><span class="line-content">      } catch (error) {</span></div><div class="line uncovered"><span class="line-num">  60</span><span class="line-content">        return response.status(500).json({ error: 'Failed to seed user' });</span></div><div class="line uncovered"><span class="line-num">  61</span><span class="line-content">      }</span></div><div class="line covered"><span class="line-num">  62</span><span class="line-content">    });</span></div><div class="line "><span class="line-num">  63</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">  64</span><span class="line-content">    // Test endpoint to clear all checks (E2E test cleanup only)</span></div><div class="line covered"><span class="line-num">  65</span><span class="line-content">    app.post('/api/test/reset-checks', (request, response) =&gt; {</span></div><div class="line uncovered"><span class="line-num">  66</span><span class="line-content">      try {</span></div><div class="line uncovered"><span class="line-num">  67</span><span class="line-content">        db.prepare('DELETE FROM checks').run();</span></div><div class="line uncovered"><span class="line-num">  68</span><span class="line-content">        return response.status(200).json({ success: true, message: 'All checks cleared' });</span></div><div class="line uncovered"><span class="line-num">  69</span><span class="line-content">      } catch (error) {</span></div><div class="line uncovered"><span class="line-num">  70</span><span class="line-content">        return response.status(500).json({ error: 'Failed to reset checks' });</span></div><div class="line uncovered"><span class="line-num">  71</span><span class="line-content">      }</span></div><div class="line covered"><span class="line-num">  72</span><span class="line-content">    });</span></div><div class="line "><span class="line-num">  73</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">  74</span><span class="line-content">    // Test endpoint to clear all users (E2E test cleanup only)</span></div><div class="line covered"><span class="line-num">  75</span><span class="line-content">    app.post('/api/test/reset-users', (request, response) =&gt; {</span></div><div class="line uncovered"><span class="line-num">  76</span><span class="line-content">      try {</span></div><div class="line uncovered"><span class="line-num">  77</span><span class="line-content">        db.prepare('DELETE FROM users').run();</span></div><div class="line uncovered"><span class="line-num">  78</span><span class="line-content">        return response.status(200).json({ success: true, message: 'All users cleared' });</span></div><div class="line uncovered"><span class="line-num">  79</span><span class="line-content">      } catch (error) {</span></div><div class="line uncovered"><span class="line-num">  80</span><span class="line-content">        return response.status(500).json({ error: 'Failed to reset users' });</span></div><div class="line uncovered"><span class="line-num">  81</span><span class="line-content">      }</span></div><div class="line covered"><span class="line-num">  82</span><span class="line-content">    });</span></div><div class="line covered"><span class="line-num">  83</span><span class="line-content">  }</span></div><div class="line covered"><span class="line-num">  84</span><span class="line-content">  return app;</span></div><div class="line covered"><span class="line-num">  85</span><span class="line-content">}</span></div><div class="line "><span class="line-num">  86</span><span class="line-content"></span></div></pre>
+      </div>
+    </div>
+  
+
+    <div class="file-section">
+      <div class="file-header" style="background-color: #e74c3c; color: white; padding: 10px;">
+        <strong>/home/coco/copilot-quality-harness/backend/src/server.js</strong>
+        <span class="stats"> | 0/3 lines (0%)</span>
+      </div>
+      <div class="file-content">
+        <pre class="code-lines"><div class="line uncovered"><span class="line-num">   1</span><span class="line-content">import { createApp } from './app.js';</span></div><div class="line uncovered"><span class="line-num">   2</span><span class="line-content">const port = Number(process.env.PORT || 3000);</span></div><div class="line uncovered"><span class="line-num">   3</span><span class="line-content">createApp().listen(port, () =&gt; console.log(`Quality harness API listening on ${port}`));</span></div><div class="line "><span class="line-num">   4</span><span class="line-content"></span></div></pre>
+      </div>
+    </div>
+  
+
+    <div class="file-section">
+      <div class="file-header" style="background-color: #27ae60; color: white; padding: 10px;">
+        <strong>/home/coco/copilot-quality-harness/backend/src/utils/validators.js</strong>
+        <span class="stats"> | 34/36 lines (94%)</span>
+      </div>
+      <div class="file-content">
+        <pre class="code-lines"><div class="line covered"><span class="line-num">   1</span><span class="line-content">/* copilot-generated */</span></div><div class="line "><span class="line-num">   2</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">   3</span><span class="line-content">/**</span></div><div class="line covered"><span class="line-num">   4</span><span class="line-content"> * Validates if a URL string is in correct format (http/https)</span></div><div class="line covered"><span class="line-num">   5</span><span class="line-content"> * </span></div><div class="line covered"><span class="line-num">   6</span><span class="line-content"> * @param {string|null} url - The URL string to validate</span></div><div class="line covered"><span class="line-num">   7</span><span class="line-content"> * @returns {{valid: boolean, error?: string}} Validation result object</span></div><div class="line covered"><span class="line-num">   8</span><span class="line-content"> * </span></div><div class="line covered"><span class="line-num">   9</span><span class="line-content"> * Performance: &lt; 10ms for validation</span></div><div class="line covered"><span class="line-num">  10</span><span class="line-content"> * Security: Checks protocol, length limit, and format</span></div><div class="line covered"><span class="line-num">  11</span><span class="line-content"> */</span></div><div class="line covered"><span class="line-num">  12</span><span class="line-content">export function isValidURL(url) {</span></div><div class="line covered"><span class="line-num">  13</span><span class="line-content">  // Check for empty or null input</span></div><div class="line covered"><span class="line-num">  14</span><span class="line-content">  if (url === null || url === undefined || url === '') {</span></div><div class="line covered"><span class="line-num">  15</span><span class="line-content">    return { valid: false, error: 'URL cannot be empty' };</span></div><div class="line covered"><span class="line-num">  16</span><span class="line-content">  }</span></div><div class="line "><span class="line-num">  17</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">  18</span><span class="line-content">  // Check if URL is a string</span></div><div class="line covered"><span class="line-num">  19</span><span class="line-content">  if (typeof url !== 'string') {</span></div><div class="line covered"><span class="line-num">  20</span><span class="line-content">    return { valid: false, error: 'URL must be a string' };</span></div><div class="line covered"><span class="line-num">  21</span><span class="line-content">  }</span></div><div class="line "><span class="line-num">  22</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">  23</span><span class="line-content">  // Check length limit (2048 characters per RFC 3986)</span></div><div class="line covered"><span class="line-num">  24</span><span class="line-content">  if (url.length &gt; 2048) {</span></div><div class="line covered"><span class="line-num">  25</span><span class="line-content">    return { valid: false, error: 'Invalid URL format' };</span></div><div class="line covered"><span class="line-num">  26</span><span class="line-content">  }</span></div><div class="line "><span class="line-num">  27</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">  28</span><span class="line-content">  // Check if URL starts with allowed protocols</span></div><div class="line covered"><span class="line-num">  29</span><span class="line-content">  if (!url.startsWith('http://') &amp;&amp; !url.startsWith('https://')) {</span></div><div class="line covered"><span class="line-num">  30</span><span class="line-content">    return { valid: false, error: 'Invalid URL format' };</span></div><div class="line covered"><span class="line-num">  31</span><span class="line-content">  }</span></div><div class="line "><span class="line-num">  32</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">  33</span><span class="line-content">  // Try to parse as URL</span></div><div class="line covered"><span class="line-num">  34</span><span class="line-content">  try {</span></div><div class="line covered"><span class="line-num">  35</span><span class="line-content">    // This will throw if URL is malformed</span></div><div class="line covered"><span class="line-num">  36</span><span class="line-content">    new URL(url);</span></div><div class="line covered"><span class="line-num">  37</span><span class="line-content">    return { valid: true };</span></div><div class="line covered"><span class="line-num">  38</span><span class="line-content">  } catch (error) {</span></div><div class="line uncovered"><span class="line-num">  39</span><span class="line-content">    return { valid: false, error: 'Invalid URL format' };</span></div><div class="line uncovered"><span class="line-num">  40</span><span class="line-content">  }</span></div><div class="line covered"><span class="line-num">  41</span><span class="line-content">}</span></div><div class="line "><span class="line-num">  42</span><span class="line-content"></span></div></pre>
+      </div>
+    </div>
+  
+
+    <div class="file-section">
+      <div class="file-header" style="background-color: #27ae60; color: white; padding: 10px;">
+        <strong>/home/coco/copilot-quality-harness/backend/src/db.js</strong>
+        <span class="stats"> | 21/21 lines (100%)</span>
+      </div>
+      <div class="file-content">
+        <pre class="code-lines"><div class="line covered"><span class="line-num">   1</span><span class="line-content">import Database from 'better-sqlite3';</span></div><div class="line "><span class="line-num">   2</span><span class="line-content"></span></div><div class="line covered"><span class="line-num">   3</span><span class="line-content">export function createDatabase(filename = ':memory:') {</span></div><div class="line covered"><span class="line-num">   4</span><span class="line-content">  const db = new Database(filename);</span></div><div class="line covered"><span class="line-num">   5</span><span class="line-content">  db.pragma('journal_mode = WAL');</span></div><div class="line covered"><span class="line-num">   6</span><span class="line-content">  db.exec(`</span></div><div class="line covered"><span class="line-num">   7</span><span class="line-content">    CREATE TABLE IF NOT EXISTS checks (</span></div><div class="line covered"><span class="line-num">   8</span><span class="line-content">      id INTEGER PRIMARY KEY AUTOINCREMENT,</span></div><div class="line covered"><span class="line-num">   9</span><span class="line-content">      name TEXT NOT NULL CHECK(length(name) BETWEEN 1 AND 120),</span></div><div class="line covered"><span class="line-num">  10</span><span class="line-content">      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'passed', 'failed')),</span></div><div class="line covered"><span class="line-num">  11</span><span class="line-content">      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP</span></div><div class="line covered"><span class="line-num">  12</span><span class="line-content">    );</span></div><div class="line covered"><span class="line-num">  13</span><span class="line-content">    CREATE TABLE IF NOT EXISTS users (</span></div><div class="line covered"><span class="line-num">  14</span><span class="line-content">      id TEXT PRIMARY KEY,</span></div><div class="line covered"><span class="line-num">  15</span><span class="line-content">      email TEXT NOT NULL UNIQUE,</span></div><div class="line covered"><span class="line-num">  16</span><span class="line-content">      name TEXT NOT NULL,</span></div><div class="line covered"><span class="line-num">  17</span><span class="line-content">      created_at TEXT,</span></div><div class="line covered"><span class="line-num">  18</span><span class="line-content">      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP</span></div><div class="line covered"><span class="line-num">  19</span><span class="line-content">    )</span></div><div class="line covered"><span class="line-num">  20</span><span class="line-content">  `);</span></div><div class="line covered"><span class="line-num">  21</span><span class="line-content">  return db;</span></div><div class="line covered"><span class="line-num">  22</span><span class="line-content">}</span></div><div class="line "><span class="line-num">  23</span><span class="line-content"></span></div></pre>
+      </div>
+    </div>
+  
+    </div>
+    
+    <div class="footer">
+      <p>Generated: 2026-11-07T09:54:47.281Z</p>
+      <p>Coverage data: Istanbul format (nyc)</p>
+    </div>
+  </div>
+</body>
+</html>

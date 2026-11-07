@@ -37,7 +37,9 @@
     "generate:e2e-details": "node scripts/generate-e2e-details-page.mjs",
     "generate:e2e-details:help": "echo 'Usage: npm run generate:e2e-details -- [reportDataPath] [outputDir]' && echo 'Example: npm run generate:e2e-details -- qa/e2e-report/test-cases.json docs/reports' && echo 'Outputs: e2e-latest.html interactive details page'",
     "generate:coverage-details": "node scripts/generate-coverage-details.mjs",
-    "generate:coverage-details:help": "echo 'Usage: npm run generate:coverage-details' && echo 'Generates detailed coverage analysis pages for all Issues' && echo 'Outputs: coverage-details.html (global) and coverage-issue-{number}.html (per-issue)'"
+    "generate:coverage-details:help": "echo 'Usage: npm run generate:coverage-details' && echo 'Generates detailed coverage analysis pages for all Issues' && echo 'Outputs: coverage-details.html (global) and coverage-issue-{number}.html (per-issue)'",
+    "generate:line-coverage": "node scripts/generate-line-coverage.mjs",
+    "generate:line-coverage:help": "echo 'Usage: npm run generate:line-coverage' && echo 'Generates line-by-line code coverage report showing covered/uncovered lines' && echo 'Outputs: line-coverage.html with source code highlighting'"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
