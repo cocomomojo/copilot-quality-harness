@@ -28,8 +28,8 @@ function loadCoverageData(filePath) {
     Object.entries(data).forEach(([filePath, stats]) => {
       if (stats.lines && stats.branches) {
         normalized[filePath] = {
-          l: stats.lines.details || {},
-          b: stats.branches.details || {}
+          l: stats.lines,  // Pass summary format directly
+          b: stats.branches
         };
       }
     });
@@ -46,6 +46,17 @@ function parseFilePath(fullPath) {
 }
 
 function analyzeLineCoverage(lineCoverage) {
+  // Handle both detailed format (object with line numbers) and summary format (already counted)
+  if (typeof lineCoverage === 'object' && lineCoverage.total !== undefined) {
+    // Summary format from frontend
+    return { 
+      covered: lineCoverage.covered || 0, 
+      total: lineCoverage.total || 0, 
+      percentage: lineCoverage.pct !== undefined ? lineCoverage.pct : 0 
+    };
+  }
+  
+  // Detailed format from backend
   const lines = Object.entries(lineCoverage || {});
   const covered = lines.filter(([_, hits]) => hits > 0).length;
   const total = lines.length;
@@ -53,6 +64,17 @@ function analyzeLineCoverage(lineCoverage) {
 }
 
 function analyzeBranchCoverage(branchCoverage) {
+  // Handle both summary format and detailed format
+  if (typeof branchCoverage === 'object' && branchCoverage.total !== undefined) {
+    // Summary format
+    return { 
+      covered: branchCoverage.covered || 0, 
+      total: branchCoverage.total || 0, 
+      percentage: branchCoverage.pct !== undefined ? branchCoverage.pct : 0 
+    };
+  }
+  
+  // Detailed format from backend
   const branches = Object.entries(branchCoverage || {});
   let covered = 0, total = 0;
   
