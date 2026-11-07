@@ -1,50 +1,5 @@
 [
   {
-<<<<<<< Updated upstream
-    "timestamp": "2026-10-25T06:33:36.201Z",
-    "pass_rate": 100,
-    "test_count": 44,
-    "passed": 44,
-    "failed": 0,
-    "coverage": 0,
-    "ai_danger_rank": "D",
-    "risk_level": "HIGH",
-    "composite_score": 56,
-    "data_source": "TEST_MATRIX_ARTIFACT",
-    "details": {
-      "test_source": "test-matrix-artifact",
-      "github_run_id": 40169333923
-    },
-    "trend": "STABLE",
-    "trend_details": {
-      "pass_rate_change": 0,
-      "coverage_change": 0
-    }
-  },
-  {
-=======
->>>>>>> Stashed changes
-    "timestamp": "2026-10-25T07:26:41.902Z",
-    "pass_rate": 100,
-    "test_count": 44,
-    "passed": 44,
-    "failed": 0,
-    "coverage": 0,
-    "ai_danger_rank": "D",
-    "risk_level": "HIGH",
-    "composite_score": 56,
-    "data_source": "TEST_MATRIX_ARTIFACT",
-    "details": {
-      "test_source": "test-matrix-artifact",
-      "github_run_id": 40170016158
-    },
-    "trend": "STABLE",
-    "trend_details": {
-      "pass_rate_change": 0,
-      "coverage_change": 0
-    }
-  },
-  {
     "timestamp": "2026-10-25T07:35:17.158Z",
     "pass_rate": 100,
     "test_count": 44,
@@ -2053,8 +2008,6 @@
       "pass_rate_change": 0,
       "coverage_change": 0
     }
-<<<<<<< Updated upstream
-=======
   },
   {
     "timestamp": "2026-11-07T12:16:00.136Z",
@@ -2078,6 +2031,28 @@
       "pass_rate_change": 0,
       "coverage_change": 0
     }
->>>>>>> Stashed changes
+  },
+  {
+    "timestamp": "2026-11-07T12:23:20.414Z",
+    "pass_rate": 80,
+    "test_count": 5,
+    "passed": 4,
+    "failed": 1,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 42,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 42372110121,
+      "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
+      "explicit_test_run_id": "42372110121"
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
   }
 ]
