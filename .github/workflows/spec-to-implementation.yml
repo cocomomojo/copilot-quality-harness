@@ -120,18 +120,22 @@ jobs:
 
       - name: Update spec_file output if generated
         id: final-spec-output
-        if: steps.resolve-spec.outputs.source == 'generated'
         run: |
-          echo "spec_file=${{ steps.generate.outputs.spec_file }}" >> "$GITHUB_OUTPUT"
-          echo "feature_name=${{ steps.generate.outputs.feature_name }}" >> "$GITHUB_OUTPUT"
+          if [ "${{ steps.resolve-spec.outputs.source }}" == "generated" ]; then
+            echo "spec_file=${{ steps.generate.outputs.spec_file }}" >> "$GITHUB_OUTPUT"
+            echo "feature_name=${{ steps.generate.outputs.feature_name }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ inputs.spec_file }}" ]; then
+            echo "spec_file=${{ inputs.spec_file }}" >> "$GITHUB_OUTPUT"
+            echo "Using provided spec_file: ${{ inputs.spec_file }}"
+          fi
 
       - name: Upload generated spec as artifact
         if: steps.resolve-spec.outputs.source == 'generated'
         uses: actions/upload-artifact@v4
         with:
           name: generated-spec
-          path: ${{ steps.generate.outputs.spec_file }}
-          if-no-files-found: error
+          path: tests/specs/
+          if-no-files-found: ignore
           retention-days: 1
 
       - name: Commit generated YML to branch
