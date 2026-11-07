@@ -259,23 +259,43 @@ jobs:
 
           echo "✅ Using spec file: $SPEC_FILE"
           
-          # Generate tests from spec with timeout
+          # Step 1: Generate implementation code from spec with timeout
+          echo ""
+          echo "📝 Step 1: Generating implementation code..."
+          timeout 300 npx ts-node scripts/generate-implementation-from-spec.ts "$SPEC_FILE"
+          IMPL_STATUS=$?
+          
+          if [ $IMPL_STATUS -ne 0 ]; then
+            echo "❌ Error: Implementation generation failed with status $IMPL_STATUS" >&2
+            node scripts/workflow-error-handler.mjs capture-error "TEST_GENERATION_FAILED" "Implementation generation failed with exit code $IMPL_STATUS" "{\"issue_number\": \"$ISSUE_NUMBER\", \"spec_file\": \"$SPEC_FILE\"}"
+            exit 1
+          fi
+          
+          echo "✅ Implementation code generated successfully"
+          
+          # Step 2: Generate tests from spec with timeout
+          echo ""
+          echo "📝 Step 2: Generating test code..."
           timeout 300 npx ts-node scripts/generate-tests-from-spec.ts "$SPEC_FILE"
           GEN_STATUS=$?
           
           if [ $GEN_STATUS -ne 0 ]; then
             echo "❌ Error: Test generation failed with status $GEN_STATUS" >&2
-            node scripts/workflow-error-handler.mjs capture-error "TEST_GENERATION_FAILED" "ts-node exited with code $GEN_STATUS" "{\"issue_number\": \"$ISSUE_NUMBER\", \"spec_file\": \"$SPEC_FILE\"}"
+            node scripts/workflow-error-handler.mjs capture-error "TEST_GENERATION_FAILED" "Test generation failed with exit code $GEN_STATUS" "{\"issue_number\": \"$ISSUE_NUMBER\", \"spec_file\": \"$SPEC_FILE\"}"
             exit 1
           fi
           
-          echo "✅ Tests generated successfully"
+          echo "✅ Test code generated successfully"
           set -e
 
       - name: List generated files
         run: |
+          echo "=== Generated Implementation files ==="
+          find frontend/src/components -name "*.jsx" -o -name "*.css" 2>/dev/null | sort || true
+          echo ""
           echo "=== Generated UT files ==="
           find . -name "*.spec.ts" -path "*/unit/*" -newer /tmp/issue.json 2>/dev/null || true
+          echo ""
           echo "=== Generated E2E files ==="
           find . -name "*.spec.ts" -path "*/e2e/*" -newer /tmp/issue.json 2>/dev/null || true
           echo "=== Generated implementation files ==="
