@@ -65,6 +65,12 @@ jobs:
           node --version
           npm --version
       
+      - name: Build native modules
+        run: |
+          echo "🔨 Building native modules (better-sqlite3, etc.)..."
+          npm rebuild 2>&1 || npm rebuild --build-from-source 2>&1
+          echo "✅ Native modules built"
+      
       - name: Run unit tests
         if: matrix.test-type == 'unit'
         id: test-unit
