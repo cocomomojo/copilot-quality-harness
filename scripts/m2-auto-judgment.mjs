@@ -268,11 +268,14 @@ if (process.argv[1].endsWith('m2-auto-judgment.mjs')) {
     console.log(`AUTO_JUDGMENT_FACTORS=${judgment.factors.join(',')}`);
   }
   
-  const exitCode = {
-    [JudgmentLevel.SAFE_PROCEED]: 0,
-    [JudgmentLevel.NEEDS_APPROVAL]: 1,
-    [JudgmentLevel.MANUAL_ONLY]: 2
-  }[judgment.level] || 1;
+  let exitCode = 1; // default
+  if (judgment.level === JudgmentLevel.SAFE_PROCEED) {
+    exitCode = 0;
+  } else if (judgment.level === JudgmentLevel.NEEDS_APPROVAL) {
+    exitCode = 1;
+  } else if (judgment.level === JudgmentLevel.MANUAL_ONLY) {
+    exitCode = 2;
+  }
   
   process.exit(exitCode);
 }
