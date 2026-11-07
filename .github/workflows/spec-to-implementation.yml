@@ -176,12 +176,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Download generated spec artifact
-        if: ${{ needs.generate-spec-yml.outputs.spec_file != '' }}
+      - name: Download generated spec artifact (only if M2 generated it)
+        if: ${{ inputs.spec_file == '' && inputs.issue_number != '' }}
         uses: actions/download-artifact@v4
         with:
           name: generated-spec
-          path: .
+          path: tests/specs
+        continue-on-error: true
 
       - name: Validate generated spec file
         id: validate_spec
