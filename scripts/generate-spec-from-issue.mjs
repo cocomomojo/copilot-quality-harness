@@ -47,36 +47,87 @@ function parseArgs(args) {
 // Issue から Given/When/Then を抽出
 // ============================================================
 
+/**
+ * "シナリオ N: 説明文" 形式から Given/When/Then を自動生成
+ * 例: "ユーザーがWebアプリにアクセスし、画面最上部に..." 
+ *   → Given: "ユーザーがシステムにアクセス可能である"
+ *   → When: "ユーザーがWebアプリにアクセスしたとき"
+ *   → Then: "画面最上部にヘッダーが表示される"
+ */
+function convertBulletScenarioToGWT(scenarioText) {
+  // "シナリオ N: " を削除
+  const cleaned = scenarioText.replace(/^シナリオ\s+\d+:\s*/, '').trim();
+  
+  let given = 'システムが初期状態に準備されている';
+  let when = '';
+  let then = [];
+
+  // When キーワード（アクション開始を示す）を検出
+  // "〜をクリック", "〜にアクセス", "〜したとき", etc.
+  const whenPattern = /(.+?)(?:をクリック(?:した)?|にアクセス(?:し)?|し(?:た)?、|したとき)(.+?)(?:こと|ため)(.*)$/;
+  const match = cleaned.match(whenPattern);
+  
+  if (match) {
+    // Action が明確に検出できた場合
+    const actionPart = match[1];
+    const resultPart = match[2];
+    
+    given = 'ユーザーがシステムにアクセス可能である';
+    when = actionPart.trim();
+    then.push((resultPart + match[3]).trim() || '期待される結果が表示される');
+  } else {
+    // When キーワード未検出 → 句読点で分割
+    const parts = cleaned.split(/[、。]/);
+    
+    if (parts.length >= 2) {
+      // 最初の部分を When、残りを Then
+      when = parts[0].trim();
+      given = 'システムが準備状態である';
+      
+      for (let i = 1; i < parts.length; i++) {
+        const part = parts[i].trim();
+        if (part) then.push(part);
+      }
+    } else {
+      // 単一文 → 全てを When へ
+      when = cleaned;
+      then.push('期待される処理が完了する');
+    }
+  }
+
+  return { 
+    given: given.trim(), 
+    when: when.trim(), 
+    then: then.map(t => t.trim()).filter(t => t) 
+  };
+}
+
 function extractAcceptanceCriteria(issueBody) {
   /**
    * Issue body から Given/When/Then 形式の受け入れ基準を抽出します
    * 
-   * 期待フォーマット:
+   * 対応フォーマット1: 厳密な Given/When/Then
+   * ```
    * ### シナリオ 1: ...
-   * \`\`\`
    * Given: ...
    * When: ...
-   * Then:
-   *   - ...
-   * \`\`\`
-   *
-   * Markdown 形式でも扱う:
-   * * **Given** ...
-   * * **When** ...
-   * * **Then** ...
+   * Then: ...
+   * ```
+   * 
+   * 対応フォーマット2: 受入条件セクション内のシナリオ形式（新規対応）
+   * ## 受入条件（必須）
+   * - シナリオ 1: ユーザーがアクセスして、ヘッダーが表示されること
+   * - シナリオ 2: ...
    */
   
   const scenarios = [];
-  const blocks = [];
 
+  // フォーマット1: 厳密な Given/When/Then をまず試す
   const codeBlockRegex = /^```\s*\n([\s\S]*?)\n```/gm;
   let match;
+  const blocks = [];
   while ((match = codeBlockRegex.exec(issueBody)) !== null) {
     blocks.push(match[1]);
-  }
-
-  if (blocks.length === 0) {
-    blocks.push(issueBody);
   }
 
   for (const block of blocks) {
@@ -132,6 +183,39 @@ function extractAcceptanceCriteria(issueBody) {
 
     if (currentScenario && currentScenario.given && currentScenario.when && currentScenario.then.length > 0) {
       scenarios.push(currentScenario);
+    }
+  }
+
+  // フォーマット2: 受入条件セクションから抽出（新規）
+  if (scenarios.length === 0) {
+    const lines = issueBody.split('\n');
+    let inAcceptanceSection = false;
+    let acceptanceLines = [];
+
+    for (const line of lines) {
+      if (/^##\s+受入条件/.test(line)) {
+        inAcceptanceSection = true;
+        continue;
+      }
+      
+      if (inAcceptanceSection && /^##\s+/.test(line)) {
+        break;
+      }
+      
+      if (inAcceptanceSection) {
+        acceptanceLines.push(line);
+      }
+    }
+
+    const scenarioLines = acceptanceLines.filter(line => /^\s*[-*]\s*シナリオ/.test(line));
+    
+    for (const line of scenarioLines) {
+      const scenarioText = line.replace(/^\s*[-*]\s*/, '').trim();
+      const converted = convertBulletScenarioToGWT(scenarioText);
+      
+      if (converted.given && converted.when && converted.then.length > 0) {
+        scenarios.push(converted);
+      }
     }
   }
   
