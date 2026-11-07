@@ -38,24 +38,26 @@ if (!fs.existsSync(logFile)) {
 }
 
 const content = fs.readFileSync(logFile, 'utf-8');
-const lines = content.split('\n');
+// Remove ANSI escape sequences (e.g. ^[[32m, ^[[39m)
+const cleanedContent = content.replace(/\x1b\[[0-9;]*m/g, '');
+const lines = cleanedContent.split('\n');
 
 console.log(`📏 Log file size: ${content.length} bytes, ${lines.length} lines`);
-console.log(`📋 Log file excerpt (first 300 chars):`);
-console.log(content.substring(0, 300));
+console.log(`📋 Log file excerpt (first 300 chars) - CLEANED:`);
+console.log(cleanedContent.substring(0, 300));
 console.log('...\n');
 
-// Try different pattern matching strategies
+// Try different pattern matching strategies using cleanedContent
 
 // **Strategy 1: Vitest format** - "Tests  53 passed (53)" or "Tests  53 passed"
-let vitestTests = content.match(/Tests\s+(\d+)\s+passed/);
+let vitestTests = cleanedContent.match(/Tests\s+(\d+)\s+passed/);
 if (vitestTests) {
   result.passed = parseInt(vitestTests[1]);
   console.log(`✓ Vitest "Tests N passed" format detected: ${result.passed} tests passed`);
 }
 
 // **Strategy 2: Look for "failed" in Vitest format - "Tests  2 failed"**
-let vitestFailed = content.match(/Tests\s+(\d+)\s+failed/);
+let vitestFailed = cleanedContent.match(/Tests\s+(\d+)\s+failed/);
 if (vitestFailed) {
   result.failed = parseInt(vitestFailed[1]);
   console.log(`✓ Vitest "Tests N failed" format detected: ${result.failed}`);
@@ -64,13 +66,13 @@ if (vitestFailed) {
 // **Strategy 3: For E2E (Playwright) - "N passed, M failed"**
 if (testType === 'e2e') {
   // Playwright format: "1 passed (1)"
-  const pwFormat = content.match(/(\d+)\s+passed/);
+  const pwFormat = cleanedContent.match(/(\d+)\s+passed/);
   if (pwFormat && result.passed === 0) {
     result.passed = parseInt(pwFormat[1]);
     console.log(`✓ Playwright "N passed" format: ${result.passed}`);
   }
   
-  const pwFailed = content.match(/(\d+)\s+failed/);
+  const pwFailed = cleanedContent.match(/(\d+)\s+failed/);
   if (pwFailed && result.failed === 0) {
     result.failed = parseInt(pwFailed[1]);
     console.log(`✓ Playwright "N failed" format: ${result.failed}`);
@@ -78,13 +80,13 @@ if (testType === 'e2e') {
 }
 
 // **Strategy 4: Mocha/Node format** - "123 passing" / "2 failing"
-const mochaPass = content.match(/(\d+)\s+passing/);
+const mochaPass = cleanedContent.match(/(\d+)\s+passing/);
 if (mochaPass && result.passed === 0) {
   result.passed = parseInt(mochaPass[1]);
   console.log(`✓ Mocha "N passing" format: ${result.passed}`);
 }
 
-const mochaFail = content.match(/(\d+)\s+failing/);
+const mochaFail = cleanedContent.match(/(\d+)\s+failing/);
 if (mochaFail && result.failed === 0) {
   result.failed = parseInt(mochaFail[1]);
   console.log(`✓ Mocha "N failing" format: ${result.failed}`);
@@ -92,8 +94,8 @@ if (mochaFail && result.failed === 0) {
 
 // **Strategy 5: Fallback - count unicode checkmarks/X marks**
 if (result.passed === 0 && result.failed === 0) {
-  const allPassed = (content.match(/✓/g) || []).length;
-  const allFailed = (content.match(/✗/g) || []).length;
+  const allPassed = (cleanedContent.match(/✓/g) || []).length;
+  const allFailed = (cleanedContent.match(/✗/g) || []).length;
   
   if (allPassed > 0 || allFailed > 0) {
     console.log(`📊 No explicit counts found. Using unicode symbol counts...`);
