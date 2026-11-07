@@ -74,14 +74,18 @@ jobs:
           echo "Node version: $(node --version)"
           
           # Run backend tests first, then frontend (sequential execution to avoid database contention)
+          # Use current directory for logs (will be archived with test results)
           echo "📝 Running backend unit tests..."
-          npm run test --workspace backend 2>&1 | tee -a /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          npm run test --workspace backend 2>&1 | tee test-result-backend.log
           BACKEND_EXIT=$?
           
           echo ""
           echo "📝 Running frontend unit tests..."
-          npm run test --workspace frontend 2>&1 | tee -a /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          npm run test --workspace frontend 2>&1 | tee -a test-result-backend.log
           FRONTEND_EXIT=$?
+          
+          # Copy combined log to expected location
+          cp test-result-backend.log test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           
           # Combine results
           if [ $BACKEND_EXIT -ne 0 ] || [ $FRONTEND_EXIT -ne 0 ]; then
@@ -165,14 +169,18 @@ jobs:
           echo "🚀 ==================== START: Advanced Tests ===================="
           
           # Run backend advanced tests first, then frontend (sequential execution to avoid database contention)
+          # Use current directory for logs (will be archived with test results)
           echo "📝 Running backend advanced tests..."
-          npm run test:advanced --workspace backend 2>&1 | tee -a /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          npm run test:advanced --workspace backend 2>&1 | tee test-result-advanced.log
           BACKEND_ADV_EXIT=$?
           
           echo ""
           echo "📝 Running frontend advanced tests..."
-          npm run test:advanced --workspace frontend 2>&1 | tee -a /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          npm run test:advanced --workspace frontend 2>&1 | tee -a test-result-advanced.log
           FRONTEND_ADV_EXIT=$?
+          
+          # Copy combined log to expected location
+          cp test-result-advanced.log test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           
           # Combine results
           if [ $BACKEND_ADV_EXIT -ne 0 ] || [ $FRONTEND_ADV_EXIT -ne 0 ]; then

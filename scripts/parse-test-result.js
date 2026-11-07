@@ -10,7 +10,7 @@ const path = require('path');
 
 const nodeVersion = process.argv[2] || '20';
 const testType = process.argv[3] || 'unit';
-const logFile = `/tmp/test-result-${nodeVersion}-${testType}.log`;
+const logFile = `test-result-${nodeVersion}-${testType}.log`;
 
 let result = {
   test_type: testType,
@@ -22,16 +22,17 @@ let result = {
   timestamp: new Date().toISOString()
 };
 
-console.log(`📖 Reading test log: ${logFile}`);
+console.log(`📖 Reading test log: ${logFile} (in current directory)`);
 
 if (!fs.existsSync(logFile)) {
   console.error(`❌ Log file not found: ${logFile}`);
   result.status = 'error';
   fs.writeFileSync(`test-result-${nodeVersion}-${testType}.json`, JSON.stringify(result, null, 2));
-  console.error(`\n📂 Contents of /tmp/:`);
+  console.error(`\n📂 Current directory contents:`);
   try {
-    const tmpFiles = require('child_process').execSync('ls -lah /tmp/test-result* 2>/dev/null || true').toString();
-    console.error(tmpFiles);
+    const { execSync } = require('child_process');
+    const files = execSync('ls -lah test-result* 2>/dev/null || echo "No test-result files found"').toString();
+    console.error(files);
   } catch (e) {}
   process.exit(1);
 }
@@ -106,6 +107,10 @@ if (result.passed === 0 && result.failed === 0) {
 result.status = result.failed === 0 && result.passed > 0 ? 'passed' : result.failed > 0 ? 'failed' : 'error';
 
 console.log(`\n📊 Final result: { test_type: '${result.test_type}', passed: ${result.passed}, failed: ${result.failed}, status: '${result.status}' }`);
+
+// Include log file content in JSON for diagnostics
+result.log_content = content.substring(0, 5000); // First 5000 chars
+result.log_size = content.length;
 
 // Write JSON result
 const jsonFile = `test-result-${nodeVersion}-${testType}.json`;
