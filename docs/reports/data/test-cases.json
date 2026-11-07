@@ -1,13 +1,5 @@
 {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   "timestamp": "2026-11-07T22:42:12.120Z",
-=======
-  "timestamp": "2026-11-07T22:47:44.683Z",
->>>>>>> Stashed changes
-=======
-  "timestamp": "2026-11-07T22:52:16.037Z",
->>>>>>> Stashed changes
   "totalSuites": 0,
   "totalTests": 0,
   "passed": 0,
@@ -16,7 +8,7 @@
   "passRate": 100,
   "duration": 0,
   "metadata": {
-    "test_run_id": "42421734126"
+    "test_run_id": "42374236123"
   },
   "suites": []
 }
