@@ -4,6 +4,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "timestamp": "2026-10-25T07:35:17.158Z",
     "pass_rate": 100,
     "test_count": 44,
@@ -117,6 +118,8 @@
     }
   },
   {
+=======
+>>>>>>> Stashed changes
     "timestamp": "2026-10-25T08:58:04.828Z",
     "pass_rate": 100,
     "test_count": 44,
@@ -2070,7 +2073,10 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -2103,8 +2109,11 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -2134,8 +2143,11 @@
     }
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   },
@@ -2162,8 +2174,11 @@
       "coverage_change": 0
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 =======
+=======
+>>>>>>> Stashed changes
   },
   {
     "timestamp": "2026-11-07T12:42:18.107Z",
@@ -2181,6 +2196,32 @@
       "github_run_id": 42373489319,
       "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
       "explicit_test_run_id": "42373489319"
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+  },
+  {
+    "timestamp": "2026-11-07T12:47:44.255Z",
+    "pass_rate": 80,
+    "test_count": 5,
+    "passed": 4,
+    "failed": 1,
+    "coverage": 0,
+    "ai_danger_rank": "E",
+    "risk_level": "CRITICAL",
+    "composite_score": 42,
+    "data_source": "GITHUB_API",
+    "details": {
+      "test_source": "github-api",
+      "github_run_id": 42373692188,
+      "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
+      "explicit_test_run_id": "42373692188"
     },
     "trend": "STABLE",
     "trend_details": {

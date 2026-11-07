@@ -3,6 +3,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "timestamp": "2026-11-07T12:23:20.414Z",
 =======
   "timestamp": "2026-11-07T12:27:42.796Z",
@@ -16,6 +17,9 @@
 =======
   "timestamp": "2026-11-07T12:42:18.107Z",
 >>>>>>> Stashed changes
+=======
+  "timestamp": "2026-11-07T12:47:44.255Z",
+>>>>>>> Stashed changes
   "pass_rate": 80,
   "test_count": 5,
   "passed": 4,
@@ -27,6 +31,7 @@
   "data_source": "GITHUB_API",
   "details": {
     "test_source": "github-api",
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
@@ -53,6 +58,11 @@
     "github_run_id": 42373489319,
     "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
     "explicit_test_run_id": "42373489319"
+>>>>>>> Stashed changes
+=======
+    "github_run_id": 42373692188,
+    "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
+    "explicit_test_run_id": "42373692188"
 >>>>>>> Stashed changes
   },
   "trend": "STABLE",
