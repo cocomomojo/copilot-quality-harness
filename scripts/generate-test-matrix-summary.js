@@ -44,6 +44,12 @@ for (const dir of dirs) {
   const dirPath = path.join(resultsDir, dir);
   console.log('\n  📂 Processing directory:', dir);
   
+  // Skip non-test-result directories
+  if (!dir.startsWith('test-results-node-')) {
+    console.log('    ⏭️  Skipping non-test-result directory');
+    continue;
+  }
+  
   try {
     const files = fs.readdirSync(dirPath);
     console.log('    Files found:', files);
