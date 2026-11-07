@@ -123,7 +123,7 @@
       "generated_at": "2026-11-07T08:18:11.405Z",
       "pass_rate": 100,
       "total_tests": 97,
-      "total_passed": 103,
+      "total_passed": 97,
       "total_failed": 0,
       "coverage": {
         "overall": {
