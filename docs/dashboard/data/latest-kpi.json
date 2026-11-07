@@ -1,29 +1,20 @@
 {
-<<<<<<< Updated upstream
-  "timestamp": "2026-11-07T09:23:59.686Z",
-=======
   "timestamp": "2026-11-07T10:01:49.354Z",
->>>>>>> Stashed changes
   "pass_rate": 100,
-  "test_count": 103,
-  "passed": 103,
+  "test_count": 97,
+  "passed": 97,
   "failed": 0,
   "coverage": 81,
   "ai_danger_rank": "A",
   "risk_level": "LOW",
-  "composite_score": 90,
-  "data_source": "TEST_MATRIX_ARTIFACT",
+  "composite_score": 91,
+  "data_source": "LATEST_ISSUE_REPORT",
   "details": {
-    "test_source": "test-matrix-artifact",
-<<<<<<< Updated upstream
-    "github_run_id": 42358848098,
-    "coverage_source": "ARTIFACT_RUN:42358848098",
-    "explicit_test_run_id": "42358848098"
-=======
+    "test_source": "Issue #56 (latest)",
     "github_run_id": 42361867541,
     "coverage_source": "ARTIFACT_RUN:42361867541",
-    "explicit_test_run_id": "42361867541"
->>>>>>> Stashed changes
+    "explicit_test_run_id": "42361867541",
+    "note": "Latest Issue report: 53 UT + 44 E2E = 97 tests"
   },
   "trend": "STABLE",
   "trend_details": {
