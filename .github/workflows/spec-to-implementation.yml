@@ -284,7 +284,14 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "feat: Auto-generate implementation, UT, and E2E tests for Issue #${ISSUE_NUMBER}" \
               --no-verify
-            git push origin "$BRANCH_NAME" --no-verify
+            
+            # Try to push with rebase if conflict exists
+            git push origin "$BRANCH_NAME" --no-verify || {
+              echo "Push rejected, attempting to rebase..."
+              git fetch origin "$BRANCH_NAME" --no-verify
+              git rebase origin/"$BRANCH_NAME"
+              git push origin "$BRANCH_NAME" --no-verify --force-with-lease
+            }
             
             # Create PR with simplified body
             PR_URL=$(gh pr create \
