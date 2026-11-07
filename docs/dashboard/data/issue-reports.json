@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T09:25:40.771Z",
+  "generated_at": "2026-11-07T08:18:11.405Z",
   "source_pr": 49,
   "reports": [
     {
@@ -114,6 +114,176 @@
         "docs/dashboard/data/kpi-history.json.bak",
         "scripts/collect-kpi-advanced.mjs",
         "scripts/generate-dashboard.mjs"
+      ]
+    },
+    {
+      "issue_number": 56,
+      "pr_number": 60,
+      "workflow_run_id": null,
+      "generated_at": "2026-11-07T08:18:11.405Z",
+      "pass_rate": 100,
+      "total_tests": 103,
+      "total_passed": 103,
+      "total_failed": 0,
+      "coverage": {
+        "overall": {
+          "lines_pct": 81.41,
+          "branches_pct": 89.47,
+          "functions_pct": 82.14,
+          "status": "pass"
+        },
+        "files": [
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 94.44,
+            "branches_pct": 95.45,
+            "functions_pct": 83.33,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/UserProfile.jsx",
+            "lines_pct": 95,
+            "branches_pct": 84.61,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/components/Footer.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/utils/dateFormatter.js",
+            "lines_pct": 93.33,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/main.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/Header.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/LoadingSpinner.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          }
+        ],
+        "non_pass_count": 4,
+        "thresholds": {
+          "lines": 80,
+          "branches": 75,
+          "functions": 80
+        }
+      },
+      "traceability": {
+        "perspective_count": 8,
+        "quality_items_count": 48,
+        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
+        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
+        "spec_files": [
+          {
+            "path": "tests/specs/web.yml",
+            "feature": "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加"
+          }
+        ],
+        "ut_cases": 53,
+        "e2e_cases": 50,
+        "ut_details": [
+          {
+            "test_file": "backend/src/app.test.js",
+            "test_count": 22,
+            "passed": 22,
+            "failed": 0,
+            "pass_rate": 100
+          },
+          {
+            "test_file": "backend/src/utils/validators.spec.js",
+            "test_count": 15,
+            "passed": 15,
+            "failed": 0,
+            "pass_rate": 100
+          },
+          {
+            "test_file": "backend/src/app-advanced.test.js",
+            "test_count": 16,
+            "passed": 16,
+            "failed": 0,
+            "pass_rate": 100
+          }
+        ],
+        "e2e_details": [
+          {
+            "test_file": "frontend/src/App.test.jsx",
+            "test_count": 19,
+            "passed": 19,
+            "failed": 0,
+            "pass_rate": 100
+          },
+          {
+            "test_file": "frontend/src/App-advanced.test.jsx",
+            "test_count": 19,
+            "passed": 19,
+            "failed": 0,
+            "pass_rate": 100
+          },
+          {
+            "test_file": "frontend/src/components/Footer.test.jsx",
+            "test_count": 12,
+            "passed": 12,
+            "failed": 0,
+            "pass_rate": 100
+          }
+        ]
+      },
+      "implementation_files": [
+        "frontend/src/components/Header.jsx",
+        "frontend/src/components/LoadingSpinner.jsx",
+        "frontend/src/App.test.jsx",
+        "frontend/src/App-advanced.test.jsx",
+        "frontend/src/components/Footer.test.jsx"
       ]
     }
   ]
