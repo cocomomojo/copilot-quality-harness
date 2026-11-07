@@ -28,6 +28,11 @@ if (!fs.existsSync(logFile)) {
   console.error(`❌ Log file not found: ${logFile}`);
   result.status = 'error';
   fs.writeFileSync(`test-result-${nodeVersion}-${testType}.json`, JSON.stringify(result, null, 2));
+  console.error(`\n📂 Contents of /tmp/:`);
+  try {
+    const tmpFiles = require('child_process').execSync('ls -lah /tmp/test-result* 2>/dev/null || true').toString();
+    console.error(tmpFiles);
+  } catch (e) {}
   process.exit(1);
 }
 
@@ -35,65 +40,66 @@ const content = fs.readFileSync(logFile, 'utf-8');
 const lines = content.split('\n');
 
 console.log(`📏 Log file size: ${content.length} bytes, ${lines.length} lines`);
+console.log(`📋 Log file excerpt (first 300 chars):`);
+console.log(content.substring(0, 300));
+console.log('...\n');
 
 // Try different pattern matching strategies
 
-// **Strategy 1: Vitest format** - "Tests  53 passed (53)"
-const vitestTests = content.match(/Tests\s+(\d+)\s+passed/);
+// **Strategy 1: Vitest format** - "Tests  53 passed (53)" or "Tests  53 passed"
+let vitestTests = content.match(/Tests\s+(\d+)\s+passed/);
 if (vitestTests) {
   result.passed = parseInt(vitestTests[1]);
-  console.log(`✓ Vitest format detected: ${result.passed} tests passed`);
+  console.log(`✓ Vitest "Tests N passed" format detected: ${result.passed} tests passed`);
 }
 
-// **Strategy 2: Look for "failed" keyword**
-const vitestFailed = content.match(/Tests\s+(\d+)\s+failed/);
+// **Strategy 2: Look for "failed" in Vitest format - "Tests  2 failed"**
+let vitestFailed = content.match(/Tests\s+(\d+)\s+failed/);
 if (vitestFailed) {
   result.failed = parseInt(vitestFailed[1]);
-  console.log(`✓ Failed tests found: ${result.failed}`);
+  console.log(`✓ Vitest "Tests N failed" format detected: ${result.failed}`);
 }
 
 // **Strategy 3: For E2E (Playwright) - "N passed, M failed"**
 if (testType === 'e2e') {
+  // Playwright format: "1 passed (1)"
   const pwFormat = content.match(/(\d+)\s+passed/);
-  if (pwFormat) {
+  if (pwFormat && result.passed === 0) {
     result.passed = parseInt(pwFormat[1]);
-    console.log(`✓ Playwright passed format: ${result.passed}`);
+    console.log(`✓ Playwright "N passed" format: ${result.passed}`);
   }
   
   const pwFailed = content.match(/(\d+)\s+failed/);
-  if (pwFailed) {
+  if (pwFailed && result.failed === 0) {
     result.failed = parseInt(pwFailed[1]);
-    console.log(`✓ Playwright failed format: ${result.failed}`);
+    console.log(`✓ Playwright "N failed" format: ${result.failed}`);
   }
 }
 
-// **Strategy 4: Fallback - look for test summary patterns**
-// Vitest can also output like: "test 1: ✓" "test 2: ✗"
-const allPassed = (content.match(/✓/g) || []).length;
-const allFailed = (content.match(/✗/g) || []).length;
-
-if (result.passed === 0 && result.failed === 0) {
-  console.log(`📊 No clear test counts found. Attempting character-based detection...`);
-  console.log(`   Found ${allPassed} checkmarks (✓), ${allFailed} X marks (✗)`);
-  
-  if (allPassed > 0 || allFailed > 0) {
-    // This is very rough but better than 0/0
-    result.passed = allPassed;
-    result.failed = allFailed;
-  }
-}
-
-// **Strategy 5: Mocha/Node format**
+// **Strategy 4: Mocha/Node format** - "123 passing" / "2 failing"
 const mochaPass = content.match(/(\d+)\s+passing/);
 if (mochaPass && result.passed === 0) {
   result.passed = parseInt(mochaPass[1]);
-  console.log(`✓ Mocha "passing" format: ${result.passed}`);
+  console.log(`✓ Mocha "N passing" format: ${result.passed}`);
 }
 
 const mochaFail = content.match(/(\d+)\s+failing/);
-if (mochaFail) {
+if (mochaFail && result.failed === 0) {
   result.failed = parseInt(mochaFail[1]);
-  console.log(`✓ Mocha "failing" format: ${result.failed}`);
+  console.log(`✓ Mocha "N failing" format: ${result.failed}`);
+}
+
+// **Strategy 5: Fallback - count unicode checkmarks/X marks**
+if (result.passed === 0 && result.failed === 0) {
+  const allPassed = (content.match(/✓/g) || []).length;
+  const allFailed = (content.match(/✗/g) || []).length;
+  
+  if (allPassed > 0 || allFailed > 0) {
+    console.log(`📊 No explicit counts found. Using unicode symbol counts...`);
+    console.log(`   Found ${allPassed} checkmarks (✓), ${allFailed} X marks (✗)`);
+    result.passed = allPassed;
+    result.failed = allFailed;
+  }
 }
 
 // Determine overall status
