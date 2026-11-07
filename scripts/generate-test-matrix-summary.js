@@ -19,8 +19,25 @@ if (!fs.existsSync(resultsDir)) {
 }
 
 const dirs = fs.readdirSync(resultsDir);
-console.log('Found result directories:', dirs);
+console.log('Found result directories:', JSON.stringify(dirs));
 console.log('Number of directories:', dirs.length);
+
+// List full directory structure for debugging
+console.log('\n📊 Full directory structure:');
+const walkDir = (currentPath, indent = '') => {
+  const files = fs.readdirSync(currentPath);
+  files.forEach(file => {
+    const fullPath = path.join(currentPath, file);
+    const stats = fs.statSync(fullPath);
+    if (stats.isDirectory()) {
+      console.log(indent + '📁 ' + file);
+      walkDir(fullPath, indent + '  ');
+    } else {
+      console.log(indent + '📄 ' + file + ' (' + stats.size + ' bytes)');
+    }
+  });
+};
+walkDir(resultsDir);
 
 // Collect all test results
 for (const dir of dirs) {

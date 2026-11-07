@@ -323,6 +323,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      
       - name: Download all test results
         id: download_results
         uses: actions/download-artifact@v4
