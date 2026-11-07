@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-11-07T07:40:14.621Z",
+  "timestamp": "2026-11-07T07:55:07.787Z",
   "totalSuites": 3,
   "totalTests": 19,
   "passed": 12,
   "failed": 7,
   "skipped": 0,
   "passRate": 63,
-  "duration": 100143,
+  "duration": 101016,
   "metadata": {
-    "test_run_id": "42351573640"
+    "test_run_id": "42352566351"
   },
   "suites": [
     {
@@ -18,13 +18,13 @@
       "passed": 4,
       "failed": 3,
       "skipped": 0,
-      "duration": 55606,
+      "duration": 56072,
       "tests": [
         {
           "name": "E2E-001: Display profile with valid createdAt",
           "title": "E2E-001: Display profile with valid createdAt",
           "status": "failed",
-          "duration": 6265,
+          "duration": 6370,
           "file": "profile-created-at.spec.js",
           "errors": [
             "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /プロフィール/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /プロフィール/i }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /プロフィール/i })\u001b[22m\n"
@@ -46,7 +46,7 @@
           "name": "E2E-002: Display fallback when createdAt is null",
           "title": "E2E-002: Display fallback when createdAt is null",
           "status": "failed",
-          "duration": 6226,
+          "duration": 6298,
           "file": "profile-created-at.spec.js",
           "errors": [
             "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /プロフィール/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /プロフィール/i }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /プロフィール/i })\u001b[22m\n"
@@ -68,7 +68,7 @@
           "name": "E2E-003: Handle 404 API error",
           "title": "E2E-003: Handle 404 API error",
           "status": "failed",
-          "duration": 6343,
+          "duration": 6416,
           "file": "profile-created-at.spec.js",
           "errors": [
             "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /プロフィール/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: /プロフィール/i }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: /プロフィール/i })\u001b[22m\n"
@@ -90,7 +90,7 @@
           "name": "E2E-004: Fetch createdAt from API and display formatted",
           "title": "E2E-004: Fetch createdAt from API and display formatted",
           "status": "passed",
-          "duration": 1248,
+          "duration": 1322,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -106,7 +106,7 @@
           "name": "E2E-005: Handle invalid createdAt format with fallback",
           "title": "E2E-005: Handle invalid createdAt format with fallback",
           "status": "passed",
-          "duration": 1176,
+          "duration": 1243,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -122,7 +122,7 @@
           "name": "E2E-006: Verify element structure and accessibility",
           "title": "E2E-006: Verify element structure and accessibility",
           "status": "passed",
-          "duration": 11173,
+          "duration": 11197,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -138,7 +138,7 @@
           "name": "E2E-007: Verify multiple renders and state consistency",
           "title": "E2E-007: Verify multiple renders and state consistency",
           "status": "passed",
-          "duration": 23175,
+          "duration": 23226,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -159,13 +159,13 @@
       "passed": 0,
       "failed": 4,
       "skipped": 0,
-      "duration": 43913,
+      "duration": 44208,
       "tests": [
         {
           "name": "displays error when adding check with only whitespace",
           "title": "displays error when adding check with only whitespace",
           "status": "failed",
-          "duration": 12184,
+          "duration": 12232,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
             "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
@@ -187,7 +187,7 @@
           "name": "displays error when name exceeds 120 characters",
           "title": "displays error when name exceeds 120 characters",
           "status": "failed",
-          "duration": 12221,
+          "duration": 12298,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
             "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
@@ -209,7 +209,7 @@
           "name": "clears error message when user corrects input",
           "title": "clears error message when user corrects input",
           "status": "failed",
-          "duration": 12240,
+          "duration": 12308,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
             "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
@@ -231,7 +231,7 @@
           "name": "shows appropriate error when API is unavailable",
           "title": "shows appropriate error when API is unavailable",
           "status": "failed",
-          "duration": 7268,
+          "duration": 7370,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
             "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('alert') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n"
@@ -258,13 +258,13 @@
       "passed": 8,
       "failed": 0,
       "skipped": 0,
-      "duration": 624,
+      "duration": 736,
       "tests": [
         {
           "name": "E2E-001: Check valid HTTPS URL endpoint",
           "title": "E2E-001: Check valid HTTPS URL endpoint",
           "status": "passed",
-          "duration": 127,
+          "duration": 147,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -280,7 +280,7 @@
           "name": "E2E-002: Check invalid URL format",
           "title": "E2E-002: Check invalid URL format",
           "status": "passed",
-          "duration": 68,
+          "duration": 89,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -296,7 +296,7 @@
           "name": "E2E-003: Check empty string input",
           "title": "E2E-003: Check empty string input",
           "status": "passed",
-          "duration": 78,
+          "duration": 89,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -312,7 +312,7 @@
           "name": "E2E-004: Check null input",
           "title": "E2E-004: Check null input",
           "status": "passed",
-          "duration": 79,
+          "duration": 89,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -328,7 +328,7 @@
           "name": "E2E-005: Check valid HTTP URL with port",
           "title": "E2E-005: Check valid HTTP URL with port",
           "status": "passed",
-          "duration": 66,
+          "duration": 78,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -344,7 +344,7 @@
           "name": "E2E-006: Check valid GitHub URL",
           "title": "E2E-006: Check valid GitHub URL",
           "status": "passed",
-          "duration": 68,
+          "duration": 81,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -360,7 +360,7 @@
           "name": "E2E-007: Check FTP protocol (not allowed)",
           "title": "E2E-007: Check FTP protocol (not allowed)",
           "status": "passed",
-          "duration": 70,
+          "duration": 82,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -376,7 +376,7 @@
           "name": "E2E-008: Response time performance check",
           "title": "E2E-008: Response time performance check",
           "status": "passed",
-          "duration": 68,
+          "duration": 81,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
