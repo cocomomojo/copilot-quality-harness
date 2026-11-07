@@ -284,10 +284,31 @@ jobs:
       - name: Run tests to verify generation
         id: test_verify
         continue-on-error: true
+        env:
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
         run: |
           echo "Running tests on generated code..."
-          npm test 2>&1 | head -100
-          echo "Tests completed (may have failures if auto-gen placeholders)"
+          set +e
+          
+          # Run tests and capture output to file
+          TEST_OUTPUT_FILE="/tmp/test_output.log"
+          npm test 2>&1 | tee "$TEST_OUTPUT_FILE" | head -100
+          TEST_STATUS=$?
+          
+          echo "📋 Analyzing test output..."
+          VALIDATION_RESULT=$(node scripts/test-validation-helper.mjs check-test-output "$TEST_OUTPUT_FILE" 3 2>&1)
+          echo "$VALIDATION_RESULT"
+          
+          # Save for later notification
+          echo "$VALIDATION_RESULT" > /tmp/test_validation_result.json
+          
+          if [ $TEST_STATUS -eq 0 ]; then
+            echo "✅ Tests completed successfully"
+          else
+            echo "⚠️ Tests exited with status $TEST_STATUS (may have placeholder tests)"
+          fi
+          
+          set -e
 
       - name: Create PR with generated code
         id: create_pr
