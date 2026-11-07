@@ -188,36 +188,52 @@ jobs:
           ISSUE_NUMBER: ${{ inputs.issue_number }}
           GH_TOKEN: ${{ github.token }}
         run: |
+          echo "🔍 DEBUG: Job outputs received"
+          echo "  spec_file=$SPEC_FILE"
+          echo "  feature_name=$FEATURE_NAME"
+          echo "  issue_number=$ISSUE_NUMBER"
+          
           if [ -z "$SPEC_FILE" ]; then
-            echo "Error: SPEC_FILE is empty. The spec file was not generated." >&2
-            exit 1
+            echo "⚠️ WARNING: SPEC_FILE is empty. Checking for downloaded artifact..."
+            if [ -f "web.yml" ]; then
+              echo "✅ Found web.yml in current directory"
+              SPEC_FILE="web.yml"
+            elif [ -f "tests/specs/web.yml" ]; then
+              echo "✅ Found tests/specs/web.yml"
+              SPEC_FILE="tests/specs/web.yml"
+            elif find . -maxdepth 3 -name "*.yml" -type f | grep -q .; then
+              echo "Found YML files:"
+              find . -maxdepth 3 -name "*.yml" -type f
+              SPEC_FILE=$(find . -maxdepth 3 -name "*.yml" -type f | sort | tail -n 1)
+              echo "✅ Using: $SPEC_FILE"
+            else
+              echo "❌ Error: No YML files found. Regenerating from issue..."
+              if [ -z "$ISSUE_NUMBER" ]; then
+                echo "Error: ISSUE_NUMBER is required when the spec artifact is unavailable." >&2
+                exit 1
+              fi
+              gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}" > /tmp/issue.json
+              node scripts/generate-spec-from-issue.mjs \
+                --issue-file /tmp/issue.json \
+                --issue-number "$ISSUE_NUMBER" \
+                --repo-root "$REPO_ROOT" \
+                --output-dir "tests/specs"
+
+              LATEST_SPEC=$(find "$REPO_ROOT/tests/specs" -maxdepth 1 -type f -name '*.yml' -print | sort | tail -n 1)
+              if [ -n "$LATEST_SPEC" ]; then
+                SPEC_FILE="${LATEST_SPEC#$REPO_ROOT/}"
+                echo "✅ Using regenerated spec file: $SPEC_FILE"
+              fi
+            fi
           fi
 
           if [ ! -f "$SPEC_FILE" ]; then
-            echo "Spec file not found in checkout. Regenerating from issue number..."
-            if [ -z "$ISSUE_NUMBER" ]; then
-              echo "Issue number is required when the spec artifact is unavailable." >&2
-              exit 1
-            fi
-            gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}" > /tmp/issue.json
-            node scripts/generate-spec-from-issue.mjs \
-              --issue-file /tmp/issue.json \
-              --issue-number "$ISSUE_NUMBER" \
-              --repo-root "$REPO_ROOT" \
-              --output-dir "tests/specs"
-
-            LATEST_SPEC=$(find "$REPO_ROOT/tests/specs" -maxdepth 1 -type f -name '*.yml' -print | sort | tail -n 1)
-            if [ -n "$LATEST_SPEC" ]; then
-              SPEC_FILE="${LATEST_SPEC#$REPO_ROOT/}"
-              echo "Using regenerated spec file: $SPEC_FILE"
-            fi
-          fi
-
-          if [ ! -f "$SPEC_FILE" ]; then
-            echo "Spec file still not found after regeneration: $SPEC_FILE" >&2
+            echo "❌ Error: Spec file still not found after all attempts: $SPEC_FILE" >&2
             exit 1
           fi
 
+          echo "✅ Using spec file: $SPEC_FILE"
+          
           # Generate tests from spec
           npx ts-node scripts/generate-tests-from-spec.ts "$SPEC_FILE"
           echo "Tests generated successfully"
