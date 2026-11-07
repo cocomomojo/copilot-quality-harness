@@ -149,7 +149,327 @@
 
     <main>
       
+          <div class="section">
+            <h3>📊 テスト観点（8 件）</h3>
+            <table class="details-table">
+              <thead>
+                <tr>
+                  <th>特性名</th>
+                  <th>説明</th>
+                  <th>テスト観点</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>機能適合性 (Functional Suitability)</td>
+                    <td>ソフトウェアが指定された条件下で、指定された用途に対して、必要な機能を提供する程度</td>
+                    <td><code>happy-path-testing</code> <code>boundary-value-testing</code> <code>input-validation</code> <code>error-handling</code> <code>feature-completeness</code> <code>data-integrity</code> <code>api-contract-testing</code></td>
+                  </tr>
+                
+                  <tr>
+                    <td>性能効率 (Performance Efficiency)</td>
+                    <td>使用されるリソースの量に関連した、要求された程度の性能を提供する程度</td>
+                    <td><code>response-time-testing</code> <code>load-testing</code> <code>stress-testing</code> <code>memory-profiling</code> <code>cpu-profiling</code> <code>throughput-testing</code></td>
+                  </tr>
+                
+                  <tr>
+                    <td>互換性 (Compatibility)</td>
+                    <td>他のシステムとの交換可能性とシステムとの共存が可能な程度</td>
+                    <td><code>cross-browser-testing</code> <code>cross-platform-testing</code> <code>version-compatibility</code> <code>api-version-compatibility</code> <code>database-compatibility</code></td>
+                  </tr>
+                
+                  <tr>
+                    <td>ユーザビリティ (Usability)</td>
+                    <td>指定されたユーザーが指定された環境下で効果的かつ効率的に使用できる程度</td>
+                    <td><code>ui-display-testing</code> <code>user-flow-testing</code> <code>accessibility-testing</code> <code>localization-testing</code> <code>user-experience-testing</code> <code>error-message-clarity</code></td>
+                  </tr>
+                
+                  <tr>
+                    <td>信頼性 (Reliability)</td>
+                    <td>指定された時間と条件下で、指定された性能レベルを維持する程度</td>
+                    <td><code>regression-testing</code> <code>crash-testing</code> <code>recovery-testing</code> <code>failover-testing</code> <code>data-corruption-testing</code> <code>degradation-testing</code></td>
+                  </tr>
+                
+                  <tr>
+                    <td>セキュリティ (Security)</td>
+                    <td>データと情報を保護する程度で、不正アクセスおよび使用から保護される</td>
+                    <td><code>authentication-testing</code> <code>authorization-testing</code> <code>encryption-testing</code> <code>injection-attack-testing</code> <code>session-management-testing</code> <code>data-exposure-testing</code> <code>pii-protection-testing</code></td>
+                  </tr>
+                
+                  <tr>
+                    <td>保守性 (Maintainability)</td>
+                    <td>欠陥を特定・除去または性能を改善するためにシステムを修正できる程度</td>
+                    <td><code>code-quality-testing</code> <code>logging-testing</code> <code>documentation-testing</code> <code>refactoring-validation</code> <code>unit-test-coverage</code> <code>integration-test-coverage</code></td>
+                  </tr>
+                
+                  <tr>
+                    <td>移植性 (Portability)</td>
+                    <td>異なるハードウェア、ソフトウェア環境へシステムを移行できる程度</td>
+                    <td><code>os-compatibility-testing</code> <code>browser-compatibility-testing</code> <code>deployment-testing</code> <code>migration-testing</code> <code>environment-variable-testing</code></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          </div>
+          
       
+          <div class="section">
+            <h3>✅ テスト項目（34 件）</h3>
+            <table class="details-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>観点</th>
+                  <th>説明</th>
+                  <th>受け入れ条件</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td><code>FS-001</code></td>
+                    <td>happy-path-testing</td>
+                    <td>正常系: 正常な入力で正しく機能することを確認</td>
+                    <td>結果が仕様書の期待値と一致すること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>FS-002</code></td>
+                    <td>boundary-value-testing</td>
+                    <td>境界値: 最小値・最大値で正しく機能することを確認</td>
+                    <td>最小値・最大値両方で期待通りの結果を返すこと</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>FS-003</code></td>
+                    <td>input-validation</td>
+                    <td>入力検証: 無効な入力を適切に処理</td>
+                    <td>エラーメッセージが明確で、ユーザーが修正できるハント を含むこと</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>FS-004</code></td>
+                    <td>error-handling</td>
+                    <td>エラー処理: エラーが発生した時に適切に処理</td>
+                    <td>エラーハンドリングがログに記録され、ユーザーに通知されること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>FS-005</code></td>
+                    <td>feature-completeness</td>
+                    <td>完全性: 仕様書に記載されたすべての機能が実装されているか</td>
+                    <td>トレーサビリティマトリクスですべての要件がカバーされていること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>FS-006</code></td>
+                    <td>data-integrity</td>
+                    <td>データ整合性: データが保存・取得時に破損しないこと</td>
+                    <td>バイト単位で完全に一致すること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>PE-001</code></td>
+                    <td>response-time-testing</td>
+                    <td>応答時間: API応答が要件の時間内に完了する</td>
+                    <td>P95応答時間が定義された閾値以下であること（例: 200ms）</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>PE-002</code></td>
+                    <td>load-testing</td>
+                    <td>負荷試験: 予期された最大負荷で正常に動作</td>
+                    <td>エラー率が1%未満であり、応答時間が要件内であること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>PE-003</code></td>
+                    <td>memory-profiling</td>
+                    <td>メモリ使用量: メモリリークがなく効率的に利用</td>
+                    <td>メモリ使用量が線形に増加しないこと</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>PE-004</code></td>
+                    <td>cpu-profiling</td>
+                    <td>CPU効率: CPU使用率が適切な範囲内</td>
+                    <td>CPU使用率がピーク時でも80%以下であること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>PE-005</code></td>
+                    <td>throughput-testing</td>
+                    <td>スループット: 単位時間あたりの処理数が要件を満たす</td>
+                    <td>最小スループットが定義値以上であること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>C-001</code></td>
+                    <td>cross-browser-testing</td>
+                    <td>複数ブラウザ対応: 主要ブラウザで同じように動作</td>
+                    <td>対象ブラウザの最新2バージョンで同じように動作すること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>C-002</code></td>
+                    <td>cross-platform-testing</td>
+                    <td>複数OS対応: Windows, macOS, Linux で動作</td>
+                    <td>対象OS全てでテストケースがパスすること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>C-003</code></td>
+                    <td>api-version-compatibility</td>
+                    <td>API互換性: 異なるAPIバージョン間で互換性がある</td>
+                    <td>後方互換性が維持されていること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>U-001</code></td>
+                    <td>ui-display-testing</td>
+                    <td>UI表示: UIが正しく表示される</td>
+                    <td>すべての解像度（1280x720以上）でUIが正しく表示されること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>U-002</code></td>
+                    <td>user-flow-testing</td>
+                    <td>ユーザーフロー: 主要な操作フローが完結できる</td>
+                    <td>5クリック以内で主要な操作が完結すること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>U-003</code></td>
+                    <td>accessibility-testing</td>
+                    <td>アクセシビリティ: 身体障害者でも利用可能</td>
+                    <td>WCAG 2.1 AA基準をクリアすること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>U-004</code></td>
+                    <td>error-message-clarity</td>
+                    <td>エラーメッセージ: ユーザーが問題を理解できる</td>
+                    <td>エラーメッセージに原因と対処法が明記されていること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>R-001</code></td>
+                    <td>regression-testing</td>
+                    <td>回帰テスト: 既存機能が引き続き動作する</td>
+                    <td>回帰テスト合格率が100%であること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>R-002</code></td>
+                    <td>crash-testing</td>
+                    <td>クラッシュテスト: 異常な入力でクラッシュしない</td>
+                    <td>エラーが発生してもシステムが落ちないこと</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>R-003</code></td>
+                    <td>recovery-testing</td>
+                    <td>リカバリテスト: エラーから正常に復帰する</td>
+                    <td>リカバリ成功率が99%以上であること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>R-004</code></td>
+                    <td>data-corruption-testing</td>
+                    <td>データ破損テスト: データベースレベルのエラーに対応</td>
+                    <td>データ整合性が保たれていること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>S-001</code></td>
+                    <td>authentication-testing</td>
+                    <td>ユーザー認証: 正規ユーザーのみアクセス可能</td>
+                    <td>無効な認証がブロックされていること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>S-002</code></td>
+                    <td>authorization-testing</td>
+                    <td>権限確認: ユーザーは許可された機能のみアクセス</td>
+                    <td>権限外のリソースへのアクセスがブロックされること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>S-003</code></td>
+                    <td>encryption-testing</td>
+                    <td>暗号化: 機密データは暗号化される</td>
+                    <td>TLS 1.2以上が使用されていること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>S-004</code></td>
+                    <td>injection-attack-testing</td>
+                    <td>インジェクション防止: SQLインジェクション等を防止</td>
+                    <td>すべてのインジェクション攻撃がブロックされること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>S-005</code></td>
+                    <td>pii-protection-testing</td>
+                    <td>個人情報保護: PII（個人識別情報）が保護される</td>
+                    <td>PII（パスワード、クレジットカード番号等）がログに含まれていないこと</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>M-001</code></td>
+                    <td>code-quality-testing</td>
+                    <td>コード品質: コード品質基準を満たす</td>
+                    <td>コード複雑性（CC）が15以下であること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>M-002</code></td>
+                    <td>unit-test-coverage</td>
+                    <td>ユニットテストカバレッジ: 十分なテストカバレッジがある</td>
+                    <td>コードカバレッジが80%以上であること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>M-003</code></td>
+                    <td>documentation-testing</td>
+                    <td>ドキュメント: コードが十分にドキュメント化されている</td>
+                    <td>公開メソッド100%にJSDocコメントがあること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>M-004</code></td>
+                    <td>logging-testing</td>
+                    <td>ログ記録: デバッグに必要なログが十分に出力される</td>
+                    <td>トラブルシューティングに必要な情報がログに含まれていること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>P-001</code></td>
+                    <td>os-compatibility-testing</td>
+                    <td>OS互換性: 複数OSで動作する</td>
+                    <td>対象OS全てで同じテストスイートがパスすること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>P-002</code></td>
+                    <td>deployment-testing</td>
+                    <td>デプロイ: 新しい環境へ簡単にデプロイできる</td>
+                    <td>デプロイにかかる時間が30分以下であること</td>
+                  </tr>
+                
+                  <tr>
+                    <td><code>P-003</code></td>
+                    <td>environment-variable-testing</td>
+                    <td>環境変数: 環境固有の設定で適切に動作</td>
+                    <td>ハードコーディングされた設定がないこと</td>
+                  </tr>
+                
+              </tbody>
+            </table>
+            
+          </div>
+          
       
       <div class="section">
         <h3>📋 仕様ファイル（1 件）</h3>

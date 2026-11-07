@@ -57,9 +57,10 @@ async function generateDetailPages() {
     if (traceability?.perspectives_file) {
       try {
         const perspFile = await readFile(traceability.perspectives_file, 'utf-8');
-        const perspectives = JSON.parse(perspFile);
+        const perspData = JSON.parse(perspFile);
+        const perspectives = Array.isArray(perspData) ? perspData : (perspData.testPerspectives || []);
         
-        if (Array.isArray(perspectives)) {
+        if (Array.isArray(perspectives) && perspectives.length > 0) {
           perspectivesHtml = `
           <div class="section">
             <h3>📊 テスト観点（${perspectives.length} 件）</h3>
@@ -94,9 +95,10 @@ async function generateDetailPages() {
     if (traceability?.test_items_file) {
       try {
         const itemsFile = await readFile(traceability.test_items_file, 'utf-8');
-        const items = JSON.parse(itemsFile);
+        const itemsData = JSON.parse(itemsFile);
+        const items = Array.isArray(itemsData) ? itemsData : (itemsData.testItems || []);
 
-        if (Array.isArray(items)) {
+        if (Array.isArray(items) && items.length > 0) {
           itemsHtml = `
           <div class="section">
             <h3>✅ テスト項目（${items.length} 件）</h3>
@@ -106,7 +108,7 @@ async function generateDetailPages() {
                   <th>ID</th>
                   <th>観点</th>
                   <th>説明</th>
-                  <th>詳細</th>
+                  <th>受け入れ条件</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,7 +117,7 @@ async function generateDetailPages() {
                     <td><code>${escapeHtml(item.id || '—')}</code></td>
                     <td>${escapeHtml(item.perspective || '—')}</td>
                     <td>${escapeHtml(item.description || '—')}</td>
-                    <td>${escapeHtml(item.detail || '—')}</td>
+                    <td>${escapeHtml((item.acceptance_criteria || item.detail || '—').substring(0, 100))}</td>
                   </tr>
                 `).join('')}
               </tbody>
