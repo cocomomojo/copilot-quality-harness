@@ -2,14 +2,15 @@ import fs from 'fs';
 import path from 'path';
 
 /**
- * Generate detailed coverage report HTML page
+ * Generate detailed coverage report HTML pages for each Issue
  * Shows which lines/branches are covered vs uncovered
+ * Supports both per-issue and global coverage reports
  */
 
 const backendCoveragePath = './backend/coverage/coverage-final.json';
 const frontendCoveragePath = './frontend/coverage/coverage-summary.json';
+const reportsDataPath = './docs/dashboard/data/issue-reports.json';
 const outputDir = './docs/dashboard/details';
-const outputFile = path.join(outputDir, 'coverage-details.html');
 
 // Ensure output directory exists
 if (!fs.existsSync(outputDir)) {
@@ -36,6 +37,18 @@ function loadCoverageData(filePath) {
     return normalized;
   }
   return data;
+}
+
+function loadReportData() {
+  if (!fs.existsSync(reportsDataPath)) {
+    return null;
+  }
+  try {
+    return JSON.parse(fs.readFileSync(reportsDataPath, 'utf-8'));
+  } catch (err) {
+    console.warn('Failed to load reports data:', err.message);
+    return null;
+  }
 }
 
 function parseFilePath(fullPath) {
@@ -91,6 +104,9 @@ function analyzeBranchCoverage(branchCoverage) {
 }
 
 function getUncoveredLines(lineCoverage) {
+  if (typeof lineCoverage === 'object' && lineCoverage.total !== undefined) {
+    return []; // Summary format doesn't have line details
+  }
   return Object.entries(lineCoverage || {})
     .filter(([_, hits]) => hits === 0)
     .map(([line]) => parseInt(line));
@@ -121,7 +137,7 @@ function generateFileRow(filePath, coverage) {
     </tr>`;
 }
 
-function generateHTML(backendCoverage, frontendCoverage) {
+function generateHTML(backendCoverage, frontendCoverage, issueNumber = null) {
   const allFiles = { ...backendCoverage, ...frontendCoverage };
   const fileEntries = Object.entries(allFiles)
     .map(([filePath, coverage]) => ({
@@ -152,12 +168,24 @@ function generateHTML(backendCoverage, frontendCoverage) {
     generateFileRow(filePath, coverage)
   ).join('');
   
+  const backLink = issueNumber 
+    ? `<a href="issue-${issueNumber}-report.html" class="back-link">← Issue #${issueNumber} レポートに戻る</a>`
+    : '<a href="../index.html" class="back-link">← ダッシュボードに戻る</a>';
+  
+  const title = issueNumber 
+    ? `詳細カバレッジ | Issue #${issueNumber} 品質レポート`
+    : '詳細カバレッジ | Quality Report';
+  
+  const heading = issueNumber 
+    ? `<h1>📊 詳細カバレッジ分析 - Issue #${issueNumber}</h1>`
+    : '<h1>📊 詳細カバレッジ分析</h1>';
+  
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>詳細カバレッジ | Issue #56 品質レポート</title>
+  <title>${title}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -191,9 +219,9 @@ function generateHTML(backendCoverage, frontendCoverage) {
 </head>
 <body>
   <div class="container">
-    <a href="issue-56-report.html" class="back-link">← Issue #56 レポートに戻る</a>
+    ${backLink}
     
-    <h1>📊 詳細カバレッジ分析 - Issue #56</h1>
+    ${heading}
     
     <div class="summary">
       <div class="summary-item"><strong>全体 Lines:</strong> <span class="coverage-${ overallLinePercentage >= 80 ? 'good' : overallLinePercentage >= 50 ? 'warning' : 'poor'}">${coveredLines}/${totalLines} (${overallLinePercentage}%)</span></div>
@@ -242,9 +270,25 @@ function generateHTML(backendCoverage, frontendCoverage) {
 </html>`;
 }
 
+// Main execution
 const backendCov = loadCoverageData(backendCoveragePath);
 const frontendCov = loadCoverageData(frontendCoveragePath);
-const html = generateHTML(backendCov, frontendCov);
 
-fs.writeFileSync(outputFile, html);
-console.log(`✅ Coverage details page generated: ${outputFile}`);
+// Generate global coverage report
+const globalHtml = generateHTML(backendCov, frontendCov);
+const globalOutputFile = path.join(outputDir, 'coverage-details.html');
+fs.writeFileSync(globalOutputFile, globalHtml);
+console.log(`✅ Global coverage details page generated: ${globalOutputFile}`);
+
+// Generate per-issue coverage reports (if issue-reports.json exists)
+const reportsData = loadReportData();
+if (reportsData && Array.isArray(reportsData.reports)) {
+  reportsData.reports.forEach(report => {
+    if (report.issue_number) {
+      const issueHtml = generateHTML(backendCov, frontendCov, report.issue_number);
+      const issueOutputFile = path.join(outputDir, `coverage-issue-${report.issue_number}.html`);
+      fs.writeFileSync(issueOutputFile, issueHtml);
+      console.log(`✅ Issue #${report.issue_number} coverage details generated: ${issueOutputFile}`);
+    }
+  });
+}
