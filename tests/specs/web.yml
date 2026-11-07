@@ -2,7 +2,7 @@
 # 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
 # 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
 # Issue: Closes #56
-# Generated: 2026-11-07T05:23:26.635Z
+# Generated: 2026-11-07T05:27:43.715Z
 
 feature: "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加"
 description: "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加 (generated from issue acceptance criteria)"
@@ -93,7 +93,7 @@ mocks: []
 
 seeds:
   - name: "base_seed"
-    value: 1794029006
+    value: 1794029263
     description: "基本シード値（テストデータ生成用）"
 
 environment:
