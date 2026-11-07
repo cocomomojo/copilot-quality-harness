@@ -46,9 +46,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-v1
+          key: playwright-${{ runner.os }}-v2-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            playwright-${{ runner.os }}-
+            playwright-${{ runner.os }}-v2-
       
       - name: Install Playwright browsers (if cache miss)
         if: matrix.test-type == 'e2e' && steps.cache-playwright.outputs.cache-hit != 'true'
@@ -70,6 +70,13 @@ jobs:
           echo "🔨 Building native modules (better-sqlite3, etc.)..."
           npm rebuild 2>&1 || npm rebuild --build-from-source 2>&1
           echo "✅ Native modules built"
+      
+      - name: Install/Update Playwright browsers
+        if: matrix.test-type == 'e2e'
+        run: |
+          echo "🎭 Installing/updating Playwright browsers..."
+          npx playwright install --with-deps chromium
+          echo "✅ Playwright browsers ready"
       
       - name: Run unit tests
         if: matrix.test-type == 'unit'
@@ -138,22 +145,11 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: E2E Tests ===================="
-          
-          echo "📋【ステップ 1】Playwright キャッシュ確認..."
-          if [ -d ~/.cache/ms-playwright ]; then
-            echo "✅ Playwright キャッシュ使用（高速）"
-            ls -lh ~/.cache/ms-playwright/ 2>/dev/null | head -10 || true
-          else
-            echo "⚠️ キャッシュなし。ブラウザをインストール..."
-            npx playwright install --with-deps chromium
-          fi
-          
-          echo ""
-          echo "✅【ステップ 2】Playwright バージョン確認..."
+          echo "✅【ステップ 1】Playwright バージョン確認..."
           npx playwright --version
           
           echo ""
-          echo "🚀【ステップ 3】E2E テスト実行..."
+          echo "🚀【ステップ 2】E2E テスト実行..."
           echo "   • フロントエンド: npm run dev --workspace frontend (port 5173)"
           echo "   • バックエンド: npm run start --workspace backend (port 3000)"
           echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
