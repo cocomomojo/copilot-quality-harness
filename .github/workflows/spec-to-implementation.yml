@@ -394,8 +394,25 @@ jobs:
           
           set -e
 
-      - name: Verify no test regressions
+      - name: Playwright Test Healer - Auto-fix E2E failures
         if: steps.test_verify.outputs.test_status == 'failed'
+        id: healer
+        continue-on-error: true
+        run: |
+          echo "🔧 Attempting automatic E2E test repair with Playwright Healer...\n"
+          node scripts/playwright-healer.mjs heal-e2e
+          HEALER_STATUS=$?
+          
+          if [ $HEALER_STATUS -eq 0 ]; then
+            echo "✅ E2E tests healed successfully"
+            echo "healer_status=success" >> "$GITHUB_OUTPUT"
+          else
+            echo "⚠️ Healer could not fully resolve all failures (manual review may be needed)"
+            echo "healer_status=partial" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify no test regressions
+        if: steps.test_verify.outputs.test_status == 'failed' && steps.healer.outputs.healer_status != 'success'
         run: |
           echo "⚠️ WARNING: Test execution reported failures"
           echo ""
@@ -404,8 +421,10 @@ jobs:
           echo "2. Existing tests were broken by changes"
           echo "3. Environment issues"
           echo ""
+          echo "ℹ️ Playwright Healer attempted automatic repair but could not resolve all issues"
+          echo ""
           echo "🔧 Recommended actions:"
-          echo "1. Review test output above"
+          echo "1. Review test output above and Healer suggestions"
           echo "2. Check for breaking changes in generated code"
           echo "3. Verify integration with existing components"
           echo ""
