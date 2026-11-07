@@ -40,6 +40,20 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
       
+      - name: Cache Playwright browsers
+        if: matrix.test-type == 'e2e'
+        id: cache-playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+      
+      - name: Install Playwright browsers (cached)
+        if: matrix.test-type == 'e2e' && steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      
       - name: Install dependencies
         run: |
           echo "📦 Installing dependencies..."
@@ -103,22 +117,22 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: E2E Tests ===================="
-          echo "📋【ステップ 1】Playwright ブラウザをインストール..."
-          npx playwright install --with-deps chromium
           
-          echo "✅【ステップ 2】インストール確認..."
+          echo "📋【ステップ 1】Playwright キャッシュ確認..."
+          if [ -d ~/.cache/ms-playwright ]; then
+            echo "✅ Playwright キャッシュ使用（高速）"
+            ls -lh ~/.cache/ms-playwright/ 2>/dev/null | head -10 || true
+          else
+            echo "⚠️ キャッシュなし。ブラウザをインストール..."
+            npx playwright install --with-deps chromium
+          fi
+          
+          echo ""
+          echo "✅【ステップ 2】Playwright バージョン確認..."
           npx playwright --version
           
-          echo "📂 キャッシュディレクトリを確認:"
-          ls -la ~/.cache/ms-playwright/chromium* 2>/dev/null || echo "❌ Chromium が見つかりません"
-          find ~/.cache/ms-playwright -name "chrome-headless-shell*" -o -name "chromium*" | head -5
-          
           echo ""
-          echo "⚠️【ステップ 3】ブラウザバイナリの権限を確認..."
-          find ~/.cache/ms-playwright -type f -executable -name "chrome*" | head -3
-          
-          echo ""
-          echo "🚀【ステップ 4】E2E テスト実行..."
+          echo "🚀【ステップ 3】E2E テスト実行..."
           echo "   • フロントエンド: npm run dev --workspace frontend (port 5173)"
           echo "   • バックエンド: npm run start --workspace backend (port 3000)"
           echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
