@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "timestamp": "2026-10-25T10:28:03.684Z",
     "pass_rate": 100,
     "test_count": 44,
@@ -23,6 +24,8 @@
     }
   },
   {
+=======
+>>>>>>> Stashed changes
     "timestamp": "2026-10-25T10:42:14.931Z",
     "pass_rate": 100,
     "test_count": 44,
@@ -2068,5 +2071,31 @@
       "pass_rate_change": 0,
       "coverage_change": 0
     }
+<<<<<<< Updated upstream
+=======
+  },
+  {
+    "timestamp": "2026-11-07T22:46:54.180Z",
+    "pass_rate": 100,
+    "test_count": 9,
+    "passed": 9,
+    "failed": 0,
+    "coverage": 59,
+    "ai_danger_rank": "D",
+    "risk_level": "HIGH",
+    "composite_score": 69,
+    "data_source": "TEST_MATRIX_ARTIFACT",
+    "details": {
+      "test_source": "test-matrix-artifact",
+      "github_run_id": 42421734126,
+      "coverage_source": "ARTIFACT_RUN:42421734126",
+      "explicit_test_run_id": "42421734126"
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+>>>>>>> Stashed changes
   }
 ]
