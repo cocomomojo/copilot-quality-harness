@@ -3,7 +3,17 @@ name: Test Coverage Analysis
 on:
   push:
     branches: [main]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'package*.json'
+      - '.github/workflows/test-coverage-analysis.yml'
   pull_request:
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'package*.json'
+      - '.github/workflows/test-coverage-analysis.yml'
 
 permissions:
   contents: read

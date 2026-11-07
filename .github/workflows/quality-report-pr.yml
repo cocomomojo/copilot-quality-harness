@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: ["Test Matrix"]
     types: [completed]
+    conclusions: ["success"]
 
 permissions:
   contents: read

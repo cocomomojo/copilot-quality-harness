@@ -3,7 +3,19 @@ name: Test Matrix
 on:
   push:
     branches: [main]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'scripts/**'
+      - 'package*.json'
+      - '.github/workflows/test-matrix.yml'
   pull_request:
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'scripts/**'
+      - 'package*.json'
+      - '.github/workflows/test-matrix.yml'
   workflow_dispatch:
 
 permissions:

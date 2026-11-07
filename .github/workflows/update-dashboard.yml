@@ -5,6 +5,7 @@ on:
   workflow_run:
     workflows: ["Test Matrix"]
     types: [completed]
+    conclusions: ["success"]
 
 concurrency:
   group: update-dashboard-main
