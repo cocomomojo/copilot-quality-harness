@@ -1,47 +1,49 @@
 {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  "timestamp": "2026-11-07T23:34:35.016Z",
-=======
-  "timestamp": "2026-11-07T23:39:41.834Z",
->>>>>>> Stashed changes
-  "pass_rate": 100,
-  "test_count": 12,
-  "passed": 12,
-  "failed": 0,
-=======
-  "timestamp": "2026-11-07T23:44:28.250Z",
-  "pass_rate": 46,
-  "test_count": 57,
-  "passed": 26,
-  "failed": 31,
->>>>>>> Stashed changes
+  "timestamp": "2026-11-07T23:52:18.000Z",
+  "pass_rate": 73,
+  "test_count": 54,
+  "passed": 39,
+  "failed": 15,
   "coverage": 59,
-  "ai_danger_rank": "E",
-  "risk_level": "CRITICAL",
-  "composite_score": 44,
+  "ai_danger_rank": "D",
+  "risk_level": "HIGH",
+  "composite_score": 61,
   "data_source": "TEST_MATRIX_ARTIFACT",
   "details": {
     "test_source": "test-matrix-artifact",
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    "github_run_id": 42425486893,
-    "coverage_source": "ARTIFACT_RUN:42425486893",
-    "explicit_test_run_id": "42425486893"
-=======
-    "github_run_id": 42425677313,
-    "coverage_source": "ARTIFACT_RUN:42425677313",
-    "explicit_test_run_id": "42425677313"
->>>>>>> Stashed changes
-=======
-    "github_run_id": 42425878618,
-    "coverage_source": "ARTIFACT_RUN:42425878618",
-    "explicit_test_run_id": "42425878618"
->>>>>>> Stashed changes
+    "github_run_id": 42426627697,
+    "coverage_source": "ARTIFACT_RUN:42426627697",
+    "explicit_test_run_id": "42426627697"
   },
   "trend": "STABLE",
   "trend_details": {
-    "pass_rate_change": 0,
+    "pass_rate_change": -27,
     "coverage_change": 0
+  },
+  "breakdown": {
+    "unit": {
+      "passed": 10,
+      "failed": 0,
+      "total": 10,
+      "pass_rate": 100
+    },
+    "api": {
+      "passed": 16,
+      "failed": 0,
+      "total": 16,
+      "pass_rate": 100
+    },
+    "e2e": {
+      "passed": 13,
+      "failed": 31,
+      "total": 44,
+      "pass_rate": 30
+    },
+    "advanced": {
+      "passed": 25,
+      "failed": 0,
+      "total": 25,
+      "pass_rate": 100
+    }
   }
 }
