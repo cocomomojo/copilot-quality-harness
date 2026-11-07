@@ -4,6 +4,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "timestamp": "2026-11-07T12:23:20.414Z",
 =======
   "timestamp": "2026-11-07T12:27:42.796Z",
@@ -63,6 +64,23 @@
     "github_run_id": 42373692188,
     "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
     "explicit_test_run_id": "42373692188"
+>>>>>>> Stashed changes
+=======
+  "timestamp": "2026-11-07T12:52:34.283Z",
+  "pass_rate": 100,
+  "test_count": 9,
+  "passed": 9,
+  "failed": 0,
+  "coverage": 59,
+  "ai_danger_rank": "D",
+  "risk_level": "HIGH",
+  "composite_score": 69,
+  "data_source": "TEST_MATRIX_ARTIFACT",
+  "details": {
+    "test_source": "test-matrix-artifact",
+    "github_run_id": 42374236123,
+    "coverage_source": "ARTIFACT_RUN:42374236123",
+    "explicit_test_run_id": "42374236123"
 >>>>>>> Stashed changes
   },
   "trend": "STABLE",
