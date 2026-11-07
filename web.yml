@@ -1,0 +1,129 @@
+# テスト設計テンプレ - 【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加
+# 目的: Copilot が UT と E2E を自動生成するための構造化テスト仕様
+# 用途: tests/specs/*.yml として配置。Copilot に読み取られ、テストコード自動生成の入力となる
+# Issue: Closes #56
+# Generated: 2026-11-07T05:38:53.368Z
+
+feature: "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加"
+description: "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加 (generated from issue acceptance criteria)"
+component: "auto-generated-component"
+requires_human_approval: false
+
+# ============================================================
+# テスト定義（生成器の期待する形式）
+# ============================================================
+tests:
+  unit_tests:
+    - id: "UT-001"
+      title: "プレースホルダー: 自動生成用ユニットテスト"
+      category: "auto_generated"
+      input: {}
+      expected_output:
+        success: true
+      mock_dependencies: []
+
+  e2e_tests:
+    - id: "E2E-001"
+      title: "シナリオ 1: ユーザーがシステムにアクセス可能である..."
+      description: "Given: ユーザーがシステムにアクセス可能である\nWhen: ユーザーがWebアプリ\nThen: 、画面最上部にタイトル \"Copilot Quality Harness Dash\" を持つダーク背景（#1f2937）のヘッダーバーが表示される"
+      priority: "critical"
+      steps:
+        - step_id: 1
+          action: "setup"
+          target: "ユーザーがシステムにアクセス可能である"
+          expected:
+            - assertion_passed: true
+        - step_id: 2
+          action: "execute"
+          target: "ユーザーがWebアプリ"
+          expected:
+            - assertion_passed: true
+        - step_id: 3
+          action: "assert"
+          target: "、画面最上部にタイトル \"Copilot Quality Harness Dash\" を持つダーク背景（#1f2937）のヘッダーバーが表示される"
+          expected:
+            - assertion_passed: true
+    - id: "E2E-002"
+      title: "シナリオ 2: ユーザーがシステムにアクセス可能である..."
+      description: "Given: ユーザーがシステムにアクセス可能である\nWhen: ユーザーが画面上の主要なアクションボタン\nThen: とき、1秒未満の間にローディングアニメーション（スピナー等）が表示される"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "setup"
+          target: "ユーザーがシステムにアクセス可能である"
+          expected:
+            - assertion_passed: true
+        - step_id: 2
+          action: "execute"
+          target: "ユーザーが画面上の主要なアクションボタン"
+          expected:
+            - assertion_passed: true
+        - step_id: 3
+          action: "assert"
+          target: "とき、1秒未満の間にローディングアニメーション（スピナー等）が表示される"
+          expected:
+            - assertion_passed: true
+    - id: "E2E-003"
+      title: "シナリオ 3: システムが準備状態である..."
+      description: "Given: システムが準備状態である\nWhen: 処理終了後\nThen: 本来の処理結果が画面に正しく表示され, 画面崩れやエラーが発生しないこと"
+      priority: "high"
+      steps:
+        - step_id: 1
+          action: "setup"
+          target: "システムが準備状態である"
+          expected:
+            - assertion_passed: true
+        - step_id: 2
+          action: "execute"
+          target: "処理終了後"
+          expected:
+            - assertion_passed: true
+        - step_id: 3
+          action: "assert"
+          target: "本来の処理結果が画面に正しく表示され"
+          expected:
+            - assertion_passed: true
+        - step_id: 4
+          action: "assert"
+          target: "画面崩れやエラーが発生しないこと"
+          expected:
+            - assertion_passed: true
+
+mocks: []
+
+seeds:
+  - name: "base_seed"
+    value: 1794029933
+    description: "基本シード値（テストデータ生成用）"
+
+environment:
+  API_BASE_URL: "http://localhost:3000"
+  TEST_DB_URL: "sqlite:///:memory:"
+
+coverage_requirements:
+  - component: "auto-generated-component"
+    target_percentage: 90
+    critical_paths:
+      - "Auto-generated critical path"
+
+execution:
+  timeout_ms: 30000
+  retry_on_flake:
+    enabled: true
+    max_attempts: 3
+    backoff_ms: 1000
+  parallel_execution:
+    enabled: true
+    max_workers: 4
+  failure_mode: "fast_fail"
+
+references:
+  - ".github/ISSUE_TEMPLATE/acceptance.md"
+  - "CONTRIBUTING.md"
+  - "QA_POLICY.md"
+
+notes: |
+  - This spec was auto-generated from Issue #56
+  - E2E テストは必ずモック環境で実行してください（外部 API 非依存）
+  - テスト後は自動で DB がロールバックされます
+  - 手動でテストケースを追加・修正してください
