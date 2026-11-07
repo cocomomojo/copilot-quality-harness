@@ -179,6 +179,26 @@ jobs:
           name: generated-spec
           path: .
 
+      - name: Validate generated spec file
+        id: validate_spec
+        env:
+          SPEC_FILE: ${{ needs.generate-spec-yml.outputs.spec_file }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+        run: |
+          echo "🔍 Validating spec file..."
+          VALIDATION_RESULT=$(node scripts/workflow-error-handler.mjs validate-spec "$SPEC_FILE" "$ISSUE_NUMBER" 2>&1)
+          echo "$VALIDATION_RESULT" | tee /tmp/validation_result.json
+          
+          # Check if validation passed
+          if ! echo "$VALIDATION_RESULT" | grep -q '"valid": true'; then
+            echo "❌ Spec validation failed"
+            echo "validation_passed=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          
+          echo "✅ Spec validation passed"
+          echo "validation_passed=true" >> "$GITHUB_OUTPUT"
+
       - name: Generate implementation code from spec
         id: impl_gen
         env:
@@ -187,7 +207,10 @@ jobs:
           REPO_ROOT: ${{ github.workspace }}
           ISSUE_NUMBER: ${{ inputs.issue_number }}
           GH_TOKEN: ${{ github.token }}
+        continue-on-error: true
         run: |
+          set +e
+          
           echo "🔍 DEBUG: Job outputs received"
           echo "  spec_file=$SPEC_FILE"
           echo "  feature_name=$FEATURE_NAME"
@@ -210,6 +233,7 @@ jobs:
               echo "❌ Error: No YML files found. Regenerating from issue..."
               if [ -z "$ISSUE_NUMBER" ]; then
                 echo "Error: ISSUE_NUMBER is required when the spec artifact is unavailable." >&2
+                node scripts/workflow-error-handler.mjs capture-error "TEST_GENERATION_FAILED" "ISSUE_NUMBER is required but was not provided"
                 exit 1
               fi
               gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE_NUMBER}" > /tmp/issue.json
@@ -229,14 +253,24 @@ jobs:
 
           if [ ! -f "$SPEC_FILE" ]; then
             echo "❌ Error: Spec file still not found after all attempts: $SPEC_FILE" >&2
+            node scripts/workflow-error-handler.mjs capture-error "TEST_GENERATION_FAILED" "Spec file not found: $SPEC_FILE" "{\"issue_number\": \"$ISSUE_NUMBER\"}"
             exit 1
           fi
 
           echo "✅ Using spec file: $SPEC_FILE"
           
-          # Generate tests from spec
-          npx ts-node scripts/generate-tests-from-spec.ts "$SPEC_FILE"
-          echo "Tests generated successfully"
+          # Generate tests from spec with timeout
+          timeout 300 npx ts-node scripts/generate-tests-from-spec.ts "$SPEC_FILE"
+          GEN_STATUS=$?
+          
+          if [ $GEN_STATUS -ne 0 ]; then
+            echo "❌ Error: Test generation failed with status $GEN_STATUS" >&2
+            node scripts/workflow-error-handler.mjs capture-error "TEST_GENERATION_FAILED" "ts-node exited with code $GEN_STATUS" "{\"issue_number\": \"$ISSUE_NUMBER\", \"spec_file\": \"$SPEC_FILE\"}"
+            exit 1
+          fi
+          
+          echo "✅ Tests generated successfully"
+          set -e
 
       - name: List generated files
         run: |
@@ -293,13 +327,35 @@ jobs:
             git commit -m "feat: Auto-generate implementation, UT, and E2E tests for Issue #${ISSUE_NUMBER}" \
               --no-verify
             
-            # Push new branch
-            if ! git push origin "$BRANCH_NAME" --no-verify; then
-              echo "❌ Error: Push failed even after fresh branch creation"
-              exit 1
-            fi
+            # Push new branch with retry logic
+            PUSH_ATTEMPTS=0
+            PUSH_MAX_ATTEMPTS=3
+            PUSH_BACKOFF=5
             
-            echo "✅ Branch pushed successfully: $BRANCH_NAME"
+            while [ $PUSH_ATTEMPTS -lt $PUSH_MAX_ATTEMPTS ]; do
+              PUSH_ATTEMPTS=$((PUSH_ATTEMPTS + 1))
+              echo "🔄 Push attempt $PUSH_ATTEMPTS/$PUSH_MAX_ATTEMPTS..."
+              
+              if git push origin "$BRANCH_NAME" --no-verify 2>&1 | tee /tmp/push_output.txt; then
+                echo "✅ Branch pushed successfully: $BRANCH_NAME"
+                break
+              else
+                PUSH_ERROR=$(cat /tmp/push_output.txt | tail -5)
+                echo "❌ Push failed: $PUSH_ERROR"
+                
+                if [ $PUSH_ATTEMPTS -lt $PUSH_MAX_ATTEMPTS ]; then
+                  echo "⏳ Waiting ${PUSH_BACKOFF}s before retry..."
+                  sleep $PUSH_BACKOFF
+                  # Try to clean up before retry
+                  git push origin --delete "$BRANCH_NAME" 2>/dev/null || true
+                  sleep 2
+                else
+                  echo "❌ Error: Push failed after $PUSH_MAX_ATTEMPTS attempts"
+                  node scripts/workflow-error-handler.mjs capture-error "GIT_PUSH_FAILED" "Failed to push branch after $PUSH_MAX_ATTEMPTS attempts" "{\"branch\": \"$BRANCH_NAME\", \"error\": \"$PUSH_ERROR\"}"
+                  exit 1
+                fi
+              fi
+            done
             
             # Create PR with simplified body
             echo "🔄 Attempting to create PR..."
@@ -355,6 +411,68 @@ jobs:
             echo "2. Verify content matches Issue requirements"
             echo "3. Manually trigger implementation generation if needed"
           fi
+
+      - name: Check for workflow errors and post if any
+        if: always()
+        continue-on-error: true
+        uses: actions/github-script@v7
+        env:
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          JOB_STATUS: ${{ job.status }}
+        with:
+          script: |
+            const fs = require('fs');
+            const issueNumber = process.env.ISSUE_NUMBER;
+            const jobStatus = process.env.JOB_STATUS;
+            
+            // Check for error log file
+            const errorLogPath = '/tmp/workflow_errors.json';
+            if (!fs.existsSync(errorLogPath)) {
+              console.log('No error log found');
+              return;
+            }
+            
+            try {
+              const errors = JSON.parse(fs.readFileSync(errorLogPath, 'utf-8'));
+              if (!errors || errors.length === 0) {
+                console.log('No errors recorded');
+                return;
+              }
+              
+              const latestError = errors[errors.length - 1];
+              console.log('Found error:', latestError);
+              
+              // Generate error notification message
+              let message = `## ⚠️ ワークフロー実行エラー\n\n`;
+              message += `**エラータイプ**: \`${latestError.type}\`\n`;
+              message += `**メッセージ**: ${latestError.message}\n`;
+              message += `**実行ID**: [${latestError.workflowRunId}](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${latestError.workflowRunId})\n\n`;
+              
+              if (latestError.context) {
+                message += `### コンテキスト情報\n`;
+                message += `\`\`\`json\n`;
+                message += JSON.stringify(latestError.context, null, 2);
+                message += `\n\`\`\`\n\n`;
+              }
+              
+              message += `### 推奨アクション\n`;
+              message += `1. [ワークフロー実行ログ](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${latestError.workflowRunId}) を確認\n`;
+              message += `2. エラー内容に基づいて Issue の受入条件を確認・修正\n`;
+              message += `3. ワークフローを再実行\n\n`;
+              message += `*このメッセージは自動生成されました*`;
+              
+              // Post comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueNumber),
+                body: message
+              });
+              
+              console.log('Error notification posted');
+            } catch (err) {
+              console.error('Error processing error log:', err);
+            }
 
       - name: Post comment on Issue
         if: always()
