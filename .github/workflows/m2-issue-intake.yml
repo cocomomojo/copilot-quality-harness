@@ -79,9 +79,12 @@ jobs:
           ai_result=$?
           if [ $ai_result -eq 0 ]; then
             echo "ai_judgment_success=true" >> "$GITHUB_OUTPUT"
+            JUDGMENT_LEVEL=$(node -e "console.log(require('fs').existsSync('$JUDGMENT_OUTPUT') ? JSON.parse(require('fs').readFileSync('$JUDGMENT_OUTPUT', 'utf8')).level : 'unknown')" 2>/dev/null || echo "unknown")
+            echo "judgment_level=${JUDGMENT_LEVEL}" >> "$GITHUB_OUTPUT"
             echo "✅ AI judgment completed via Copilot Skill"
           else
             echo "ai_judgment_success=false" >> "$GITHUB_OUTPUT"
+            echo "judgment_level=unknown" >> "$GITHUB_OUTPUT"
             echo "⚠️ AI judgment failed; will use rule-based fallback"
           fi
           exit 0
@@ -97,6 +100,8 @@ jobs:
           node scripts/m2-auto-judgment.mjs \
             --report "$REPORT_FILE" \
             --output "$JUDGMENT_OUTPUT" || true
+          JUDGMENT_LEVEL=$(node -e "console.log(require('fs').existsSync('$JUDGMENT_OUTPUT') ? JSON.parse(require('fs').readFileSync('$JUDGMENT_OUTPUT', 'utf8')).level : 'unknown')" 2>/dev/null || echo "unknown")
+          echo "judgment_level=${JUDGMENT_LEVEL}" >> "$GITHUB_OUTPUT"
           echo "✅ Fallback judgment completed"
       - name: Format M2 report as Markdown
         if: always() && steps.analyze.outcome != 'skipped'
@@ -242,6 +247,20 @@ jobs:
               issue_number: Number(process.env.ISSUE_NUMBER),
               body: lines.join('\n')
             });
+      - name: Trigger spec-to-implementation if safe-proceed
+        if: always() && steps.analyze.outcome != 'skipped' && (steps.ai-judgment.outputs.judgment_level == 'safe-proceed' || steps.fallback-judgment.outputs.judgment_level == 'safe-proceed')
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ steps.input.outputs.issue_number }}
+          BRANCH_NAME: work/issue-${{ steps.input.outputs.issue_number }}
+        run: |
+          echo "🚀 Triggering spec-to-implementation workflow for auto-implementation..."
+          gh workflow run spec-to-implementation.yml \
+            --ref main \
+            -f issue_number="${ISSUE_NUMBER}" \
+            -f branch_name="${BRANCH_NAME}"
+          echo "✅ Workflow triggered successfully"
       - name: Upload M2 report and judgment artifacts
         if: always() && steps.analyze.outcome != 'skipped'
         uses: actions/upload-artifact@v4
