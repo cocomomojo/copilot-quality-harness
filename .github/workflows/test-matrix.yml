@@ -128,7 +128,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: API Tests ===================="
-          npm run test:api 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          npm run test:api 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           echo "✅ API tests completed"
           echo "🏁 ==================== END: API Tests ===================="
       
@@ -159,7 +159,7 @@ jobs:
           echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
           echo ""
           
-          npm run test:e2e 2>&1 | tee /tmp/test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          npm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           E2E_EXIT_CODE=$?
           
           echo ""
