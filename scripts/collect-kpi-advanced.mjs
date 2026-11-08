@@ -291,16 +291,31 @@ function parseTestResults(testData) {
     
     passRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
     
+    // Extract per-type counts from summary if available
+    let globalE2eCount = 0;
+    let globalUnitCount = 0;
+    if (testData.summary?.by_test_type) {
+      const byType = testData.summary.by_test_type;
+      globalE2eCount = (byType.e2e?.passed_tests || 0) + (byType.e2e?.failed_tests || 0);
+      globalUnitCount = (byType.unit?.passed_tests || 0) + (byType.unit?.failed_tests || 0)
+        + (byType.api?.passed_tests || 0) + (byType.api?.failed_tests || 0)
+        + (byType.advanced?.passed_tests || 0) + (byType.advanced?.failed_tests || 0);
+    }
+    
     console.log(`  ✓ Total tests: ${totalTests}`);
     console.log(`  ✓ Passed: ${passedTests}`);
     console.log(`  ✓ Failed: ${failedTests}`);
     console.log(`  ✓ Pass rate: ${passRate}%`);
+    if (globalE2eCount > 0) console.log(`  ✓ Global E2E count: ${globalE2eCount}`);
+    if (globalUnitCount > 0) console.log(`  ✓ Global unit/api/advanced count: ${globalUnitCount}`);
     
     return {
       totalTests,
       passedTests,
       failedTests,
       passRate,
+      globalE2eCount,
+      globalUnitCount,
       source: 'test-matrix'
     };
   } else if (testData.source === 'github-api' && testData.jobs) {
@@ -634,6 +649,8 @@ async function main() {
   const testCount = testResults.totalTests;
   const passed = testResults.passedTests;
   const failed = testResults.failedTests;
+  const globalE2eCount = testResults.globalE2eCount || 0;
+  const globalUnitCount = testResults.globalUnitCount || 0;
   
   console.log(`\n✅ Real test data loaded:`);
   console.log(`   Pass Rate: ${passRate}%`);
@@ -659,6 +676,8 @@ async function main() {
     passed: passed,
     failed: failed,
     coverage: coverage,
+    global_e2e_count: globalE2eCount,
+    global_unit_count: globalUnitCount,
     ai_danger_rank: rank,
     risk_level: riskLevel,
     composite_score: Math.round(compositeScore),

@@ -157,11 +157,12 @@ graph LR
     B -->|テスト項目確認| C["spec-to-implementation<br/>(Manual)"]
     C -->|UT/E2E 自動生成| D["test-matrix<br/>(PR/Push)"]
     D -->|テスト完了| E["quality-report-pr<br/>(workflow_run)"]
+    D -->|テスト完了| K["update-dashboard<br/>(workflow_run)"]
     D -->|並列実行| F["test-coverage-analysis<br/>(PR/Push)"]
     E -->|品質チェック| G["ai-review<br/>(PR)"]
     G -->|AI コメント投稿| H["人間レビュー<br/>(Manual)"]
     H -->|マージ| I["Pages Deploy<br/>(auto)"]
-    J["quality-schedule<br/>(Cron)"] -->|週次チェック| K["update-dashboard<br/>(workflow_run)"]
+    J["quality-schedule<br/>(Cron)"] -->|週次チェック| D
     L["copilot-analyze-trace<br/>(Manual)"] -->|失敗分析| M["Draft PR + 修正案<br/>(auto)"]
     
     style A fill:#e1f5ff
@@ -172,6 +173,28 @@ graph LR
     style I fill:#c8e6c9
     style H fill:#fff9c4
 ```
+
+---
+
+## 現在のテスト構成（2026-11-08 時点）
+
+| テスト種別 | ファイル数 | テスト数 | 実行方法 |
+|-----------|-----------|---------|---------|
+| E2E (Playwright) | ~5ファイル | ~51 テスト | `npx playwright test` |
+| Unit (Vitest) | ~6ファイル | ~53 テスト | `npx vitest run` |
+| API | ~2ファイル | ~16 テスト | `npx vitest run --config vitest.api.config` |
+| Advanced | ~3ファイル | ~25 テスト | `npx vitest run --config vitest.advanced.config` |
+| **合計** | | **~145 テスト** | test-matrix (4並列) |
+
+### ワークフロー自動トリガーチェーン
+
+```
+PR / Push → test-matrix.yml
+  └─ 完了後 → quality-report-pr.yml (PR issue レポート生成)
+  └─ 完了後 → update-dashboard.yml (KPI + ダッシュボード更新)
+```
+
+**重要**: `update-dashboard.yml` は `test-matrix.yml` の `workflow_run` で直接トリガーされます。フォールバック時は `--branch main --status success` で最新の main ブランチの成功 run を使用します。
 
 ---
 
