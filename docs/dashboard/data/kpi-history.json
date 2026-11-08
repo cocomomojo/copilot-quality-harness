@@ -2059,7 +2059,7 @@
     }
   },
   {
-    "timestamp": "2026-11-08T10:55:14.336Z",
+    "timestamp": "2026-11-08T11:04:03.754Z",
     "pass_rate": 99,
     "test_count": 172,
     "passed": 171,
@@ -2073,9 +2073,9 @@
     "data_source": "TEST_MATRIX_ARTIFACT",
     "details": {
       "test_source": "test-matrix-artifact",
-      "github_run_id": 42472985807,
-      "coverage_source": "ARTIFACT_RUN:42472985807",
-      "explicit_test_run_id": "42472985807"
+      "github_run_id": 42473685868,
+      "coverage_source": "ARTIFACT_RUN:42473685868",
+      "explicit_test_run_id": "42473685868"
     },
     "trend": "STABLE",
     "trend_details": {
