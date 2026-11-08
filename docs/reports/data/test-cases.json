@@ -1,12 +1,398 @@
 {
-  "timestamp": "2026-11-08T05:21:06.609Z",
-  "totalSuites": 0,
-  "totalTests": 0,
-  "passed": 0,
+  "timestamp": "2026-11-08T05:52:48.353Z",
+  "totalSuites": 3,
+  "totalTests": 22,
+  "passed": 22,
   "failed": 0,
   "skipped": 0,
   "passRate": 100,
-  "duration": 0,
+  "duration": 41884,
   "metadata": {},
-  "suites": []
+  "suites": [
+    {
+      "name": "User Profile - Account Created At Display (E2E)",
+      "file": "profile-created-at.spec.js",
+      "totalTests": 10,
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 28002,
+      "tests": [
+        {
+          "name": "E2E-001: Display profile with valid createdAt",
+          "title": "E2E-001: Display profile with valid createdAt",
+          "status": "passed",
+          "duration": 1891,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-002: Display fallback when createdAt is null",
+          "title": "E2E-002: Display fallback when createdAt is null",
+          "status": "passed",
+          "duration": 1809,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-003: Handle 404 API error when user not found",
+          "title": "E2E-003: Handle 404 API error when user not found",
+          "status": "passed",
+          "duration": 1952,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-004: Fetch createdAt from API and display formatted",
+          "title": "E2E-004: Fetch createdAt from API and display formatted",
+          "status": "passed",
+          "duration": 1259,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-005: Handle invalid createdAt format with fallback",
+          "title": "E2E-005: Handle invalid createdAt format with fallback",
+          "status": "passed",
+          "duration": 1250,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-006: Verify element structure and accessibility",
+          "title": "E2E-006: Verify element structure and accessibility",
+          "status": "passed",
+          "duration": 1263,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-007: Verify multiple renders and state consistency",
+          "title": "E2E-007: Verify multiple renders and state consistency",
+          "status": "passed",
+          "duration": 13274,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-101: Display user avatar image when available",
+          "title": "E2E-101: Display user avatar image when available",
+          "status": "passed",
+          "duration": 1767,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-102: Display default avatar when avatar_url is not provided",
+          "title": "E2E-102: Display default avatar when avatar_url is not provided",
+          "status": "passed",
+          "duration": 1774,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-103: Avatar displays with correct styling and dimensions",
+          "title": "E2E-103: Avatar displays with correct styling and dimensions",
+          "status": "passed",
+          "duration": 1763,
+          "file": "profile-created-at.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "Error Path Tests",
+      "file": "quality-checks-advanced.spec.js",
+      "totalTests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 13315,
+      "tests": [
+        {
+          "name": "displays error when adding check with only whitespace",
+          "title": "displays error when adding check with only whitespace",
+          "status": "passed",
+          "duration": 3321,
+          "file": "quality-checks-advanced.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "displays error when name exceeds 120 characters",
+          "title": "displays error when name exceeds 120 characters",
+          "status": "passed",
+          "duration": 2258,
+          "file": "quality-checks-advanced.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "clears error message when user corrects input",
+          "title": "clears error message when user corrects input",
+          "status": "passed",
+          "duration": 5361,
+          "file": "quality-checks-advanced.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "shows appropriate error when API is unavailable",
+          "title": "shows appropriate error when API is unavailable",
+          "status": "passed",
+          "duration": 2375,
+          "file": "quality-checks-advanced.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "URL Validator API",
+      "file": "url-validator.spec.js",
+      "totalTests": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 567,
+      "tests": [
+        {
+          "name": "E2E-001: Check valid HTTPS URL endpoint",
+          "title": "E2E-001: Check valid HTTPS URL endpoint",
+          "status": "passed",
+          "duration": 79,
+          "file": "url-validator.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-002: Check invalid URL format",
+          "title": "E2E-002: Check invalid URL format",
+          "status": "passed",
+          "duration": 70,
+          "file": "url-validator.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-003: Check empty string input",
+          "title": "E2E-003: Check empty string input",
+          "status": "passed",
+          "duration": 70,
+          "file": "url-validator.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-004: Check null input",
+          "title": "E2E-004: Check null input",
+          "status": "passed",
+          "duration": 71,
+          "file": "url-validator.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-005: Check valid HTTP URL with port",
+          "title": "E2E-005: Check valid HTTP URL with port",
+          "status": "passed",
+          "duration": 71,
+          "file": "url-validator.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-006: Check valid GitHub URL",
+          "title": "E2E-006: Check valid GitHub URL",
+          "status": "passed",
+          "duration": 68,
+          "file": "url-validator.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-007: Check FTP protocol (not allowed)",
+          "title": "E2E-007: Check FTP protocol (not allowed)",
+          "status": "passed",
+          "duration": 68,
+          "file": "url-validator.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-008: Response time performance check",
+          "title": "E2E-008: Response time performance check",
+          "status": "passed",
+          "duration": 70,
+          "file": "url-validator.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    }
+  ]
 }
