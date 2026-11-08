@@ -7,6 +7,7 @@ import QualityChecksPage from './pages/QualityChecksPage';
 import URLValidatorPage from './pages/URLValidatorPage';
 import DashboardPage from './pages/DashboardPage';
 import SettingsPage from './pages/SettingsPage';
+import UserProfile from './UserProfile';
 import NotFoundPage from './pages/NotFoundPage';
 import './styles.css';
 
@@ -22,6 +23,7 @@ function AppRouter() {
             <Route path="/url-validator" element={<URLValidatorPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/profile" element={<UserProfile />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
