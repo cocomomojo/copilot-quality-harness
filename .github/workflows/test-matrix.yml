@@ -6,16 +6,22 @@ on:
     paths:
       - 'backend/**'
       - 'frontend/**'
+      - 'e2e/**'
       - 'scripts/**'
       - 'package*.json'
+      - 'pnpm-lock.yaml'
       - '.github/workflows/test-matrix.yml'
+      - 'playwright.config.js'
   pull_request:
     paths:
       - 'backend/**'
       - 'frontend/**'
+      - 'e2e/**'
       - 'scripts/**'
       - 'package*.json'
+      - 'pnpm-lock.yaml'
       - '.github/workflows/test-matrix.yml'
+      - 'playwright.config.js'
   workflow_dispatch:
 
 permissions:
@@ -34,11 +40,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
+          cache: pnpm
       
       - name: Cache Playwright browsers
         if: matrix.test-type == 'e2e'
