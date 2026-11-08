@@ -34,7 +34,7 @@ jobs:
           cache: npm
       
       - name: Install dependencies
-        run: npm install
+        run: npm ci --prefer-offline
       
       - name: Create data directory
         run: mkdir -p qa/dashboard-data
@@ -122,7 +122,7 @@ jobs:
           cache: npm
       
       - name: Install dependencies
-        run: npm install
+        run: npm ci --prefer-offline
       
       - name: Download KPI data
         uses: actions/download-artifact@v4
@@ -369,6 +369,10 @@ jobs:
           
           if [ "$DASHBOARD_CHANGES" -gt 0 ] || [ "$REPORTS_CHANGES" -gt 0 ]; then
             echo "📝 Committing updated dashboard and E2E report data..."
+
+            # Clean untracked files that would conflict with git pull
+            echo "🧹 Cleaning untracked files..."
+            git clean -fd docs/reports/ 2>/dev/null || true
 
             # Pull latest main using merge (not rebase) to avoid autostash conflicts
             git pull --no-rebase origin main || {
