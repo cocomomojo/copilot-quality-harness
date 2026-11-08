@@ -72,6 +72,8 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       });
       
       await page.reload();
+      // Ensure page is loaded after reload
+      await page.waitForLoadState('networkidle');
       
       const error = page.getByRole('alert');
       await error.waitFor({ state: "attached", timeout: 10000 });
@@ -221,6 +223,8 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       
       // Reload page
       await page.reload();
+      // Ensure page is loaded after reload
+      await page.waitForLoadState('networkidle');
       
       // Check should still be visible
       await expect(page.getByText('Persistent Check')).toBeVisible();
@@ -242,7 +246,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       // Wait for second check to appear before verifying order
       await expect(page.getByText('Second Check')).toBeVisible();
       
-      const checks = page.locator('li');
+      const checks = page.locator('section li');
       const firstCheck = await checks.first().textContent();
       
       expect(firstCheck).toContain('Second Check');
@@ -355,7 +359,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await input.fill('List Check');
       await button.click();
       
-      const listItems = page.locator('li');
+      const listItems = page.locator('section li');
       await expect(listItems.first()).toContainText('List Check');
     });
   });
