@@ -96,7 +96,7 @@ function QualityChecksPage() {
       <section aria-labelledby="checks-heading">
         <h2 id="checks-heading">Current checks</h2>
         {checks.length === 0 ? <p>No checks recorded yet.</p> : (
-          <ul>{checks.map((check) => <li key={check.id}><span>{check.name}</span><small className="status-badge" data-testid="status-badge" title={STATUS_TOOLTIPS[check.status] || check.status} tabIndex={0} aria-describedby={`status-desc-${check.id}`}>{check.status}<span id={`status-desc-${check.id}`} className="sr-only">{STATUS_TOOLTIPS[check.status] || check.status}</span></small></li>)}</ul>
+          <ul>{checks.map((check) => <li key={check.id}><span>{check.name}</span><small className="status-badge" data-testid="status-badge" title={STATUS_TOOLTIPS[check.status] || check.status} tabIndex={0} aria-describedby={`status-desc-${check.id}`}>{check.status}</small><span id={`status-desc-${check.id}`} className="sr-only">{STATUS_TOOLTIPS[check.status] || check.status}</span></li>)}</ul>
         )}
       </section>
       <Footer />
