@@ -14,7 +14,10 @@ Issue 作成 → M2 Issue Intake → 実装・テスト → test-matrix → upda
     ↑             ↑（手動実行）      ↑（PR作成）    ↑（自動）       ↑（自動）
 ```
 
-**判定方式**: M2 Intake はルールベース判定（生成AI不使用・無料・高速）
+**判定方式**: M2 Intake はルールベース判定（`scripts/m2-auto-judgment.mjs`）
+- 生成AI・外部APIを使用しない（無料・高速・決定論的）
+- OpenJEV 的なアプローチ（ルールベースによる実行ルーティング）
+- ただし OpenJEV パッケージは未リリース（npm 未公開）のため直接は未使用
 
 ---
 

@@ -22,9 +22,14 @@ jobs:
         with:
           persist-credentials: false
           clean: true
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
       - name: Validate dispatch input
         id: input
         env:

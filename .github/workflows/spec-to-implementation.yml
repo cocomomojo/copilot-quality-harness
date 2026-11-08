@@ -44,14 +44,19 @@ jobs:
         with:
           persist-credentials: true
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Resolve spec file
         id: resolve-spec
@@ -167,14 +172,19 @@ jobs:
         with:
           persist-credentials: true
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Download generated spec artifact (only if M2 generated it)
         if: ${{ inputs.spec_file == '' && inputs.issue_number != '' }}
@@ -267,7 +277,7 @@ jobs:
           # Step 1: Generate implementation code from spec with timeout
           echo ""
           echo "📝 Step 1: Generating implementation code..."
-          timeout 300 npx ts-node scripts/generate-implementation-from-spec.ts "$SPEC_FILE"
+          timeout 300 pnpm exec ts-node scripts/generate-implementation-from-spec.ts "$SPEC_FILE"
           IMPL_STATUS=$?
           
           if [ $IMPL_STATUS -ne 0 ]; then
@@ -281,7 +291,7 @@ jobs:
           # Step 2: Generate tests from spec with timeout
           echo ""
           echo "📝 Step 2: Generating test code..."
-          timeout 300 npx ts-node scripts/generate-tests-from-spec.ts "$SPEC_FILE"
+          timeout 300 pnpm exec ts-node scripts/generate-tests-from-spec.ts "$SPEC_FILE"
           GEN_STATUS=$?
           
           if [ $GEN_STATUS -ne 0 ]; then
@@ -374,7 +384,7 @@ jobs:
           
           # Run tests and capture output to file
           TEST_OUTPUT_FILE="/tmp/test_output.log"
-          npm test 2>&1 | tee "$TEST_OUTPUT_FILE" | head -100
+          pnpm test 2>&1 | tee "$TEST_OUTPUT_FILE" | head -100
           TEST_STATUS=$?
           
           echo "📋 Analyzing test output..."

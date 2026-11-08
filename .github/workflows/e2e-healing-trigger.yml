@@ -71,17 +71,22 @@ jobs:
         with:
           ref: main
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: pnpm
       
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
       
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
       
       - name: Download E2E test results
         uses: actions/download-artifact@v4
@@ -94,7 +99,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "🧪 Running E2E tests to identify failures..."
-          npm run test:e2e 2>&1 | tee e2e-test.log || true
+          pnpm run test:e2e 2>&1 | tee e2e-test.log || true
       
       - name: Analyze E2E failures and generate fixes
         id: analyze

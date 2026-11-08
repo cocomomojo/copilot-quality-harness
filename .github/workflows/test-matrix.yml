@@ -65,28 +65,28 @@ jobs:
         if: matrix.test-type == 'e2e' && steps.cache-playwright.outputs.cache-hit != 'true'
         run: |
           echo "📦 Installing Playwright browsers (cache miss)..."
-          npx playwright install --with-deps chromium
+          pnpm exec playwright install --with-deps chromium
           echo "✅ Playwright browsers installed"
       
       - name: Install dependencies (without postinstall)
         run: |
-          echo "📦 Installing dependencies with npm ci..."
-          npm ci --ignore-scripts
+          echo "📦 Installing dependencies with pnpm install..."
+          pnpm install --frozen-lockfile --ignore-scripts
           echo "✅ Dependencies installed"
           node --version
-          npm --version
+          pnpm --version
       
       - name: Build native modules
         run: |
           echo "🔨 Building native modules (better-sqlite3, etc.)..."
-          npm rebuild 2>&1 || npm rebuild --build-from-source 2>&1
+          pnpm rebuild 2>&1 || pnpm rebuild --build-from-source 2>&1
           echo "✅ Native modules built"
       
       - name: Install/Update Playwright browsers
         if: matrix.test-type == 'e2e'
         run: |
           echo "🎭 Installing/updating Playwright browsers..."
-          npx playwright install --with-deps chromium
+          pnpm exec playwright install --with-deps chromium
           echo "✅ Playwright browsers ready"
       
       - name: Run unit tests
@@ -100,12 +100,12 @@ jobs:
           # Run backend tests first, then frontend (sequential execution to avoid database contention)
           # Use current directory for logs (will be archived with test results)
           echo "📝 Running backend unit tests..."
-          npm run test --workspace backend 2>&1 | tee test-result-backend.log
+          pnpm --filter backend run test 2>&1 | tee test-result-backend.log
           BACKEND_EXIT=$?
           
           echo ""
           echo "📝 Running frontend unit tests..."
-          npm run test --workspace frontend 2>&1 | tee -a test-result-backend.log
+          pnpm --filter frontend run test 2>&1 | tee -a test-result-backend.log
           FRONTEND_EXIT=$?
           
           # Copy combined log to expected location
@@ -121,7 +121,7 @@ jobs:
           echo "✅ Unit tests completed with exit code: $TEST_EXIT_CODE"
           
           echo "📊 Generating coverage report..."
-          npm run test:coverage 2>&1 || true
+          pnpm run test:coverage 2>&1 || true
           
           # Extract coverage percentage
           if [ -f coverage/coverage-final.json ]; then
@@ -146,7 +146,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: API Tests ===================="
-          npm run test:api 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          pnpm run test:api 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           echo "✅ API tests completed"
           echo "🏁 ==================== END: API Tests ===================="
       
@@ -172,16 +172,16 @@ jobs:
         run: |
           echo "🚀 ==================== START: E2E Tests ===================="
           echo "✅【ステップ 1】Playwright バージョン確認..."
-          npx playwright --version
+          pnpm exec playwright --version
           
           echo ""
           echo "🚀【ステップ 2】E2E テスト実行..."
-          echo "   • フロントエンド: npm run dev --workspace frontend (port 5173)"
-          echo "   • バックエンド: npm run start --workspace backend (port 3000)"
+          echo "   • フロントエンド: pnpm --filter frontend dev (port 5173)"
+          echo "   • バックエンド: pnpm --filter backend start (port 3000)"
           echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
           echo ""
           
-          npm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          pnpm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           E2E_EXIT_CODE=$?
           
           echo ""
@@ -214,12 +214,12 @@ jobs:
           # Run backend advanced tests first, then frontend (sequential execution to avoid database contention)
           # Use current directory for logs (will be archived with test results)
           echo "📝 Running backend advanced tests..."
-          npm run test:advanced --workspace backend 2>&1 | tee test-result-advanced.log
+          pnpm --filter backend run test:advanced 2>&1 | tee test-result-advanced.log
           BACKEND_ADV_EXIT=$?
           
           echo ""
           echo "📝 Running frontend advanced tests..."
-          npm run test:advanced --workspace frontend 2>&1 | tee -a test-result-advanced.log
+          pnpm --filter frontend run test:advanced 2>&1 | tee -a test-result-advanced.log
           FRONTEND_ADV_EXIT=$?
           
           # Copy combined log to expected location
@@ -319,11 +319,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: pnpm
       
       - name: Download all test results
         id: download_results

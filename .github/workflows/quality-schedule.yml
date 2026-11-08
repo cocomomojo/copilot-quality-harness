@@ -23,30 +23,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
+          cache: pnpm
       
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
       
       - name: Run all tests
         id: all_tests
         continue-on-error: true
         run: |
           echo "Running comprehensive test suite on Node ${{ matrix.node-version }}"
-          npm test 2>&1 | tee /tmp/all-tests-${{ matrix.node-version }}.log
-          npm run test:api 2>&1 | tee /tmp/all-tests-api-${{ matrix.node-version }}.log
-          npm run test:advanced 2>&1 | tee /tmp/all-tests-advanced-${{ matrix.node-version }}.log
+          pnpm test 2>&1 | tee /tmp/all-tests-${{ matrix.node-version }}.log
+          pnpm run test:api 2>&1 | tee /tmp/all-tests-api-${{ matrix.node-version }}.log
+          pnpm run test:advanced 2>&1 | tee /tmp/all-tests-advanced-${{ matrix.node-version }}.log
       
       - name: Run E2E tests
         id: e2e_tests
         continue-on-error: true
         run: |
-          npx playwright install --with-deps chromium
-          npm run test:e2e 2>&1 | tee /tmp/e2e-tests-${{ matrix.node-version }}.log
+          pnpm exec playwright install --with-deps chromium
+          pnpm run test:e2e 2>&1 | tee /tmp/e2e-tests-${{ matrix.node-version }}.log
       
       - name: Parse comprehensive results
         id: parse_results
@@ -118,19 +123,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: pnpm
       
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
       
       - name: Run M2 validation
         id: m2_validation
         continue-on-error: true
-        run: npm run test:m2 2>&1 | tee /tmp/m2-validation.log
+        run: pnpm run test:m2 2>&1 | tee /tmp/m2-validation.log
       
       - name: Parse M2 results
         id: parse_m2
