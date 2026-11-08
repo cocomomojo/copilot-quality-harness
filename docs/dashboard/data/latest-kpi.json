@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-08T01:51:28.610Z",
+  "timestamp": "2026-11-08T02:00:57.393Z",
   "pass_rate": 80,
   "test_count": 141,
   "passed": 113,
@@ -11,9 +11,9 @@
   "data_source": "TEST_MATRIX_ARTIFACT",
   "details": {
     "test_source": "test-matrix-artifact",
-    "github_run_id": 42435451904,
-    "coverage_source": "ARTIFACT_RUN:42435451904",
-    "explicit_test_run_id": "42435451904"
+    "github_run_id": 42436114277,
+    "coverage_source": "ARTIFACT_RUN:42436114277",
+    "explicit_test_run_id": "42436114277"
   },
   "trend": "STABLE",
   "trend_details": {
