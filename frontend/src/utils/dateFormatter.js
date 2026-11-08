@@ -91,7 +91,8 @@ export async function fetchUserProfile() {
       success: true,
       user_id: data.id,
       email: data.email,
-      created_at: data.created_at
+      created_at: data.created_at,
+      avatar_url: data.avatar_url
     };
   } catch (error) {
     return { success: false, error_code: 'FETCH_USER_FAILED', error_message: 'ユーザープロフィール取得に失敗しました' };
