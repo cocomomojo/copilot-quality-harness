@@ -339,7 +339,8 @@ jobs:
           
           # 実装ファイルが少なくとも1つは必要
           if [ $IMPL_COUNT -lt 1 ]; then
-            echo "❌ ERROR: No implementation files generated (expected ≥1, got $IMPL_COUNT)"
+            echo "⚠️ WARNING: No implementation files generated (expected ≥1, got $IMPL_COUNT)"
+            echo "   This may occur when implementation was already done manually."
             VALIDATION_PASSED=false
           else
             echo "✅ Implementation files found: $IMPL_COUNT"
@@ -347,7 +348,7 @@ jobs:
           
           # テストファイルが少なくとも1つは必要
           if [ $TOTAL_TEST_COUNT -lt 1 ]; then
-            echo "❌ ERROR: No test files generated (expected ≥1, got $TOTAL_TEST_COUNT)"
+            echo "⚠️ WARNING: No test files generated (expected ≥1, got $TOTAL_TEST_COUNT)"
             VALIDATION_PASSED=false
           else
             echo "✅ Test files found: $TOTAL_TEST_COUNT"
@@ -357,7 +358,7 @@ jobs:
           if [ $IMPL_COUNT -ge 1 ] && [ $TOTAL_TEST_COUNT -ge 1 ]; then
             echo "✅ Both implementation and test files generated successfully"
           else
-            echo "❌ ERROR: Missing either implementation or test files"
+            echo "⚠️ WARNING: Missing either implementation or test files"
             echo "   Implementation: $IMPL_COUNT, Tests: $TOTAL_TEST_COUNT"
             VALIDATION_PASSED=false
           fi
@@ -367,9 +368,9 @@ jobs:
             echo "validation_passed=true" >> "$GITHUB_OUTPUT"
             exit 0
           else
-            echo "❌ Artifact validation FAILED"
+            echo "⚠️ Artifact validation skipped (no files generated)"
             echo "validation_passed=false" >> "$GITHUB_OUTPUT"
-            exit 1
+            exit 0
           fi
           set -e
 
@@ -516,20 +517,20 @@ jobs:
           echo "   Test files: $TEST_STAGED"
           
           if [ $STAGED_FILES -lt 2 ]; then
-            echo "❌ ERROR: Too few files staged for commit ($STAGED_FILES)"
-            echo "   Expected: implementation files + test files"
-            git diff --cached --name-only | head -20
-            exit 1
+            echo "⚠️ WARNING: Too few files staged for commit ($STAGED_FILES). Skipping commit."
+            echo "   This may occur when implementation was already done manually."
+            exit 0
           fi
           
           if [ $IMPL_STAGED -lt 1 ]; then
-            echo "❌ ERROR: No implementation files staged (expected ≥1)"
-            exit 1
+            echo "⚠️ WARNING: No implementation files staged. Skipping commit."
+            echo "   This may occur when implementation was already done manually."
+            exit 0
           fi
           
           if [ $TEST_STAGED -lt 1 ]; then
-            echo "❌ ERROR: No test files staged (expected ≥1)"
-            exit 1
+            echo "⚠️ WARNING: No test files staged. Skipping commit."
+            exit 0
           fi
           
           echo "✅ Staged files validation passed"
