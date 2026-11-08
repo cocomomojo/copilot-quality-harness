@@ -448,19 +448,33 @@ jobs:
   post-pr-comment:
     runs-on: ubuntu-latest
     needs: generate-quality-report
-    if: github.event.workflow_run.event == 'pull_request'
+    if: github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.head_branch == 'main'
     
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       
       - name: Find PR
         id: find_pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_NUMBER=$(gh pr list --search "head:${{ github.event.workflow_run.head_branch }}" --json number --jq ".[0].number" || echo "")
+          PR_NUMBER=""
+          if [ "${{ github.event.workflow_run.event }}" = "pull_request" ]; then
+            # PR branch: find open PR by branch name
+            PR_NUMBER=$(gh pr list --search "head:${{ github.event.workflow_run.head_branch }}" --json number --jq ".[0].number" || echo "")
+          else
+            # main branch push (after merge): find recently merged PR by commit SHA
+            HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
+            PR_NUMBER=$(gh pr list --state merged --json number,mergeCommit --jq ".[] | select(.mergeCommit.oid == \"$HEAD_SHA\") | .number" | head -n1 || echo "")
+            if [ -z "$PR_NUMBER" ]; then
+              # Fallback: find most recently merged PR on main
+              PR_NUMBER=$(gh pr list --state merged --base main --json number --jq ".[0].number" | head -n1 || echo "")
+            fi
+          fi
           if [ -z "$PR_NUMBER" ]; then
-            echo "Could not find PR for branch: ${{ github.event.workflow_run.head_branch }}"
+            echo "Could not find PR for this run"
             echo "pr_number=" >> $GITHUB_OUTPUT
           else
             echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
