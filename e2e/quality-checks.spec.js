@@ -6,7 +6,7 @@ test('adds a quality check through the main user flow', async ({ page, request }
     // Endpoint might not be available, continue
   });
   
-  await page.goto('/');
+  await page.goto('/quality-checks');
   await expect(page.getByRole('heading', { name: 'Quality checks' })).toBeVisible();
   await page.getByLabel('Check name').fill('E2E flow');
   await page.getByRole('button', { name: 'Add check' }).click();

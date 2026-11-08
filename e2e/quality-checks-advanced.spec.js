@@ -9,7 +9,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       // Endpoint might not be available, continue
     });
     
-    await page.goto('/');
+    await page.goto('/quality-checks');
     await page.waitForLoadState('networkidle');
     // Wait for form to be fully interactive (React renders input element)
     await page.getByLabel('Check name').waitFor({ state: 'attached', timeout: 10000 });
@@ -363,7 +363,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
   test.describe('Performance Tests', () => {
     test('page loads within reasonable time', async ({ page }) => {
       const startTime = Date.now();
-      await page.goto('/');
+      await page.goto('/quality-checks');
       const loadTime = Date.now() - startTime;
       
       // Page should load within 5 seconds
