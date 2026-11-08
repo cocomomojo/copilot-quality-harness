@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "timestamp": "2026-11-07T23:52:18.000Z",
   "pass_rate": 73,
   "test_count": 54,
@@ -8,6 +9,17 @@
   "ai_danger_rank": "D",
   "risk_level": "HIGH",
   "composite_score": 61,
+=======
+  "timestamp": "2026-11-07T23:53:22.048Z",
+  "pass_rate": 78,
+  "test_count": 138,
+  "passed": 107,
+  "failed": 31,
+  "coverage": 59,
+  "ai_danger_rank": "D",
+  "risk_level": "HIGH",
+  "composite_score": 67,
+>>>>>>> Stashed changes
   "data_source": "TEST_MATRIX_ARTIFACT",
   "details": {
     "test_source": "test-matrix-artifact",
