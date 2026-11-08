@@ -10,20 +10,26 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
   // E2E-001: Normal case - logged-in user with valid createdAt
   test('E2E-001: Display profile with valid createdAt', async ({ page, request }) => {
     // Setup: Seed database with user
-    await request.post(`${apiUrl}/api/test/seed-user`, {
+    const seedResponse = await request.post(`${apiUrl}/api/test/seed-user`, {
       data: {
         id: 'user-123',
         email: 'testuser@example.com',
         name: 'Test User',
         created_at: '2026-10-18T10:00:00Z'
       }
-    }).catch(() => {
-      // Endpoint might not exist, continue with test
+    }).catch((err) => {
+      console.error('Seed user failed:', err);
     });
 
     // Navigate to profile page (uses baseURL from playwright.config.js)
     await page.goto('/profile');
+    
+    // Wait for loading state to disappear and content to load
     await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500); // Additional wait for React state update
+    
+    // Wait for heading to be visible
+    await page.waitForSelector('h1:has-text("プロフィール")', { timeout: 5000 });
 
     // Verify page title and headings
     await expect(page.getByRole('heading', { name: /プロフィール/i })).toBeVisible();
@@ -51,13 +57,17 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
         name: 'Legacy User',
         created_at: null
       }
-    }).catch(() => {
-      // Endpoint might not exist, continue with test
+    }).catch((err) => {
+      console.error('Seed user failed:', err);
     });
 
     // Navigate to profile page (uses baseURL from playwright.config.js)
     await page.goto('/profile');
+    
+    // Wait for loading state to disappear
     await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
+    await page.waitForSelector('h1:has-text("プロフィール")', { timeout: 5000 });
 
     // Verify page displays
     await expect(page.getByRole('heading', { name: /プロフィール/i })).toBeVisible();
@@ -73,41 +83,24 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
     expect(text?.trim()).toMatch(/^(-|未設定)$/);
   });
 
-  // E2E-003: Error case - API returns 404
-  test('E2E-003: Handle 404 API error', async ({ page, request }) => {
-    // Setup: Try to reset users to ensure no user exists
+  // E2E-003: Error case - API returns 404 (no user exists)
+  test('E2E-003: Handle 404 API error when user not found', async ({ page, request }) => {
+    // Setup: Reset users to ensure no user exists
     try {
-      const resetResponse = await request.post(`${apiUrl}/api/test/reset-users`, {});
-      await resetResponse.json();
+      await request.post(`${apiUrl}/api/test/reset-users`, {});
+      await page.waitForTimeout(200);
     } catch (error) {
-      // Endpoint might not exist in production, continue anyway
-      console.log('Reset users endpoint not available, continuing with test');
+      console.log('Reset users endpoint not available');
     }
     
-    // Add small delay to ensure reset is complete if it worked
-    await page.waitForTimeout(100);
-    
-    // Navigate to profile page without user data (uses baseURL from playwright.config.js)
+    // Navigate to profile page without user data
     await page.goto('/profile');
     await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
 
     // Verify error message is displayed
-    // The error message should be from fetchUserProfile's 404 handling
-    const alertElement = page.locator('[role="alert"]');
     const errorText = page.getByText(/ユーザープロフィール取得に失敗しました|ユーザー情報を取得できません/i);
-    
-    // Either an alert should be visible or an error message
-    const hasAlert = await alertElement.isVisible().catch(() => false);
-    const hasErrorText = await errorText.isVisible().catch(() => false);
-    
-    if (!hasAlert && !hasErrorText) {
-      // If neither error message nor alert, just verify we're on the profile page
-      await expect(page.getByRole('heading', { name: /プロフィール/i })).toBeVisible();
-    } else if (hasAlert) {
-      await expect(alertElement).toBeVisible();
-    } else {
-      await expect(errorText).toBeVisible();
-    }
+    await expect(errorText).toBeVisible({ timeout: 5000 });
   });
 
   // E2E-004: Normal case - fetch and display from API
