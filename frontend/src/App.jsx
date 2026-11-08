@@ -2,9 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import Footer from './components/Footer.jsx';
 import UserProfile from './UserProfile.jsx';
 
+const MAX_LENGTH = 50;
+
 function QualityChecksPage() {
   const [checks, setChecks] = useState([]);
   const [name, setName] = useState('');
+  const [checkNameLength, setCheckNameLength] = useState(0);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const inputRef = useRef(null);
@@ -38,6 +41,7 @@ function QualityChecksPage() {
     if (!response.ok) { setError(payload.error); return; }
     setChecks((current) => [payload, ...current]);
     setName('');
+    setCheckNameLength(0);
     
     // Show success message
     setSuccessMessage('Check added successfully');
@@ -70,10 +74,14 @@ function QualityChecksPage() {
             ref={inputRef}
             id="check-name" 
             value={name} 
-            onChange={(event) => setName(event.target.value)} 
+            onChange={(event) => { setName(event.target.value); setCheckNameLength(event.target.value.length); }} 
             required 
-            maxLength="120" 
+            maxLength={MAX_LENGTH}
           />
+          <span
+            className={`char-count${(MAX_LENGTH - checkNameLength) <= 10 ? ' char-count-warning' : ''}`}
+            data-testid="char-count"
+          >{checkNameLength}/{MAX_LENGTH}</span>
           <button type="submit">Add check</button>
         </div>
       </form>

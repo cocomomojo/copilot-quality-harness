@@ -415,3 +415,33 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
     });
   });
 }); // end describe 'Quality Checks UI - Error Scenarios & Edge Cases'
+
+test.describe('Character Count Tests', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/quality-checks');
+    await page.waitForLoadState('networkidle');
+    await page.getByLabel('Check name').waitFor({ state: 'attached', timeout: 10000 });
+  });
+
+  test('shows character count when typing', async ({ page }) => {
+    const input = page.getByLabel('Check name');
+    await input.fill('Hello World');
+    const counter = page.getByTestId('char-count');
+    await expect(counter).toBeVisible();
+    await expect(counter).toContainText('11/50');
+  });
+
+  test('shows warning color when 10 or fewer characters remaining', async ({ page }) => {
+    const input = page.getByLabel('Check name');
+    await input.fill('A'.repeat(41)); // 41 chars = 9 remaining
+    const counter = page.getByTestId('char-count');
+    await expect(counter).toHaveClass(/char-count-warning/);
+  });
+
+  test('enforces maximum 50 character limit', async ({ page }) => {
+    const input = page.getByLabel('Check name');
+    await input.fill('A'.repeat(60)); // Try to fill 60 chars
+    const value = await input.inputValue();
+    expect(value.length).toBeLessThanOrEqual(50);
+  });
+});
