@@ -71,7 +71,7 @@ jobs:
       - name: Install dependencies (without postinstall)
         run: |
           echo "📦 Installing dependencies with pnpm install..."
-          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm install --frozen-lockfile
           echo "✅ Dependencies installed"
           node --version
           pnpm --version
@@ -100,12 +100,12 @@ jobs:
           # Run backend tests first, then frontend (sequential execution to avoid database contention)
           # Use current directory for logs (will be archived with test results)
           echo "📝 Running backend unit tests..."
-          pnpm --filter backend run test 2>&1 | tee test-result-backend.log
+          pnpm --filter quality-harness-backend run test 2>&1 | tee test-result-backend.log
           BACKEND_EXIT=$?
           
           echo ""
           echo "📝 Running frontend unit tests..."
-          pnpm --filter frontend run test 2>&1 | tee -a test-result-backend.log
+          pnpm --filter quality-harness-frontend run test 2>&1 | tee -a test-result-backend.log
           FRONTEND_EXIT=$?
           
           # Copy combined log to expected location
@@ -176,8 +176,8 @@ jobs:
           
           echo ""
           echo "🚀【ステップ 2】E2E テスト実行..."
-          echo "   • フロントエンド: pnpm --filter frontend dev (port 5173)"
-          echo "   • バックエンド: pnpm --filter backend start (port 3000)"
+          echo "   • フロントエンド: pnpm --filter quality-harness-frontend dev (port 5173)"
+          echo "   • バックエンド: pnpm --filter quality-harness-backend start (port 3000)"
           echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
           echo ""
           
@@ -214,12 +214,12 @@ jobs:
           # Run backend advanced tests first, then frontend (sequential execution to avoid database contention)
           # Use current directory for logs (will be archived with test results)
           echo "📝 Running backend advanced tests..."
-          pnpm --filter backend run test:advanced 2>&1 | tee test-result-advanced.log
+          pnpm --filter quality-harness-backend run test:advanced 2>&1 | tee test-result-advanced.log
           BACKEND_ADV_EXIT=$?
           
           echo ""
           echo "📝 Running frontend advanced tests..."
-          pnpm --filter frontend run test:advanced 2>&1 | tee -a test-result-advanced.log
+          pnpm --filter quality-harness-frontend run test:advanced 2>&1 | tee -a test-result-advanced.log
           FRONTEND_ADV_EXIT=$?
           
           # Copy combined log to expected location

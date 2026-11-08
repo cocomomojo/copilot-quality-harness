@@ -8,7 +8,7 @@ export default defineConfig({
   },
   webServer: [
     { 
-      command: 'pnpm --filter backend start',
+      command: 'pnpm --filter quality-harness-backend start',
       url: 'http://127.0.0.1:3000/api/health',
       reuseExistingServer: true,
       timeout: 120000,  // サーバー起動タイムアウト: 120秒
@@ -17,7 +17,7 @@ export default defineConfig({
       env: { NODE_ENV: 'test' }
     },
     { 
-      command: 'pnpm --filter frontend dev',
+      command: 'pnpm --filter quality-harness-frontend dev',
       url: 'http://127.0.0.1:5173',
       reuseExistingServer: true,
       timeout: 120000,  // サーバー起動タイムアウト: 120秒
