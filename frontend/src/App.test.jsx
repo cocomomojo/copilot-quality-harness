@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { beforeEach, expect, test, vi } from 'vitest';
 import App from './App.jsx';
 
@@ -13,4 +13,21 @@ test('renders checks returned by the API', async () => {
   render(<App />);
   expect(await screen.findByText('API contract')).toBeInTheDocument();
   expect(screen.getByText('pending')).toBeInTheDocument();
+});
+
+test('displays character count as 0/50 initially', async () => {
+  render(<App />);
+  await screen.findByText('API contract');
+  const counter = screen.getByTestId('char-count');
+  expect(counter).toBeInTheDocument();
+  expect(counter.textContent).toBe('0/50');
+});
+
+test('updates character count when typing in check name input', async () => {
+  render(<App />);
+  await screen.findByText('API contract');
+  const input = screen.getByLabelText('Check name');
+  fireEvent.change(input, { target: { value: 'Hello' } });
+  const counter = screen.getByTestId('char-count');
+  expect(counter.textContent).toBe('5/50');
 });
