@@ -1,41 +1,26 @@
 {
-  "generated_at": "2026-11-08T11:15:55.891Z",
-  "source_pr": 83,
+  "generated_at": "2026-11-08T05:17:35.897Z",
+  "source_pr": 49,
   "reports": [
     {
       "issue_number": 44,
-      "pr_number": 83,
-      "workflow_run_id": "42474870945",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42474870945",
-      "generated_at": "2026-11-08T11:15:55.891Z",
+      "pr_number": 49,
+      "workflow_run_id": 41293004461,
+      "generated_at": "2026-11-01T09:25:40.771Z",
       "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
+      "total_tests": 44,
+      "total_passed": 44,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
-          "functions_pct": 62.5,
-          "status": "fail"
+          "lines_pct": 89.57,
+          "branches_pct": 89.52,
+          "functions_pct": 83.33,
+          "status": "pass"
         },
         "files": [
           {
-            "path": "frontend/src/AppRouter.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Header.jsx",
-            "lines_pct": 100,
-            "branches_pct": 28.57,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/LoadingSpinner.jsx",
+            "path": "backend/src/server.js",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -49,44 +34,30 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
           },
           {
-            "path": "frontend/src/pages/NotFoundPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
           },
           {
-            "path": "frontend/src/pages/QualityChecksPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/SettingsPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/URLValidatorPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
           },
           {
             "path": "frontend/src/App.jsx",
-            "lines_pct": 95.04,
-            "branches_pct": 87.5,
+            "lines_pct": 94.44,
+            "branches_pct": 95.45,
             "functions_pct": 83.33,
             "status": "pass"
           },
@@ -98,28 +69,21 @@
             "status": "pass"
           },
           {
-            "path": "frontend/src/pages/HomePage.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "frontend/src/UserProfile.jsx",
-            "lines_pct": 95.71,
-            "branches_pct": 87.5,
+            "lines_pct": 95,
+            "branches_pct": 86.66,
             "functions_pct": 100,
             "status": "pass"
           },
           {
             "path": "frontend/src/utils/dateFormatter.js",
-            "lines_pct": 93.4,
-            "branches_pct": 87.5,
+            "lines_pct": 93.33,
+            "branches_pct": 87.09,
             "functions_pct": 100,
             "status": "pass"
           }
         ],
-        "non_pass_count": 9,
+        "non_pass_count": 2,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -144,45 +108,82 @@
       },
       "implementation_files": [
         ".github/workflows/quality-report-pr.yml",
+        ".github/workflows/test-matrix.yml",
         ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        "docs/dashboard/data/kpi-history.json",
+        "docs/dashboard/data/kpi-history.json.bak",
+        "scripts/collect-kpi-advanced.mjs",
+        "scripts/generate-dashboard.mjs"
       ]
     },
     {
       "issue_number": 56,
-      "pr_number": 83,
-      "workflow_run_id": "42474870945",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42474870945",
-      "generated_at": "2026-11-08T11:15:55.891Z",
+      "pr_number": 60,
+      "workflow_run_id": null,
+      "generated_at": "2026-11-07T08:18:11.405Z",
       "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
+      "total_tests": 103,
+      "total_passed": 103,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
-          "functions_pct": 62.5,
-          "status": "fail"
+          "lines_pct": 81.41,
+          "branches_pct": 89.47,
+          "functions_pct": 82.14,
+          "status": "pass"
         },
         "files": [
           {
-            "path": "frontend/src/AppRouter.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 94.44,
+            "branches_pct": 95.45,
+            "functions_pct": 83.33,
+            "status": "pass"
           },
           {
-            "path": "frontend/src/components/Header.jsx",
-            "lines_pct": 100,
-            "branches_pct": 28.57,
+            "path": "frontend/src/UserProfile.jsx",
+            "lines_pct": 95,
+            "branches_pct": 84.61,
             "functions_pct": 100,
-            "status": "fail"
+            "status": "pass"
           },
           {
-            "path": "frontend/src/components/LoadingSpinner.jsx",
+            "path": "frontend/src/components/Footer.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/utils/dateFormatter.js",
+            "lines_pct": 93.33,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/server.js",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -196,77 +197,21 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/DashboardPage.jsx",
+            "path": "frontend/src/components/Header.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/NotFoundPage.jsx",
+            "path": "frontend/src/components/LoadingSpinner.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/QualityChecksPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/SettingsPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/URLValidatorPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
-            "lines_pct": 95.04,
-            "branches_pct": 87.5,
-            "functions_pct": 83.33,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/components/Footer.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/pages/HomePage.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/UserProfile.jsx",
-            "lines_pct": 95.71,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/utils/dateFormatter.js",
-            "lines_pct": 93.4,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
           }
         ],
-        "non_pass_count": 9,
+        "non_pass_count": 4,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -275,25 +220,70 @@
       },
       "traceability": {
         "perspective_count": 8,
-        "quality_items_count": 34,
+        "quality_items_count": 48,
         "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
         "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
         "spec_files": [
           {
             "path": "tests/specs/web.yml",
-            "feature": "web.yml"
+            "feature": "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加"
           }
         ],
-        "ut_cases": 0,
-        "e2e_cases": 0,
-        "ut_details": [],
-        "e2e_details": []
+        "ut_cases": 53,
+        "e2e_cases": 50,
+        "ut_details": [
+          {
+            "test_file": "backend/src/app.test.js",
+            "test_count": 22,
+            "passed": 22,
+            "failed": 0,
+            "pass_rate": 100
+          },
+          {
+            "test_file": "backend/src/utils/validators.spec.js",
+            "test_count": 15,
+            "passed": 15,
+            "failed": 0,
+            "pass_rate": 100
+          },
+          {
+            "test_file": "backend/src/app-advanced.test.js",
+            "test_count": 16,
+            "passed": 16,
+            "failed": 0,
+            "pass_rate": 100
+          }
+        ],
+        "e2e_details": [
+          {
+            "test_file": "frontend/src/App.test.jsx",
+            "test_count": 19,
+            "passed": 19,
+            "failed": 0,
+            "pass_rate": 100
+          },
+          {
+            "test_file": "frontend/src/App-advanced.test.jsx",
+            "test_count": 19,
+            "passed": 19,
+            "failed": 0,
+            "pass_rate": 100
+          },
+          {
+            "test_file": "frontend/src/components/Footer.test.jsx",
+            "test_count": 12,
+            "passed": 12,
+            "failed": 0,
+            "pass_rate": 100
+          }
+        ]
       },
       "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        "frontend/src/components/Header.jsx",
+        "frontend/src/components/LoadingSpinner.jsx",
+        "frontend/src/App.test.jsx",
+        "frontend/src/App-advanced.test.jsx",
+        "frontend/src/components/Footer.test.jsx"
       ]
     },
     {
@@ -445,122 +435,30 @@
     },
     {
       "issue_number": 63,
-      "pr_number": 83,
-      "workflow_run_id": "42474870945",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42474870945",
-      "generated_at": "2026-11-08T11:15:55.891Z",
+      "pr_number": null,
+      "workflow_run_id": 42374236123,
+      "generated_at": "2026-11-07T22:37:48.737190Z",
       "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
+      "total_tests": 3,
+      "total_passed": 3,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
-          "functions_pct": 62.5,
-          "status": "fail"
+          "lines_pct": 100,
+          "branches_pct": 100,
+          "functions_pct": 100,
+          "status": "pass"
         },
         "files": [
-          {
-            "path": "frontend/src/AppRouter.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Header.jsx",
-            "lines_pct": 100,
-            "branches_pct": 28.57,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/LoadingSpinner.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/main.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/NotFoundPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/QualityChecksPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/SettingsPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/URLValidatorPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
-            "lines_pct": 95.04,
-            "branches_pct": 87.5,
-            "functions_pct": 83.33,
-            "status": "pass"
-          },
           {
             "path": "frontend/src/components/Footer.jsx",
             "lines_pct": 100,
             "branches_pct": 100,
             "functions_pct": 100,
             "status": "pass"
-          },
-          {
-            "path": "frontend/src/pages/HomePage.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/UserProfile.jsx",
-            "lines_pct": 95.71,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/utils/dateFormatter.js",
-            "lines_pct": 93.4,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
           }
         ],
-        "non_pass_count": 9,
+        "non_pass_count": 0,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -568,174 +466,65 @@
         }
       },
       "traceability": {
-        "perspective_count": 8,
-        "quality_items_count": 34,
-        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
-        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
-        "spec_files": [
-          {
-            "path": "tests/specs/feature-1794053074631.yml",
-            "feature": "feature-1794053074631.yml"
-          }
-        ],
+        "perspective_count": 0,
+        "quality_items_count": 0,
+        "perspectives_file": null,
+        "test_items_file": null,
+        "spec_files": [],
         "ut_cases": 0,
-        "e2e_cases": 0,
+        "e2e_cases": 3,
         "ut_details": [],
-        "e2e_details": []
+        "e2e_details": [
+          {
+            "test_file": "frontend/src/components/Footer.test.jsx",
+            "test_count": 3,
+            "passed": 3,
+            "failed": 0,
+            "pass_rate": 100
+          }
+        ]
       },
       "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        "frontend/src/components/Footer.jsx",
+        "frontend/src/components/Footer.test.jsx"
       ]
     },
     {
       "issue_number": 65,
-      "pr_number": 83,
-      "workflow_run_id": "42474870945",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42474870945",
-      "generated_at": "2026-11-08T11:15:55.891Z",
+      "pr_number": 66,
+      "workflow_run_id": 42448103245,
+      "generated_at": "2026-11-08T04:47:12.000Z",
       "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
+      "total_tests": 141,
+      "total_passed": 141,
       "total_failed": 0,
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42448103245",
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
-          "functions_pct": 62.5,
-          "status": "fail"
+          "lines_pct": 59.0,
+          "branches_pct": 55.0,
+          "functions_pct": 62.0,
+          "status": "pass"
         },
-        "files": [
-          {
-            "path": "frontend/src/AppRouter.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Header.jsx",
-            "lines_pct": 100,
-            "branches_pct": 28.57,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/LoadingSpinner.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/main.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/NotFoundPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/QualityChecksPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/SettingsPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/URLValidatorPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
-            "lines_pct": 95.04,
-            "branches_pct": 87.5,
-            "functions_pct": 83.33,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/components/Footer.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/pages/HomePage.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/UserProfile.jsx",
-            "lines_pct": 95.71,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/utils/dateFormatter.js",
-            "lines_pct": 93.4,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          }
-        ],
-        "non_pass_count": 9,
+        "files": [],
+        "non_pass_count": 0,
         "thresholds": {
-          "lines": 80,
-          "branches": 75,
-          "functions": 80
+          "lines": 50,
+          "branches": 50,
+          "functions": 50
         }
       },
       "traceability": {
-        "perspective_count": 8,
-        "quality_items_count": 34,
-        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
-        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
-        "spec_files": [
-          {
-            "path": "tests/specs/feature-1794098655594.yml",
-            "feature": "feature-1794098655594.yml"
-          }
-        ],
-        "ut_cases": 0,
-        "e2e_cases": 0,
+        "perspective_count": 3,
+        "quality_items_count": 5,
+        "perspectives_file": null,
+        "test_items_file": null,
+        "spec_files": [],
+        "ut_cases": 6,
+        "e2e_cases": 2,
         "ut_details": [],
         "e2e_details": []
-      },
-      "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
-      ]
+      }
     },
     {
       "issue_number": 67,
@@ -749,9 +538,9 @@
       "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42448825573",
       "coverage": {
         "overall": {
-          "lines_pct": 60,
-          "branches_pct": 56,
-          "functions_pct": 63,
+          "lines_pct": 60.0,
+          "branches_pct": 56.0,
+          "functions_pct": 63.0,
           "status": "pass"
         },
         "files": [],
@@ -785,122 +574,23 @@
     },
     {
       "issue_number": 69,
-      "pr_number": 83,
-      "workflow_run_id": "42474870945",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42474870945",
-      "generated_at": "2026-11-08T11:15:55.891Z",
+      "pr_number": 75,
+      "workflow_run_id": "42456442394",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42456442394",
+      "generated_at": "2026-11-08T06:56:22.518Z",
       "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
+      "total_tests": 169,
+      "total_passed": 169,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
+          "lines_pct": 60.81,
+          "branches_pct": 77.89,
           "functions_pct": 62.5,
           "status": "fail"
         },
-        "files": [
-          {
-            "path": "frontend/src/AppRouter.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Header.jsx",
-            "lines_pct": 100,
-            "branches_pct": 28.57,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/LoadingSpinner.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/main.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/NotFoundPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/QualityChecksPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/SettingsPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/URLValidatorPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
-            "lines_pct": 95.04,
-            "branches_pct": 87.5,
-            "functions_pct": 83.33,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/components/Footer.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/pages/HomePage.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/UserProfile.jsx",
-            "lines_pct": 95.71,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/utils/dateFormatter.js",
-            "lines_pct": 93.4,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          }
-        ],
-        "non_pass_count": 9,
+        "files": [],
+        "non_pass_count": 0,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -908,26 +598,37 @@
         }
       },
       "traceability": {
-        "perspective_count": 8,
-        "quality_items_count": 34,
-        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
-        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
+        "perspective_count": 0,
+        "quality_items_count": 0,
+        "perspectives_file": null,
+        "test_items_file": null,
         "spec_files": [
           {
             "path": "tests/specs/frontend-add-character-count-display-for-quality-c.yml",
-            "feature": "frontend-add-character-count-display-for-quality-c.yml"
+            "feature": "Frontend: Add character count display for quality check name input"
           }
         ],
         "ut_cases": 0,
-        "e2e_cases": 0,
+        "e2e_cases": 3,
         "ut_details": [],
-        "e2e_details": []
+        "e2e_details": [
+          {
+            "id": "E2E-069-01",
+            "title": "shows character count when typing"
+          },
+          {
+            "id": "E2E-069-02",
+            "title": "shows warning color when 10 or fewer characters remaining"
+          },
+          {
+            "id": "E2E-069-03",
+            "title": "enforces maximum 50 character limit"
+          }
+        ]
       },
       "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        "frontend/src/App.jsx",
+        "frontend/src/styles.css"
       ]
     },
     {
@@ -1079,122 +780,23 @@
     },
     {
       "issue_number": 78,
-      "pr_number": 83,
-      "workflow_run_id": "42474870945",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42474870945",
-      "generated_at": "2026-11-08T11:15:55.891Z",
+      "pr_number": 81,
+      "workflow_run_id": "42472985807",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42472985807",
+      "generated_at": "2026-11-08T10:54:35.000Z",
       "pass_rate": 100,
       "total_tests": 172,
       "total_passed": 172,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
+          "lines_pct": 60.81,
+          "branches_pct": 77.89,
           "functions_pct": 62.5,
           "status": "fail"
         },
-        "files": [
-          {
-            "path": "frontend/src/AppRouter.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Header.jsx",
-            "lines_pct": 100,
-            "branches_pct": 28.57,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/LoadingSpinner.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/main.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/NotFoundPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/QualityChecksPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/SettingsPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/URLValidatorPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
-            "lines_pct": 95.04,
-            "branches_pct": 87.5,
-            "functions_pct": 83.33,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/components/Footer.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/pages/HomePage.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/UserProfile.jsx",
-            "lines_pct": 95.71,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/utils/dateFormatter.js",
-            "lines_pct": 93.4,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          }
-        ],
-        "non_pass_count": 9,
+        "files": [],
+        "non_pass_count": 0,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1202,26 +804,38 @@
         }
       },
       "traceability": {
-        "perspective_count": 8,
-        "quality_items_count": 34,
-        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
-        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
+        "perspective_count": 0,
+        "quality_items_count": 0,
+        "perspectives_file": null,
+        "test_items_file": null,
         "spec_files": [
           {
             "path": "tests/specs/frontend-add-tooltip-to-status-badge-on-quality-ch.yml",
-            "feature": "frontend-add-tooltip-to-status-badge-on-quality-ch.yml"
+            "feature": "Frontend: Add tooltip to status badge on quality checks list"
           }
         ],
-        "ut_cases": 0,
-        "e2e_cases": 0,
-        "ut_details": [],
-        "e2e_details": []
+        "ut_cases": 1,
+        "e2e_cases": 2,
+        "ut_details": [
+          {
+            "id": "UT-078-01",
+            "title": "status badge has title attribute with tooltip text"
+          }
+        ],
+        "e2e_details": [
+          {
+            "id": "E2E-078-01",
+            "title": "status badge has tooltip title attribute"
+          },
+          {
+            "id": "E2E-078-02",
+            "title": "status badge is keyboard accessible with tabindex"
+          }
+        ]
       },
       "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        "frontend/src/App.jsx",
+        "frontend/src/styles.css"
       ]
     }
   ]

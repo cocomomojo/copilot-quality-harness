@@ -190,8 +190,27 @@ jobs:
           mkdir -p qa/dashboard-data/issue-reports
           if gh run download "$TARGET_QUALITY_RUN" --name issue-quality-reports --dir qa/dashboard-data/issue-reports 2>/dev/null; then
             if [ -f qa/dashboard-data/issue-reports/issue-reports.json ]; then
-              cp qa/dashboard-data/issue-reports/issue-reports.json qa/dashboard-data/issue-reports.json
-              echo "✅ Issue-level quality reports downloaded"
+              # Merge downloaded reports with existing reports in repo (accumulate all issues)
+              if [ -f docs/dashboard/data/issue-reports.json ]; then
+                node -e "
+                  const fs = require('fs');
+                  const existing = JSON.parse(fs.readFileSync('docs/dashboard/data/issue-reports.json', 'utf-8'));
+                  const downloaded = JSON.parse(fs.readFileSync('qa/dashboard-data/issue-reports/issue-reports.json', 'utf-8'));
+                  const existingReports = Array.isArray(existing.reports) ? existing.reports : [];
+                  const newReports = Array.isArray(downloaded.reports) ? downloaded.reports : [];
+                  const newIssueNumbers = new Set(newReports.map(r => r.issue_number));
+                  const merged = [
+                    ...existingReports.filter(r => !newIssueNumbers.has(r.issue_number)),
+                    ...newReports
+                  ].sort((a, b) => a.issue_number - b.issue_number);
+                  const result = { ...downloaded, reports: merged };
+                  fs.writeFileSync('qa/dashboard-data/issue-reports.json', JSON.stringify(result, null, 2));
+                  console.log('Merged issue reports: ' + merged.map(r => '#' + r.issue_number).join(', '));
+                " || cp qa/dashboard-data/issue-reports/issue-reports.json qa/dashboard-data/issue-reports.json
+              else
+                cp qa/dashboard-data/issue-reports/issue-reports.json qa/dashboard-data/issue-reports.json
+              fi
+              echo "✅ Issue-level quality reports merged and downloaded"
             else
               echo "⚠️ issue-quality-reports artifact found but issue-reports.json missing"
             fi
