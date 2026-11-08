@@ -98,11 +98,57 @@ gh workflow run copilot-analyze-trace.yml
 - ✅ Phase 2B: Copilot CLI 統合 (PR #8)
 - ✅ Phase 2C: 自動化と最適化 (PR #9)
 - ✅ Phase 2D: 並列処理と統合 (PR #10)
+
+---
+
+### [11] Issue単位品質レポート（quality-report-pr）
+**目的**: test-matrix 完了後に Issue ごとの品質レポートを生成し、PRコメント投稿・ダッシュボードへ蓄積する  
+**対象**: PR に紐づく Issue の E2E/UTテスト数・カバレッジ・トレーサビリティ  
+**トリガー**: `test-matrix.yml` 完了後に自動（`workflow_run`）  
+**成果物**: PR コメント、`issue-quality-reports` artifact、`docs/dashboard/data/issue-reports.json`  
+**実装状態**: ✅ 運用中（PR #77 で yaml パッケージ修正・蓄積ロジック追加 2026-11-08）
+
+**ファイル**:
+- `.github/workflows/quality-report-pr.yml` – メインワークフロー
+
+**重要ルール**:
+- `require('yaml')` を使用（`js-yaml` は未インストールのため使用不可）
+- `yaml.parse()` で YAML を解析（`yaml.load()` は yaml パッケージでは使えない）
+- 毎回 `docs/dashboard/data/issue-reports.json` を読み込んで既存レポートとマージする（上書き禁止）
+- PR body の `Fixes #N` / `Closes #N` パターンで紐づく Issue を自動検出
+
+---
+
+### [M2] M2 Issue Intake（ルールベース自動判定）
+**目的**: Issue の受入条件・テスト要求・影響範囲・重大度を検査し、`safe-proceed` / `manual-only` を自動判定する  
+**対象**: 全ての新規 Issue  
+**トリガー**: 手動実行（`gh workflow run m2-issue-intake.yml -f issue_number=NN`）  
+**成果物**: Issue へのコメント（判定結果・テスト設計たたき台）  
+**実装状態**: ✅ 運用中（AI不使用・ルールベース・無料）
+
+**ファイル**:
+- `.github/workflows/m2-issue-intake.yml` – メインワークフロー
+- `scripts/m2-auto-judgment.mjs` – ルールベース判定エンジン
+
+**重要ルール**:
+- Issue に「受入条件」「テスト要求」「影響範囲」「重大度」の4項目が必要
+- `safe-proceed` → 実装可、`manual-only` → 人間レビュー必須
+- AI・外部API不使用のため常に無料・高速・決定論的
+
 ---
 
 ## 🔄 スキル間の関係図
 
 ```
+Issue 作成
+  └─→ [M2] M2 Issue Intake（手動実行）
+         └─→ safe-proceed なら実装へ
+               └─→ PR 作成（Fixes #N）
+                     └─→ test-matrix.yml（自動）
+                           └─→ [11] quality-report-pr.yml（自動）
+                                 └─→ Issue単位レポート蓄積
+                                       └─→ update-dashboard.yml（自動）
+
 ┌─────────────────────────────────────────────┐
 │  [00] AI-Powered Failure Analysis テンプレート │
 │  (汎用: テスト・ビルド・デプロイ失敗)       │
@@ -130,10 +176,16 @@ gh workflow run copilot-analyze-trace.yml
 ワークフロー・機能を新規実装する際は、以下を確認してください：
 
 **実装時**:
-- [ ] 関連する Skill があるか確認（00 / 01 / 10）
+- [ ] 関連する Skill があるか確認（00 / 01 / 10 / 11 / M2）
 - [ ] 適用可能なテンプレートがあるか確認
 - [ ] 失敗シナリオを考慮した設計（Skill 00 に基づく）
 - [ ] Copilot review への対応方針を事前に決定
+
+**Issue 作成・運用時**:
+- [ ] Issue に「受入条件」「テスト要求」「影響範囲」「重大度」を記載（[M2] 必須）
+- [ ] `gh workflow run m2-issue-intake.yml -f issue_number=NN` を手動実行
+- [ ] M2 結果が `safe-proceed` であることを確認
+- [ ] PR body に `Fixes #N` を記載（Issue単位レポート自動生成のため必須）
 
 **PR 作成時**:
 - [ ] PR 説明に関連 Skill へのリンクを記載
@@ -141,7 +193,8 @@ gh workflow run copilot-analyze-trace.yml
 
 **マージ前**:
 - [ ] 全 Copilot 指摘が Skill 01 に従い対応済みか確認
-- [ ] テスト・検証が完了
+- [ ] test-matrix が全テスト合格（169テスト / 合格率100%）
+- [ ] quality-report-pr が成功し Issue単位レポートが生成されること
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Issue を作成するだけで、テスト設計・実装・品質レポートまで自動化する**品質ハーネスです。
 
-> **最新状態** (2026-11-08): E2E 51テスト / Unit 53テスト / API 16テスト / Advanced 25テスト = **計 145 テスト / 合格率 100%**  
+> **最新状態** (2026-11-08): E2E 51テスト / Unit 58テスト / API 16テスト / Advanced 44テスト = **計 169 テスト / 合格率 100%**  
 > 📊 [品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/) | 🔍 [E2Eレポート](https://cocomomojo.github.io/copilot-quality-harness/reports/e2e-latest.html)
 
 ---
@@ -184,10 +184,10 @@ graph LR
 | テスト種別 | ファイル数 | テスト数 | 実行方法 |
 |-----------|-----------|---------|---------|
 | E2E (Playwright) | ~5ファイル | ~51 テスト | `npx playwright test` |
-| Unit (Vitest) | ~6ファイル | ~53 テスト | `npx vitest run` |
+| Unit (Vitest) | ~6ファイル | ~58 テスト | `npx vitest run` |
 | API | ~2ファイル | ~16 テスト | `npx vitest run --config vitest.api.config` |
-| Advanced | ~3ファイル | ~25 テスト | `npx vitest run --config vitest.advanced.config` |
-| **合計** | | **~145 テスト** | test-matrix (4並列) |
+| Advanced | ~3ファイル | ~44 テスト | `npx vitest run --config vitest.advanced.config` |
+| **合計** | | **~169 テスト** | test-matrix (4並列) |
 
 ### ワークフロー自動トリガーチェーン
 
@@ -199,9 +199,17 @@ PR / Push → test-matrix.yml
 
 **重要**: `update-dashboard.yml` は `test-matrix.yml` の `workflow_run` で直接トリガーされます。フォールバック時は `--branch main --status success` で最新の main ブランチの成功 run を使用します。
 
----
+### quality-report-pr.yml の依存パッケージ
 
-## ワークフロー入出力仕様（アーティファクト）
+`quality-report-pr.yml` 内の Node スクリプトは **`yaml`** パッケージ（`require('yaml')`）を使用します。  
+`js-yaml` は未インストールのため使用不可。`yaml.parse()` で YAML を解析します（PR #77 で修正済み）。
+
+### Issue単位レポートの蓄積
+
+`quality-report-pr.yml` は PR マージのたびに `docs/dashboard/data/issue-reports.json` を読み込み、  
+新しい Issue レポートとマージして蓄積します（PR #77 で修正済み）。
+
+
 
 ### test-matrix.yml の出力
 
