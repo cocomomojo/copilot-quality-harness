@@ -102,7 +102,7 @@ jobs:
           node << 'EOF'
           const fs = require('fs');
           const path = require('path');
-          const yaml = require('js-yaml');
+          const yaml = require('yaml');
           
           const resultsDir = 'test-results-data';
           const results = {};
@@ -354,7 +354,7 @@ jobs:
 
               let specObject = {};
               try {
-                specObject = yaml.load(content) || {};
+                specObject = yaml.parse(content) || {};
               } catch (e) {
                 console.warn(`Could not parse spec YAML (${specFile}):`, e.message);
               }
@@ -718,16 +718,35 @@ jobs:
               };
             });
 
+            // Merge with existing reports from the repo to accumulate all issues
+            let existingReports = [];
+            const existingReportsPath = 'docs/dashboard/data/issue-reports.json';
+            try {
+              if (fs.existsSync(existingReportsPath)) {
+                const existing = JSON.parse(fs.readFileSync(existingReportsPath, 'utf-8'));
+                existingReports = Array.isArray(existing.reports) ? existing.reports : [];
+              }
+            } catch (e) {
+              console.warn('Could not read existing issue reports:', e.message);
+            }
+
+            // Replace existing entries for the same issues, add new ones
+            const newIssueNumbers = new Set(issueReportItems.map((r) => r.issue_number));
+            const merged = [
+              ...existingReports.filter((r) => !newIssueNumbers.has(r.issue_number)),
+              ...issueReportItems
+            ].sort((a, b) => a.issue_number - b.issue_number);
+
             fs.mkdirSync('issue-reports', { recursive: true });
             fs.writeFileSync(
               'issue-reports/issue-reports.json',
               JSON.stringify({
                 generated_at: summary.timestamp || new Date().toISOString(),
                 source_pr: prNumber,
-                reports: issueReportItems
+                reports: merged
               }, null, 2)
             );
-            console.log(`Wrote issue report artifact with ${issueReportItems.length} item(s)`);
+            console.log(`Wrote issue report artifact with ${merged.length} item(s) (${issueReportItems.length} new/updated)`);
             
             try {
               await github.rest.issues.createComment({
