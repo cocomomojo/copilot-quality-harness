@@ -445,3 +445,34 @@ test.describe('Character Count Tests', () => {
     expect(value.length).toBeLessThanOrEqual(50);
   });
 });
+
+test.describe('Status Badge Tooltip Tests', () => {
+  test.beforeEach(async ({ page, request }) => {
+    await request.post('http://localhost:3000/api/test/reset-checks').catch(() => {});
+    await page.goto('/quality-checks');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('E2E-078-01: status badge has tooltip title attribute', async ({ page }) => {
+    const input = page.getByLabel('Check name');
+    await input.fill('Tooltip Test Check');
+    await page.getByRole('button', { name: 'Add check' }).click();
+    await page.waitForLoadState('networkidle');
+    const badge = page.getByTestId('status-badge').first();
+    await expect(badge).toBeVisible();
+    const title = await badge.getAttribute('title');
+    expect(title).toBeTruthy();
+    expect(title).toContain('pending');
+  });
+
+  test('E2E-078-02: status badge is keyboard accessible with tabindex', async ({ page }) => {
+    const input = page.getByLabel('Check name');
+    await input.fill('Keyboard Access Check');
+    await page.getByRole('button', { name: 'Add check' }).click();
+    await page.waitForLoadState('networkidle');
+    const badge = page.getByTestId('status-badge').first();
+    await expect(badge).toBeVisible();
+    const tabIndex = await badge.getAttribute('tabindex');
+    expect(tabIndex).toBe('0');
+  });
+});
