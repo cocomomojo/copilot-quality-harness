@@ -1,21 +1,21 @@
 {
-  "timestamp": "2026-11-08T06:00:09.522Z",
+  "timestamp": "2026-11-08T06:07:45.201Z",
   "pass_rate": 100,
-  "test_count": 217,
-  "passed": 217,
+  "test_count": 164,
+  "passed": 164,
   "failed": 0,
   "coverage": 60,
   "global_e2e_count": 48,
-  "global_unit_count": 169,
+  "global_unit_count": 116,
   "ai_danger_rank": "B",
   "risk_level": "LOW-MEDIUM",
   "composite_score": 88,
   "data_source": "TEST_MATRIX_ARTIFACT",
   "details": {
     "test_source": "test-matrix-artifact",
-    "github_run_id": 42452484073,
-    "coverage_source": "ARTIFACT_RUN:42452484073",
-    "explicit_test_run_id": "42452484073"
+    "github_run_id": 42453101903,
+    "coverage_source": "ARTIFACT_RUN:42453101903",
+    "explicit_test_run_id": "42453101903"
   },
   "trend": "STABLE",
   "trend_details": {
