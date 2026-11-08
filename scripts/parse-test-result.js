@@ -50,17 +50,18 @@ console.log('...\n');
 // Try different pattern matching strategies using cleanedContent
 
 // **Strategy 1: Vitest format** - "Tests  53 passed (53)" or "Tests  53 passed"
-let vitestTests = cleanedContent.match(/Tests\s+(\d+)\s+passed/);
-if (vitestTests) {
-  result.passed = parseInt(vitestTests[1]);
-  console.log(`✓ Vitest "Tests N passed" format detected: ${result.passed} tests passed`);
+// Use matchAll to sum ALL Vitest outputs (e.g. backend + frontend combined in one log)
+const vitestPassMatches = [...cleanedContent.matchAll(/Tests\s+(\d+)\s+passed/g)];
+if (vitestPassMatches.length > 0) {
+  result.passed = vitestPassMatches.reduce((sum, m) => sum + parseInt(m[1]), 0);
+  console.log(`✓ Vitest "Tests N passed" format detected: ${result.passed} tests passed (${vitestPassMatches.length} runs combined)`);
 }
 
 // **Strategy 2: Look for "failed" in Vitest format - "Tests  2 failed"**
-let vitestFailed = cleanedContent.match(/Tests\s+(\d+)\s+failed/);
-if (vitestFailed) {
-  result.failed = parseInt(vitestFailed[1]);
-  console.log(`✓ Vitest "Tests N failed" format detected: ${result.failed}`);
+const vitestFailMatches = [...cleanedContent.matchAll(/Tests\s+(\d+)\s+failed/g)];
+if (vitestFailMatches.length > 0) {
+  result.failed = vitestFailMatches.reduce((sum, m) => sum + parseInt(m[1]), 0);
+  console.log(`✓ Vitest "Tests N failed" format detected: ${result.failed} (${vitestFailMatches.length} runs combined)`);
 }
 
 // **Strategy 3: For E2E (Playwright) - "N passed, M failed"**

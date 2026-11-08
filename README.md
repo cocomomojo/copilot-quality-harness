@@ -1,6 +1,20 @@
 # Copilot Quality Harness 🛠️🤖
 
-Welcome! これは「Playwright テスト失敗分析から Copilot による自動修正提案・並列実行・品質判定」を実装したハーネスです。GitHub Actions の Dynamic Workflows を活用して、複数のテストトレース（trace）を**最大 8 つ並列分析**し、修正案を自動生成・提案します。
+**Issue を作成するだけで、テスト設計・実装・品質レポートまで自動化する**品質ハーネスです。
+
+> **最新状態** (2026-11-08): E2E 51テスト / Unit 53テスト / API 16テスト / Advanced 25テスト = **計 145 テスト / 合格率 100%**  
+> 📊 [品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/) | 🔍 [E2Eレポート](https://cocomomojo.github.io/copilot-quality-harness/reports/e2e-latest.html)
+
+---
+
+## ⚡ 運用パス（全体像）
+
+```
+Issue 作成 → M2 Issue Intake → 実装・テスト → test-matrix → update-dashboard
+    ↑             ↑（手動実行）      ↑（PR作成）    ↑（自動）       ↑（自動）
+```
+
+**判定方式**: M2 Intake はルールベース判定（生成AI不使用・無料・高速）
 
 ---
 
@@ -124,7 +138,7 @@ Pages デプロイ（自動）
 | 6 | **quality-report-pr.yml** | テスト結果集約 + PR コメント投稿 | workflow_run（test-matrix 完了） | ~1m |
 | 7 | **ai-review.yml** | Copilot AI による品質レビュー | PR 作成/更新 | ~2-3m |
 | 8 | **auto-code-review.yml** | Lint + スタイル自動チェック | PR | ~1m |
-| 9 | **update-dashboard.yml** | 品質ダッシュボード自動更新 | workflow_run（quality-schedule 完了） | ~30s |
+| 9 | **update-dashboard.yml** | 品質ダッシュボード自動更新 | workflow_run（test-matrix または quality-report-pr 完了） | ~30s |
 
 ### 📅 スケジュール・特殊 ワークフロー
 

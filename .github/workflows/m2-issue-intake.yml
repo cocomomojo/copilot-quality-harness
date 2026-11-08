@@ -62,48 +62,22 @@ jobs:
           echo "validation_exit_code=$result" >> "$GITHUB_OUTPUT"
           if [ "$result" -eq 4 ]; then exit 4; fi
           exit 0
-      - name: Run AI judgment with Copilot Skill
+      - name: Run rule-based M2 judgment
         if: always() && steps.analyze.outcome != 'skipped'
         id: ai-judgment
         env:
           REPORT_FILE: ${{ runner.temp }}/m2-report.json
           JUDGMENT_OUTPUT: ${{ runner.temp }}/judgment.json
         run: |
-          set +e
-          
-          # Try to run Copilot Skill-based AI judgment
-          copilot review --skill "m2-auto-judgment" \
-            --input "$REPORT_FILE" \
-            --format json \
-            --output "$JUDGMENT_OUTPUT" 2>&1
-          
-          ai_result=$?
-          if [ $ai_result -eq 0 ]; then
-            echo "ai_judgment_success=true" >> "$GITHUB_OUTPUT"
-            JUDGMENT_LEVEL=$(node -e "console.log(require('fs').existsSync('$JUDGMENT_OUTPUT') ? JSON.parse(require('fs').readFileSync('$JUDGMENT_OUTPUT', 'utf8')).level : 'unknown')" 2>/dev/null || echo "unknown")
-            echo "judgment_level=${JUDGMENT_LEVEL}" >> "$GITHUB_OUTPUT"
-            echo "✅ AI judgment completed via Copilot Skill"
-          else
-            echo "ai_judgment_success=false" >> "$GITHUB_OUTPUT"
-            echo "judgment_level=unknown" >> "$GITHUB_OUTPUT"
-            echo "⚠️ AI judgment failed; will use rule-based fallback"
-          fi
-          exit 0
-      - name: Run rule-based judgment as fallback
-        if: always() && steps.analyze.outcome != 'skipped' && steps.ai-judgment.outputs.ai_judgment_success == 'false'
-        id: fallback-judgment
-        continue-on-error: true
-        env:
-          REPORT_FILE: ${{ runner.temp }}/m2-report.json
-          JUDGMENT_OUTPUT: ${{ runner.temp }}/judgment.json
-        run: |
-          echo "⚠️ Using rule-based fallback judgment..."
+          # Rule-based judgment (fast, free, deterministic - no generative AI needed)
           node scripts/m2-auto-judgment.mjs \
             --report "$REPORT_FILE" \
             --output "$JUDGMENT_OUTPUT" || true
+          
           JUDGMENT_LEVEL=$(node -e "console.log(require('fs').existsSync('$JUDGMENT_OUTPUT') ? JSON.parse(require('fs').readFileSync('$JUDGMENT_OUTPUT', 'utf8')).level : 'unknown')" 2>/dev/null || echo "unknown")
+          echo "ai_judgment_success=true" >> "$GITHUB_OUTPUT"
           echo "judgment_level=${JUDGMENT_LEVEL}" >> "$GITHUB_OUTPUT"
-          echo "✅ Fallback judgment completed"
+          echo "✅ Rule-based judgment completed: $JUDGMENT_LEVEL"
       - name: Format M2 report as Markdown
         if: always() && steps.analyze.outcome != 'skipped'
         id: format-report
@@ -186,7 +160,7 @@ jobs:
               '',
               `Issue: #${report.sourceTrust.issueNumber}`,
               `ソース: \`${report.sourceTrust.repository}\` (検証済み)`,
-              `AIモデル呼び出し: ${aiStatus}`,
+              `ルールベース判定: ${aiStatus}`,
               'ソース書き込み、ブランチ作成、PR作成: なし',
               `レポートアーティファクト: [M2 実行結果](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
               ''
@@ -194,7 +168,7 @@ jobs:
             
             // Add AI judgment details if available
             if (judgment) {
-              lines.push('### 🤖 AI 自動判定結果');
+              lines.push('### 🔍 ルールベース自動判定結果');
               lines.push('');
               lines.push(`**判定レベル**: \`${judgment.level}\``);
               lines.push(`**判定理由**: ${judgment.reason || 'N/A'}`);

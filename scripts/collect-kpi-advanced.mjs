@@ -106,13 +106,14 @@ function fetchTestResults() {
         run = JSON.parse(viewOutput);
       }
     } else {
-      // 最新の test-matrix 実行を取得
-      const cmd = `gh run list --workflow=test-matrix.yml --limit=1 --json databaseId,conclusion,status,createdAt -q '.[] | select(.conclusion != null)'`;
+      // 最新の test-matrix 実行を main ブランチから取得
+      const cmd = `gh run list --workflow=test-matrix.yml --branch=main --status=success --limit=3 --json databaseId,conclusion,status,createdAt -q '.[0]'`;
       const output = execSync(cmd, {
         encoding: 'utf-8',
         env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
       });
       run = JSON.parse(output.trim());
+      console.log(`  Using latest successful test-matrix run on main branch: ${run?.databaseId}`);
     }
     
     if (!run) {
@@ -221,6 +222,12 @@ function parseTestResults(testData) {
     totalTests = summary.total_tests || 0;
     passedTests = summary.total_passed || 0;
     failedTests = summary.total_failed || 0;
+    
+    // Sanity check: warn if total_tests seems too low (incomplete run)
+    if (totalTests > 0 && totalTests < 100) {
+      console.log(`  ⚠️  WARNING: total_tests=${totalTests} is suspiciously low (expected 100+).`);
+      console.log(`      This may indicate an incomplete test-matrix run (not all 4 test types).`);
+    }
     
     // Validation: 合計がゼロの場合は警告して、フォールバック
     if (totalTests === 0) {
@@ -404,7 +411,7 @@ function readCoverageData() {
   // アーティファクトから coverage を取得してみる
   try {
     console.log('  🔍 Searching in GitHub artifacts...');
-    const cmd = `gh run list --workflow=test-matrix.yml --limit=3 --json databaseId,conclusion,status -q '.[] | select(.conclusion == "success")'`;
+    const cmd = `gh run list --workflow=test-matrix.yml --branch=main --status=success --limit=3 --json databaseId,conclusion,status -q '.[]'`;
     const runsOutput = execSync(cmd, {
       encoding: 'utf-8',
       env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }

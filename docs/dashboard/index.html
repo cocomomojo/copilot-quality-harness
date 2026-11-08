@@ -773,7 +773,7 @@
         const coverageFail = report.coverage?.non_pass_count ?? '-';
         const coverageLink = (report.issue_number && report.coverage?.non_pass_count !== undefined)
           ? '<a href="./details/coverage-issue-' + report.issue_number + '.html" title="カバレッジ詳細">' + coverageFail + '</a>'
-          : coverageFail;
+          : String(coverageFail);
         const perspectives = report.traceability?.perspective_count ?? '-';
         const testItems = report.traceability?.quality_items_count ?? '-';
         const utCases = report.traceability?.ut_cases ?? '-';

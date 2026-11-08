@@ -46,19 +46,27 @@ jobs:
 
           TARGET_TEST_RUN_ID=""
 
+          # Priority 1: Triggered by Test Matrix workflow_run event
           if [ "${{ github.event_name }}" = "workflow_run" ] && [ "${{ github.event.workflow_run.name }}" = "Test Matrix" ]; then
             TARGET_TEST_RUN_ID="${{ github.event.workflow_run.id }}"
             echo "  ✓ Triggered by Test Matrix run: $TARGET_TEST_RUN_ID"
           fi
 
+          # Priority 2: Fallback - get latest successful run on main branch only
           if [ -z "$TARGET_TEST_RUN_ID" ]; then
-            TARGET_TEST_RUN_ID=$(gh run list --workflow test-matrix.yml --status completed --limit 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
+            TARGET_TEST_RUN_ID=$(gh run list --workflow test-matrix.yml \
+              --branch main --status success --limit 3 \
+              --json databaseId,headBranch \
+              --jq '[.[] | select(.headBranch == "main")] | .[0].databaseId' 2>/dev/null || echo "")
             if [ -n "$TARGET_TEST_RUN_ID" ]; then
-              echo "  ✓ Fallback latest Test Matrix run: $TARGET_TEST_RUN_ID"
+              echo "  ✓ Fallback: latest successful Test Matrix run on main: $TARGET_TEST_RUN_ID"
             fi
           fi
 
-          if [ -z "$TARGET_TEST_RUN_ID" ]; then
+          # Sanity check: verify the run has reasonable test counts
+          if [ -n "$TARGET_TEST_RUN_ID" ]; then
+            echo "  📊 Using Test Matrix run: $TARGET_TEST_RUN_ID"
+          else
             echo "⚠️ Could not resolve Test Matrix run ID"
           fi
 

@@ -783,6 +783,9 @@ async function generateDashboard(config) {
           ? '<a href="https://github.com/' + owner + '/' + repo + '/pull/' + report.pr_number + '">#' + report.pr_number + '</a>'
           : '-';
         const coverageFail = report.coverage?.non_pass_count ?? '-';
+        const coverageLink = (report.issue_number && report.coverage?.non_pass_count !== undefined)
+          ? '<a href="./details/coverage-issue-' + report.issue_number + '.html" title="カバレッジ詳細">' + coverageFail + '</a>'
+          : String(coverageFail);
         const perspectives = report.traceability?.perspective_count ?? '-';
         const testItems = report.traceability?.quality_items_count ?? '-';
         const utCases = report.traceability?.ut_cases ?? '-';
@@ -802,7 +805,7 @@ async function generateDashboard(config) {
         row.innerHTML = '<td>' + issueLink + '</td>' +
           '<td>' + prLink + '</td>' +
           '<td>' + (report.pass_rate ?? '-') + '%</td>' +
-          '<td>' + coverageFail + '</td>' +
+          '<td>' + coverageLink + '</td>' +
           '<td>' + perspectives + ' / ' + testItems + '</td>' +
           '<td>' + utCases + ' / ' + e2eCases + '</td>' +
           '<td>' + specText + '</td>' +
