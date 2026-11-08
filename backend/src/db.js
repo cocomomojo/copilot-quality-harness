@@ -14,6 +14,7 @@ export function createDatabase(filename = ':memory:') {
       id TEXT PRIMARY KEY,
       email TEXT NOT NULL UNIQUE,
       name TEXT NOT NULL,
+      avatar_url TEXT,
       created_at TEXT,
       updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )

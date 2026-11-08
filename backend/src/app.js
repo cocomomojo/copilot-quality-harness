@@ -33,7 +33,7 @@ export function createApp(db = createDatabase()) {
   // 4. Use HTTPS and secure session management
   app.get('/api/user/me', (request, response) => {
     try {
-      const user = db.prepare("SELECT id, email, name, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS created_at, strftime('%Y-%m-%dT%H:%M:%SZ', updated_at) AS updated_at FROM users ORDER BY rowid DESC LIMIT 1").get();
+      const user = db.prepare("SELECT id, email, name, avatar_url, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS created_at, strftime('%Y-%m-%dT%H:%M:%SZ', updated_at) AS updated_at FROM users ORDER BY rowid DESC LIMIT 1").get();
       if (!user) {
         return response.status(404).json({ error: 'User not found' });
       }
@@ -49,12 +49,12 @@ export function createApp(db = createDatabase()) {
   if (process.env.NODE_ENV !== 'production') {
     app.post('/api/test/seed-user', (request, response) => {
       try {
-        const { id, email, name, created_at } = request.body;
+        const { id, email, name, avatar_url, created_at } = request.body;
         if (!id || !email || !name) {
           return response.status(400).json({ error: 'Missing required fields: id, email, name' });
         }
         db.prepare('DELETE FROM users').run();
-        db.prepare('INSERT INTO users (id, email, name, created_at) VALUES (?, ?, ?, ?)').run(id, email, name, created_at);
+        db.prepare('INSERT INTO users (id, email, name, avatar_url, created_at) VALUES (?, ?, ?, ?, ?)').run(id, email, name, avatar_url || null, created_at);
         return response.status(201).json({ success: true, message: 'User seeded successfully' });
       } catch (error) {
         return response.status(500).json({ error: 'Failed to seed user' });

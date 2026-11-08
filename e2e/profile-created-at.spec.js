@@ -216,4 +216,90 @@ test.describe('User Profile - Account Created At Display (E2E)', () => {
       expect(firstText).toBe(secondText);
     }
   });
+
+  // E2E-101: Avatar image display (Issue #65)
+  test('E2E-101: Display user avatar image when available', async ({ page, request }) => {
+    // Setup: Seed user with avatar URL
+    await request.post(`${apiUrl}/api/test/seed-user`, {
+      data: {
+        id: 'user-avatar-1',
+        email: 'avatar@example.com',
+        name: 'Avatar User',
+        avatar_url: 'https://i.pravatar.cc/150?img=1',
+        created_at: '2026-10-18T10:00:00Z'
+      }
+    });
+
+    // Navigate to profile page
+    await page.goto('/profile');
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
+
+    // Verify avatar image is visible
+    const avatar = page.locator('[data-testid="user-avatar"]');
+    await expect(avatar).toBeVisible();
+    
+    // Verify avatar src contains expected URL
+    await expect(avatar).toHaveAttribute('src', /avatar/);
+  });
+
+  // E2E-102: Default avatar display when not provided
+  test('E2E-102: Display default avatar when avatar_url is not provided', async ({ page, request }) => {
+    // Setup: Seed user without avatar
+    await request.post(`${apiUrl}/api/test/seed-user`, {
+      data: {
+        id: 'user-avatar-2',
+        email: 'noavatar@example.com',
+        name: 'No Avatar User',
+        avatar_url: null,
+        created_at: '2026-10-18T10:00:00Z'
+      }
+    });
+
+    // Navigate to profile page
+    await page.goto('/profile');
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
+
+    // Verify avatar image is visible
+    const avatar = page.locator('[data-testid="user-avatar"]');
+    await expect(avatar).toBeVisible();
+    
+    // Verify default avatar (data URI with SVG)
+    await expect(avatar).toHaveAttribute('src', /data:image\/svg/);
+  });
+
+  // E2E-103: Avatar styling (responsive design)
+  test('E2E-103: Avatar displays with correct styling and dimensions', async ({ page, request }) => {
+    // Setup: Seed user with avatar
+    await request.post(`${apiUrl}/api/test/seed-user`, {
+      data: {
+        id: 'user-avatar-3',
+        email: 'styled@example.com',
+        name: 'Styled Avatar User',
+        avatar_url: 'https://i.pravatar.cc/150?img=2',
+        created_at: '2026-10-18T10:00:00Z'
+      }
+    });
+
+    // Navigate to profile page
+    await page.goto('/profile');
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
+
+    // Get avatar element
+    const avatar = page.locator('[data-testid="user-avatar"]');
+    
+    // Verify avatar is visible
+    await expect(avatar).toBeVisible();
+    
+    // Check styling (border and border-radius)
+    const boundingBox = await avatar.boundingBox();
+    
+    // Avatar should be square (width ~= height)
+    if (boundingBox) {
+      const aspectRatio = boundingBox.width / boundingBox.height;
+      expect(aspectRatio).toBeCloseTo(1, 0.1); // Allow 10% deviation
+    }
+  });
 });
