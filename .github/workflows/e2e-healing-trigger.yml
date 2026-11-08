@@ -10,6 +10,7 @@ permissions:
   contents: write
   checks: read
   actions: read
+  issues: write
 
 jobs:
   check-e2e-failures:

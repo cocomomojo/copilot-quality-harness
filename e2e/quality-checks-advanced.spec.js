@@ -414,3 +414,4 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await expect(page.getByText('Second Success Check')).toBeVisible();
     });
   });
+}); // end describe 'Quality Checks UI - Error Scenarios & Edge Cases'
