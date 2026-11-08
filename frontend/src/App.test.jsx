@@ -31,3 +31,11 @@ test('updates character count when typing in check name input', async () => {
   const counter = screen.getByTestId('char-count');
   expect(counter.textContent).toBe('5/50');
 });
+
+test('status badge has title attribute with tooltip text', async () => {
+  render(<App />);
+  const badge = await screen.findByTestId('status-badge');
+  expect(badge).toBeInTheDocument();
+  expect(badge.getAttribute('title')).toBeTruthy();
+  expect(badge.getAttribute('title')).toContain('pending');
+});
