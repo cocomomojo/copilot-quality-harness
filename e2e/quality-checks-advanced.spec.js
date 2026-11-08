@@ -16,18 +16,22 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
   test.describe('Error Path Tests', () => {
     test('displays error when adding check with only whitespace', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('   ');
       await button.click();
       
       const error = page.getByRole('alert');
+      await error.waitFor({ state: 'attached', timeout: 10000 });
       await expect(error).toBeVisible();
       await expect(error).toContainText(ERROR_MESSAGE_INVALID_NAME);
     });
 
     test('displays error when name exceeds 120 characters', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
 
       // HTML input maxLength="120" will prevent exceeding 120 characters
       // Fill with 121 characters to test truncation behavior
@@ -39,12 +43,15 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('clears error message when user corrects input', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
 
       await input.fill('   ');
       await button.click();
 
       const error = page.getByRole('alert');
+      await error.waitFor({ state: 'attached', timeout: 10000 });
       await expect(error).toBeVisible();
       await expect(error).toContainText(ERROR_MESSAGE_INVALID_NAME);
 
@@ -70,6 +77,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await page.reload();
       
       const error = page.getByRole('alert');
+      await error.waitFor({ state: 'attached', timeout: 10000 });
       await expect(error).toBeVisible();
     });
   });
@@ -77,7 +85,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
   test.describe('Input Validation Tests', () => {
     test('accepts check name with unicode characters', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('日本語テスト');
       await button.click();
@@ -87,7 +97,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('accepts check name with special characters', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       const specialName = 'Check #123 - Special & Test!';
       await input.fill(specialName);
@@ -98,7 +110,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('accepts check name with quotes', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       const nameWithQuotes = 'Check with "quotes"';
       await input.fill(nameWithQuotes);
@@ -109,7 +123,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('accepts single character check name', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('A');
       await button.click();
@@ -121,7 +137,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('trims whitespace from check name', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('  trimmed name  ');
       await button.click();
@@ -134,7 +152,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
   test.describe('User Interaction Tests', () => {
     test('form clears after successful submission', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('Test Check');
       await button.click();
@@ -147,7 +167,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('focuses input after successful submission', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('Test Check');
       await button.click();
@@ -163,7 +185,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('can add multiple checks in sequence', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       const checkNames = ['First Check', 'Second Check', 'Third Check'];
       
@@ -181,7 +205,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('prevents duplicate submission during API call', async ({ page }) => {
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('Test Check');
       
@@ -196,6 +222,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('maintains focus on input field during interactions', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.focus();
       
@@ -207,7 +234,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
   test.describe('Data Persistence Tests', () => {
     test('checks persist after page reload', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('Persistent Check');
       await button.click();
@@ -223,7 +252,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('new checks appear at top of list', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('First Check');
       await button.click();
@@ -245,7 +276,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('status is displayed for each check', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('Status Check');
       await button.click();
@@ -266,12 +299,15 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
       await expect(label).toBeVisible();
       
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       await expect(input).toBeVisible();
     });
 
     test('button is keyboard accessible', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.focus();
       await input.fill('Keyboard Test');
@@ -284,6 +320,7 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('form is navigable with Tab key', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.focus();
       const initialId = await input.evaluate(el => el.id);
@@ -296,12 +333,15 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('error message is announced as alert', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('   ');
       await button.click();
       
       const alert = page.getByRole('alert');
+      await alert.waitFor({ state: 'attached', timeout: 10000 });
       await expect(alert).toBeVisible();
       
       // Alert should have accessible role
@@ -316,7 +356,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('checks list has accessible heading', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('Test Check');
       await button.click();
@@ -333,7 +375,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('removes "No checks" message when first check is added', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await expect(page.getByText('No checks recorded yet.')).toBeVisible();
       
@@ -345,7 +389,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('displays checks as list items', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('List Check');
       await button.click();
@@ -367,7 +413,9 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
 
     test('API call completes reasonably fast', async ({ page }) => {
       const input = page.getByLabel('Check name');
+      await input.waitFor({ state: 'attached', timeout: 10000 });
       const button = page.getByRole('button', { name: 'Add check' });
+      await button.waitFor({ state: 'attached', timeout: 10000 });
       
       await input.fill('Performance Test');
       
