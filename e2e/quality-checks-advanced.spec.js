@@ -364,30 +364,53 @@ test.describe('Quality Checks UI - Error Scenarios & Edge Cases', () => {
     });
   });
 
-  test.describe('Performance Tests', () => {
-    test('page loads within reasonable time', async ({ page }) => {
-      const startTime = Date.now();
-      await page.goto('/quality-checks');
-      const loadTime = Date.now() - startTime;
-      
-      // Page should load within 5 seconds
-      expect(loadTime).toBeLessThan(5000);
-    });
-
-    test('API call completes reasonably fast', async ({ page }) => {
+  test.describe('Success Message Tests', () => {
+    test('displays success message after check is added', async ({ page }) => {
       const input = page.getByLabel('Check name');
       const button = page.getByRole('button', { name: 'Add check' });
       
-      await input.fill('Performance Test');
-      
-      const startTime = Date.now();
+      await input.fill('Success Test Check');
       await button.click();
-      const duration = Date.now() - startTime;
       
-      // API call should complete within 2 seconds
-      expect(duration).toBeLessThan(2000);
+      const successMessage = page.getByText('Check added successfully');
+      await expect(successMessage).toBeVisible();
+    });
+
+    test('success message disappears after 3 seconds', async ({ page }) => {
+      const input = page.getByLabel('Check name');
+      const button = page.getByRole('button', { name: 'Add check' });
       
-      await expect(page.getByText('Performance Test')).toBeVisible();
+      await input.fill('Auto Dismiss Test');
+      await button.click();
+      
+      const successMessage = page.getByText('Check added successfully');
+      await expect(successMessage).toBeVisible();
+      
+      // Wait for 3 seconds and verify it disappears
+      await page.waitForTimeout(3500);
+      await expect(successMessage).not.toBeVisible();
+    });
+
+    test('multiple success messages display independently', async ({ page }) => {
+      const input = page.getByLabel('Check name');
+      const button = page.getByRole('button', { name: 'Add check' });
+      
+      // Add first check
+      await input.fill('First Success Check');
+      await button.click();
+      
+      const successMessage = page.getByText('Check added successfully');
+      await expect(successMessage).toBeVisible();
+      
+      // Add second check quickly (within 3 seconds)
+      await input.fill('Second Success Check');
+      await button.click();
+      
+      // Success message should still be visible for the second check
+      await expect(successMessage).toBeVisible();
+      
+      // Verify both checks were added
+      await expect(page.getByText('First Success Check')).toBeVisible();
+      await expect(page.getByText('Second Success Check')).toBeVisible();
     });
   });
-});

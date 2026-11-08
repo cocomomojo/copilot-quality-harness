@@ -6,7 +6,9 @@ function QualityChecksPage() {
   const [checks, setChecks] = useState([]);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const inputRef = useRef(null);
+  const successTimeoutRef = useRef(null);
 
   async function loadChecks() {
     const response = await fetch('/api/checks');
@@ -15,6 +17,14 @@ function QualityChecksPage() {
   }
 
   useEffect(() => { loadChecks().catch((cause) => setError(cause.message)); }, []);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, []);
 
   async function addCheck(event) {
     event.preventDefault();
@@ -28,6 +38,18 @@ function QualityChecksPage() {
     if (!response.ok) { setError(payload.error); return; }
     setChecks((current) => [payload, ...current]);
     setName('');
+    
+    // Show success message
+    setSuccessMessage('Check added successfully');
+    
+    // Auto-clear message after 3 seconds
+    if (successTimeoutRef.current) {
+      clearTimeout(successTimeoutRef.current);
+    }
+    successTimeoutRef.current = setTimeout(() => {
+      setSuccessMessage('');
+    }, 3000);
+    
     // Focus input after successful submission
     if (inputRef.current) {
       setTimeout(() => inputRef.current.focus(), 0);
@@ -56,6 +78,7 @@ function QualityChecksPage() {
         </div>
       </form>
       {error && <p role="alert" className="error">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
       <section aria-labelledby="checks-heading">
         <h2 id="checks-heading">Current checks</h2>
         {checks.length === 0 ? <p>No checks recorded yet.</p> : (
