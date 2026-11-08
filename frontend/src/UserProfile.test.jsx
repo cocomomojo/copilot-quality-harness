@@ -16,6 +16,7 @@ describe('UserProfile Component', () => {
         json: async () => ({
           id: 'user-123',
           email: 'testuser@example.com',
+          avatar_url: 'https://example.com/avatar.png',
           created_at: '2026-10-18T10:00:00Z'
         })
       });
@@ -29,6 +30,7 @@ describe('UserProfile Component', () => {
 
       const createdDateValue = screen.getByTestId('account-created-at-value');
       expect(createdDateValue).toHaveTextContent('2026年10月18日');
+      expect(screen.getByTestId('user-avatar')).toHaveAttribute('src', 'https://example.com/avatar.png');
     });
 
     test('has account-created-at data-testid element', async () => {
@@ -57,6 +59,7 @@ describe('UserProfile Component', () => {
         json: async () => ({
           id: 'user-456',
           email: 'legacyuser@example.com',
+          avatar_url: null,
           created_at: null
         })
       });
@@ -67,6 +70,9 @@ describe('UserProfile Component', () => {
         const createdDateValue = screen.getByTestId('account-created-at-value');
         expect(createdDateValue).toHaveTextContent('-');
       });
+
+      const avatar = screen.getByTestId('user-avatar');
+      expect(avatar).toHaveAttribute('src', expect.stringContaining('data:image/svg+xml'));
     });
   });
 
