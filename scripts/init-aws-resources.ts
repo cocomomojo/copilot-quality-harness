@@ -21,8 +21,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 
-import { fromEnv } from '@aws-sdk/credential-providers';
-
 // Configuration from environment variables
 const awsConfig: any = {
   endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
