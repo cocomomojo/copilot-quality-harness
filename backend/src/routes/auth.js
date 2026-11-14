@@ -2,7 +2,7 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { generateToken } from '../middleware/auth.js';
 import { hashPassword, verifyPassword } from '../utils/password.js';
-import { putItem, getItem } from '../utils/dynamodb.js';
+import { putItem, getItem, scanItems } from '../utils/dynamodb.js';
 
 const router = express.Router();
 const TABLE_NAME = 'Users';
@@ -20,9 +20,9 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
     
-    // Check if user already exists
-    const existing = await getItem(TABLE_NAME, { email });
-    if (existing) {
+    // Check if user already exists (search by email since Users table has userId as key)
+    const existingUsers = await scanItems(TABLE_NAME, '#e = :email', { ':email': email }, { '#e': 'email' });
+    if (existingUsers.length > 0) {
       return res.status(400).json({ error: 'User already exists' });
     }
     
@@ -56,11 +56,13 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Missing email or password' });
     }
     
-    const user = await getItem(TABLE_NAME, { email });
-    if (!user) {
+    // Search by email since Users table has userId as key
+    const users = await scanItems(TABLE_NAME, '#e = :email', { ':email': email }, { '#e': 'email' });
+    if (users.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
     
+    const user = users[0];
     const isValid = await verifyPassword(password, user.passwordHash);
     if (!isValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
