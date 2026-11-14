@@ -105,7 +105,7 @@ function QualityChecksForm() {
 
         <button
           type="submit"
-          disabled={loading || input.trim().length === 0}
+          disabled={loading}
           className="add-check-btn"
           data-testid="add-check-button"
         >
