@@ -1,28 +1,5 @@
 [
   {
-    "timestamp": "2026-11-01T10:58:47.901Z",
-    "pass_rate": 80,
-    "test_count": 5,
-    "passed": 4,
-    "failed": 1,
-    "coverage": 0,
-    "ai_danger_rank": "E",
-    "risk_level": "CRITICAL",
-    "composite_score": 42,
-    "data_source": "GITHUB_API",
-    "details": {
-      "test_source": "github-api",
-      "github_run_id": 41299537621,
-      "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
-      "explicit_test_run_id": "41299537621"
-    },
-    "trend": "STABLE",
-    "trend_details": {
-      "pass_rate_change": 0,
-      "coverage_change": 0
-    }
-  },
-  {
     "timestamp": "2026-11-01T11:06:16.458Z",
     "pass_rate": 80,
     "test_count": 5,
@@ -2077,7 +2054,32 @@
     }
   },
   {
-    "timestamp": "2026-11-14T11:52:11.214Z",
+    "timestamp": "2026-11-14T11:53:29.129Z",
+    "pass_rate": 81,
+    "test_count": 183,
+    "passed": 148,
+    "failed": 35,
+    "coverage": 17,
+    "global_e2e_count": 53,
+    "global_unit_count": 130,
+    "ai_danger_rank": "D",
+    "risk_level": "HIGH",
+    "composite_score": 58,
+    "data_source": "TEST_MATRIX_ARTIFACT",
+    "details": {
+      "test_source": "test-matrix-artifact",
+      "github_run_id": 43591322515,
+      "coverage_source": "ARTIFACT_RUN:43591322515",
+      "explicit_test_run_id": "43591322515"
+    },
+    "trend": "IMPROVING",
+    "trend_details": {
+      "pass_rate_change": 22,
+      "coverage_change": -16
+    }
+  },
+  {
+    "timestamp": "2026-11-14T11:56:24.861Z",
     "pass_rate": 100,
     "test_count": 225,
     "passed": 225,
@@ -2091,14 +2093,14 @@
     "data_source": "TEST_MATRIX_ARTIFACT",
     "details": {
       "test_source": "test-matrix-artifact",
-      "github_run_id": 43591616560,
-      "coverage_source": "ARTIFACT_RUN:43591616560",
-      "explicit_test_run_id": "43591616560"
+      "github_run_id": 43591944966,
+      "coverage_source": "ARTIFACT_RUN:43591944966",
+      "explicit_test_run_id": "43591944966"
     },
     "trend": "IMPROVING",
     "trend_details": {
-      "pass_rate_change": 41,
-      "coverage_change": 28
+      "pass_rate_change": 19,
+      "coverage_change": 44
     }
   }
 ]
