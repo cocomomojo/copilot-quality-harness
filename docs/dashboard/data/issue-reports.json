@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-11-14T14:14:24.933Z",
+  "generated_at": "2026-11-14T14:15:43.396Z",
   "source_pr": 98,
   "reports": [
     {
       "issue_number": 44,
       "pr_number": 98,
-      "workflow_run_id": "43603756266",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603756266",
-      "generated_at": "2026-11-14T14:14:24.933Z",
+      "workflow_run_id": "43603872908",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603872908",
+      "generated_at": "2026-11-14T14:15:43.396Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
@@ -339,16 +339,18 @@
         "backend/src/server.js",
         "docker-compose.yml",
         "e2e-test-output.log",
+        "e2e-test-run.log",
         "scripts/init-aws-resources.ts",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/start-emulator.sh"
       ]
     },
     {
       "issue_number": 56,
       "pr_number": 98,
-      "workflow_run_id": "43603756266",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603756266",
-      "generated_at": "2026-11-14T14:14:24.933Z",
+      "workflow_run_id": "43603872908",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603872908",
+      "generated_at": "2026-11-14T14:15:43.396Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
@@ -684,16 +686,18 @@
         "backend/src/server.js",
         "docker-compose.yml",
         "e2e-test-output.log",
+        "e2e-test-run.log",
         "scripts/init-aws-resources.ts",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/start-emulator.sh"
       ]
     },
     {
       "issue_number": 61,
       "pr_number": 98,
-      "workflow_run_id": "43603756266",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603756266",
-      "generated_at": "2026-11-14T14:14:24.933Z",
+      "workflow_run_id": "43603872908",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603872908",
+      "generated_at": "2026-11-14T14:15:43.396Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
@@ -1045,16 +1049,18 @@
         "backend/src/server.js",
         "docker-compose.yml",
         "e2e-test-output.log",
+        "e2e-test-run.log",
         "scripts/init-aws-resources.ts",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/start-emulator.sh"
       ]
     },
     {
       "issue_number": 63,
       "pr_number": 98,
-      "workflow_run_id": "43603756266",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603756266",
-      "generated_at": "2026-11-14T14:14:24.933Z",
+      "workflow_run_id": "43603872908",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603872908",
+      "generated_at": "2026-11-14T14:15:43.396Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
@@ -1377,16 +1383,18 @@
         "backend/src/server.js",
         "docker-compose.yml",
         "e2e-test-output.log",
+        "e2e-test-run.log",
         "scripts/init-aws-resources.ts",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/start-emulator.sh"
       ]
     },
     {
       "issue_number": 65,
       "pr_number": 98,
-      "workflow_run_id": "43603756266",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603756266",
-      "generated_at": "2026-11-14T14:14:24.933Z",
+      "workflow_run_id": "43603872908",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603872908",
+      "generated_at": "2026-11-14T14:15:43.396Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
@@ -1709,8 +1717,10 @@
         "backend/src/server.js",
         "docker-compose.yml",
         "e2e-test-output.log",
+        "e2e-test-run.log",
         "scripts/init-aws-resources.ts",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/start-emulator.sh"
       ]
     },
     {
@@ -1762,9 +1772,9 @@
     {
       "issue_number": 69,
       "pr_number": 98,
-      "workflow_run_id": "43603756266",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603756266",
-      "generated_at": "2026-11-14T14:14:24.933Z",
+      "workflow_run_id": "43603872908",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603872908",
+      "generated_at": "2026-11-14T14:15:43.396Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
@@ -2087,16 +2097,18 @@
         "backend/src/server.js",
         "docker-compose.yml",
         "e2e-test-output.log",
+        "e2e-test-run.log",
         "scripts/init-aws-resources.ts",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/start-emulator.sh"
       ]
     },
     {
       "issue_number": 76,
       "pr_number": 98,
-      "workflow_run_id": "43603756266",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603756266",
-      "generated_at": "2026-11-14T14:14:24.933Z",
+      "workflow_run_id": "43603872908",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603872908",
+      "generated_at": "2026-11-14T14:15:43.396Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
@@ -2419,16 +2431,18 @@
         "backend/src/server.js",
         "docker-compose.yml",
         "e2e-test-output.log",
+        "e2e-test-run.log",
         "scripts/init-aws-resources.ts",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/start-emulator.sh"
       ]
     },
     {
       "issue_number": 78,
       "pr_number": 98,
-      "workflow_run_id": "43603756266",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603756266",
-      "generated_at": "2026-11-14T14:14:24.933Z",
+      "workflow_run_id": "43603872908",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43603872908",
+      "generated_at": "2026-11-14T14:15:43.396Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
@@ -2751,8 +2765,10 @@
         "backend/src/server.js",
         "docker-compose.yml",
         "e2e-test-output.log",
+        "e2e-test-run.log",
         "scripts/init-aws-resources.ts",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/start-emulator.sh"
       ]
     },
     {
