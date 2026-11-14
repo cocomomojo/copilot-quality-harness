@@ -70,43 +70,43 @@ const awsConfig: any = {
 };
 
 // SSL certificate configuration per AWS SDK for JavaScript docs
-// AWS_CA_BUNDLE environment variable is read by AWS SDK v3 automatically
-// But we also set it explicitly to clients
+// AWS_CA_BUNDLE environment variable is read by AWS CLI but NOT automatically by AWS SDK v3
+// We must set it on HTTP agents explicitly
 
 const clientConfig: any = {
   ...awsConfig,
   disableHostPrefix: true, // Required for AWS SDK v3 with emulator (prevents host prefix injection)
 };
 
-// Add CA certificate handling and disable certificate verification for self-signed certs
-// AWS SDK v3 automatically reads AWS_CA_BUNDLE, but we also set it on HTTP agents for robustness
+// Load CA certificate and create HTTPS agent
+// Try AWS_CA_BUNDLE first (per official docs), then NODE_EXTRA_CA_CERTS as fallback
 const caCertPath = process.env.AWS_CA_BUNDLE || process.env.NODE_EXTRA_CA_CERTS;
 
 if (caCertPath) {
   try {
     const caCert = fs.readFileSync(caCertPath);
-    clientConfig.httpAgent = new (require('http').Agent)({
-      ca: caCert,
-      rejectUnauthorized: false,
-    });
+    console.log('✅ CA certificate loaded from:', caCertPath);
     clientConfig.httpsAgent = new https.Agent({
       ca: caCert,
       rejectUnauthorized: false,
     });
-    console.log('✅ CA certificate loaded from:', caCertPath);
+    clientConfig.httpAgent = new (require('http').Agent)({
+      ca: caCert,
+      rejectUnauthorized: false,
+    });
   } catch (err) {
     console.warn('⚠️  Failed to load CA certificate from', caCertPath, ':', err instanceof Error ? err.message : String(err));
-    // Fall back to disabling verification
+    console.warn('   Falling back to rejectUnauthorized: false');
     clientConfig.httpsAgent = new https.Agent({
       rejectUnauthorized: false,
     });
   }
 } else {
   // No CA certificate configured, disable verification for local testing
+  console.warn('⚠️  AWS_CA_BUNDLE and NODE_EXTRA_CA_CERTS not set; disabling certificate verification');
   clientConfig.httpsAgent = new https.Agent({
     rejectUnauthorized: false,
   });
-  console.log('⚠️  AWS_CA_BUNDLE and NODE_EXTRA_CA_CERTS not set; disabling certificate verification');
 }
 
 const dynamodbClient = new DynamoDBClient(clientConfig);
