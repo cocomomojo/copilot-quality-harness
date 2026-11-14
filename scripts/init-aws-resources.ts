@@ -20,6 +20,40 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
+import * as http from 'http';
+
+// Configure Node.js HTTPS/HTTP agents to trust self-signed certificates
+// This must be done BEFORE any HTTPS requests are made
+const caCertPath = process.env.AWS_CA_BUNDLE || process.env.NODE_EXTRA_CA_CERTS;
+
+if (caCertPath) {
+  try {
+    const caCert = fs.readFileSync(caCertPath);
+    console.log('✅ CA certificate loaded from:', caCertPath);
+    
+    // Set global agents - this affects all HTTPS/HTTP requests in the process
+    https.globalAgent = new https.Agent({
+      ca: caCert,
+      rejectUnauthorized: false,
+    });
+    http.globalAgent = new http.Agent({
+      ca: caCert,
+      rejectUnauthorized: false,
+    });
+    console.log('✅ Global HTTPS/HTTP agents configured with CA certificate');
+  } catch (err) {
+    console.warn('⚠️  Failed to load CA certificate from', caCertPath, ':', err instanceof Error ? err.message : String(err));
+    console.warn('   Using default agents (accepting all certificates)');
+    https.globalAgent = new https.Agent({
+      rejectUnauthorized: false,
+    });
+  }
+} else {
+  console.warn('⚠️  AWS_CA_BUNDLE and NODE_EXTRA_CA_CERTS not set; accepting all HTTPS certificates');
+  https.globalAgent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+}
 
 // Load AWS Emulator credentials from the auto-generated credentials file
 // Per AWS Emulator official docs: use AWS_SHARED_CREDENTIALS_FILE pointing to emulator_credentials
@@ -67,51 +101,14 @@ const awsConfig: any = {
   endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
   region: process.env.AWS_REGION || 'us-east-1',
   credentials: emulatorCredentials,
-};
-
-// SSL certificate configuration per AWS SDK for JavaScript docs
-// AWS_CA_BUNDLE environment variable is read by AWS CLI but NOT automatically by AWS SDK v3
-// We must set it on HTTP agents explicitly
-
-const clientConfig: any = {
-  ...awsConfig,
   disableHostPrefix: true, // Required for AWS SDK v3 with emulator (prevents host prefix injection)
 };
 
-// Load CA certificate and create HTTPS agent
-// Try AWS_CA_BUNDLE first (per official docs), then NODE_EXTRA_CA_CERTS as fallback
-const caCertPath = process.env.AWS_CA_BUNDLE || process.env.NODE_EXTRA_CA_CERTS;
-
-if (caCertPath) {
-  try {
-    const caCert = fs.readFileSync(caCertPath);
-    console.log('✅ CA certificate loaded from:', caCertPath);
-    clientConfig.httpsAgent = new https.Agent({
-      ca: caCert,
-      rejectUnauthorized: false,
-    });
-    clientConfig.httpAgent = new (require('http').Agent)({
-      ca: caCert,
-      rejectUnauthorized: false,
-    });
-  } catch (err) {
-    console.warn('⚠️  Failed to load CA certificate from', caCertPath, ':', err instanceof Error ? err.message : String(err));
-    console.warn('   Falling back to rejectUnauthorized: false');
-    clientConfig.httpsAgent = new https.Agent({
-      rejectUnauthorized: false,
-    });
-  }
-} else {
-  // No CA certificate configured, disable verification for local testing
-  console.warn('⚠️  AWS_CA_BUNDLE and NODE_EXTRA_CA_CERTS not set; disabling certificate verification');
-  clientConfig.httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-  });
-}
-
-const dynamodbClient = new DynamoDBClient(clientConfig);
-const s3Client = new S3Client(clientConfig);
-const sqsClient = new SQSClient(clientConfig);
+// Initialize AWS SDK clients
+// Note: Global HTTPS/HTTP agents configured at module load time handle certificate verification
+const dynamodbClient = new DynamoDBClient(awsConfig);
+const s3Client = new S3Client(awsConfig);
+const sqsClient = new SQSClient(awsConfig);
 
 interface DynamoDBTableConfig {
   name: string;
