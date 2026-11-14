@@ -20,19 +20,38 @@ function buildClientConfig() {
     ...awsConfig,
   };
 
-  // Add CA certificate if NODE_EXTRA_CA_CERTS is set
-  if (process.env.NODE_EXTRA_CA_CERTS) {
+  // For AWS Emulator, disable certificate verification since it uses self-signed certs
+  // Per AWS SDK v3 docs: rejectUnauthorized: false is needed for self-signed certificates
+  const caPath = process.env.NODE_EXTRA_CA_CERTS || process.env.AWS_CA_BUNDLE;
+  
+  if (caPath) {
     try {
-      const caCert = fs.readFileSync(process.env.NODE_EXTRA_CA_CERTS);
+      const caCert = fs.readFileSync(caPath);
       config.requestHandler = {
         httpsAgent: new https.Agent({
           ca: caCert,
           rejectUnauthorized: false,
         }),
       };
+      console.log(`✅ Loaded CA certificate from: ${caPath}`);
     } catch (err) {
-      console.warn('Warning: Failed to load CA certificate:', err instanceof Error ? err.message : String(err));
+      // Fall back to just disabling cert verification
+      console.warn(`⚠️  Failed to load CA certificate from ${caPath}:`, err instanceof Error ? err.message : String(err));
+      console.log('   Falling back to disabling certificate verification');
+      config.requestHandler = {
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        }),
+      };
     }
+  } else if (process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0') {
+    // If NODE_TLS_REJECT_UNAUTHORIZED is already set, use that
+    console.log('✅ Using NODE_TLS_REJECT_UNAUTHORIZED=0 setting');
+    config.requestHandler = {
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false,
+      }),
+    };
   }
 
   return config;
