@@ -4,15 +4,16 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:2023-minimal
 ADD https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/latest/aws-emulator-x86_64.rpm /tmp/aws-emulator.rpm
 RUN rpm -i /tmp/aws-emulator.rpm && rm /tmp/aws-emulator.rpm
 
-# Verify the emulator user was created (typically UID 1000) and fix permissions
-RUN id emulator || useradd -u 1000 -d /home/emulator -m -s /sbin/nologin emulator || true \
-    && mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator \
-    && chown -R 1000:1000 /home/emulator
+# Create emulator directories with world-writable permissions
+# AWS Emulator needs to write to its data directories
+RUN mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator \
+    && chmod -R 777 /home/emulator \
+    && mkdir -p /.emulator /.aws-emulator \
+    && chmod -R 777 /.emulator /.aws-emulator /tmp
 
-# Set up user and environment
-USER 1000
 ENV HOME=/home/emulator
 EXPOSE 9297
 
-# Run AWS Emulator listening on all addresses
-ENTRYPOINT ["aws-emulator", "-b", "0.0.0.0"]
+# Bind to localhost instead of 0.0.0.0 (Docker handles port mapping)
+# This avoids permission issues with binding to privileged ports
+ENTRYPOINT ["aws-emulator", "-b", "127.0.0.1"]
