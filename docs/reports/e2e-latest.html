@@ -425,25 +425,25 @@
     <div class="summary-grid">
       <div class="summary-card success">
         <h3>テスト合格率</h3>
-        <div class="value" id="passRate">85</div>
+        <div class="value" id="passRate">3</div>
         <div class="unit">%</div>
       </div>
 
       <div class="summary-card">
         <h3>テスト実行数</h3>
-        <div class="value" id="testCount">27</div>
+        <div class="value" id="testCount">31</div>
         <div class="unit">テスト</div>
       </div>
 
       <div class="summary-card success">
         <h3>合格数</h3>
-        <div class="value" id="passedCount">23</div>
+        <div class="value" id="passedCount">1</div>
         <div class="unit">テスト</div>
       </div>
 
       <div class="summary-card danger">
         <h3>失敗数</h3>
-        <div class="value" id="failedCount">4</div>
+        <div class="value" id="failedCount">30</div>
         <div class="unit">テスト</div>
       </div>
 
@@ -455,7 +455,7 @@
 
       <div class="summary-card">
         <h3>実行時間</h3>
-        <div class="value" id="duration">77.0</div>
+        <div class="value" id="duration">70.7</div>
         <div class="unit">秒</div>
       </div>
     </div>
@@ -471,143 +471,103 @@
       
     <div class="test-suite">
       <div class="suite-header" onclick="toggleSuite(this.parentElement)">
-        <div class="suite-title">User Profile - Account Created At Display (E2E)</div>
+        <div class="suite-title">Activity Logs</div>
         <div class="suite-stats">
-          <span><span class="stat-passed">✅ 10</span></span>
-          <span><span class="stat-failed">❌ 0</span></span>
+          <span><span class="stat-passed">✅ 0</span></span>
+          <span><span class="stat-failed">❌ 6</span></span>
           <span><span class="stat-skipped">⏭️ 0</span></span>
         </div>
         <div class="suite-toggle">▶</div>
       </div>
       <div class="suite-content">
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-001: Display profile with valid createdAt
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-301: User can view activity logs
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1971ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00132ac871a4030189fe46861beaf5f44edf685d.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00132ac871a4030189fe46861beaf5f44edf685d.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/010f1caa8f1dc5bc9ac353ba47af1f8aa5953c0a.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 242ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00132ac871a4030189fe46861beaf5f44edf685d.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00132ac871a4030189fe46861beaf5f44edf685d.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/010f1caa8f1dc5bc9ac353ba47af1f8aa5953c0a.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-002: Display fallback when createdAt is null
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-302: Activity logs show timestamps
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1852ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/001e683604dec2b965fc26ed9dbb8e0b3cea77df.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/001e683604dec2b965fc26ed9dbb8e0b3cea77df.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/03ddeb059858d9389287efd8c11c7231c86980b5.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 209ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/001e683604dec2b965fc26ed9dbb8e0b3cea77df.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/001e683604dec2b965fc26ed9dbb8e0b3cea77df.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/03ddeb059858d9389287efd8c11c7231c86980b5.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-003: Handle 404 API error when user not found
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-303: Activity logs show event types
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1996ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0036028e9f8c1079f604d250b945a4864a93d2ce.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0036028e9f8c1079f604d250b945a4864a93d2ce.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/043c2d0daa60ec06c6d33fbb6d80865128495645.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 212ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0036028e9f8c1079f604d250b945a4864a93d2ce.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0036028e9f8c1079f604d250b945a4864a93d2ce.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/044aa643e2a045e616eebca40a6afd70d4b6a486.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-004: Fetch createdAt from API and display formatted
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-304: Activity logs can be filtered by date
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1302ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00441a3830e4ffbbebf5f2bacb7d5627da0594bf.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00441a3830e4ffbbebf5f2bacb7d5627da0594bf.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0574c2c6cdb45dbd8755eb66229d28fb119d196d.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 215ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00441a3830e4ffbbebf5f2bacb7d5627da0594bf.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00441a3830e4ffbbebf5f2bacb7d5627da0594bf.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0574c2c6cdb45dbd8755eb66229d28fb119d196d.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-005: Handle invalid createdAt format with fallback
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-305: Activity logs show user actions in chronological order
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1307ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005165a935e03ddf207a78850cc649882b713606.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005165a935e03ddf207a78850cc649882b713606.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/05e6258137d4affb3e43c78acd8d5654080acbbf.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 210ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005165a935e03ddf207a78850cc649882b713606.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005165a935e03ddf207a78850cc649882b713606.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/05bf6be208f689554c5a0c0b37569e2839c8e9c3.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-006: Verify element structure and accessibility
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-306: Activity logs display is paginated or scrollable
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 1298ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005beda0fb3377bb1ba3e0aaaf3d1deaaee92ddf.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005beda0fb3377bb1ba3e0aaaf3d1deaaee92ddf.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/06b1d1c225dab9063005e6b294ab298653123e54.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
-          </div>
-        </div>
-
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
-          <div class="test-name">
-            ✅ E2E-007: Verify multiple renders and state consistency
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
-            </span>
-          </div>
-          <div class="test-details">
-            <small>⏱️ 13322ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005e8000e14991195fe16a3570bd99264d947e1a.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005e8000e14991195fe16a3570bd99264d947e1a.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/072773643ad496b2182aa59a12ff4ccf81991117.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
-          </div>
-        </div>
-
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
-          <div class="test-name">
-            ✅ E2E-101: Display user avatar image when available
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
-            </span>
-          </div>
-          <div class="test-details">
-            <small>⏱️ 1822ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0a6ac073aa664cd6122fec0747518053b98e9a1c.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
-          </div>
-        </div>
-
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
-          <div class="test-name">
-            ✅ E2E-102: Display default avatar when avatar_url is not provided
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
-            </span>
-          </div>
-          <div class="test-details">
-            <small>⏱️ 1821ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00768df302012100ad644970d25dd42df773df44.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00768df302012100ad644970d25dd42df773df44.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0c3546f39f40969f8a48d66ca5aa7e894336be8f.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
-          </div>
-        </div>
-
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
-          <div class="test-name">
-            ✅ E2E-103: Avatar displays with correct styling and dimensions
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
-            </span>
-          </div>
-          <div class="test-details">
-            <small>⏱️ 1819ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00823e2e48e814d5ad8fd29252a0d7f6935159c0.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00823e2e48e814d5ad8fd29252a0d7f6935159c0.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0e22a3a0944c05be1768687323928fe576b2da1a.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 206ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005beda0fb3377bb1ba3e0aaaf3d1deaaee92ddf.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005beda0fb3377bb1ba3e0aaaf3d1deaaee92ddf.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/05e6258137d4affb3e43c78acd8d5654080acbbf.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
@@ -616,77 +576,10 @@
 
     <div class="test-suite">
       <div class="suite-header" onclick="toggleSuite(this.parentElement)">
-        <div class="suite-title">Error Path Tests</div>
-        <div class="suite-stats">
-          <span><span class="stat-passed">✅ 4</span></span>
-          <span><span class="stat-failed">❌ 0</span></span>
-          <span><span class="stat-skipped">⏭️ 0</span></span>
-        </div>
-        <div class="suite-toggle">▶</div>
-      </div>
-      <div class="suite-content">
-
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
-          <div class="test-name">
-            ✅ displays error when adding check with only whitespace
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
-            </span>
-          </div>
-          <div class="test-details">
-            <small>⏱️ 3376ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0e6112750dcbb0e322b1b8a396703ed8c8533127.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
-          </div>
-        </div>
-
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
-          <div class="test-name">
-            ✅ displays error when name exceeds 50 characters
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
-            </span>
-          </div>
-          <div class="test-details">
-            <small>⏱️ 2305ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0094d279898dcb11b5c22ab73dfdcec1416451cd.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0094d279898dcb11b5c22ab73dfdcec1416451cd.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0f093c867d93aa4047c90a3e2145419bee14f9d0.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
-          </div>
-        </div>
-
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
-          <div class="test-name">
-            ✅ clears error message when user corrects input
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
-            </span>
-          </div>
-          <div class="test-details">
-            <small>⏱️ 5436ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00a3fec169ab1c943798373fc2ae11be22009b7b.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00a3fec169ab1c943798373fc2ae11be22009b7b.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0f19c5ca45c3709ce0988ebf0bab932ae0967788.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
-          </div>
-        </div>
-
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
-          <div class="test-name">
-            ✅ shows appropriate error when API is unavailable
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
-            </span>
-          </div>
-          <div class="test-details">
-            <small>⏱️ 2447ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00a47868033dd6a8d48b3722d0f659e294928942.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00a47868033dd6a8d48b3722d0f659e294928942.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/10550d3d1f9eb4d1e6ccfd63ff588adc7980d0f0.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="test-suite">
-      <div class="suite-header" onclick="toggleSuite(this.parentElement)">
-        <div class="suite-title">Character Count Tests</div>
+        <div class="suite-title">Authentication - Registration & Login</div>
         <div class="suite-stats">
           <span><span class="stat-passed">✅ 1</span></span>
-          <span><span class="stat-failed">❌ 2</span></span>
+          <span><span class="stat-failed">❌ 4</span></span>
           <span><span class="stat-skipped">⏭️ 0</span></span>
         </div>
         <div class="suite-toggle">▶</div>
@@ -695,60 +588,78 @@
 
         <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ❌ shows character count when typing
+            ❌ E2E-001: User can register with valid credentials
             <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 7423ms</small>
-<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
-
-Locator: getByTestId(&#39;char-count&#39;)
-Expected: visible
-Timeout: 5000ms
-Error: element(s) not found
-
+            <small>⏱️ 12368ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">TimeoutError: locator.click: Timeout 10000ms exceeded.
 Call log:
-[2m  - Expect &quot;toBeVisible&quot; getByTestId(&#39;char-count&#39;) with timeout 5000ms[22m
-[2m  - waiting for getByTestId(&#39;char-count&#39;)[22m
-</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00cc206e1bd55f168a6c442120192e03bc2b4154.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00cc206e1bd55f168a6c442120192e03bc2b4154.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/123197e4a2270ac74bf33ea19931fe062fa154f1.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+[2m  - waiting for getByRole(&#39;tab&#39;, { name: /register/i })[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/005e8000e14991195fe16a3570bd99264d947e1a.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/005e8000e14991195fe16a3570bd99264d947e1a.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/06b1d1c225dab9063005e6b294ab298653123e54.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
         <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ❌ shows warning color when 10 or fewer characters remaining
+            ❌ E2E-002: User can login with valid credentials
             <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 7426ms</small>
-<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveClass[2m([22m[32mexpected[39m[2m)[22m failed
-
-Locator: getByTestId(&#39;char-count&#39;)
-Expected pattern: [32m/char-count-warning/[39m
-Timeout: 5000ms
-Error: element(s) not found
-
+            <small>⏱️ 12395ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">TimeoutError: locator.fill: Timeout 10000ms exceeded.
 Call log:
-[2m  - Expect &quot;toHaveClass&quot; getByTestId(&#39;char-count&#39;) with timeout 5000ms[22m
-[2m  - waiting for getByTestId(&#39;char-count&#39;)[22m
-</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00e9ea547471b64a167d322c146f68b61fbe87a6.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00e9ea547471b64a167d322c146f68b61fbe87a6.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/123272d88c261e1b1c8af07bb81ce2aaa0be4362.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+[2m  - waiting for getByLabel(/email/i)[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/006bd376184ca522e6814dbc052bb50050dfb9ba.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/072773643ad496b2182aa59a12ff4ccf81991117.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-003: User cannot login with invalid password
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 13480ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">TimeoutError: locator.fill: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for getByLabel(/email/i)[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00768df302012100ad644970d25dd42df773df44.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00768df302012100ad644970d25dd42df773df44.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/088a4c11855dba265b42bf4e090c5b2611960ea2.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-004: Duplicate email registration is rejected
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 13499ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">TimeoutError: locator.click: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for getByRole(&#39;tab&#39;, { name: /register/i })[22m
+</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00823e2e48e814d5ad8fd29252a0d7f6935159c0.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00823e2e48e814d5ad8fd29252a0d7f6935159c0.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0a6ac073aa664cd6122fec0747518053b98e9a1c.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
         <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ enforces maximum 50 character limit
+            ✅ E2E-005: User can logout
             <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               合格
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 2419ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01069f8b3cea99deedce6bdb28647bccc667d13f.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01069f8b3cea99deedce6bdb28647bccc667d13f.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/12a0e205f6a1da0ce06cca0531b4df62048e265f.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 2488ms</small>
+<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/008e935511a216eb82cbec6ec9aed87d4a2c67b7.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0c11c3529c784c757bdbba24b1b42d8c7133af0f.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
           </div>
         </div>
 
@@ -757,7 +668,7 @@ Call log:
 
     <div class="test-suite">
       <div class="suite-header" onclick="toggleSuite(this.parentElement)">
-        <div class="suite-title">Status Badge Tooltip Tests</div>
+        <div class="suite-title">Protected Routes</div>
         <div class="suite-stats">
           <span><span class="stat-passed">✅ 0</span></span>
           <span><span class="stat-failed">❌ 2</span></span>
@@ -769,47 +680,32 @@ Call log:
 
         <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ❌ E2E-078-01: status badge has tooltip title attribute
+            ❌ E2E-006: Unauthenticated user redirected to login
             <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 8411ms</small>
-<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
-
-Locator: getByTestId(&#39;status-badge&#39;).first()
-Expected: visible
-Timeout: 5000ms
-Error: element(s) not found
-
-Call log:
-[2m  - Expect &quot;toBeVisible&quot; getByTestId(&#39;status-badge&#39;).first() with timeout 5000ms[22m
-[2m  - waiting for getByTestId(&#39;status-badge&#39;).first()[22m
-</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01431c23285e2db74b321c76f97d888578d48693.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01431c23285e2db74b321c76f97d888578d48693.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/12b0e1b50f9b310dd9b0f9baa9736e0c2ce0e655.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+            <small>⏱️ 11329ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+=========================== logs ===========================
+waiting for navigation until &quot;load&quot;
+============================================================</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0094d279898dcb11b5c22ab73dfdcec1416451cd.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0094d279898dcb11b5c22ab73dfdcec1416451cd.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0c3546f39f40969f8a48d66ca5aa7e894336be8f.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
         <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ❌ E2E-078-02: status badge is keyboard accessible with tabindex
+            ❌ E2E-007: Authenticated user can access protected pages
             <span class="test-status-badge" style="background: #ff6b6b; color: white;">
               失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 8499ms</small>
-<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
-
-Locator: getByTestId(&#39;status-badge&#39;).first()
-Expected: visible
-Timeout: 5000ms
-Error: element(s) not found
-
-Call log:
-[2m  - Expect &quot;toBeVisible&quot; getByTestId(&#39;status-badge&#39;).first() with timeout 5000ms[22m
-[2m  - waiting for getByTestId(&#39;status-badge&#39;).first()[22m
-</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/13211c854d34bc81db7664622d2e8f292a2fae55.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+            <small>⏱️ 202ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00a3fec169ab1c943798373fc2ae11be22009b7b.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00a3fec169ab1c943798373fc2ae11be22009b7b.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0e6112750dcbb0e322b1b8a396703ed8c8533127.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
@@ -818,117 +714,313 @@ Call log:
 
     <div class="test-suite">
       <div class="suite-header" onclick="toggleSuite(this.parentElement)">
-        <div class="suite-title">URL Validator API</div>
+        <div class="suite-title">Dashboard</div>
         <div class="suite-stats">
-          <span><span class="stat-passed">✅ 8</span></span>
-          <span><span class="stat-failed">❌ 0</span></span>
+          <span><span class="stat-passed">✅ 0</span></span>
+          <span><span class="stat-failed">❌ 6</span></span>
           <span><span class="stat-skipped">⏭️ 0</span></span>
         </div>
         <div class="suite-toggle">▶</div>
       </div>
       <div class="suite-content">
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-001: Check valid HTTPS URL endpoint
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-401: Dashboard displays summary cards
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 103ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/13ed9daad01ded0d57f53c2a775d792065f9f7e2.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 199ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00a47868033dd6a8d48b3722d0f659e294928942.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00a47868033dd6a8d48b3722d0f659e294928942.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0f093c867d93aa4047c90a3e2145419bee14f9d0.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-002: Check invalid URL format
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-402: Dashboard shows TODO summary
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 91ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d35a91faaa214ec7e076083f0e5d15c7e282e.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d35a91faaa214ec7e076083f0e5d15c7e282e.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1471ec087196ebe167d65ea87fdc7b314031c520.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 206ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/00cc206e1bd55f168a6c442120192e03bc2b4154.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/00cc206e1bd55f168a6c442120192e03bc2b4154.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/0f19c5ca45c3709ce0988ebf0bab932ae0967788.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-003: Check empty string input
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-403: Dashboard shows recent activity timeline
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 97ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/17f50a069f1d8613436cf503d1b27155e2533827.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 199ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01069f8b3cea99deedce6bdb28647bccc667d13f.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01069f8b3cea99deedce6bdb28647bccc667d13f.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/10550d3d1f9eb4d1e6ccfd63ff588adc7980d0f0.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-004: Check null input
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-404: Dashboard is responsive on different sizes
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 97ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01cba3eb8dea743353c913b3588e07ce26aadc4f.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01cba3eb8dea743353c913b3588e07ce26aadc4f.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1bd0b2cd9564f78d0eff7d3d24d25eaef4cb2697.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 217ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01431c23285e2db74b321c76f97d888578d48693.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01431c23285e2db74b321c76f97d888578d48693.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/123197e4a2270ac74bf33ea19931fe062fa154f1.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-005: Check valid HTTP URL with port
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-405: Navigation menu is accessible from dashboard
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 95ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01d74090e3cde79e8783cdc801554e4ddb4ffe04.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01d74090e3cde79e8783cdc801554e4ddb4ffe04.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1c3e3bf8620508d39bcccf3dae131c08c0ccffbc.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 217ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/014fcc80fb47880eacaf2527f77ff060f7c23fe4.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/123272d88c261e1b1c8af07bb81ce2aaa0be4362.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-006: Check valid GitHub URL
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-406: Dashboard statistics update in real-time
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 96ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01f61cfb083d8c14781d379784f5844847d95ad1.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01f61cfb083d8c14781d379784f5844847d95ad1.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1cb6f7d39d71b8af11d7eb123c6f153563c27f4d.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 197ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d0f0ac82695cc448869f94d1722b6722743b7.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/12a0e205f6a1da0ce06cca0531b4df62048e265f.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+      </div>
+    </div>
+
+    <div class="test-suite">
+      <div class="suite-header" onclick="toggleSuite(this.parentElement)">
+        <div class="suite-title">File Management</div>
+        <div class="suite-stats">
+          <span><span class="stat-passed">✅ 0</span></span>
+          <span><span class="stat-failed">❌ 6</span></span>
+          <span><span class="stat-skipped">⏭️ 0</span></span>
+        </div>
+        <div class="suite-toggle">▶</div>
+      </div>
+      <div class="suite-content">
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-007: Check FTP protocol (not allowed)
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-201: User can upload a file
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 96ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01f6613631939881850de1ffa78df0f146c44891.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01f6613631939881850de1ffa78df0f146c44891.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1ccadacaf955af654afa6eacf840207652d924b8.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 198ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/017d35a91faaa214ec7e076083f0e5d15c7e282e.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/017d35a91faaa214ec7e076083f0e5d15c7e282e.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/12b0e1b50f9b310dd9b0f9baa9736e0c2ce0e655.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
-        <div class="test-item passed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
           <div class="test-name">
-            ✅ E2E-008: Response time performance check
-            <span class="test-status-badge" style="background: #51cf66; color: white;">
-              合格
+            ❌ E2E-202: User can view file list
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
             </span>
           </div>
           <div class="test-details">
-            <small>⏱️ 82ms</small>
-<div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01f95f62f4a38a900e97c6ab02f6def3e41d1682.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01f95f62f4a38a900e97c6ab02f6def3e41d1682.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1de7e8e13be58b38bd4b38739d2c7b0c8e181e67.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div>
+            <small>⏱️ 206ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01a2f64f2b92d83171a10a1c3b5e4ce4976a1e67.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/13211c854d34bc81db7664622d2e8f292a2fae55.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-203: User can download a file
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 203ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01cba3eb8dea743353c913b3588e07ce26aadc4f.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01cba3eb8dea743353c913b3588e07ce26aadc4f.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/13ed9daad01ded0d57f53c2a775d792065f9f7e2.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-204: User can delete a file
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 211ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01d74090e3cde79e8783cdc801554e4ddb4ffe04.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01d74090e3cde79e8783cdc801554e4ddb4ffe04.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1471ec087196ebe167d65ea87fdc7b314031c520.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-205: File upload handles large files
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 202ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01f61cfb083d8c14781d379784f5844847d95ad1.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01f61cfb083d8c14781d379784f5844847d95ad1.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/14751de951b3528bd01070ef224e581c42cea7cf.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-206: Drag and drop file upload works
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 204ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01f6613631939881850de1ffa78df0f146c44891.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01f6613631939881850de1ffa78df0f146c44891.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/16a9293ee018f0aece9b632a2285d36536b969c5.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="test-suite">
+      <div class="suite-header" onclick="toggleSuite(this.parentElement)">
+        <div class="suite-title">TODO Management</div>
+        <div class="suite-stats">
+          <span><span class="stat-passed">✅ 0</span></span>
+          <span><span class="stat-failed">❌ 6</span></span>
+          <span><span class="stat-skipped">⏭️ 0</span></span>
+        </div>
+        <div class="suite-toggle">▶</div>
+      </div>
+      <div class="suite-content">
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-101: User can create a new TODO
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 203ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/01f95f62f4a38a900e97c6ab02f6def3e41d1682.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/01f95f62f4a38a900e97c6ab02f6def3e41d1682.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/17f50a069f1d8613436cf503d1b27155e2533827.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-102: User can view TODO list
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 207ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/021efd4b4c2ef7560a18b7a314f21bda7b39b8ce.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/021efd4b4c2ef7560a18b7a314f21bda7b39b8ce.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1980b76fe50db5a83191c12f0947387659a63eab.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-103: User can mark TODO as completed
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 202ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/0e98b97031075b6e0010da8491562c6a1d5fd1e2.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/0e98b97031075b6e0010da8491562c6a1d5fd1e2.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1a3650de79ecbe1612fb50029d5a95f884ed5ae6.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-104: User can delete a TODO
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 207ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/1f0dad0f794b70750113de87f7f52397c02b7065.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/1f0dad0f794b70750113de87f7f52397c02b7065.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1bd0b2cd9564f78d0eff7d3d24d25eaef4cb2697.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-105: User can filter TODOs by priority
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 199ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/201a036c1c9742319a29fe8f828019d1acfa7fc2.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/201a036c1c9742319a29fe8f828019d1acfa7fc2.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1c3e3bf8620508d39bcccf3dae131c08c0ccffbc.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
+          </div>
+        </div>
+
+        <div class="test-item failed" onclick="toggleTestDetails(this)" style="cursor: pointer;">
+          <div class="test-name">
+            ❌ E2E-106: User can search TODOs
+            <span class="test-status-badge" style="background: #ff6b6b; color: white;">
+              失敗
+            </span>
+          </div>
+          <div class="test-details">
+            <small>⏱️ 213ms</small>
+<div style="color: #ff6b6b; margin-top: 8px;"><p style="word-break: break-all; white-space: pre-wrap;">Error: page.evaluate: SecurityError: Failed to read the &#39;localStorage&#39; property from &#39;Window&#39;: Access is denied for this document.
+    at UtilityScript.evaluate (&lt;anonymous&gt;:372:16)
+    at UtilityScript.&lt;anonymous&gt; (&lt;anonymous&gt;:1:44)</p></div><div style="margin-top: 10px; padding: 10px; background: #f7f9fc; border-radius: 6px;"><div style="font-size: 0.85em; color: #555; margin-bottom: 6px;">🧾 実行証跡</div><div style="margin-bottom: 6px;"><a href="./traces/266e1c1c864915753fc067ab66758b7363335e8a.zip" target="_blank" rel="noopener noreferrer" style="margin-right: 8px;">📦 trace.zip</a><a href="#" onclick="event.stopPropagation(); openTraceViewer('./traces/266e1c1c864915753fc067ab66758b7363335e8a.zip'); return false;">🔍 Trace Viewerで開く</a></div><div style="margin-bottom: 4px;"><a href="./logs/1cb3893ff7d886274a2ab798b41d658ba5ebfe73.md" target="_blank" rel="noopener noreferrer">📝 error-context</a></div></div><div style="margin-top: 10px;"><img src="./test-failed-1.png" alt="Screenshot" style="max-width: 200px; cursor: pointer; margin-right: 5px;" onclick="openModal('./test-failed-1.png')"></div>
           </div>
         </div>
 
@@ -953,7 +1045,7 @@ Call log:
     </div>
 
     <div class="footer">
-      <p>最終更新: <span id="lastUpdated">2026/11/14 15:19:54</span></p>
+      <p>最終更新: <span id="lastUpdated">2026/11/14 22:00:44</span></p>
       <p>Copilot Quality Harness | <a href="https://github.com/cocomomojo/copilot-quality-harness" style="color: #667eea; text-decoration: none;">GitHub</a></p>
     </div>
   </div>

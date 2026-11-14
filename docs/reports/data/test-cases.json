@@ -1,277 +1,174 @@
 {
-  "timestamp": "2026-11-14T15:19:54.898Z",
-  "totalSuites": 5,
-  "totalTests": 27,
-  "passed": 23,
-  "failed": 4,
+  "timestamp": "2026-11-14T22:00:44.071Z",
+  "totalSuites": 6,
+  "totalTests": 31,
+  "passed": 1,
+  "failed": 30,
   "skipped": 0,
-  "passRate": 85,
-  "duration": 77009,
+  "passRate": 3,
+  "duration": 70745,
   "metadata": {},
   "suites": [
     {
-      "name": "User Profile - Account Created At Display (E2E)",
-      "file": "profile-created-at.spec.js",
-      "totalTests": 10,
-      "passed": 10,
-      "failed": 0,
+      "name": "Activity Logs",
+      "file": "activity-logs.spec.js",
+      "totalTests": 6,
+      "passed": 0,
+      "failed": 6,
       "skipped": 0,
-      "duration": 28510,
+      "duration": 1294,
       "tests": [
         {
-          "name": "E2E-001: Display profile with valid createdAt",
-          "title": "E2E-001: Display profile with valid createdAt",
-          "status": "passed",
-          "duration": 1971,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-301: User can view activity logs",
+          "title": "E2E-301: User can view activity logs",
+          "status": "failed",
+          "duration": 242,
+          "file": "activity-logs.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-002: Display fallback when createdAt is null",
-          "title": "E2E-002: Display fallback when createdAt is null",
-          "status": "passed",
-          "duration": 1852,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-302: Activity logs show timestamps",
+          "title": "E2E-302: Activity logs show timestamps",
+          "status": "failed",
+          "duration": 209,
+          "file": "activity-logs.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-003: Handle 404 API error when user not found",
-          "title": "E2E-003: Handle 404 API error when user not found",
-          "status": "passed",
-          "duration": 1996,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-303: Activity logs show event types",
+          "title": "E2E-303: Activity logs show event types",
+          "status": "failed",
+          "duration": 212,
+          "file": "activity-logs.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-004: Fetch createdAt from API and display formatted",
-          "title": "E2E-004: Fetch createdAt from API and display formatted",
-          "status": "passed",
-          "duration": 1302,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-304: Activity logs can be filtered by date",
+          "title": "E2E-304: Activity logs can be filtered by date",
+          "status": "failed",
+          "duration": 215,
+          "file": "activity-logs.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-005: Handle invalid createdAt format with fallback",
-          "title": "E2E-005: Handle invalid createdAt format with fallback",
-          "status": "passed",
-          "duration": 1307,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-305: Activity logs show user actions in chronological order",
+          "title": "E2E-305: Activity logs show user actions in chronological order",
+          "status": "failed",
+          "duration": 210,
+          "file": "activity-logs.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-006: Verify element structure and accessibility",
-          "title": "E2E-006: Verify element structure and accessibility",
-          "status": "passed",
-          "duration": 1298,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-306: Activity logs display is paginated or scrollable",
+          "title": "E2E-306: Activity logs display is paginated or scrollable",
+          "status": "failed",
+          "duration": 206,
+          "file": "activity-logs.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-007: Verify multiple renders and state consistency",
-          "title": "E2E-007: Verify multiple renders and state consistency",
-          "status": "passed",
-          "duration": 13322,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
+          "errorContexts": [
+            "./error-context.md"
           ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-101: Display user avatar image when available",
-          "title": "E2E-101: Display user avatar image when available",
-          "status": "passed",
-          "duration": 1822,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-102: Display default avatar when avatar_url is not provided",
-          "title": "E2E-102: Display default avatar when avatar_url is not provided",
-          "status": "passed",
-          "duration": 1821,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-103: Avatar displays with correct styling and dimensions",
-          "title": "E2E-103: Avatar displays with correct styling and dimensions",
-          "status": "passed",
-          "duration": 1819,
-          "file": "profile-created-at.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
           "stdout": [],
           "stderr": []
         }
       ]
     },
     {
-      "name": "Error Path Tests",
-      "file": "quality-checks-advanced.spec.js",
-      "totalTests": 4,
-      "passed": 4,
-      "failed": 0,
-      "skipped": 0,
-      "duration": 13564,
-      "tests": [
-        {
-          "name": "displays error when adding check with only whitespace",
-          "title": "displays error when adding check with only whitespace",
-          "status": "passed",
-          "duration": 3376,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "displays error when name exceeds 50 characters",
-          "title": "displays error when name exceeds 50 characters",
-          "status": "passed",
-          "duration": 2305,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "clears error message when user corrects input",
-          "title": "clears error message when user corrects input",
-          "status": "passed",
-          "duration": 5436,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "shows appropriate error when API is unavailable",
-          "title": "shows appropriate error when API is unavailable",
-          "status": "passed",
-          "duration": 2447,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        }
-      ]
-    },
-    {
-      "name": "Character Count Tests",
-      "file": "quality-checks-advanced.spec.js",
-      "totalTests": 3,
+      "name": "Authentication - Registration & Login",
+      "file": "auth.spec.js",
+      "totalTests": 5,
       "passed": 1,
-      "failed": 2,
+      "failed": 4,
       "skipped": 0,
-      "duration": 17268,
+      "duration": 54230,
       "tests": [
         {
-          "name": "shows character count when typing",
-          "title": "shows character count when typing",
+          "name": "E2E-001: User can register with valid credentials",
+          "title": "E2E-001: User can register with valid credentials",
           "status": "failed",
-          "duration": 7423,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 12368,
+          "file": "auth.spec.js",
           "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('char-count')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('char-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('char-count')\u001b[22m\n"
+            "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('tab', { name: /register/i })\u001b[22m\n"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -287,13 +184,13 @@
           "stderr": []
         },
         {
-          "name": "shows warning color when 10 or fewer characters remaining",
-          "title": "shows warning color when 10 or fewer characters remaining",
+          "name": "E2E-002: User can login with valid credentials",
+          "title": "E2E-002: User can login with valid credentials",
           "status": "failed",
-          "duration": 7426,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 12395,
+          "file": "auth.spec.js",
           "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveClass\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('char-count')\nExpected pattern: \u001b[32m/char-count-warning/\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveClass\" getByTestId('char-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('char-count')\u001b[22m\n"
+            "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel(/email/i)\u001b[22m\n"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -309,11 +206,55 @@
           "stderr": []
         },
         {
-          "name": "enforces maximum 50 character limit",
-          "title": "enforces maximum 50 character limit",
+          "name": "E2E-003: User cannot login with invalid password",
+          "title": "E2E-003: User cannot login with invalid password",
+          "status": "failed",
+          "duration": 13480,
+          "file": "auth.spec.js",
+          "errors": [
+            "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel(/email/i)\u001b[22m\n"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-004: Duplicate email registration is rejected",
+          "title": "E2E-004: Duplicate email registration is rejected",
+          "status": "failed",
+          "duration": 13499,
+          "file": "auth.spec.js",
+          "errors": [
+            "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('tab', { name: /register/i })\u001b[22m\n"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-005: User can logout",
+          "title": "E2E-005: User can logout",
           "status": "passed",
-          "duration": 2419,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 2488,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -327,22 +268,22 @@
       ]
     },
     {
-      "name": "Status Badge Tooltip Tests",
-      "file": "quality-checks-advanced.spec.js",
+      "name": "Protected Routes",
+      "file": "auth.spec.js",
       "totalTests": 2,
       "passed": 0,
       "failed": 2,
       "skipped": 0,
-      "duration": 16910,
+      "duration": 11531,
       "tests": [
         {
-          "name": "E2E-078-01: status badge has tooltip title attribute",
-          "title": "E2E-078-01: status badge has tooltip title attribute",
+          "name": "E2E-006: Unauthenticated user redirected to login",
+          "title": "E2E-006: Unauthenticated user redirected to login",
           "status": "failed",
-          "duration": 8411,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 11329,
+          "file": "auth.spec.js",
           "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('status-badge').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('status-badge').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('status-badge').first()\u001b[22m\n"
+            "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -358,13 +299,13 @@
           "stderr": []
         },
         {
-          "name": "E2E-078-02: status badge is keyboard accessible with tabindex",
-          "title": "E2E-078-02: status badge is keyboard accessible with tabindex",
+          "name": "E2E-007: Authenticated user can access protected pages",
+          "title": "E2E-007: Authenticated user can access protected pages",
           "status": "failed",
-          "duration": 8499,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 202,
+          "file": "auth.spec.js",
           "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('status-badge').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('status-badge').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('status-badge').first()\u001b[22m\n"
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -382,139 +323,429 @@
       ]
     },
     {
-      "name": "URL Validator API",
-      "file": "url-validator.spec.js",
-      "totalTests": 8,
-      "passed": 8,
-      "failed": 0,
+      "name": "Dashboard",
+      "file": "dashboard.spec.js",
+      "totalTests": 6,
+      "passed": 0,
+      "failed": 6,
       "skipped": 0,
-      "duration": 757,
+      "duration": 1235,
       "tests": [
         {
-          "name": "E2E-001: Check valid HTTPS URL endpoint",
-          "title": "E2E-001: Check valid HTTPS URL endpoint",
-          "status": "passed",
-          "duration": 103,
-          "file": "url-validator.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-401: Dashboard displays summary cards",
+          "title": "E2E-401: Dashboard displays summary cards",
+          "status": "failed",
+          "duration": 199,
+          "file": "dashboard.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-002: Check invalid URL format",
-          "title": "E2E-002: Check invalid URL format",
-          "status": "passed",
-          "duration": 91,
-          "file": "url-validator.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-402: Dashboard shows TODO summary",
+          "title": "E2E-402: Dashboard shows TODO summary",
+          "status": "failed",
+          "duration": 206,
+          "file": "dashboard.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-003: Check empty string input",
-          "title": "E2E-003: Check empty string input",
-          "status": "passed",
-          "duration": 97,
-          "file": "url-validator.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-403: Dashboard shows recent activity timeline",
+          "title": "E2E-403: Dashboard shows recent activity timeline",
+          "status": "failed",
+          "duration": 199,
+          "file": "dashboard.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-004: Check null input",
-          "title": "E2E-004: Check null input",
-          "status": "passed",
-          "duration": 97,
-          "file": "url-validator.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-404: Dashboard is responsive on different sizes",
+          "title": "E2E-404: Dashboard is responsive on different sizes",
+          "status": "failed",
+          "duration": 217,
+          "file": "dashboard.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-005: Check valid HTTP URL with port",
-          "title": "E2E-005: Check valid HTTP URL with port",
-          "status": "passed",
-          "duration": 95,
-          "file": "url-validator.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-405: Navigation menu is accessible from dashboard",
+          "title": "E2E-405: Navigation menu is accessible from dashboard",
+          "status": "failed",
+          "duration": 217,
+          "file": "dashboard.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-006: Check valid GitHub URL",
-          "title": "E2E-006: Check valid GitHub URL",
-          "status": "passed",
-          "duration": 96,
-          "file": "url-validator.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-406: Dashboard statistics update in real-time",
+          "title": "E2E-406: Dashboard statistics update in real-time",
+          "status": "failed",
+          "duration": 197,
+          "file": "dashboard.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "File Management",
+      "file": "files.spec.js",
+      "totalTests": 6,
+      "passed": 0,
+      "failed": 6,
+      "skipped": 0,
+      "duration": 1224,
+      "tests": [
+        {
+          "name": "E2E-201: User can upload a file",
+          "title": "E2E-201: User can upload a file",
+          "status": "failed",
+          "duration": 198,
+          "file": "files.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-007: Check FTP protocol (not allowed)",
-          "title": "E2E-007: Check FTP protocol (not allowed)",
-          "status": "passed",
-          "duration": 96,
-          "file": "url-validator.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-202: User can view file list",
+          "title": "E2E-202: User can view file list",
+          "status": "failed",
+          "duration": 206,
+          "file": "files.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         },
         {
-          "name": "E2E-008: Response time performance check",
-          "title": "E2E-008: Response time performance check",
-          "status": "passed",
-          "duration": 82,
-          "file": "url-validator.spec.js",
-          "errors": [],
-          "screenshots": [],
+          "name": "E2E-203: User can download a file",
+          "title": "E2E-203: User can download a file",
+          "status": "failed",
+          "duration": 203,
+          "file": "files.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-204: User can delete a file",
+          "title": "E2E-204: User can delete a file",
+          "status": "failed",
+          "duration": 211,
+          "file": "files.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-205: File upload handles large files",
+          "title": "E2E-205: File upload handles large files",
+          "status": "failed",
+          "duration": 202,
+          "file": "files.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-206: Drag and drop file upload works",
+          "title": "E2E-206: Drag and drop file upload works",
+          "status": "failed",
+          "duration": 204,
+          "file": "files.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "TODO Management",
+      "file": "todos.spec.js",
+      "totalTests": 6,
+      "passed": 0,
+      "failed": 6,
+      "skipped": 0,
+      "duration": 1231,
+      "tests": [
+        {
+          "name": "E2E-101: User can create a new TODO",
+          "title": "E2E-101: User can create a new TODO",
+          "status": "failed",
+          "duration": 203,
+          "file": "todos.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-102: User can view TODO list",
+          "title": "E2E-102: User can view TODO list",
+          "status": "failed",
+          "duration": 207,
+          "file": "todos.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-103: User can mark TODO as completed",
+          "title": "E2E-103: User can mark TODO as completed",
+          "status": "failed",
+          "duration": 202,
+          "file": "todos.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-104: User can delete a TODO",
+          "title": "E2E-104: User can delete a TODO",
+          "status": "failed",
+          "duration": 207,
+          "file": "todos.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-105: User can filter TODOs by priority",
+          "title": "E2E-105: User can filter TODOs by priority",
+          "status": "failed",
+          "duration": 199,
+          "file": "todos.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-106: User can search TODOs",
+          "title": "E2E-106: User can search TODOs",
+          "status": "failed",
+          "duration": 213,
+          "file": "todos.spec.js",
+          "errors": [
+            "Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+          ],
+          "screenshots": [
+            "./test-failed-1.png"
+          ],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [
+            "./error-context.md"
+          ],
           "stdout": [],
           "stderr": []
         }
