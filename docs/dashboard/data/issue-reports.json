@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-11-14T22:36:34.913Z",
+  "generated_at": "2026-11-14T22:40:03.073Z",
   "source_pr": 106,
   "reports": [
     {
       "issue_number": 44,
       "pr_number": 106,
-      "workflow_run_id": "43648932922",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
-      "generated_at": "2026-11-14T22:36:34.913Z",
+      "workflow_run_id": "43649227828",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43649227828",
+      "generated_at": "2026-11-14T22:40:03.073Z",
       "pass_rate": 100,
-      "total_tests": 40,
-      "total_passed": 40,
+      "total_tests": 55,
+      "total_passed": 55,
       "total_failed": 0,
       "coverage": {
         "overall": {
@@ -347,6 +347,7 @@
         "e2e/auth.spec.js",
         "e2e/files.spec.js",
         "e2e/profile-created-at.spec.js",
+        "e2e/quality-checks-advanced-v2.spec.js",
         "e2e/quality-checks-advanced.spec.js",
         "e2e/quality-checks.spec.js",
         "e2e/todos.spec.js",
@@ -355,18 +356,19 @@
         "frontend/src/UserProfile.test.jsx",
         "frontend/src/components/Header.test.jsx",
         "frontend/src/pages/HomePage.test.jsx",
-        "frontend/src/utils/dateFormatter.test.js"
+        "frontend/src/utils/dateFormatter.test.js",
+        "package.json"
       ]
     },
     {
       "issue_number": 56,
       "pr_number": 106,
-      "workflow_run_id": "43648932922",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
-      "generated_at": "2026-11-14T22:36:34.913Z",
+      "workflow_run_id": "43649227828",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43649227828",
+      "generated_at": "2026-11-14T22:40:03.073Z",
       "pass_rate": 100,
-      "total_tests": 40,
-      "total_passed": 40,
+      "total_tests": 55,
+      "total_passed": 55,
       "total_failed": 0,
       "coverage": {
         "overall": {
@@ -707,6 +709,7 @@
         "e2e/auth.spec.js",
         "e2e/files.spec.js",
         "e2e/profile-created-at.spec.js",
+        "e2e/quality-checks-advanced-v2.spec.js",
         "e2e/quality-checks-advanced.spec.js",
         "e2e/quality-checks.spec.js",
         "e2e/todos.spec.js",
@@ -715,18 +718,19 @@
         "frontend/src/UserProfile.test.jsx",
         "frontend/src/components/Header.test.jsx",
         "frontend/src/pages/HomePage.test.jsx",
-        "frontend/src/utils/dateFormatter.test.js"
+        "frontend/src/utils/dateFormatter.test.js",
+        "package.json"
       ]
     },
     {
       "issue_number": 61,
       "pr_number": 106,
-      "workflow_run_id": "43648932922",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
-      "generated_at": "2026-11-14T22:36:34.913Z",
+      "workflow_run_id": "43649227828",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43649227828",
+      "generated_at": "2026-11-14T22:40:03.073Z",
       "pass_rate": 100,
-      "total_tests": 40,
-      "total_passed": 40,
+      "total_tests": 55,
+      "total_passed": 55,
       "total_failed": 0,
       "coverage": {
         "overall": {
@@ -1083,6 +1087,7 @@
         "e2e/auth.spec.js",
         "e2e/files.spec.js",
         "e2e/profile-created-at.spec.js",
+        "e2e/quality-checks-advanced-v2.spec.js",
         "e2e/quality-checks-advanced.spec.js",
         "e2e/quality-checks.spec.js",
         "e2e/todos.spec.js",
@@ -1091,18 +1096,19 @@
         "frontend/src/UserProfile.test.jsx",
         "frontend/src/components/Header.test.jsx",
         "frontend/src/pages/HomePage.test.jsx",
-        "frontend/src/utils/dateFormatter.test.js"
+        "frontend/src/utils/dateFormatter.test.js",
+        "package.json"
       ]
     },
     {
       "issue_number": 63,
       "pr_number": 106,
-      "workflow_run_id": "43648932922",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
-      "generated_at": "2026-11-14T22:36:34.913Z",
+      "workflow_run_id": "43649227828",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43649227828",
+      "generated_at": "2026-11-14T22:40:03.073Z",
       "pass_rate": 100,
-      "total_tests": 40,
-      "total_passed": 40,
+      "total_tests": 55,
+      "total_passed": 55,
       "total_failed": 0,
       "coverage": {
         "overall": {
@@ -1430,6 +1436,7 @@
         "e2e/auth.spec.js",
         "e2e/files.spec.js",
         "e2e/profile-created-at.spec.js",
+        "e2e/quality-checks-advanced-v2.spec.js",
         "e2e/quality-checks-advanced.spec.js",
         "e2e/quality-checks.spec.js",
         "e2e/todos.spec.js",
@@ -1438,18 +1445,19 @@
         "frontend/src/UserProfile.test.jsx",
         "frontend/src/components/Header.test.jsx",
         "frontend/src/pages/HomePage.test.jsx",
-        "frontend/src/utils/dateFormatter.test.js"
+        "frontend/src/utils/dateFormatter.test.js",
+        "package.json"
       ]
     },
     {
       "issue_number": 65,
       "pr_number": 106,
-      "workflow_run_id": "43648932922",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
-      "generated_at": "2026-11-14T22:36:34.913Z",
+      "workflow_run_id": "43649227828",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43649227828",
+      "generated_at": "2026-11-14T22:40:03.073Z",
       "pass_rate": 100,
-      "total_tests": 40,
-      "total_passed": 40,
+      "total_tests": 55,
+      "total_passed": 55,
       "total_failed": 0,
       "coverage": {
         "overall": {
@@ -1777,6 +1785,7 @@
         "e2e/auth.spec.js",
         "e2e/files.spec.js",
         "e2e/profile-created-at.spec.js",
+        "e2e/quality-checks-advanced-v2.spec.js",
         "e2e/quality-checks-advanced.spec.js",
         "e2e/quality-checks.spec.js",
         "e2e/todos.spec.js",
@@ -1785,7 +1794,8 @@
         "frontend/src/UserProfile.test.jsx",
         "frontend/src/components/Header.test.jsx",
         "frontend/src/pages/HomePage.test.jsx",
-        "frontend/src/utils/dateFormatter.test.js"
+        "frontend/src/utils/dateFormatter.test.js",
+        "package.json"
       ]
     },
     {
@@ -1837,12 +1847,12 @@
     {
       "issue_number": 69,
       "pr_number": 106,
-      "workflow_run_id": "43648932922",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
-      "generated_at": "2026-11-14T22:36:34.913Z",
+      "workflow_run_id": "43649227828",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43649227828",
+      "generated_at": "2026-11-14T22:40:03.073Z",
       "pass_rate": 100,
-      "total_tests": 40,
-      "total_passed": 40,
+      "total_tests": 55,
+      "total_passed": 55,
       "total_failed": 0,
       "coverage": {
         "overall": {
@@ -2170,6 +2180,7 @@
         "e2e/auth.spec.js",
         "e2e/files.spec.js",
         "e2e/profile-created-at.spec.js",
+        "e2e/quality-checks-advanced-v2.spec.js",
         "e2e/quality-checks-advanced.spec.js",
         "e2e/quality-checks.spec.js",
         "e2e/todos.spec.js",
@@ -2178,18 +2189,19 @@
         "frontend/src/UserProfile.test.jsx",
         "frontend/src/components/Header.test.jsx",
         "frontend/src/pages/HomePage.test.jsx",
-        "frontend/src/utils/dateFormatter.test.js"
+        "frontend/src/utils/dateFormatter.test.js",
+        "package.json"
       ]
     },
     {
       "issue_number": 76,
       "pr_number": 106,
-      "workflow_run_id": "43648932922",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
-      "generated_at": "2026-11-14T22:36:34.913Z",
+      "workflow_run_id": "43649227828",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43649227828",
+      "generated_at": "2026-11-14T22:40:03.073Z",
       "pass_rate": 100,
-      "total_tests": 40,
-      "total_passed": 40,
+      "total_tests": 55,
+      "total_passed": 55,
       "total_failed": 0,
       "coverage": {
         "overall": {
@@ -2517,6 +2529,7 @@
         "e2e/auth.spec.js",
         "e2e/files.spec.js",
         "e2e/profile-created-at.spec.js",
+        "e2e/quality-checks-advanced-v2.spec.js",
         "e2e/quality-checks-advanced.spec.js",
         "e2e/quality-checks.spec.js",
         "e2e/todos.spec.js",
@@ -2525,18 +2538,19 @@
         "frontend/src/UserProfile.test.jsx",
         "frontend/src/components/Header.test.jsx",
         "frontend/src/pages/HomePage.test.jsx",
-        "frontend/src/utils/dateFormatter.test.js"
+        "frontend/src/utils/dateFormatter.test.js",
+        "package.json"
       ]
     },
     {
       "issue_number": 78,
       "pr_number": 106,
-      "workflow_run_id": "43648932922",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
-      "generated_at": "2026-11-14T22:36:34.913Z",
+      "workflow_run_id": "43649227828",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43649227828",
+      "generated_at": "2026-11-14T22:40:03.073Z",
       "pass_rate": 100,
-      "total_tests": 40,
-      "total_passed": 40,
+      "total_tests": 55,
+      "total_passed": 55,
       "total_failed": 0,
       "coverage": {
         "overall": {
@@ -2864,6 +2878,7 @@
         "e2e/auth.spec.js",
         "e2e/files.spec.js",
         "e2e/profile-created-at.spec.js",
+        "e2e/quality-checks-advanced-v2.spec.js",
         "e2e/quality-checks-advanced.spec.js",
         "e2e/quality-checks.spec.js",
         "e2e/todos.spec.js",
@@ -2872,7 +2887,8 @@
         "frontend/src/UserProfile.test.jsx",
         "frontend/src/components/Header.test.jsx",
         "frontend/src/pages/HomePage.test.jsx",
-        "frontend/src/utils/dateFormatter.test.js"
+        "frontend/src/utils/dateFormatter.test.js",
+        "package.json"
       ]
     },
     {
