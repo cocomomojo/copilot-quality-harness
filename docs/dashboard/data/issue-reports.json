@@ -1,111 +1,34 @@
 {
-  "generated_at": "2026-11-14T12:07:14.799Z",
-  "source_pr": 93,
+  "generated_at": "2026-11-14T12:11:09.401Z",
+  "source_pr": 91,
   "reports": [
     {
       "issue_number": 44,
-      "pr_number": 93,
-      "workflow_run_id": "43593179007",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593179007",
-      "generated_at": "2026-11-14T12:07:14.799Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 130,
-      "total_passed": 130,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.51,
-          "branches_pct": 68.97,
-          "functions_pct": 27.78,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
           {
-            "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
-            "functions_pct": 50,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/middleware/auth.js",
-            "lines_pct": 18.52,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/auth.js",
-            "lines_pct": 27.06,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/workers/sqs-listener.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App-old.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -133,34 +56,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/components/ProtectedRoute.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Toast.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AppContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AuthContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/main.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -168,35 +63,7 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/ActivityLogs.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Dashboard.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Files.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Login.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -224,13 +91,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/Todos.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/URLValidatorPage.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -238,15 +98,8 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/utils/api.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "backend/src/app.js",
-            "lines_pct": 83.33,
+            "lines_pct": 82.28,
             "branches_pct": 94.74,
             "functions_pct": 100,
             "status": "pass"
@@ -263,6 +116,13 @@
             "lines_pct": 94.44,
             "branches_pct": 92.86,
             "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
             "status": "pass"
           },
           {
@@ -294,7 +154,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -333,155 +193,44 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
-        ".npmrc",
-        ".pnpmfile.cjs",
-        "Dockerfile.aws-emulator",
         "backend/package.json",
-        "backend/src/app.js",
-        "backend/src/lib/aws.js",
-        "backend/src/middleware/auth.js",
-        "backend/src/routes/auth.js",
-        "backend/src/routes/files.js",
-        "backend/src/routes/logs.js",
-        "backend/src/routes/todos.js",
-        "backend/src/server.js",
-        "backend/src/utils/dynamodb.js",
-        "backend/src/utils/password.js",
-        "backend/src/utils/sqs.js",
-        "backend/src/workers/sqs-listener.js",
+        "backend/src/lib/aws.ts",
         "docker-compose.yml",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/App-old.jsx",
-        "frontend/src/App.css",
-        "frontend/src/App.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/components/ProtectedRoute.jsx",
-        "frontend/src/components/Toast.css",
-        "frontend/src/components/Toast.jsx",
-        "frontend/src/context/AppContext.jsx",
-        "frontend/src/context/AuthContext.jsx",
-        "frontend/src/pages/ActivityLogs.css",
-        "frontend/src/pages/ActivityLogs.jsx",
-        "frontend/src/pages/Dashboard.css",
-        "frontend/src/pages/Dashboard.jsx",
-        "frontend/src/pages/Files.css",
-        "frontend/src/pages/Files.jsx",
-        "frontend/src/pages/Login.css",
-        "frontend/src/pages/Login.jsx",
-        "frontend/src/pages/Todos.css",
-        "frontend/src/pages/Todos.jsx",
-        "frontend/src/utils/api.js",
         "package.json",
         "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
         "scripts/init-aws-resources.ts",
-        "scripts/parse-test-result.js",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 56,
-      "pr_number": 93,
-      "workflow_run_id": "43593179007",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593179007",
-      "generated_at": "2026-11-14T12:07:14.799Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 130,
-      "total_passed": 130,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.51,
-          "branches_pct": 68.97,
-          "functions_pct": 27.78,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
           {
-            "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
-            "functions_pct": 50,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/middleware/auth.js",
-            "lines_pct": 18.52,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/auth.js",
-            "lines_pct": 27.06,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/workers/sqs-listener.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App-old.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -509,34 +258,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/components/ProtectedRoute.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Toast.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AppContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AuthContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/main.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -544,35 +265,7 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/ActivityLogs.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Dashboard.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Files.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Login.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -600,13 +293,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/Todos.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/URLValidatorPage.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -614,15 +300,8 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/utils/api.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "backend/src/app.js",
-            "lines_pct": 83.33,
+            "lines_pct": 82.28,
             "branches_pct": 94.74,
             "functions_pct": 100,
             "status": "pass"
@@ -639,6 +318,13 @@
             "lines_pct": 94.44,
             "branches_pct": 92.86,
             "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
             "status": "pass"
           },
           {
@@ -670,7 +356,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -713,155 +399,44 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
-        ".npmrc",
-        ".pnpmfile.cjs",
-        "Dockerfile.aws-emulator",
         "backend/package.json",
-        "backend/src/app.js",
-        "backend/src/lib/aws.js",
-        "backend/src/middleware/auth.js",
-        "backend/src/routes/auth.js",
-        "backend/src/routes/files.js",
-        "backend/src/routes/logs.js",
-        "backend/src/routes/todos.js",
-        "backend/src/server.js",
-        "backend/src/utils/dynamodb.js",
-        "backend/src/utils/password.js",
-        "backend/src/utils/sqs.js",
-        "backend/src/workers/sqs-listener.js",
+        "backend/src/lib/aws.ts",
         "docker-compose.yml",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/App-old.jsx",
-        "frontend/src/App.css",
-        "frontend/src/App.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/components/ProtectedRoute.jsx",
-        "frontend/src/components/Toast.css",
-        "frontend/src/components/Toast.jsx",
-        "frontend/src/context/AppContext.jsx",
-        "frontend/src/context/AuthContext.jsx",
-        "frontend/src/pages/ActivityLogs.css",
-        "frontend/src/pages/ActivityLogs.jsx",
-        "frontend/src/pages/Dashboard.css",
-        "frontend/src/pages/Dashboard.jsx",
-        "frontend/src/pages/Files.css",
-        "frontend/src/pages/Files.jsx",
-        "frontend/src/pages/Login.css",
-        "frontend/src/pages/Login.jsx",
-        "frontend/src/pages/Todos.css",
-        "frontend/src/pages/Todos.jsx",
-        "frontend/src/utils/api.js",
         "package.json",
         "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
         "scripts/init-aws-resources.ts",
-        "scripts/parse-test-result.js",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 61,
-      "pr_number": 93,
-      "workflow_run_id": "43593179007",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593179007",
-      "generated_at": "2026-11-14T12:07:14.799Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 130,
-      "total_passed": 130,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.51,
-          "branches_pct": 68.97,
-          "functions_pct": 27.78,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
           {
-            "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
-            "functions_pct": 50,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/middleware/auth.js",
-            "lines_pct": 18.52,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/auth.js",
-            "lines_pct": 27.06,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/workers/sqs-listener.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App-old.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -889,34 +464,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/components/ProtectedRoute.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Toast.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AppContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AuthContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/main.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -924,35 +471,7 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/ActivityLogs.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Dashboard.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Files.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Login.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -980,13 +499,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/Todos.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/URLValidatorPage.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -994,15 +506,8 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/utils/api.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "backend/src/app.js",
-            "lines_pct": 83.33,
+            "lines_pct": 82.28,
             "branches_pct": 94.74,
             "functions_pct": 100,
             "status": "pass"
@@ -1019,6 +524,13 @@
             "lines_pct": 94.44,
             "branches_pct": 92.86,
             "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
             "status": "pass"
           },
           {
@@ -1050,7 +562,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1109,155 +621,44 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
-        ".npmrc",
-        ".pnpmfile.cjs",
-        "Dockerfile.aws-emulator",
         "backend/package.json",
-        "backend/src/app.js",
-        "backend/src/lib/aws.js",
-        "backend/src/middleware/auth.js",
-        "backend/src/routes/auth.js",
-        "backend/src/routes/files.js",
-        "backend/src/routes/logs.js",
-        "backend/src/routes/todos.js",
-        "backend/src/server.js",
-        "backend/src/utils/dynamodb.js",
-        "backend/src/utils/password.js",
-        "backend/src/utils/sqs.js",
-        "backend/src/workers/sqs-listener.js",
+        "backend/src/lib/aws.ts",
         "docker-compose.yml",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/App-old.jsx",
-        "frontend/src/App.css",
-        "frontend/src/App.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/components/ProtectedRoute.jsx",
-        "frontend/src/components/Toast.css",
-        "frontend/src/components/Toast.jsx",
-        "frontend/src/context/AppContext.jsx",
-        "frontend/src/context/AuthContext.jsx",
-        "frontend/src/pages/ActivityLogs.css",
-        "frontend/src/pages/ActivityLogs.jsx",
-        "frontend/src/pages/Dashboard.css",
-        "frontend/src/pages/Dashboard.jsx",
-        "frontend/src/pages/Files.css",
-        "frontend/src/pages/Files.jsx",
-        "frontend/src/pages/Login.css",
-        "frontend/src/pages/Login.jsx",
-        "frontend/src/pages/Todos.css",
-        "frontend/src/pages/Todos.jsx",
-        "frontend/src/utils/api.js",
         "package.json",
         "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
         "scripts/init-aws-resources.ts",
-        "scripts/parse-test-result.js",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 63,
-      "pr_number": 93,
-      "workflow_run_id": "43593179007",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593179007",
-      "generated_at": "2026-11-14T12:07:14.799Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 130,
-      "total_passed": 130,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.51,
-          "branches_pct": 68.97,
-          "functions_pct": 27.78,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
           {
-            "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
-            "functions_pct": 50,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/middleware/auth.js",
-            "lines_pct": 18.52,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/auth.js",
-            "lines_pct": 27.06,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/workers/sqs-listener.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App-old.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -1285,34 +686,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/components/ProtectedRoute.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Toast.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AppContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AuthContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/main.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -1320,35 +693,7 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/ActivityLogs.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Dashboard.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Files.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Login.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -1376,13 +721,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/Todos.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/URLValidatorPage.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -1390,15 +728,8 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/utils/api.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "backend/src/app.js",
-            "lines_pct": 83.33,
+            "lines_pct": 82.28,
             "branches_pct": 94.74,
             "functions_pct": 100,
             "status": "pass"
@@ -1415,6 +746,13 @@
             "lines_pct": 94.44,
             "branches_pct": 92.86,
             "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
             "status": "pass"
           },
           {
@@ -1446,7 +784,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1476,155 +814,44 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
-        ".npmrc",
-        ".pnpmfile.cjs",
-        "Dockerfile.aws-emulator",
         "backend/package.json",
-        "backend/src/app.js",
-        "backend/src/lib/aws.js",
-        "backend/src/middleware/auth.js",
-        "backend/src/routes/auth.js",
-        "backend/src/routes/files.js",
-        "backend/src/routes/logs.js",
-        "backend/src/routes/todos.js",
-        "backend/src/server.js",
-        "backend/src/utils/dynamodb.js",
-        "backend/src/utils/password.js",
-        "backend/src/utils/sqs.js",
-        "backend/src/workers/sqs-listener.js",
+        "backend/src/lib/aws.ts",
         "docker-compose.yml",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/App-old.jsx",
-        "frontend/src/App.css",
-        "frontend/src/App.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/components/ProtectedRoute.jsx",
-        "frontend/src/components/Toast.css",
-        "frontend/src/components/Toast.jsx",
-        "frontend/src/context/AppContext.jsx",
-        "frontend/src/context/AuthContext.jsx",
-        "frontend/src/pages/ActivityLogs.css",
-        "frontend/src/pages/ActivityLogs.jsx",
-        "frontend/src/pages/Dashboard.css",
-        "frontend/src/pages/Dashboard.jsx",
-        "frontend/src/pages/Files.css",
-        "frontend/src/pages/Files.jsx",
-        "frontend/src/pages/Login.css",
-        "frontend/src/pages/Login.jsx",
-        "frontend/src/pages/Todos.css",
-        "frontend/src/pages/Todos.jsx",
-        "frontend/src/utils/api.js",
         "package.json",
         "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
         "scripts/init-aws-resources.ts",
-        "scripts/parse-test-result.js",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 65,
-      "pr_number": 93,
-      "workflow_run_id": "43593179007",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593179007",
-      "generated_at": "2026-11-14T12:07:14.799Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 130,
-      "total_passed": 130,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.51,
-          "branches_pct": 68.97,
-          "functions_pct": 27.78,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
           {
-            "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
-            "functions_pct": 50,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/middleware/auth.js",
-            "lines_pct": 18.52,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/auth.js",
-            "lines_pct": 27.06,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/workers/sqs-listener.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App-old.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -1652,34 +879,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/components/ProtectedRoute.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Toast.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AppContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AuthContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/main.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -1687,35 +886,7 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/ActivityLogs.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Dashboard.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Files.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Login.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -1743,13 +914,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/Todos.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/URLValidatorPage.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -1757,15 +921,8 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/utils/api.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "backend/src/app.js",
-            "lines_pct": 83.33,
+            "lines_pct": 82.28,
             "branches_pct": 94.74,
             "functions_pct": 100,
             "status": "pass"
@@ -1782,6 +939,13 @@
             "lines_pct": 94.44,
             "branches_pct": 92.86,
             "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
             "status": "pass"
           },
           {
@@ -1813,7 +977,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1843,49 +1007,15 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
-        ".npmrc",
-        ".pnpmfile.cjs",
-        "Dockerfile.aws-emulator",
         "backend/package.json",
-        "backend/src/app.js",
-        "backend/src/lib/aws.js",
-        "backend/src/middleware/auth.js",
-        "backend/src/routes/auth.js",
-        "backend/src/routes/files.js",
-        "backend/src/routes/logs.js",
-        "backend/src/routes/todos.js",
-        "backend/src/server.js",
-        "backend/src/utils/dynamodb.js",
-        "backend/src/utils/password.js",
-        "backend/src/utils/sqs.js",
-        "backend/src/workers/sqs-listener.js",
+        "backend/src/lib/aws.ts",
         "docker-compose.yml",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/App-old.jsx",
-        "frontend/src/App.css",
-        "frontend/src/App.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/components/ProtectedRoute.jsx",
-        "frontend/src/components/Toast.css",
-        "frontend/src/components/Toast.jsx",
-        "frontend/src/context/AppContext.jsx",
-        "frontend/src/context/AuthContext.jsx",
-        "frontend/src/pages/ActivityLogs.css",
-        "frontend/src/pages/ActivityLogs.jsx",
-        "frontend/src/pages/Dashboard.css",
-        "frontend/src/pages/Dashboard.jsx",
-        "frontend/src/pages/Files.css",
-        "frontend/src/pages/Files.jsx",
-        "frontend/src/pages/Login.css",
-        "frontend/src/pages/Login.jsx",
-        "frontend/src/pages/Todos.css",
-        "frontend/src/pages/Todos.jsx",
-        "frontend/src/utils/api.js",
         "package.json",
         "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
         "scripts/init-aws-resources.ts",
-        "scripts/parse-test-result.js",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
@@ -1936,108 +1066,31 @@
     },
     {
       "issue_number": 69,
-      "pr_number": 93,
-      "workflow_run_id": "43593179007",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593179007",
-      "generated_at": "2026-11-14T12:07:14.799Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 130,
-      "total_passed": 130,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.51,
-          "branches_pct": 68.97,
-          "functions_pct": 27.78,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
           {
-            "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
-            "functions_pct": 50,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/middleware/auth.js",
-            "lines_pct": 18.52,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/auth.js",
-            "lines_pct": 27.06,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/workers/sqs-listener.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App-old.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2065,34 +1118,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/components/ProtectedRoute.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Toast.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AppContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AuthContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/main.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -2100,35 +1125,7 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/ActivityLogs.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Dashboard.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Files.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Login.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2156,13 +1153,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/Todos.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/URLValidatorPage.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -2170,15 +1160,8 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/utils/api.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "backend/src/app.js",
-            "lines_pct": 83.33,
+            "lines_pct": 82.28,
             "branches_pct": 94.74,
             "functions_pct": 100,
             "status": "pass"
@@ -2195,6 +1178,13 @@
             "lines_pct": 94.44,
             "branches_pct": 92.86,
             "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
             "status": "pass"
           },
           {
@@ -2226,7 +1216,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2256,155 +1246,44 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
-        ".npmrc",
-        ".pnpmfile.cjs",
-        "Dockerfile.aws-emulator",
         "backend/package.json",
-        "backend/src/app.js",
-        "backend/src/lib/aws.js",
-        "backend/src/middleware/auth.js",
-        "backend/src/routes/auth.js",
-        "backend/src/routes/files.js",
-        "backend/src/routes/logs.js",
-        "backend/src/routes/todos.js",
-        "backend/src/server.js",
-        "backend/src/utils/dynamodb.js",
-        "backend/src/utils/password.js",
-        "backend/src/utils/sqs.js",
-        "backend/src/workers/sqs-listener.js",
+        "backend/src/lib/aws.ts",
         "docker-compose.yml",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/App-old.jsx",
-        "frontend/src/App.css",
-        "frontend/src/App.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/components/ProtectedRoute.jsx",
-        "frontend/src/components/Toast.css",
-        "frontend/src/components/Toast.jsx",
-        "frontend/src/context/AppContext.jsx",
-        "frontend/src/context/AuthContext.jsx",
-        "frontend/src/pages/ActivityLogs.css",
-        "frontend/src/pages/ActivityLogs.jsx",
-        "frontend/src/pages/Dashboard.css",
-        "frontend/src/pages/Dashboard.jsx",
-        "frontend/src/pages/Files.css",
-        "frontend/src/pages/Files.jsx",
-        "frontend/src/pages/Login.css",
-        "frontend/src/pages/Login.jsx",
-        "frontend/src/pages/Todos.css",
-        "frontend/src/pages/Todos.jsx",
-        "frontend/src/utils/api.js",
         "package.json",
         "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
         "scripts/init-aws-resources.ts",
-        "scripts/parse-test-result.js",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 76,
-      "pr_number": 93,
-      "workflow_run_id": "43593179007",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593179007",
-      "generated_at": "2026-11-14T12:07:14.799Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 130,
-      "total_passed": 130,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.51,
-          "branches_pct": 68.97,
-          "functions_pct": 27.78,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
           {
-            "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
-            "functions_pct": 50,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/middleware/auth.js",
-            "lines_pct": 18.52,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/auth.js",
-            "lines_pct": 27.06,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/workers/sqs-listener.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App-old.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2432,34 +1311,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/components/ProtectedRoute.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Toast.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AppContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AuthContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/main.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -2467,35 +1318,7 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/ActivityLogs.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Dashboard.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Files.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Login.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2523,13 +1346,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/Todos.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/URLValidatorPage.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -2537,15 +1353,8 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/utils/api.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "backend/src/app.js",
-            "lines_pct": 83.33,
+            "lines_pct": 82.28,
             "branches_pct": 94.74,
             "functions_pct": 100,
             "status": "pass"
@@ -2562,6 +1371,13 @@
             "lines_pct": 94.44,
             "branches_pct": 92.86,
             "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
             "status": "pass"
           },
           {
@@ -2593,7 +1409,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2623,155 +1439,44 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
-        ".npmrc",
-        ".pnpmfile.cjs",
-        "Dockerfile.aws-emulator",
         "backend/package.json",
-        "backend/src/app.js",
-        "backend/src/lib/aws.js",
-        "backend/src/middleware/auth.js",
-        "backend/src/routes/auth.js",
-        "backend/src/routes/files.js",
-        "backend/src/routes/logs.js",
-        "backend/src/routes/todos.js",
-        "backend/src/server.js",
-        "backend/src/utils/dynamodb.js",
-        "backend/src/utils/password.js",
-        "backend/src/utils/sqs.js",
-        "backend/src/workers/sqs-listener.js",
+        "backend/src/lib/aws.ts",
         "docker-compose.yml",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/App-old.jsx",
-        "frontend/src/App.css",
-        "frontend/src/App.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/components/ProtectedRoute.jsx",
-        "frontend/src/components/Toast.css",
-        "frontend/src/components/Toast.jsx",
-        "frontend/src/context/AppContext.jsx",
-        "frontend/src/context/AuthContext.jsx",
-        "frontend/src/pages/ActivityLogs.css",
-        "frontend/src/pages/ActivityLogs.jsx",
-        "frontend/src/pages/Dashboard.css",
-        "frontend/src/pages/Dashboard.jsx",
-        "frontend/src/pages/Files.css",
-        "frontend/src/pages/Files.jsx",
-        "frontend/src/pages/Login.css",
-        "frontend/src/pages/Login.jsx",
-        "frontend/src/pages/Todos.css",
-        "frontend/src/pages/Todos.jsx",
-        "frontend/src/utils/api.js",
         "package.json",
         "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
         "scripts/init-aws-resources.ts",
-        "scripts/parse-test-result.js",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 78,
-      "pr_number": 93,
-      "workflow_run_id": "43593179007",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593179007",
-      "generated_at": "2026-11-14T12:07:14.799Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 130,
-      "total_passed": 130,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.51,
-          "branches_pct": 68.97,
-          "functions_pct": 27.78,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
           {
-            "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
-            "functions_pct": 50,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/middleware/auth.js",
-            "lines_pct": 18.52,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/auth.js",
-            "lines_pct": 27.06,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/workers/sqs-listener.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App-old.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/App.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2799,34 +1504,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/components/ProtectedRoute.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Toast.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AppContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/context/AuthContext.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/main.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -2834,35 +1511,7 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/ActivityLogs.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Dashboard.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/DashboardPage.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Files.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/pages/Login.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2890,13 +1539,6 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/pages/Todos.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "frontend/src/pages/URLValidatorPage.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
@@ -2904,15 +1546,8 @@
             "status": "fail"
           },
           {
-            "path": "frontend/src/utils/api.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
             "path": "backend/src/app.js",
-            "lines_pct": 83.33,
+            "lines_pct": 82.28,
             "branches_pct": 94.74,
             "functions_pct": 100,
             "status": "pass"
@@ -2929,6 +1564,13 @@
             "lines_pct": 94.44,
             "branches_pct": 92.86,
             "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
             "status": "pass"
           },
           {
@@ -2960,7 +1602,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2990,49 +1632,15 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
-        ".npmrc",
-        ".pnpmfile.cjs",
-        "Dockerfile.aws-emulator",
         "backend/package.json",
-        "backend/src/app.js",
-        "backend/src/lib/aws.js",
-        "backend/src/middleware/auth.js",
-        "backend/src/routes/auth.js",
-        "backend/src/routes/files.js",
-        "backend/src/routes/logs.js",
-        "backend/src/routes/todos.js",
-        "backend/src/server.js",
-        "backend/src/utils/dynamodb.js",
-        "backend/src/utils/password.js",
-        "backend/src/utils/sqs.js",
-        "backend/src/workers/sqs-listener.js",
+        "backend/src/lib/aws.ts",
         "docker-compose.yml",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/App-old.jsx",
-        "frontend/src/App.css",
-        "frontend/src/App.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/components/ProtectedRoute.jsx",
-        "frontend/src/components/Toast.css",
-        "frontend/src/components/Toast.jsx",
-        "frontend/src/context/AppContext.jsx",
-        "frontend/src/context/AuthContext.jsx",
-        "frontend/src/pages/ActivityLogs.css",
-        "frontend/src/pages/ActivityLogs.jsx",
-        "frontend/src/pages/Dashboard.css",
-        "frontend/src/pages/Dashboard.jsx",
-        "frontend/src/pages/Files.css",
-        "frontend/src/pages/Files.jsx",
-        "frontend/src/pages/Login.css",
-        "frontend/src/pages/Login.jsx",
-        "frontend/src/pages/Todos.css",
-        "frontend/src/pages/Todos.jsx",
-        "frontend/src/utils/api.js",
         "package.json",
         "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
         "scripts/init-aws-resources.ts",
-        "scripts/parse-test-result.js",
-        "scripts/start-aws-emulator.sh"
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
