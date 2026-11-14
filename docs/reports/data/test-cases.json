@@ -1,330 +1,14 @@
 {
-  "timestamp": "2026-11-14T23:07:41.130Z",
-  "totalSuites": 11,
-  "totalTests": 40,
-  "passed": 40,
+  "timestamp": "2026-11-14T23:17:30.537Z",
+  "totalSuites": 7,
+  "totalTests": 23,
+  "passed": 23,
   "failed": 0,
   "skipped": 0,
   "passRate": 100,
-  "duration": 1487,
+  "duration": 1330,
   "metadata": {},
   "suites": [
-    {
-      "name": "Authentication - Registration & Login",
-      "file": "auth.spec.js",
-      "totalTests": 7,
-      "passed": 7,
-      "failed": 0,
-      "skipped": 0,
-      "duration": 599,
-      "tests": [
-        {
-          "name": "E2E-001: User can register via API",
-          "title": "E2E-001: User can register via API",
-          "status": "passed",
-          "duration": 183,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-002: User can login via API",
-          "title": "E2E-002: User can login via API",
-          "status": "passed",
-          "duration": 220,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-003: Invalid login credentials return error",
-          "title": "E2E-003: Invalid login credentials return error",
-          "status": "passed",
-          "duration": 27,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-004: Duplicate email registration is rejected",
-          "title": "E2E-004: Duplicate email registration is rejected",
-          "status": "passed",
-          "duration": 121,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-005: User can retrieve profile",
-          "title": "E2E-005: User can retrieve profile",
-          "status": "passed",
-          "duration": 18,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-006: Protected endpoint requires authentication",
-          "title": "E2E-006: Protected endpoint requires authentication",
-          "status": "passed",
-          "duration": 13,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-007: Health check endpoint is available",
-          "title": "E2E-007: Health check endpoint is available",
-          "status": "passed",
-          "duration": 17,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        }
-      ]
-    },
-    {
-      "name": "API Authentication Flow",
-      "file": "auth.spec.js",
-      "totalTests": 2,
-      "passed": 2,
-      "failed": 0,
-      "skipped": 0,
-      "duration": 128,
-      "tests": [
-        {
-          "name": "E2E-008: Registration endpoint accepts valid data",
-          "title": "E2E-008: Registration endpoint accepts valid data",
-          "status": "passed",
-          "duration": 108,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-009: Login endpoint validates credentials",
-          "title": "E2E-009: Login endpoint validates credentials",
-          "status": "passed",
-          "duration": 20,
-          "file": "auth.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        }
-      ]
-    },
-    {
-      "name": "File Management API",
-      "file": "files.spec.js",
-      "totalTests": 6,
-      "passed": 6,
-      "failed": 0,
-      "skipped": 0,
-      "duration": 79,
-      "tests": [
-        {
-          "name": "E2E-201: Upload file endpoint exists",
-          "title": "E2E-201: Upload file endpoint exists",
-          "status": "passed",
-          "duration": 16,
-          "file": "files.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-202: List files endpoint exists",
-          "title": "E2E-202: List files endpoint exists",
-          "status": "passed",
-          "duration": 13,
-          "file": "files.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-203: Get file details endpoint",
-          "title": "E2E-203: Get file details endpoint",
-          "status": "passed",
-          "duration": 11,
-          "file": "files.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-204: Download file endpoint",
-          "title": "E2E-204: Download file endpoint",
-          "status": "passed",
-          "duration": 15,
-          "file": "files.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-205: Delete file endpoint",
-          "title": "E2E-205: Delete file endpoint",
-          "status": "passed",
-          "duration": 12,
-          "file": "files.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-206: Get presigned URL for upload",
-          "title": "E2E-206: Get presigned URL for upload",
-          "status": "passed",
-          "duration": 12,
-          "file": "files.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        }
-      ]
-    },
-    {
-      "name": "File Management UI",
-      "file": "files.spec.js",
-      "totalTests": 2,
-      "passed": 2,
-      "failed": 0,
-      "skipped": 0,
-      "duration": 30,
-      "tests": [
-        {
-          "name": "E2E-207: Files page accessible",
-          "title": "E2E-207: Files page accessible",
-          "status": "passed",
-          "duration": 16,
-          "file": "files.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-208: File list renders",
-          "title": "E2E-208: File list renders",
-          "status": "passed",
-          "duration": 14,
-          "file": "files.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        }
-      ]
-    },
     {
       "name": "Advanced Auth Scenarios",
       "file": "quality-checks-advanced-v2.spec.js",
@@ -332,13 +16,13 @@
       "passed": 3,
       "failed": 0,
       "skipped": 0,
-      "duration": 314,
+      "duration": 434,
       "tests": [
         {
           "name": "E2E-ADV-001: Multiple registration attempts with same email",
           "title": "E2E-ADV-001: Multiple registration attempts with same email",
           "status": "passed",
-          "duration": 114,
+          "duration": 200,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -354,7 +38,7 @@
           "name": "E2E-ADV-002: Login immediately after registration",
           "title": "E2E-ADV-002: Login immediately after registration",
           "status": "passed",
-          "duration": 187,
+          "duration": 216,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -370,7 +54,7 @@
           "name": "E2E-ADV-003: Password validation on registration",
           "title": "E2E-ADV-003: Password validation on registration",
           "status": "passed",
-          "duration": 13,
+          "duration": 18,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -391,13 +75,13 @@
       "passed": 3,
       "failed": 0,
       "skipped": 0,
-      "duration": 69,
+      "duration": 67,
       "tests": [
         {
           "name": "E2E-ADV-004: Create and immediately retrieve TODO",
           "title": "E2E-ADV-004: Create and immediately retrieve TODO",
           "status": "passed",
-          "duration": 20,
+          "duration": 18,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -413,7 +97,7 @@
           "name": "E2E-ADV-005: Update TODO status transitions",
           "title": "E2E-ADV-005: Update TODO status transitions",
           "status": "passed",
-          "duration": 18,
+          "duration": 17,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -429,7 +113,7 @@
           "name": "E2E-ADV-006: Bulk TODO operations",
           "title": "E2E-ADV-006: Bulk TODO operations",
           "status": "passed",
-          "duration": 31,
+          "duration": 32,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -450,7 +134,7 @@
       "passed": 2,
       "failed": 0,
       "skipped": 0,
-      "duration": 25,
+      "duration": 28,
       "tests": [
         {
           "name": "E2E-ADV-007: Presigned URL flow",
@@ -472,7 +156,7 @@
           "name": "E2E-ADV-008: File list and retrieval",
           "title": "E2E-ADV-008: File list and retrieval",
           "status": "passed",
-          "duration": 13,
+          "duration": 16,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -493,13 +177,13 @@
       "passed": 4,
       "failed": 0,
       "skipped": 0,
-      "duration": 60,
+      "duration": 53,
       "tests": [
         {
           "name": "E2E-ADV-009: Invalid token handling",
           "title": "E2E-ADV-009: Invalid token handling",
           "status": "passed",
-          "duration": 15,
+          "duration": 10,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -547,7 +231,7 @@
           "name": "E2E-ADV-012: Concurrent requests handling",
           "title": "E2E-ADV-012: Concurrent requests handling",
           "status": "passed",
-          "duration": 22,
+          "duration": 20,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -568,13 +252,13 @@
       "passed": 3,
       "failed": 0,
       "skipped": 0,
-      "duration": 91,
+      "duration": 55,
       "tests": [
         {
           "name": "E2E-ADV-013: Frontend loads and responds",
           "title": "E2E-ADV-013: Frontend loads and responds",
           "status": "passed",
-          "duration": 31,
+          "duration": 15,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -590,7 +274,7 @@
           "name": "E2E-ADV-014: Navigation pages accessible",
           "title": "E2E-ADV-014: Navigation pages accessible",
           "status": "passed",
-          "duration": 41,
+          "duration": 25,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -606,7 +290,7 @@
           "name": "E2E-ADV-015: Health endpoints consistent",
           "title": "E2E-ADV-015: Health endpoints consistent",
           "status": "passed",
-          "duration": 19,
+          "duration": 15,
           "file": "quality-checks-advanced-v2.spec.js",
           "errors": [],
           "screenshots": [],
@@ -621,19 +305,19 @@
       ]
     },
     {
-      "name": "TODO Management API",
+      "name": "TODO Management",
       "file": "todos.spec.js",
       "totalTests": 6,
       "passed": 6,
       "failed": 0,
       "skipped": 0,
-      "duration": 67,
+      "duration": 670,
       "tests": [
         {
           "name": "E2E-101: Create TODO via API",
           "title": "E2E-101: Create TODO via API",
           "status": "passed",
-          "duration": 14,
+          "duration": 124,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
@@ -649,7 +333,7 @@
           "name": "E2E-102: List TODOs via API",
           "title": "E2E-102: List TODOs via API",
           "status": "passed",
-          "duration": 10,
+          "duration": 131,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
@@ -665,7 +349,7 @@
           "name": "E2E-103: Get TODO by ID via API",
           "title": "E2E-103: Get TODO by ID via API",
           "status": "passed",
-          "duration": 11,
+          "duration": 124,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
@@ -681,7 +365,7 @@
           "name": "E2E-104: Update TODO via API",
           "title": "E2E-104: Update TODO via API",
           "status": "passed",
-          "duration": 12,
+          "duration": 142,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
@@ -697,7 +381,7 @@
           "name": "E2E-105: Delete TODO via API",
           "title": "E2E-105: Delete TODO via API",
           "status": "passed",
-          "duration": 9,
+          "duration": 139,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
@@ -710,10 +394,10 @@
           "stderr": []
         },
         {
-          "name": "E2E-106: Filter TODOs by status",
-          "title": "E2E-106: Filter TODOs by status",
+          "name": "E2E-106: TODO operations require authentication",
+          "title": "E2E-106: TODO operations require authentication",
           "status": "passed",
-          "duration": 11,
+          "duration": 10,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
@@ -734,13 +418,13 @@
       "passed": 2,
       "failed": 0,
       "skipped": 0,
-      "duration": 25,
+      "duration": 23,
       "tests": [
         {
           "name": "E2E-107: TODO page is accessible",
           "title": "E2E-107: TODO page is accessible",
           "status": "passed",
-          "duration": 14,
+          "duration": 13,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
@@ -753,10 +437,10 @@
           "stderr": []
         },
         {
-          "name": "E2E-108: Dashboard TODO summary accessible",
-          "title": "E2E-108: Dashboard TODO summary accessible",
+          "name": "E2E-108: Dashboard is accessible",
+          "title": "E2E-108: Dashboard is accessible",
           "status": "passed",
-          "duration": 11,
+          "duration": 10,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
