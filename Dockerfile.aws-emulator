@@ -11,9 +11,11 @@ RUN mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator /root/.aws/em
     && mkdir -p /.emulator /.aws-emulator \
     && chmod -R 777 /.emulator /.aws-emulator /tmp
 
-# Create a startup script via tee
-RUN tee /usr/local/bin/start-emulator.sh > /dev/null << 'EOF'
+# Create a startup script
+RUN cat > /usr/local/bin/start-emulator.sh << 'EOF'
 #!/bin/sh
+set -e
+
 # Start AWS Emulator in background
 aws-emulator -b 0.0.0.0 &
 EMULATOR_PID=$!
