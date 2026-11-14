@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-11-14T13:25:33.014Z",
+  "generated_at": "2026-11-14T13:43:44.382Z",
   "source_pr": 98,
   "reports": [
     {
       "issue_number": 44,
       "pr_number": 98,
-      "workflow_run_id": "43599634961",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43599634961",
-      "generated_at": "2026-11-14T13:25:33.014Z",
+      "workflow_run_id": "43601159340",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43601159340",
+      "generated_at": "2026-11-14T13:43:44.382Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.45,
-          "branches_pct": 68.97,
+          "lines_pct": 22.4,
+          "branches_pct": 68.38,
           "functions_pct": 27.78,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
+            "lines_pct": 48.61,
+            "branches_pct": 50,
             "functions_pct": 50,
             "status": "fail"
           },
@@ -333,34 +333,37 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
+        ".gitignore",
         "Dockerfile.aws-emulator",
+        "backend/src/lib/aws.js",
         "backend/src/server.js",
         "docker-compose.yml",
-        "scripts/init-aws-resources.ts"
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 56,
       "pr_number": 98,
-      "workflow_run_id": "43599634961",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43599634961",
-      "generated_at": "2026-11-14T13:25:33.014Z",
+      "workflow_run_id": "43601159340",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43601159340",
+      "generated_at": "2026-11-14T13:43:44.382Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.45,
-          "branches_pct": 68.97,
+          "lines_pct": 22.4,
+          "branches_pct": 68.38,
           "functions_pct": 27.78,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
+            "lines_pct": 48.61,
+            "branches_pct": 50,
             "functions_pct": 50,
             "status": "fail"
           },
@@ -674,34 +677,37 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
+        ".gitignore",
         "Dockerfile.aws-emulator",
+        "backend/src/lib/aws.js",
         "backend/src/server.js",
         "docker-compose.yml",
-        "scripts/init-aws-resources.ts"
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 61,
       "pr_number": 98,
-      "workflow_run_id": "43599634961",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43599634961",
-      "generated_at": "2026-11-14T13:25:33.014Z",
+      "workflow_run_id": "43601159340",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43601159340",
+      "generated_at": "2026-11-14T13:43:44.382Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.45,
-          "branches_pct": 68.97,
+          "lines_pct": 22.4,
+          "branches_pct": 68.38,
           "functions_pct": 27.78,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
+            "lines_pct": 48.61,
+            "branches_pct": 50,
             "functions_pct": 50,
             "status": "fail"
           },
@@ -1031,34 +1037,37 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
+        ".gitignore",
         "Dockerfile.aws-emulator",
+        "backend/src/lib/aws.js",
         "backend/src/server.js",
         "docker-compose.yml",
-        "scripts/init-aws-resources.ts"
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 63,
       "pr_number": 98,
-      "workflow_run_id": "43599634961",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43599634961",
-      "generated_at": "2026-11-14T13:25:33.014Z",
+      "workflow_run_id": "43601159340",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43601159340",
+      "generated_at": "2026-11-14T13:43:44.382Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.45,
-          "branches_pct": 68.97,
+          "lines_pct": 22.4,
+          "branches_pct": 68.38,
           "functions_pct": 27.78,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
+            "lines_pct": 48.61,
+            "branches_pct": 50,
             "functions_pct": 50,
             "status": "fail"
           },
@@ -1359,34 +1368,37 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
+        ".gitignore",
         "Dockerfile.aws-emulator",
+        "backend/src/lib/aws.js",
         "backend/src/server.js",
         "docker-compose.yml",
-        "scripts/init-aws-resources.ts"
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 65,
       "pr_number": 98,
-      "workflow_run_id": "43599634961",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43599634961",
-      "generated_at": "2026-11-14T13:25:33.014Z",
+      "workflow_run_id": "43601159340",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43601159340",
+      "generated_at": "2026-11-14T13:43:44.382Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.45,
-          "branches_pct": 68.97,
+          "lines_pct": 22.4,
+          "branches_pct": 68.38,
           "functions_pct": 27.78,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
+            "lines_pct": 48.61,
+            "branches_pct": 50,
             "functions_pct": 50,
             "status": "fail"
           },
@@ -1687,10 +1699,13 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
+        ".gitignore",
         "Dockerfile.aws-emulator",
+        "backend/src/lib/aws.js",
         "backend/src/server.js",
         "docker-compose.yml",
-        "scripts/init-aws-resources.ts"
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh"
       ]
     },
     {
@@ -1742,25 +1757,25 @@
     {
       "issue_number": 69,
       "pr_number": 98,
-      "workflow_run_id": "43599634961",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43599634961",
-      "generated_at": "2026-11-14T13:25:33.014Z",
+      "workflow_run_id": "43601159340",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43601159340",
+      "generated_at": "2026-11-14T13:43:44.382Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.45,
-          "branches_pct": 68.97,
+          "lines_pct": 22.4,
+          "branches_pct": 68.38,
           "functions_pct": 27.78,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
+            "lines_pct": 48.61,
+            "branches_pct": 50,
             "functions_pct": 50,
             "status": "fail"
           },
@@ -2061,34 +2076,37 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
+        ".gitignore",
         "Dockerfile.aws-emulator",
+        "backend/src/lib/aws.js",
         "backend/src/server.js",
         "docker-compose.yml",
-        "scripts/init-aws-resources.ts"
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 76,
       "pr_number": 98,
-      "workflow_run_id": "43599634961",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43599634961",
-      "generated_at": "2026-11-14T13:25:33.014Z",
+      "workflow_run_id": "43601159340",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43601159340",
+      "generated_at": "2026-11-14T13:43:44.382Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.45,
-          "branches_pct": 68.97,
+          "lines_pct": 22.4,
+          "branches_pct": 68.38,
           "functions_pct": 27.78,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
+            "lines_pct": 48.61,
+            "branches_pct": 50,
             "functions_pct": 50,
             "status": "fail"
           },
@@ -2389,34 +2407,37 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
+        ".gitignore",
         "Dockerfile.aws-emulator",
+        "backend/src/lib/aws.js",
         "backend/src/server.js",
         "docker-compose.yml",
-        "scripts/init-aws-resources.ts"
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 78,
       "pr_number": 98,
-      "workflow_run_id": "43599634961",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43599634961",
-      "generated_at": "2026-11-14T13:25:33.014Z",
+      "workflow_run_id": "43601159340",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43601159340",
+      "generated_at": "2026-11-14T13:43:44.382Z",
       "pass_rate": 100,
       "total_tests": 130,
       "total_passed": 130,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 22.45,
-          "branches_pct": 68.97,
+          "lines_pct": 22.4,
+          "branches_pct": 68.38,
           "functions_pct": 27.78,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 58.49,
-            "branches_pct": 66.67,
+            "lines_pct": 48.61,
+            "branches_pct": 50,
             "functions_pct": 50,
             "status": "fail"
           },
@@ -2717,10 +2738,13 @@
       },
       "implementation_files": [
         ".github/workflows/test-matrix.yml",
+        ".gitignore",
         "Dockerfile.aws-emulator",
+        "backend/src/lib/aws.js",
         "backend/src/server.js",
         "docker-compose.yml",
-        "scripts/init-aws-resources.ts"
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh"
       ]
     },
     {
