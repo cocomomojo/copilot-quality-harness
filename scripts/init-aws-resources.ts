@@ -17,42 +17,46 @@ import {
   CreateQueueCommand, 
   ListQueuesCommand 
 } from '@aws-sdk/client-sqs';
+import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 import * as http from 'http';
 
-// Configure Node.js HTTPS/HTTP agents to trust self-signed certificates
-// This must be done BEFORE any HTTPS requests are made
+// Load CA certificate for HTTPS verification
+// Try AWS_CA_BUNDLE first (per official docs), then NODE_EXTRA_CA_CERTS as fallback
 const caCertPath = process.env.AWS_CA_BUNDLE || process.env.NODE_EXTRA_CA_CERTS;
+let httpAgent: any = undefined;
+let httpsAgent: any = undefined;
 
 if (caCertPath) {
   try {
     const caCert = fs.readFileSync(caCertPath);
     console.log('✅ CA certificate loaded from:', caCertPath);
     
-    // Set global agents - this affects all HTTPS/HTTP requests in the process
-    https.globalAgent = new https.Agent({
-      ca: caCert,
-      rejectUnauthorized: false,
+    // Create HTTPS agent with CA certificate for AWS SDK
+    httpsAgent = new https.Agent({
+      ca: [caCert],
+      rejectUnauthorized: true,
     });
-    http.globalAgent = new http.Agent({
-      ca: caCert,
-      rejectUnauthorized: false,
+    httpAgent = new http.Agent({
+      ca: [caCert],
     });
-    console.log('✅ Global HTTPS/HTTP agents configured with CA certificate');
+    console.log('✅ HTTPS/HTTP agents configured with CA certificate');
   } catch (err) {
     console.warn('⚠️  Failed to load CA certificate from', caCertPath, ':', err instanceof Error ? err.message : String(err));
     console.warn('   Using default agents (accepting all certificates)');
-    https.globalAgent = new https.Agent({
+    httpsAgent = new https.Agent({
       rejectUnauthorized: false,
     });
+    httpAgent = new http.Agent({});
   }
 } else {
   console.warn('⚠️  AWS_CA_BUNDLE and NODE_EXTRA_CA_CERTS not set; accepting all HTTPS certificates');
-  https.globalAgent = new https.Agent({
+  httpsAgent = new https.Agent({
     rejectUnauthorized: false,
   });
+  httpAgent = new http.Agent({});
 }
 
 // Load AWS Emulator credentials from the auto-generated credentials file
@@ -97,6 +101,7 @@ function loadEmulatorCredentials(): { accessKeyId: string; secretAccessKey: stri
 const emulatorCredentials = loadEmulatorCredentials();
 
 // Configuration from environment variables
+// Per AWS SDK v3 docs: pass requestHandler with configured HTTP agents for certificate handling
 const awsConfig: any = {
   endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
   region: process.env.AWS_REGION || 'us-east-1',
@@ -104,8 +109,15 @@ const awsConfig: any = {
   disableHostPrefix: true, // Required for AWS SDK v3 with emulator (prevents host prefix injection)
 };
 
-// Initialize AWS SDK clients
-// Note: Global HTTPS/HTTP agents configured at module load time handle certificate verification
+// Add request handler with custom HTTPS/HTTP agents
+if (httpsAgent || httpAgent) {
+  awsConfig.requestHandler = new NodeHttpHandler({
+    httpsAgent: httpsAgent || undefined,
+    httpAgent: httpAgent || undefined,
+  });
+}
+
+// Initialize AWS SDK clients with proper agent configuration
 const dynamodbClient = new DynamoDBClient(awsConfig);
 const s3Client = new S3Client(awsConfig);
 const sqsClient = new SQSClient(awsConfig);
