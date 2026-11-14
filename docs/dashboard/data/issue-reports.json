@@ -1,71 +1,78 @@
 {
-  "generated_at": "2026-11-14T22:33:26.530Z",
+  "generated_at": "2026-11-14T22:36:34.913Z",
   "source_pr": 106,
   "reports": [
     {
       "issue_number": 44,
       "pr_number": 106,
-      "workflow_run_id": "43648656726",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648656726",
-      "generated_at": "2026-11-14T22:33:26.530Z",
+      "workflow_run_id": "43648932922",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
+      "generated_at": "2026-11-14T22:36:34.913Z",
       "pass_rate": 100,
-      "total_tests": 64,
-      "total_passed": 64,
+      "total_tests": 40,
+      "total_passed": 40,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 12.22,
-          "branches_pct": 38.24,
-          "functions_pct": 17.65,
+          "lines_pct": 1.62,
+          "branches_pct": 25,
+          "functions_pct": 5,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/app.js",
-            "lines_pct": 55.32,
-            "branches_pct": 75,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 48.98,
-            "branches_pct": 25,
-            "functions_pct": 60,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/middleware/auth.js",
-            "lines_pct": 77.78,
-            "branches_pct": 80,
-            "functions_pct": 66.67,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/auth.js",
-            "lines_pct": 41.18,
-            "branches_pct": 40,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -78,22 +85,22 @@
           },
           {
             "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -280,13 +287,6 @@
             "status": "fail"
           },
           {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "backend/src/utils/validators.js",
             "lines_pct": 94.44,
             "branches_pct": 92.31,
@@ -301,7 +301,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 37,
+        "non_pass_count": 38,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -339,6 +339,7 @@
         ]
       },
       "implementation_files": [
+        ".github/workflows/test-matrix.yml",
         "backend/src/app-advanced.test.js",
         "backend/src/app.test.js",
         "backend/vitest.config.ts",
@@ -360,67 +361,74 @@
     {
       "issue_number": 56,
       "pr_number": 106,
-      "workflow_run_id": "43648656726",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648656726",
-      "generated_at": "2026-11-14T22:33:26.530Z",
+      "workflow_run_id": "43648932922",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
+      "generated_at": "2026-11-14T22:36:34.913Z",
       "pass_rate": 100,
-      "total_tests": 64,
-      "total_passed": 64,
+      "total_tests": 40,
+      "total_passed": 40,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 12.22,
-          "branches_pct": 38.24,
-          "functions_pct": 17.65,
+          "lines_pct": 1.62,
+          "branches_pct": 25,
+          "functions_pct": 5,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/app.js",
-            "lines_pct": 55.32,
-            "branches_pct": 75,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 48.98,
-            "branches_pct": 25,
-            "functions_pct": 60,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/middleware/auth.js",
-            "lines_pct": 77.78,
-            "branches_pct": 80,
-            "functions_pct": 66.67,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/auth.js",
-            "lines_pct": 41.18,
-            "branches_pct": 40,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -433,22 +441,22 @@
           },
           {
             "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -635,13 +643,6 @@
             "status": "fail"
           },
           {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "backend/src/utils/validators.js",
             "lines_pct": 94.44,
             "branches_pct": 92.31,
@@ -656,7 +657,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 37,
+        "non_pass_count": 38,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -698,6 +699,7 @@
         ]
       },
       "implementation_files": [
+        ".github/workflows/test-matrix.yml",
         "backend/src/app-advanced.test.js",
         "backend/src/app.test.js",
         "backend/vitest.config.ts",
@@ -719,67 +721,74 @@
     {
       "issue_number": 61,
       "pr_number": 106,
-      "workflow_run_id": "43648656726",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648656726",
-      "generated_at": "2026-11-14T22:33:26.530Z",
+      "workflow_run_id": "43648932922",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
+      "generated_at": "2026-11-14T22:36:34.913Z",
       "pass_rate": 100,
-      "total_tests": 64,
-      "total_passed": 64,
+      "total_tests": 40,
+      "total_passed": 40,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 12.22,
-          "branches_pct": 38.24,
-          "functions_pct": 17.65,
+          "lines_pct": 1.62,
+          "branches_pct": 25,
+          "functions_pct": 5,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/app.js",
-            "lines_pct": 55.32,
-            "branches_pct": 75,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 48.98,
-            "branches_pct": 25,
-            "functions_pct": 60,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/middleware/auth.js",
-            "lines_pct": 77.78,
-            "branches_pct": 80,
-            "functions_pct": 66.67,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/auth.js",
-            "lines_pct": 41.18,
-            "branches_pct": 40,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -792,22 +801,22 @@
           },
           {
             "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -994,13 +1003,6 @@
             "status": "fail"
           },
           {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "backend/src/utils/validators.js",
             "lines_pct": 94.44,
             "branches_pct": 92.31,
@@ -1015,7 +1017,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 37,
+        "non_pass_count": 38,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1073,6 +1075,7 @@
         ]
       },
       "implementation_files": [
+        ".github/workflows/test-matrix.yml",
         "backend/src/app-advanced.test.js",
         "backend/src/app.test.js",
         "backend/vitest.config.ts",
@@ -1094,67 +1097,74 @@
     {
       "issue_number": 63,
       "pr_number": 106,
-      "workflow_run_id": "43648656726",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648656726",
-      "generated_at": "2026-11-14T22:33:26.530Z",
+      "workflow_run_id": "43648932922",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
+      "generated_at": "2026-11-14T22:36:34.913Z",
       "pass_rate": 100,
-      "total_tests": 64,
-      "total_passed": 64,
+      "total_tests": 40,
+      "total_passed": 40,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 12.22,
-          "branches_pct": 38.24,
-          "functions_pct": 17.65,
+          "lines_pct": 1.62,
+          "branches_pct": 25,
+          "functions_pct": 5,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/app.js",
-            "lines_pct": 55.32,
-            "branches_pct": 75,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 48.98,
-            "branches_pct": 25,
-            "functions_pct": 60,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/middleware/auth.js",
-            "lines_pct": 77.78,
-            "branches_pct": 80,
-            "functions_pct": 66.67,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/auth.js",
-            "lines_pct": 41.18,
-            "branches_pct": 40,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -1167,22 +1177,22 @@
           },
           {
             "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -1369,13 +1379,6 @@
             "status": "fail"
           },
           {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "backend/src/utils/validators.js",
             "lines_pct": 94.44,
             "branches_pct": 92.31,
@@ -1390,7 +1393,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 37,
+        "non_pass_count": 38,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1419,6 +1422,7 @@
         "e2e_details": []
       },
       "implementation_files": [
+        ".github/workflows/test-matrix.yml",
         "backend/src/app-advanced.test.js",
         "backend/src/app.test.js",
         "backend/vitest.config.ts",
@@ -1440,67 +1444,74 @@
     {
       "issue_number": 65,
       "pr_number": 106,
-      "workflow_run_id": "43648656726",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648656726",
-      "generated_at": "2026-11-14T22:33:26.530Z",
+      "workflow_run_id": "43648932922",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
+      "generated_at": "2026-11-14T22:36:34.913Z",
       "pass_rate": 100,
-      "total_tests": 64,
-      "total_passed": 64,
+      "total_tests": 40,
+      "total_passed": 40,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 12.22,
-          "branches_pct": 38.24,
-          "functions_pct": 17.65,
+          "lines_pct": 1.62,
+          "branches_pct": 25,
+          "functions_pct": 5,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/app.js",
-            "lines_pct": 55.32,
-            "branches_pct": 75,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 48.98,
-            "branches_pct": 25,
-            "functions_pct": 60,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/middleware/auth.js",
-            "lines_pct": 77.78,
-            "branches_pct": 80,
-            "functions_pct": 66.67,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/auth.js",
-            "lines_pct": 41.18,
-            "branches_pct": 40,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -1513,22 +1524,22 @@
           },
           {
             "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -1715,13 +1726,6 @@
             "status": "fail"
           },
           {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "backend/src/utils/validators.js",
             "lines_pct": 94.44,
             "branches_pct": 92.31,
@@ -1736,7 +1740,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 37,
+        "non_pass_count": 38,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1765,6 +1769,7 @@
         "e2e_details": []
       },
       "implementation_files": [
+        ".github/workflows/test-matrix.yml",
         "backend/src/app-advanced.test.js",
         "backend/src/app.test.js",
         "backend/vitest.config.ts",
@@ -1832,67 +1837,74 @@
     {
       "issue_number": 69,
       "pr_number": 106,
-      "workflow_run_id": "43648656726",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648656726",
-      "generated_at": "2026-11-14T22:33:26.530Z",
+      "workflow_run_id": "43648932922",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
+      "generated_at": "2026-11-14T22:36:34.913Z",
       "pass_rate": 100,
-      "total_tests": 64,
-      "total_passed": 64,
+      "total_tests": 40,
+      "total_passed": 40,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 12.22,
-          "branches_pct": 38.24,
-          "functions_pct": 17.65,
+          "lines_pct": 1.62,
+          "branches_pct": 25,
+          "functions_pct": 5,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/app.js",
-            "lines_pct": 55.32,
-            "branches_pct": 75,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 48.98,
-            "branches_pct": 25,
-            "functions_pct": 60,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/middleware/auth.js",
-            "lines_pct": 77.78,
-            "branches_pct": 80,
-            "functions_pct": 66.67,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/auth.js",
-            "lines_pct": 41.18,
-            "branches_pct": 40,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -1905,22 +1917,22 @@
           },
           {
             "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -2107,13 +2119,6 @@
             "status": "fail"
           },
           {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "backend/src/utils/validators.js",
             "lines_pct": 94.44,
             "branches_pct": 92.31,
@@ -2128,7 +2133,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 37,
+        "non_pass_count": 38,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2157,6 +2162,7 @@
         "e2e_details": []
       },
       "implementation_files": [
+        ".github/workflows/test-matrix.yml",
         "backend/src/app-advanced.test.js",
         "backend/src/app.test.js",
         "backend/vitest.config.ts",
@@ -2178,67 +2184,74 @@
     {
       "issue_number": 76,
       "pr_number": 106,
-      "workflow_run_id": "43648656726",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648656726",
-      "generated_at": "2026-11-14T22:33:26.530Z",
+      "workflow_run_id": "43648932922",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
+      "generated_at": "2026-11-14T22:36:34.913Z",
       "pass_rate": 100,
-      "total_tests": 64,
-      "total_passed": 64,
+      "total_tests": 40,
+      "total_passed": 40,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 12.22,
-          "branches_pct": 38.24,
-          "functions_pct": 17.65,
+          "lines_pct": 1.62,
+          "branches_pct": 25,
+          "functions_pct": 5,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/app.js",
-            "lines_pct": 55.32,
-            "branches_pct": 75,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 48.98,
-            "branches_pct": 25,
-            "functions_pct": 60,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/middleware/auth.js",
-            "lines_pct": 77.78,
-            "branches_pct": 80,
-            "functions_pct": 66.67,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/auth.js",
-            "lines_pct": 41.18,
-            "branches_pct": 40,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -2251,22 +2264,22 @@
           },
           {
             "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -2453,13 +2466,6 @@
             "status": "fail"
           },
           {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "backend/src/utils/validators.js",
             "lines_pct": 94.44,
             "branches_pct": 92.31,
@@ -2474,7 +2480,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 37,
+        "non_pass_count": 38,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2503,6 +2509,7 @@
         "e2e_details": []
       },
       "implementation_files": [
+        ".github/workflows/test-matrix.yml",
         "backend/src/app-advanced.test.js",
         "backend/src/app.test.js",
         "backend/vitest.config.ts",
@@ -2524,67 +2531,74 @@
     {
       "issue_number": 78,
       "pr_number": 106,
-      "workflow_run_id": "43648656726",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648656726",
-      "generated_at": "2026-11-14T22:33:26.530Z",
+      "workflow_run_id": "43648932922",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43648932922",
+      "generated_at": "2026-11-14T22:36:34.913Z",
       "pass_rate": 100,
-      "total_tests": 64,
-      "total_passed": 64,
+      "total_tests": 40,
+      "total_passed": 40,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 12.22,
-          "branches_pct": 38.24,
-          "functions_pct": 17.65,
+          "lines_pct": 1.62,
+          "branches_pct": 25,
+          "functions_pct": 5,
           "status": "fail"
         },
         "files": [
           {
             "path": "backend/src/app.js",
-            "lines_pct": 55.32,
-            "branches_pct": 75,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/lib/aws.js",
-            "lines_pct": 48.98,
-            "branches_pct": 25,
-            "functions_pct": 60,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/middleware/auth.js",
-            "lines_pct": 77.78,
-            "branches_pct": 80,
-            "functions_pct": 66.67,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/auth.js",
-            "lines_pct": 41.18,
-            "branches_pct": 40,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/files.js",
-            "lines_pct": 23.13,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/logs.js",
-            "lines_pct": 34.38,
-            "branches_pct": 100,
-            "functions_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/routes/todos.js",
-            "lines_pct": 17.54,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -2597,22 +2611,22 @@
           },
           {
             "path": "backend/src/utils/dynamodb.js",
-            "lines_pct": 14.29,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/password.js",
-            "lines_pct": 50,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
           {
             "path": "backend/src/utils/sqs.js",
-            "lines_pct": 12.5,
-            "branches_pct": 100,
+            "lines_pct": 0,
+            "branches_pct": 0,
             "functions_pct": 0,
             "status": "fail"
           },
@@ -2799,13 +2813,6 @@
             "status": "fail"
           },
           {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
             "path": "backend/src/utils/validators.js",
             "lines_pct": 94.44,
             "branches_pct": 92.31,
@@ -2820,7 +2827,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 37,
+        "non_pass_count": 38,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2849,6 +2856,7 @@
         "e2e_details": []
       },
       "implementation_files": [
+        ".github/workflows/test-matrix.yml",
         "backend/src/app-advanced.test.js",
         "backend/src/app.test.js",
         "backend/vitest.config.ts",
