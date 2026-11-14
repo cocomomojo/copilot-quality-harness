@@ -40,30 +40,32 @@ router.post('/register', async (req, res) => {
     // Validate password strength
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
-      return res.status(422).json({ error: passwordValidation.error });
+      return res.status(422).json({ error: passwordValidation.error, message: passwordValidation.error });
     }
     
     // Check if user already exists (search by email since Users table has userId as key)
     const existingUsers = await scanItems(TABLE_NAME, '#e = :email', { ':email': email }, { '#e': 'email' });
     if (existingUsers.length > 0) {
-      return res.status(400).json({ error: 'User already exists' });
+      return res.status(409).json({ error: 'User already exists', message: 'Email already registered' });
     }
     
     const userId = generateUserId();
     const passwordHash = await hashPassword(password);
     const now = new Date().toISOString();
     
-    await putItem(TABLE_NAME, {
+    const user = {
       userId,
       email,
       passwordHash,
       name,
       createdAt: now,
       updatedAt: now,
-    });
+    };
+    
+    await putItem(TABLE_NAME, user);
     
     const token = generateToken(userId, email);
-    res.json({ token, userId, email, name });
+    res.status(200).json({ token, userId, email, name });
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ error: 'Registration failed' });
@@ -100,11 +102,25 @@ router.post('/login', async (req, res) => {
 });
 
 // Get current user
-router.get('/me', (req, res) => {
-  if (!req.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
+router.get('/me', async (req, res) => {
+  try {
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    // Fetch complete user from database
+    const user = await getItem(TABLE_NAME, { userId: req.user.userId });
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+    
+    // Return user without password hash
+    const { passwordHash, ...safeUser } = user;
+    res.json(safeUser);
+  } catch (error) {
+    console.error('Get user error:', error);
+    res.status(500).json({ error: 'Failed to get user' });
   }
-  res.json(req.user);
 });
 
 export default router;
