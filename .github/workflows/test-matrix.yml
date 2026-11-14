@@ -185,12 +185,6 @@ jobs:
           echo "   • docker-compose で AWS Emulator を起動"
           echo "   • リソース初期化（DynamoDB、S3、SQS）を実行"
           
-          # Set AWS environment variables
-          export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
-          export AWS_REGION="us-east-1"
-          export AWS_ACCESS_KEY_ID="test"
-          export AWS_SECRET_ACCESS_KEY="test"
-          
           # Start AWS Emulator
           echo "🐳 Starting AWS Emulator via docker compose..."
           docker compose up -d aws-emulator 2>&1 || { echo "❌ Failed to start AWS Emulator"; docker compose ps; exit 1; }
@@ -220,19 +214,33 @@ jobs:
           mkdir -p certs
           if docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/9297/ca.pem >/dev/null 2>&1; then
             docker compose cp "aws-emulator:/home/emulator/.aws/emulator/9297/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
-            export NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem"
             echo "✅ Certificate configured (/home/emulator/.aws/emulator/9297/ca.pem)"
           elif docker compose exec -T aws-emulator test -f /.aws-emulator/ca.pem >/dev/null 2>&1; then
             docker compose cp "aws-emulator:/.aws-emulator/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
-            export NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem"
             echo "✅ Certificate configured (/.aws-emulator/ca.pem)"
           else
             echo "⚠️  CA certificate not found in container"
           fi
           
+          # Set AWS SDK environment variables per AWS Emulator official docs
+          echo ""
+          echo "📝 Configuring AWS SDK environment variables per official docs..."
+          export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
+          export AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/emulator/9297/emulator_credentials"
+          export AWS_CONFIG_FILE="$HOME/.aws/emulator/9297/config"
+          export AWS_CA_BUNDLE="$HOME/.aws/emulator/9297/ca.pem"
+          export AWS_EC2_METADATA_DISABLED="true"
+          export AWS_DISABLE_HOST_PREFIX_INJECTION="true"
+          export AWS_REGION="us-east-1"
+          export AWS_DEFAULT_REGION="us-east-1"
+          # Unset any real AWS credentials that might override emulator credentials
+          unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_PROFILE
+          echo "✅ AWS SDK configured to use emulator's auto-generated credentials"
+          
           # Initialize AWS resources
+          echo ""
           echo "📊 Initializing AWS resources..."
-          NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem" pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
+          pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
           
           echo ""
           echo "✅【ステップ 1】Playwright バージョン確認..."
@@ -243,7 +251,7 @@ jobs:
           echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
           echo ""
           
-          NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem" pnpm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          pnpm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           E2E_EXIT_CODE=$?
           
           echo ""

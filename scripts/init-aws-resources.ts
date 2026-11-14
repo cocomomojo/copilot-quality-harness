@@ -21,26 +21,70 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 
+// Load AWS Emulator credentials from the auto-generated credentials file
+// Per AWS Emulator official docs: use AWS_SHARED_CREDENTIALS_FILE pointing to emulator_credentials
+function loadEmulatorCredentials(): { accessKeyId: string; secretAccessKey: string } {
+  const credentialsFile = process.env.AWS_SHARED_CREDENTIALS_FILE;
+  
+  if (!credentialsFile) {
+    console.warn('⚠️  AWS_SHARED_CREDENTIALS_FILE not set. Using placeholder credentials.');
+    return {
+      accessKeyId: 'test-key',
+      secretAccessKey: 'test-secret',
+    };
+  }
+
+  try {
+    const content = fs.readFileSync(credentialsFile, 'utf-8');
+    // AWS credentials file format: [profile]\naws_access_key_id=...\naws_secret_access_key=...
+    const accessKeyMatch = content.match(/aws_access_key_id\s*=\s*(.+)/);
+    const secretKeyMatch = content.match(/aws_secret_access_key\s*=\s*(.+)/);
+    
+    if (!accessKeyMatch || !secretKeyMatch) {
+      throw new Error('Invalid credentials file format');
+    }
+
+    const credentials = {
+      accessKeyId: accessKeyMatch[1].trim(),
+      secretAccessKey: secretKeyMatch[1].trim(),
+    };
+    console.log('✅ Loaded AWS Emulator credentials from:', credentialsFile);
+    return credentials;
+  } catch (err) {
+    console.warn('⚠️  Failed to load credentials from', credentialsFile, ':', err instanceof Error ? err.message : String(err));
+    console.warn('   Falling back to placeholder credentials.');
+    return {
+      accessKeyId: 'test-key',
+      secretAccessKey: 'test-secret',
+    };
+  }
+}
+
+const emulatorCredentials = loadEmulatorCredentials();
+
 // Configuration from environment variables
 const awsConfig: any = {
   endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
   region: process.env.AWS_REGION || 'us-east-1',
-  // Use credentials from environment or provide static test credentials
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test-key',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test-secret',
-  },
+  credentials: emulatorCredentials,
 };
 
-// SSL certificate configuration
+// SSL certificate configuration per AWS SDK for JavaScript docs
+// AWS_CA_BUNDLE environment variable is read by AWS SDK v3 automatically
+// But we also set it explicitly to clients
+
 const clientConfig: any = {
   ...awsConfig,
+  disableHostPrefix: true, // Required for AWS SDK v3 with emulator (prevents host prefix injection)
 };
 
-// Add CA certificate and disable certificate verification for self-signed certs
-if (process.env.NODE_EXTRA_CA_CERTS) {
+// Add CA certificate handling and disable certificate verification for self-signed certs
+// AWS SDK v3 automatically reads AWS_CA_BUNDLE, but we also set it on HTTP agents for robustness
+const caCertPath = process.env.AWS_CA_BUNDLE || process.env.NODE_EXTRA_CA_CERTS;
+
+if (caCertPath) {
   try {
-    const caCert = fs.readFileSync(process.env.NODE_EXTRA_CA_CERTS);
+    const caCert = fs.readFileSync(caCertPath);
     clientConfig.httpAgent = new (require('http').Agent)({
       ca: caCert,
       rejectUnauthorized: false,
@@ -49,16 +93,20 @@ if (process.env.NODE_EXTRA_CA_CERTS) {
       ca: caCert,
       rejectUnauthorized: false,
     });
-    console.log('✅ CA certificate loaded from:', process.env.NODE_EXTRA_CA_CERTS);
+    console.log('✅ CA certificate loaded from:', caCertPath);
   } catch (err) {
-    console.warn('⚠️  Failed to load CA certificate:', err instanceof Error ? err.message : String(err));
+    console.warn('⚠️  Failed to load CA certificate from', caCertPath, ':', err instanceof Error ? err.message : String(err));
+    // Fall back to disabling verification
+    clientConfig.httpsAgent = new https.Agent({
+      rejectUnauthorized: false,
+    });
   }
 } else {
-  // Even without explicit CA, disable verification for local testing
+  // No CA certificate configured, disable verification for local testing
   clientConfig.httpsAgent = new https.Agent({
     rejectUnauthorized: false,
   });
-  console.log('⚠️  No CA certificate configured, disabling certificate verification');
+  console.log('⚠️  AWS_CA_BUNDLE and NODE_EXTRA_CA_CERTS not set; disabling certificate verification');
 }
 
 const dynamodbClient = new DynamoDBClient(clientConfig);
