@@ -252,9 +252,51 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: Advanced E2E Tests (v2) ===================="
+          
+          echo ""
+          echo "✅【ステップ 0】AWS Emulator セットアップ..."
+          echo "   • docker-compose で AWS Emulator を起動"
+          echo "   • リソース初期化（DynamoDB、S3、SQS）を実行"
+          
+          # Use the startup script which handles:
+          # 1. Building and starting AWS Emulator via docker-compose
+          # 2. Waiting for it to be healthy
+          # 3. Copying credentials and CA certificate to certs/
+          bash scripts/start-aws-emulator.sh || { echo "❌ Failed to start AWS Emulator"; exit 1; }
+          
+          # Set AWS SDK environment variables per AWS Emulator official docs
+          # The startup script already copied credentials and CA to certs/
+          echo ""
+          echo "📝 Configuring AWS SDK environment variables..."
+          export NODE_EXTRA_CA_CERTS="$(pwd)/certs/ca.pem"
+          export AWS_SHARED_CREDENTIALS_FILE="$(pwd)/certs/emulator_credentials"
+          export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
+          export AWS_REGION="us-east-1"
+          echo "✅ AWS SDK configured"
+          
+          # Initialize AWS resources
+          echo ""
+          echo "📊 Initializing AWS resources..."
+          pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
+          
+          echo ""
+          echo "✅【ステップ 1】Playwright バージョン確認..."
+          pnpm exec playwright --version
+          
+          echo ""
+          echo "🚀【ステップ 2】Advanced E2E テスト実行..."
+          echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
+          echo ""
+          
           pnpm run test:e2e:advanced 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
-          echo "✅ Advanced E2E tests completed"
+          ADVANCED_EXIT_CODE=$?
+          
+          echo ""
+          echo "✅ Advanced E2E test execution completed with exit code: $ADVANCED_EXIT_CODE"
+          echo "📊 Test results saved to test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log"
           echo "🏁 ==================== END: Advanced E2E Tests ===================="
+          
+          exit $ADVANCED_EXIT_CODE
       
       - name: Parse test results
         id: parse_results
