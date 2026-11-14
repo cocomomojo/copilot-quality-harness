@@ -11,8 +11,33 @@ RUN mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator /root/.aws/em
     && mkdir -p /.emulator /.aws-emulator \
     && chmod -R 777 /.emulator /.aws-emulator /tmp
 
-# Create a startup script using printf and shell
-RUN printf '#!/bin/sh\nset -e\n\n# Start AWS Emulator in background\naws-emulator -b 0.0.0.0 &\nEMULATOR_PID=$!\n\n# Wait for credentials to be generated (up to 10 seconds)\nfor i in $(seq 1 20); do\n    if [ -f /home/emulator/.aws/emulator/9297/emulator_credentials ]; then\n        echo "✅ Credentials file created"\n        break\n    fi\n    sleep 0.5\ndone\n\n# Make all generated files world-readable so host can copy them\nchmod -R 755 /home/emulator/.aws/emulator/9297/\necho "✅ Fixed permissions on credentials directory"\n\n# Wait for the emulator process (this keeps the container running)\nwait $EMULATOR_PID\n' > /usr/local/bin/start-emulator.sh && chmod +x /usr/local/bin/start-emulator.sh
+# Create a startup script using shell -c with echo commands
+RUN /bin/sh -c 'cat > /usr/local/bin/start-emulator.sh << "SCRIPT"
+#!/bin/sh
+set -e
+
+# Start AWS Emulator in background
+aws-emulator -b 0.0.0.0 &
+EMULATOR_PID=$!
+
+# Wait for credentials to be generated (up to 10 seconds)
+for i in $(seq 1 20); do
+    if [ -f /home/emulator/.aws/emulator/9297/emulator_credentials ]; then
+        echo "✅ Credentials file created"
+        break
+    fi
+    sleep 0.5
+done
+
+# Make all generated files world-readable so host can copy them
+chmod -R 755 /home/emulator/.aws/emulator/9297/
+echo "✅ Fixed permissions on credentials directory"
+
+# Wait for the emulator process (this keeps the container running)
+wait $EMULATOR_PID
+SCRIPT
+'
+RUN chmod +x /usr/local/bin/start-emulator.sh
 
 EXPOSE 9297
 
