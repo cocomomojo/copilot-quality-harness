@@ -210,7 +210,7 @@ jobs:
             exit 1
           fi
           
-          # Extract certificate from container
+          # Extract certificate from container and fix permissions
           mkdir -p certs
           if docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/9297/ca.pem >/dev/null 2>&1; then
             docker compose cp "aws-emulator:/home/emulator/.aws/emulator/9297/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
@@ -220,6 +220,15 @@ jobs:
             echo "✅ Certificate configured (/.aws-emulator/ca.pem)"
           else
             echo "⚠️  CA certificate not found in container"
+          fi
+          
+          # Fix permissions on ~/.aws/emulator/9297 directory and files
+          # Docker container (UID 1000 or custom) created files that runner cannot read
+          # Solution: Make all files readable by the current user
+          echo "🔧 Fixing permissions on ~/.aws/emulator/9297..."
+          if [ -d ~/.aws/emulator/9297 ]; then
+            chmod -R 777 ~/.aws/emulator/9297 2>/dev/null || sudo chmod -R 777 ~/.aws/emulator/9297 2>/dev/null || true
+            ls -la ~/.aws/emulator/9297/ | head -10
           fi
           
           # Set AWS SDK environment variables per AWS Emulator official docs
