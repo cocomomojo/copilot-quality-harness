@@ -207,10 +207,10 @@ jobs:
           export AWS_REGION="us-east-1"
           echo "✅ AWS SDK configured"
           
-          # Initialize AWS resources
+          # Initialize AWS resources (must succeed for tests to work)
           echo ""
           echo "📊 Initializing AWS resources..."
-          pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
+          pnpm run init:aws 2>&1 || { echo "❌ AWS resource initialization failed"; exit 1; }
           
           echo ""
           echo "✅【ステップ 1】Playwright バージョン確認..."
@@ -274,10 +274,10 @@ jobs:
           export AWS_REGION="us-east-1"
           echo "✅ AWS SDK configured"
           
-          # Initialize AWS resources
+          # Initialize AWS resources (must succeed for tests to work)
           echo ""
           echo "📊 Initializing AWS resources..."
-          pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
+          pnpm run init:aws 2>&1 || { echo "❌ AWS resource initialization failed"; exit 1; }
           
           echo ""
           echo "✅【ステップ 1】Playwright バージョン確認..."
