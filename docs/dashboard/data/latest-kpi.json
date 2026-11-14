@@ -1,25 +1,25 @@
 {
-  "timestamp": "2026-11-14T22:56:49.187Z",
-  "pass_rate": 94,
-  "test_count": 215,
-  "passed": 203,
-  "failed": 12,
-  "coverage": 30,
-  "global_e2e_count": 53,
-  "global_unit_count": 162,
+  "timestamp": "2026-11-14T22:59:53.692Z",
+  "pass_rate": 98,
+  "test_count": 55,
+  "passed": 54,
+  "failed": 1,
+  "coverage": 0,
+  "global_e2e_count": 40,
+  "global_unit_count": 15,
   "ai_danger_rank": "D",
   "risk_level": "HIGH",
-  "composite_score": 67,
+  "composite_score": 56,
   "data_source": "TEST_MATRIX_ARTIFACT",
   "details": {
     "test_source": "test-matrix-artifact",
-    "github_run_id": 43650185499,
-    "coverage_source": "ARTIFACT_RUN:43650185499",
-    "explicit_test_run_id": "43650185499"
+    "github_run_id": 43650758883,
+    "coverage_source": "ARTIFACT_RUN:43650758883",
+    "explicit_test_run_id": "43650758883"
   },
-  "trend": "STABLE",
+  "trend": "IMPROVING",
   "trend_details": {
-    "pass_rate_change": 0,
-    "coverage_change": 0
+    "pass_rate_change": 4,
+    "coverage_change": -30
   }
 }
