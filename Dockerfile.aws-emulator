@@ -4,16 +4,44 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:2023-minimal
 ADD https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/latest/aws-emulator-x86_64.rpm /tmp/aws-emulator.rpm
 RUN rpm -i /tmp/aws-emulator.rpm && rm /tmp/aws-emulator.rpm
 
-# Create emulator directories with world-writable permissions
-# AWS Emulator needs to write to its data directories
-RUN mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator \
-    && chmod -R 777 /home/emulator \
+# AWS Emulator may try to use /home/emulator or /root for data storage
+# Pre-create directories so AWS Emulator can write to them
+RUN mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator /root/.aws/emulator /root/.emulator \
+    && chmod -R 777 /home/emulator /root/.aws /root/.emulator \
     && mkdir -p /.emulator /.aws-emulator \
     && chmod -R 777 /.emulator /.aws-emulator /tmp
 
-ENV HOME=/home/emulator
+# Create a startup script that:
+# 1. Starts AWS Emulator
+# 2. Waits for files to be created
+# 3. Makes them readable by all users
+RUN cat > /usr/local/bin/start-emulator.sh << 'EOF'
+#!/bin/sh
+set -e
+
+# Start AWS Emulator in background
+aws-emulator -b 0.0.0.0 &
+EMULATOR_PID=$!
+
+# Wait for credentials to be generated (up to 10 seconds)
+for i in $(seq 1 20); do
+    if [ -f /home/emulator/.aws/emulator/9297/emulator_credentials ]; then
+        echo "✅ Credentials file created"
+        break
+    fi
+    sleep 0.5
+done
+
+# Make all generated files world-readable so host can copy them
+chmod -R 755 /home/emulator/.aws/emulator/9297/
+
+# Wait for the emulator process
+wait $EMULATOR_PID
+EOF
+RUN chmod +x /usr/local/bin/start-emulator.sh
+
 EXPOSE 9297
 
-# Bind to localhost instead of 0.0.0.0 (Docker handles port mapping)
-# This avoids permission issues with binding to privileged ports
-ENTRYPOINT ["aws-emulator", "-b", "127.0.0.1"]
+# Run startup script
+ENTRYPOINT ["/usr/local/bin/start-emulator.sh"]
+

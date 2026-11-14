@@ -173,83 +173,25 @@ jobs:
           echo "🚀 ==================== START: E2E Tests ===================="
           
           echo ""
-          echo "✅【ステップ -1】AWS Emulator ディレクトリ準備..."
-          # Create directory with proper permissions for Docker user (UID 1000)
-          mkdir -p ~/.aws/emulator
-          # Ensure directory is writable by UID 1000 (running inside container)
-          chmod 777 ~/.aws/emulator
-          echo "✅ Created ~/.aws/emulator with permissions 777"
-          
-          echo ""
           echo "✅【ステップ 0】AWS Emulator セットアップ..."
           echo "   • docker-compose で AWS Emulator を起動"
           echo "   • リソース初期化（DynamoDB、S3、SQS）を実行"
           
-          # Start AWS Emulator
-          echo "🐳 Starting AWS Emulator via docker compose..."
-          docker compose up -d aws-emulator 2>&1 || { echo "❌ Failed to start AWS Emulator"; docker compose ps; exit 1; }
-          
-          # Wait for emulator to be ready
-          echo "⏳ Waiting for AWS Emulator to be healthy..."
-          max_attempts=60
-          attempt=0
-          
-          while [ $attempt -lt $max_attempts ]; do
-            if docker compose exec -T aws-emulator curl -f -k https://localhost:9297/__admin/health >/dev/null 2>&1; then
-              echo "✅ AWS Emulator is healthy"
-              break
-            fi
-            attempt=$((attempt + 1))
-            echo "  Attempt $attempt/$max_attempts..."
-            sleep 2
-          done
-          
-          if [ $attempt -eq $max_attempts ]; then
-            echo "❌ AWS Emulator failed to become healthy"
-            docker compose logs aws-emulator | tail -50 || true
-            exit 1
-          fi
-          
-          # Extract certificate from container and fix permissions
-          mkdir -p certs
-          if docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/9297/ca.pem >/dev/null 2>&1; then
-            docker compose cp "aws-emulator:/home/emulator/.aws/emulator/9297/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
-            echo "✅ Certificate configured (/home/emulator/.aws/emulator/9297/ca.pem)"
-          elif docker compose exec -T aws-emulator test -f /.aws-emulator/ca.pem >/dev/null 2>&1; then
-            docker compose cp "aws-emulator:/.aws-emulator/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
-            echo "✅ Certificate configured (/.aws-emulator/ca.pem)"
-          else
-            echo "⚠️  CA certificate not found in container"
-          fi
-          
-          # Fix permissions on ~/.aws/emulator/9297 directory and files
-          # Docker container (UID 1000 or custom) created files that runner cannot read
-          # Solution: Make all files readable by the current user
-          echo "🔧 Fixing permissions on ~/.aws/emulator/9297..."
-          if [ -d ~/.aws/emulator/9297 ]; then
-            chmod -R 777 ~/.aws/emulator/9297 2>/dev/null || sudo chmod -R 777 ~/.aws/emulator/9297 2>/dev/null || true
-            ls -la ~/.aws/emulator/9297/ | head -10
-          fi
+          # Use the startup script which handles:
+          # 1. Building and starting AWS Emulator via docker-compose
+          # 2. Waiting for it to be healthy
+          # 3. Copying credentials and CA certificate to certs/
+          bash scripts/start-aws-emulator.sh || { echo "❌ Failed to start AWS Emulator"; exit 1; }
           
           # Set AWS SDK environment variables per AWS Emulator official docs
+          # The startup script already copied credentials and CA to certs/
           echo ""
-          echo "📝 Configuring AWS SDK environment variables per official docs..."
-          AWS_ENDPOINT_URL="https://127.0.0.1:9297"
-          AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/emulator/9297/emulator_credentials"
-          AWS_CONFIG_FILE="$HOME/.aws/emulator/9297/config"
-          AWS_CA_BUNDLE="$HOME/.aws/emulator/9297/ca.pem"
-          AWS_EC2_METADATA_DISABLED="true"
-          AWS_DISABLE_HOST_PREFIX_INJECTION="true"
-          AWS_REGION="us-east-1"
-          AWS_DEFAULT_REGION="us-east-1"
-          
-          # Export all AWS variables for subprocess execution
-          export AWS_ENDPOINT_URL AWS_SHARED_CREDENTIALS_FILE AWS_CONFIG_FILE AWS_CA_BUNDLE
-          export AWS_EC2_METADATA_DISABLED AWS_DISABLE_HOST_PREFIX_INJECTION
-          export AWS_REGION AWS_DEFAULT_REGION
-          # Unset any real AWS credentials that might override emulator credentials
-          unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_PROFILE
-          echo "✅ AWS SDK configured to use emulator's auto-generated credentials"
+          echo "📝 Configuring AWS SDK environment variables..."
+          export NODE_EXTRA_CA_CERTS="$(pwd)/certs/ca.pem"
+          export AWS_SHARED_CREDENTIALS_FILE="$(pwd)/certs/emulator_credentials"
+          export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
+          export AWS_REGION="us-east-1"
+          echo "✅ AWS SDK configured"
           
           # Initialize AWS resources
           echo ""
