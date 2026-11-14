@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-11-14T14:38:08.468Z",
+  "generated_at": "2026-11-14T14:49:33.349Z",
   "source_pr": 98,
   "reports": [
     {
       "issue_number": 44,
       "pr_number": 98,
-      "workflow_run_id": "43605828764",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43605828764",
-      "generated_at": "2026-11-14T14:38:08.468Z",
-      "pass_rate": 81,
+      "workflow_run_id": "43606816988",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43606816988",
+      "generated_at": "2026-11-14T14:49:33.349Z",
+      "pass_rate": 85,
       "total_tests": 183,
-      "total_passed": 148,
-      "total_failed": 35,
+      "total_passed": 156,
+      "total_failed": 27,
       "coverage": {
         "overall": {
-          "lines_pct": 22.7,
-          "branches_pct": 66.39,
-          "functions_pct": 29.09,
+          "lines_pct": 21.6,
+          "branches_pct": 65.85,
+          "functions_pct": 28.57,
           "status": "fail"
         },
         "files": [
@@ -134,6 +134,13 @@
           },
           {
             "path": "frontend/src/components/ProtectedRoute.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/QualityChecksForm.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -294,7 +301,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 33,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -341,6 +348,9 @@
         "docker-entrypoint.sh",
         "e2e-test-output.log",
         "e2e-test-run.log",
+        "frontend/src/components/QualityChecksForm.jsx",
+        "frontend/src/pages/QualityChecksPage.jsx",
+        "frontend/src/styles/quality-checks.css",
         "scripts/init-aws-resources.ts",
         "scripts/start-aws-emulator.sh",
         "scripts/start-emulator.sh"
@@ -349,18 +359,18 @@
     {
       "issue_number": 56,
       "pr_number": 98,
-      "workflow_run_id": "43605828764",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43605828764",
-      "generated_at": "2026-11-14T14:38:08.468Z",
-      "pass_rate": 81,
+      "workflow_run_id": "43606816988",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43606816988",
+      "generated_at": "2026-11-14T14:49:33.349Z",
+      "pass_rate": 85,
       "total_tests": 183,
-      "total_passed": 148,
-      "total_failed": 35,
+      "total_passed": 156,
+      "total_failed": 27,
       "coverage": {
         "overall": {
-          "lines_pct": 22.7,
-          "branches_pct": 66.39,
-          "functions_pct": 29.09,
+          "lines_pct": 21.6,
+          "branches_pct": 65.85,
+          "functions_pct": 28.57,
           "status": "fail"
         },
         "files": [
@@ -478,6 +488,13 @@
           },
           {
             "path": "frontend/src/components/ProtectedRoute.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/QualityChecksForm.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -638,7 +655,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 33,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -689,6 +706,9 @@
         "docker-entrypoint.sh",
         "e2e-test-output.log",
         "e2e-test-run.log",
+        "frontend/src/components/QualityChecksForm.jsx",
+        "frontend/src/pages/QualityChecksPage.jsx",
+        "frontend/src/styles/quality-checks.css",
         "scripts/init-aws-resources.ts",
         "scripts/start-aws-emulator.sh",
         "scripts/start-emulator.sh"
@@ -697,18 +717,18 @@
     {
       "issue_number": 61,
       "pr_number": 98,
-      "workflow_run_id": "43605828764",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43605828764",
-      "generated_at": "2026-11-14T14:38:08.468Z",
-      "pass_rate": 81,
+      "workflow_run_id": "43606816988",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43606816988",
+      "generated_at": "2026-11-14T14:49:33.349Z",
+      "pass_rate": 85,
       "total_tests": 183,
-      "total_passed": 148,
-      "total_failed": 35,
+      "total_passed": 156,
+      "total_failed": 27,
       "coverage": {
         "overall": {
-          "lines_pct": 22.7,
-          "branches_pct": 66.39,
-          "functions_pct": 29.09,
+          "lines_pct": 21.6,
+          "branches_pct": 65.85,
+          "functions_pct": 28.57,
           "status": "fail"
         },
         "files": [
@@ -826,6 +846,13 @@
           },
           {
             "path": "frontend/src/components/ProtectedRoute.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/QualityChecksForm.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -986,7 +1013,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 33,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1053,6 +1080,9 @@
         "docker-entrypoint.sh",
         "e2e-test-output.log",
         "e2e-test-run.log",
+        "frontend/src/components/QualityChecksForm.jsx",
+        "frontend/src/pages/QualityChecksPage.jsx",
+        "frontend/src/styles/quality-checks.css",
         "scripts/init-aws-resources.ts",
         "scripts/start-aws-emulator.sh",
         "scripts/start-emulator.sh"
@@ -1061,18 +1091,18 @@
     {
       "issue_number": 63,
       "pr_number": 98,
-      "workflow_run_id": "43605828764",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43605828764",
-      "generated_at": "2026-11-14T14:38:08.468Z",
-      "pass_rate": 81,
+      "workflow_run_id": "43606816988",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43606816988",
+      "generated_at": "2026-11-14T14:49:33.349Z",
+      "pass_rate": 85,
       "total_tests": 183,
-      "total_passed": 148,
-      "total_failed": 35,
+      "total_passed": 156,
+      "total_failed": 27,
       "coverage": {
         "overall": {
-          "lines_pct": 22.7,
-          "branches_pct": 66.39,
-          "functions_pct": 29.09,
+          "lines_pct": 21.6,
+          "branches_pct": 65.85,
+          "functions_pct": 28.57,
           "status": "fail"
         },
         "files": [
@@ -1190,6 +1220,13 @@
           },
           {
             "path": "frontend/src/components/ProtectedRoute.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/QualityChecksForm.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -1350,7 +1387,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 33,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1388,6 +1425,9 @@
         "docker-entrypoint.sh",
         "e2e-test-output.log",
         "e2e-test-run.log",
+        "frontend/src/components/QualityChecksForm.jsx",
+        "frontend/src/pages/QualityChecksPage.jsx",
+        "frontend/src/styles/quality-checks.css",
         "scripts/init-aws-resources.ts",
         "scripts/start-aws-emulator.sh",
         "scripts/start-emulator.sh"
@@ -1396,18 +1436,18 @@
     {
       "issue_number": 65,
       "pr_number": 98,
-      "workflow_run_id": "43605828764",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43605828764",
-      "generated_at": "2026-11-14T14:38:08.468Z",
-      "pass_rate": 81,
+      "workflow_run_id": "43606816988",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43606816988",
+      "generated_at": "2026-11-14T14:49:33.349Z",
+      "pass_rate": 85,
       "total_tests": 183,
-      "total_passed": 148,
-      "total_failed": 35,
+      "total_passed": 156,
+      "total_failed": 27,
       "coverage": {
         "overall": {
-          "lines_pct": 22.7,
-          "branches_pct": 66.39,
-          "functions_pct": 29.09,
+          "lines_pct": 21.6,
+          "branches_pct": 65.85,
+          "functions_pct": 28.57,
           "status": "fail"
         },
         "files": [
@@ -1525,6 +1565,13 @@
           },
           {
             "path": "frontend/src/components/ProtectedRoute.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/QualityChecksForm.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -1685,7 +1732,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 33,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1723,6 +1770,9 @@
         "docker-entrypoint.sh",
         "e2e-test-output.log",
         "e2e-test-run.log",
+        "frontend/src/components/QualityChecksForm.jsx",
+        "frontend/src/pages/QualityChecksPage.jsx",
+        "frontend/src/styles/quality-checks.css",
         "scripts/init-aws-resources.ts",
         "scripts/start-aws-emulator.sh",
         "scripts/start-emulator.sh"
@@ -1777,18 +1827,18 @@
     {
       "issue_number": 69,
       "pr_number": 98,
-      "workflow_run_id": "43605828764",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43605828764",
-      "generated_at": "2026-11-14T14:38:08.468Z",
-      "pass_rate": 81,
+      "workflow_run_id": "43606816988",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43606816988",
+      "generated_at": "2026-11-14T14:49:33.349Z",
+      "pass_rate": 85,
       "total_tests": 183,
-      "total_passed": 148,
-      "total_failed": 35,
+      "total_passed": 156,
+      "total_failed": 27,
       "coverage": {
         "overall": {
-          "lines_pct": 22.7,
-          "branches_pct": 66.39,
-          "functions_pct": 29.09,
+          "lines_pct": 21.6,
+          "branches_pct": 65.85,
+          "functions_pct": 28.57,
           "status": "fail"
         },
         "files": [
@@ -1906,6 +1956,13 @@
           },
           {
             "path": "frontend/src/components/ProtectedRoute.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/QualityChecksForm.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2066,7 +2123,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 33,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2104,6 +2161,9 @@
         "docker-entrypoint.sh",
         "e2e-test-output.log",
         "e2e-test-run.log",
+        "frontend/src/components/QualityChecksForm.jsx",
+        "frontend/src/pages/QualityChecksPage.jsx",
+        "frontend/src/styles/quality-checks.css",
         "scripts/init-aws-resources.ts",
         "scripts/start-aws-emulator.sh",
         "scripts/start-emulator.sh"
@@ -2112,18 +2172,18 @@
     {
       "issue_number": 76,
       "pr_number": 98,
-      "workflow_run_id": "43605828764",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43605828764",
-      "generated_at": "2026-11-14T14:38:08.468Z",
-      "pass_rate": 81,
+      "workflow_run_id": "43606816988",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43606816988",
+      "generated_at": "2026-11-14T14:49:33.349Z",
+      "pass_rate": 85,
       "total_tests": 183,
-      "total_passed": 148,
-      "total_failed": 35,
+      "total_passed": 156,
+      "total_failed": 27,
       "coverage": {
         "overall": {
-          "lines_pct": 22.7,
-          "branches_pct": 66.39,
-          "functions_pct": 29.09,
+          "lines_pct": 21.6,
+          "branches_pct": 65.85,
+          "functions_pct": 28.57,
           "status": "fail"
         },
         "files": [
@@ -2241,6 +2301,13 @@
           },
           {
             "path": "frontend/src/components/ProtectedRoute.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/QualityChecksForm.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2401,7 +2468,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 33,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2439,6 +2506,9 @@
         "docker-entrypoint.sh",
         "e2e-test-output.log",
         "e2e-test-run.log",
+        "frontend/src/components/QualityChecksForm.jsx",
+        "frontend/src/pages/QualityChecksPage.jsx",
+        "frontend/src/styles/quality-checks.css",
         "scripts/init-aws-resources.ts",
         "scripts/start-aws-emulator.sh",
         "scripts/start-emulator.sh"
@@ -2447,18 +2517,18 @@
     {
       "issue_number": 78,
       "pr_number": 98,
-      "workflow_run_id": "43605828764",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43605828764",
-      "generated_at": "2026-11-14T14:38:08.468Z",
-      "pass_rate": 81,
+      "workflow_run_id": "43606816988",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43606816988",
+      "generated_at": "2026-11-14T14:49:33.349Z",
+      "pass_rate": 85,
       "total_tests": 183,
-      "total_passed": 148,
-      "total_failed": 35,
+      "total_passed": 156,
+      "total_failed": 27,
       "coverage": {
         "overall": {
-          "lines_pct": 22.7,
-          "branches_pct": 66.39,
-          "functions_pct": 29.09,
+          "lines_pct": 21.6,
+          "branches_pct": 65.85,
+          "functions_pct": 28.57,
           "status": "fail"
         },
         "files": [
@@ -2576,6 +2646,13 @@
           },
           {
             "path": "frontend/src/components/ProtectedRoute.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/QualityChecksForm.jsx",
             "lines_pct": 0,
             "branches_pct": 0,
             "functions_pct": 0,
@@ -2736,7 +2813,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 32,
+        "non_pass_count": 33,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -2774,6 +2851,9 @@
         "docker-entrypoint.sh",
         "e2e-test-output.log",
         "e2e-test-run.log",
+        "frontend/src/components/QualityChecksForm.jsx",
+        "frontend/src/pages/QualityChecksPage.jsx",
+        "frontend/src/styles/quality-checks.css",
         "scripts/init-aws-resources.ts",
         "scripts/start-aws-emulator.sh",
         "scripts/start-emulator.sh"
