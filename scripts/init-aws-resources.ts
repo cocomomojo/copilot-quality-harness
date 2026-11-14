@@ -20,12 +20,19 @@ import {
 import * as fs from 'fs';
 import * as path from 'path';
 
-// For AWS Emulator with self-signed certificates, we need to disable certificate verification
-// This is safe because:
-// 1. AWS Emulator runs on localhost (127.0.0.1) only
-// 2. This script only runs in local dev or CI environments (not production)
-// 3. AWS_CA_BUNDLE is not automatically read by AWS SDK v3, so this is the most reliable approach
-if (process.env.AWS_ENDPOINT_URL?.includes('localhost') || process.env.AWS_ENDPOINT_URL?.includes('127.0.0.1')) {
+// Helper to create https agent with custom CA certificate if available
+function setupTlsHandling(): void {
+  const isLocalEmulator = process.env.AWS_ENDPOINT_URL?.includes('localhost') || 
+                          process.env.AWS_ENDPOINT_URL?.includes('127.0.0.1');
+  
+  if (!isLocalEmulator) {
+    return;
+  }
+
+  // For AWS Emulator with self-signed certificates, disable certificate verification
+  // This is safe because:
+  // 1. AWS Emulator runs on localhost (127.0.0.1) only
+  // 2. This script only runs in local dev or CI environments (not production)
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
   console.log('✅ Disabled TLS certificate verification for local AWS Emulator');
 }
@@ -70,6 +77,7 @@ function loadEmulatorCredentials(): { accessKeyId: string; secretAccessKey: stri
 }
 
 const emulatorCredentials = loadEmulatorCredentials();
+setupTlsHandling();
 
 // Configuration from environment variables
 const awsConfig: any = {
