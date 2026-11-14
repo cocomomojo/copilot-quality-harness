@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-08T11:32:58.979Z",
-  "source_pr": 83,
+  "generated_at": "2026-11-14T08:18:46.173Z",
+  "source_pr": 85,
   "reports": [
     {
       "issue_number": 44,
@@ -1222,6 +1222,174 @@
         ".github/workflows/update-dashboard.yml",
         "docs/dashboard/data/issue-reports.json",
         "frontend/src/App.jsx"
+      ]
+    },
+    {
+      "issue_number": 84,
+      "pr_number": 85,
+      "workflow_run_id": "43575166465",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43575166465",
+      "generated_at": "2026-11-14T08:18:46.173Z",
+      "pass_rate": 100,
+      "total_tests": 225,
+      "total_passed": 225,
+      "total_failed": 0,
+      "coverage": {
+        "overall": {
+          "lines_pct": 66.15,
+          "branches_pct": 80.3,
+          "functions_pct": 64.29,
+          "status": "fail"
+        },
+        "files": [
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/AppRouter.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/Header.jsx",
+            "lines_pct": 100,
+            "branches_pct": 28.57,
+            "functions_pct": 100,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/LoadingSpinner.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/main.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/DashboardPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/NotFoundPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/QualityChecksPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/SettingsPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/URLValidatorPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/components/Footer.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/pages/HomePage.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/UserProfile.jsx",
+            "lines_pct": 95.71,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/utils/dateFormatter.js",
+            "lines_pct": 93.4,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          }
+        ],
+        "non_pass_count": 10,
+        "thresholds": {
+          "lines": 80,
+          "branches": 75,
+          "functions": 80
+        }
+      },
+      "traceability": {
+        "perspective_count": 8,
+        "quality_items_count": 34,
+        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
+        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
+        "spec_files": [],
+        "ut_cases": 0,
+        "e2e_cases": 0,
+        "ut_details": [],
+        "e2e_details": []
+      },
+      "implementation_files": [
+        "backend/package.json",
+        "pnpm-lock.yaml"
       ]
     }
   ]
