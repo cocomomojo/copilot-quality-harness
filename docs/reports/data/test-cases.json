@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-11-14T14:38:11.326Z",
+  "timestamp": "2026-11-14T14:49:41.644Z",
   "totalSuites": 5,
   "totalTests": 27,
-  "passed": 18,
-  "failed": 9,
+  "passed": 21,
+  "failed": 6,
   "skipped": 0,
-  "passRate": 67,
-  "duration": 133869,
+  "passRate": 78,
+  "duration": 95571,
   "metadata": {},
   "suites": [
     {
@@ -16,13 +16,13 @@
       "passed": 10,
       "failed": 0,
       "skipped": 0,
-      "duration": 28729,
+      "duration": 28691,
       "tests": [
         {
           "name": "E2E-001: Display profile with valid createdAt",
           "title": "E2E-001: Display profile with valid createdAt",
           "status": "passed",
-          "duration": 1987,
+          "duration": 1983,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -38,7 +38,7 @@
           "name": "E2E-002: Display fallback when createdAt is null",
           "title": "E2E-002: Display fallback when createdAt is null",
           "status": "passed",
-          "duration": 1873,
+          "duration": 1880,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -54,7 +54,7 @@
           "name": "E2E-003: Handle 404 API error when user not found",
           "title": "E2E-003: Handle 404 API error when user not found",
           "status": "passed",
-          "duration": 2024,
+          "duration": 2015,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -70,7 +70,7 @@
           "name": "E2E-004: Fetch createdAt from API and display formatted",
           "title": "E2E-004: Fetch createdAt from API and display formatted",
           "status": "passed",
-          "duration": 1333,
+          "duration": 1340,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -86,7 +86,7 @@
           "name": "E2E-005: Handle invalid createdAt format with fallback",
           "title": "E2E-005: Handle invalid createdAt format with fallback",
           "status": "passed",
-          "duration": 1340,
+          "duration": 1307,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -102,7 +102,7 @@
           "name": "E2E-006: Verify element structure and accessibility",
           "title": "E2E-006: Verify element structure and accessibility",
           "status": "passed",
-          "duration": 1308,
+          "duration": 1322,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -118,7 +118,7 @@
           "name": "E2E-007: Verify multiple renders and state consistency",
           "title": "E2E-007: Verify multiple renders and state consistency",
           "status": "passed",
-          "duration": 13348,
+          "duration": 13346,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -134,7 +134,7 @@
           "name": "E2E-101: Display user avatar image when available",
           "title": "E2E-101: Display user avatar image when available",
           "status": "passed",
-          "duration": 1856,
+          "duration": 1857,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -150,7 +150,7 @@
           "name": "E2E-102: Display default avatar when avatar_url is not provided",
           "title": "E2E-102: Display default avatar when avatar_url is not provided",
           "status": "passed",
-          "duration": 1835,
+          "duration": 1824,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -166,7 +166,7 @@
           "name": "E2E-103: Avatar displays with correct styling and dimensions",
           "title": "E2E-103: Avatar displays with correct styling and dimensions",
           "status": "passed",
-          "duration": 1825,
+          "duration": 1817,
           "file": "profile-created-at.spec.js",
           "errors": [],
           "screenshots": [],
@@ -184,19 +184,19 @@
       "name": "Error Path Tests",
       "file": "quality-checks-advanced.spec.js",
       "totalTests": 4,
-      "passed": 0,
-      "failed": 4,
+      "passed": 2,
+      "failed": 2,
       "skipped": 0,
-      "duration": 45462,
+      "duration": 31785,
       "tests": [
         {
           "name": "displays error when adding check with only whitespace",
           "title": "displays error when adding check with only whitespace",
           "status": "failed",
-          "duration": 11304,
+          "duration": 13392,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
-            "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
+            "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Add check' })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"submit\" class=\"add-check-btn\" data-testid=\"add-check-button\">Add check</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -214,22 +214,16 @@
         {
           "name": "displays error when name exceeds 50 characters",
           "title": "displays error when name exceeds 50 characters",
-          "status": "failed",
-          "duration": 11380,
+          "status": "passed",
+          "duration": 2443,
           "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
-          ],
-          "screenshots": [
-            "./test-failed-1.png"
-          ],
+          "errors": [],
+          "screenshots": [],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
+          "errorContexts": [],
           "stdout": [],
           "stderr": []
         },
@@ -237,10 +231,10 @@
           "name": "clears error message when user corrects input",
           "title": "clears error message when user corrects input",
           "status": "failed",
-          "duration": 11389,
+          "duration": 13390,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
-            "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
+            "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Add check' })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled type=\"submit\" class=\"add-check-btn\" data-testid=\"add-check-button\">Add check</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -258,22 +252,16 @@
         {
           "name": "shows appropriate error when API is unavailable",
           "title": "shows appropriate error when API is unavailable",
-          "status": "failed",
-          "duration": 11389,
+          "status": "passed",
+          "duration": 2560,
           "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
-          ],
-          "screenshots": [
-            "./test-failed-1.png"
-          ],
+          "errors": [],
+          "screenshots": [],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
+          "errorContexts": [],
           "stdout": [],
           "stderr": []
         }
@@ -283,19 +271,19 @@
       "name": "Character Count Tests",
       "file": "quality-checks-advanced.spec.js",
       "totalTests": 3,
-      "passed": 0,
-      "failed": 3,
+      "passed": 1,
+      "failed": 2,
       "skipped": 0,
-      "duration": 34083,
+      "duration": 17333,
       "tests": [
         {
           "name": "shows character count when typing",
           "title": "shows character count when typing",
           "status": "failed",
-          "duration": 11355,
+          "duration": 7446,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
-            "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('char-count')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('char-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('char-count')\u001b[22m\n"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -314,10 +302,10 @@
           "name": "shows warning color when 10 or fewer characters remaining",
           "title": "shows warning color when 10 or fewer characters remaining",
           "status": "failed",
-          "duration": 11368,
+          "duration": 7441,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
-            "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveClass\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('char-count')\nExpected pattern: \u001b[32m/char-count-warning/\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveClass\" getByTestId('char-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('char-count')\u001b[22m\n"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -335,22 +323,16 @@
         {
           "name": "enforces maximum 50 character limit",
           "title": "enforces maximum 50 character limit",
-          "status": "failed",
-          "duration": 11360,
+          "status": "passed",
+          "duration": 2446,
           "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
-          ],
-          "screenshots": [
-            "./test-failed-1.png"
-          ],
+          "errors": [],
+          "screenshots": [],
           "videos": [],
           "traceFiles": [
             "./trace.zip"
           ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
+          "errorContexts": [],
           "stdout": [],
           "stderr": []
         }
@@ -363,16 +345,16 @@
       "passed": 0,
       "failed": 2,
       "skipped": 0,
-      "duration": 24800,
+      "duration": 16914,
       "tests": [
         {
           "name": "E2E-078-01: status badge has tooltip title attribute",
           "title": "E2E-078-01: status badge has tooltip title attribute",
           "status": "failed",
-          "duration": 12384,
+          "duration": 8413,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
-            "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('status-badge').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('status-badge').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('status-badge').first()\u001b[22m\n"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -391,10 +373,10 @@
           "name": "E2E-078-02: status badge is keyboard accessible with tabindex",
           "title": "E2E-078-02: status badge is keyboard accessible with tabindex",
           "status": "failed",
-          "duration": 12416,
+          "duration": 8501,
           "file": "quality-checks-advanced.spec.js",
           "errors": [
-            "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Check name')\u001b[22m\n"
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('status-badge').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('status-badge').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('status-badge').first()\u001b[22m\n"
           ],
           "screenshots": [
             "./test-failed-1.png"
@@ -418,13 +400,13 @@
       "passed": 8,
       "failed": 0,
       "skipped": 0,
-      "duration": 795,
+      "duration": 848,
       "tests": [
         {
           "name": "E2E-001: Check valid HTTPS URL endpoint",
           "title": "E2E-001: Check valid HTTPS URL endpoint",
           "status": "passed",
-          "duration": 152,
+          "duration": 157,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -440,7 +422,7 @@
           "name": "E2E-002: Check invalid URL format",
           "title": "E2E-002: Check invalid URL format",
           "status": "passed",
-          "duration": 93,
+          "duration": 110,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -456,7 +438,7 @@
           "name": "E2E-003: Check empty string input",
           "title": "E2E-003: Check empty string input",
           "status": "passed",
-          "duration": 93,
+          "duration": 107,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -472,7 +454,7 @@
           "name": "E2E-004: Check null input",
           "title": "E2E-004: Check null input",
           "status": "passed",
-          "duration": 84,
+          "duration": 88,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -488,7 +470,7 @@
           "name": "E2E-005: Check valid HTTP URL with port",
           "title": "E2E-005: Check valid HTTP URL with port",
           "status": "passed",
-          "duration": 99,
+          "duration": 96,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
@@ -536,7 +518,7 @@
           "name": "E2E-008: Response time performance check",
           "title": "E2E-008: Response time performance check",
           "status": "passed",
-          "duration": 81,
+          "duration": 97,
           "file": "url-validator.spec.js",
           "errors": [],
           "screenshots": [],
