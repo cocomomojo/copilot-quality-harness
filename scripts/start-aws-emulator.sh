@@ -17,8 +17,13 @@ mkdir -p "$CERTS_DIR"
 echo "🚀 Starting AWS Emulator..."
 cd "$ROOT_DIR"
 
-# Build and start docker compose
-docker compose up -d --build aws-emulator
+# Clean up any existing containers and images to ensure fresh build
+echo "🧹 Cleaning up previous Docker build cache..."
+docker compose down -v 2>/dev/null || true
+docker rmi copilot-quality-harness-aws-emulator 2>/dev/null || true
+
+# Build and start docker compose with no-cache to ensure latest Dockerfile is used
+docker compose up -d --build --no-cache aws-emulator
 
 # Wait for container to be healthy
 echo "⏳ Waiting for AWS Emulator to be healthy..."
