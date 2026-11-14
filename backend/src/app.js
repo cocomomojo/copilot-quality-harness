@@ -1,6 +1,11 @@
 import express from 'express';
 import { createDatabase } from './db.js';
 import { isValidURL } from './utils/validators.js';
+import { authMiddleware } from './middleware/auth.js';
+import authRoutes from './routes/auth.js';
+import todosRoutes from './routes/todos.js';
+import filesRoutes from './routes/files.js';
+import logsRoutes from './routes/logs.js';
 
 export function createApp(db = createDatabase()) {
   const app = express();
@@ -42,6 +47,13 @@ export function createApp(db = createDatabase()) {
       return response.status(500).json({ error: 'Internal Server Error', message: 'Failed to fetch user profile' });
     }
   });
+
+  // AWS Emulator routes
+  app.use('/api/auth', authRoutes);
+  app.use('/api/todos', authMiddleware, todosRoutes);
+  app.use('/api/files', authMiddleware, filesRoutes);
+  app.use('/api/logs', authMiddleware, logsRoutes);
+
   // copilot-generated: Test endpoint for seeding user data (E2E tests only)
   // ⚠️  CRITICAL: This endpoint is ONLY available in non-production environments and should NEVER be exposed to the internet.
   // It allows resetting and reinitializing the entire user database, which is essential for test reproducibility.

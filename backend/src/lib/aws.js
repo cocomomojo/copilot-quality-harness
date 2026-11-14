@@ -16,7 +16,7 @@ const awsConfig = {
 
 // Build client config with certificate support
 function buildClientConfig() {
-  const config: any = {
+  const config = {
     ...awsConfig,
   };
 
@@ -39,25 +39,25 @@ function buildClientConfig() {
 }
 
 // Lazy-load clients to avoid connection issues
-let dynamodbClient: DynamoDBClient | null = null;
-let s3Client: S3Client | null = null;
-let sqsClient: SQSClient | null = null;
+let dynamodbClient = null;
+let s3Client = null;
+let sqsClient = null;
 
-export function getDynamoDBClient(): DynamoDBClient {
+export function getDynamoDBClient() {
   if (!dynamodbClient) {
     dynamodbClient = new DynamoDBClient(buildClientConfig());
   }
   return dynamodbClient;
 }
 
-export function getS3Client(): S3Client {
+export function getS3Client() {
   if (!s3Client) {
     s3Client = new S3Client(buildClientConfig());
   }
   return s3Client;
 }
 
-export function getSQSClient(): SQSClient {
+export function getSQSClient() {
   if (!sqsClient) {
     sqsClient = new SQSClient(buildClientConfig());
   }
