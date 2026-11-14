@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# AWS Emulator startup script with certificate extraction
+# AWS Emulator startup script using docker-compose
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -14,16 +14,19 @@ mkdir -p "$CERTS_DIR"
 echo "🚀 Starting AWS Emulator..."
 cd "$ROOT_DIR"
 
-# Start docker compose in detached mode (new format: 'docker compose' instead of 'docker-compose')
-docker compose up -d aws-emulator
+# Ensure home directory exists for emulator data
+mkdir -p ~/.aws/emulator
+
+# Build and start docker compose
+docker compose up -d --build aws-emulator
 
 # Wait for container to be healthy
 echo "⏳ Waiting for AWS Emulator to be healthy..."
-max_attempts=30
+max_attempts=60
 attempt=0
 
 while [ $attempt -lt $max_attempts ]; do
-  if docker compose exec -T aws-emulator curl -f -k https://localhost:9297/health >/dev/null 2>&1; then
+  if docker compose exec -T aws-emulator curl -f -k https://127.0.0.1:9297/health >/dev/null 2>&1; then
     echo "✅ AWS Emulator is healthy"
     break
   fi
@@ -34,18 +37,24 @@ done
 
 if [ $attempt -eq $max_attempts ]; then
   echo "❌ AWS Emulator failed to become healthy within timeout"
-  docker compose logs aws-emulator
+  echo ""
+  echo "📋 Container logs:"
+  docker compose logs aws-emulator | tail -30
   exit 1
 fi
 
-# Extract certificate from container
+# Extract certificate from container (AWS Emulator generates certificates)
 echo "📜 Extracting certificate from AWS Emulator..."
-if docker compose exec -T aws-emulator test -f /aws-emulator/ca.pem >/dev/null 2>&1; then
-  docker compose cp aws-emulator:/aws-emulator/ca.pem "$CA_PEM"
+if docker compose exec -T aws-emulator test -f /.aws-emulator/ca.pem >/dev/null 2>&1; then
+  docker compose cp "aws-emulator:/.aws-emulator/ca.pem" "$CA_PEM"
+  echo "✅ Certificate extracted to $CA_PEM"
+  chmod 644 "$CA_PEM"
+elif docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/ca.pem >/dev/null 2>&1; then
+  docker compose cp "aws-emulator:/home/emulator/.aws/emulator/ca.pem" "$CA_PEM"
   echo "✅ Certificate extracted to $CA_PEM"
   chmod 644 "$CA_PEM"
 else
-  echo "⚠️  ca.pem not found in container, using generated certificate path"
+  echo "⚠️  CA certificate not found in expected locations"
 fi
 
 # Export environment variables for use
@@ -65,3 +74,4 @@ echo "   export AWS_REGION=$AWS_REGION"
 echo "   export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
 echo "   export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
 echo ""
+

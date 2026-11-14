@@ -2,23 +2,20 @@ version: '3.9'
 
 services:
   aws-emulator:
-    image: amazon/aws-emulator:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.aws-emulator
     container_name: copilot-aws-emulator
     ports:
-      - "9297:9297"
+      - "127.0.0.1:9297:9297"
     environment:
-      - AWS_ACCOUNT_ID=123456789012
-      - AWS_REGION=us-east-1
+      - HOME=/home/emulator
     volumes:
-      - aws-emulator-data:/var/lib/aws-emulator
-      - ./certs:/aws-emulator/certs:rw
+      - ~/.aws/emulator:/home/emulator/.aws/emulator
     healthcheck:
-      test: ["CMD", "curl", "-f", "-k", "https://localhost:9297/health"]
+      test: ["CMD", "curl", "-f", "-k", "https://127.0.0.1:9297/health"]
       interval: 5s
       timeout: 3s
-      retries: 10
-      start_period: 5s
+      retries: 30
+      start_period: 10s
     restart: unless-stopped
-
-volumes:
-  aws-emulator-data:

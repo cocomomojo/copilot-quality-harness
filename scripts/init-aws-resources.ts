@@ -57,8 +57,8 @@ const sqsClient = new SQSClient(clientConfig);
 
 interface DynamoDBTableConfig {
   name: string;
-  keySchema: Array<{ AttributeName: string; KeyType: string }>;
-  attributeDefinitions: Array<{ AttributeName: string; AttributeType: string }>;
+  keySchema: Array<{ AttributeName: string; KeyType: 'HASH' | 'RANGE' }>;
+  attributeDefinitions: Array<{ AttributeName: string; AttributeType: 'S' | 'N' | 'B' }>;
 }
 
 async function checkTableExists(tableName: string): Promise<boolean> {
