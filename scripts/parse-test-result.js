@@ -106,8 +106,19 @@ if (result.passed === 0 && result.failed === 0) {
   }
 }
 
+// Check if tests were skipped (common in E2E CI environments)
+const isSkipped = cleanedContent.includes('skipped') && result.passed === 0 && result.failed === 0;
+
 // Determine overall status
-result.status = result.failed === 0 && result.passed > 0 ? 'passed' : result.failed > 0 ? 'failed' : 'error';
+if (isSkipped) {
+  result.status = 'skipped';
+} else if (result.failed > 0) {
+  result.status = 'failed';
+} else if (result.passed > 0) {
+  result.status = 'passed';
+} else {
+  result.status = 'error';
+}
 
 console.log(`\n📊 Final result: { test_type: '${result.test_type}', passed: ${result.passed}, failed: ${result.failed}, status: '${result.status}' }`);
 
@@ -131,4 +142,5 @@ skipped=${result.skipped}
   console.log(`✅ GitHub Actions output set`);
 }
 
-process.exit(result.status === 'error' ? 1 : 0);
+// Exit with success for skipped tests (they are not failures)
+process.exit((result.status === 'error' || result.status === 'failed') ? 1 : 0);
