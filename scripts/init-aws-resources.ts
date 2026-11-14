@@ -21,13 +21,16 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 
+import { fromEnv } from '@aws-sdk/credential-providers';
+
 // Configuration from environment variables
-const awsConfig = {
+const awsConfig: any = {
   endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
   region: process.env.AWS_REGION || 'us-east-1',
+  // Use credentials from environment or provide static test credentials
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test-key',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test-secret',
   },
 };
 
@@ -36,19 +39,28 @@ const clientConfig: any = {
   ...awsConfig,
 };
 
-// Add CA certificate if NODE_EXTRA_CA_CERTS is set
+// Add CA certificate and disable certificate verification for self-signed certs
 if (process.env.NODE_EXTRA_CA_CERTS) {
   try {
     const caCert = fs.readFileSync(process.env.NODE_EXTRA_CA_CERTS);
-    clientConfig.requestHandler = {
-      httpsAgent: new https.Agent({
-        ca: caCert,
-        rejectUnauthorized: false,
-      }),
-    };
+    clientConfig.httpAgent = new (require('http').Agent)({
+      ca: caCert,
+      rejectUnauthorized: false,
+    });
+    clientConfig.httpsAgent = new https.Agent({
+      ca: caCert,
+      rejectUnauthorized: false,
+    });
+    console.log('✅ CA certificate loaded from:', process.env.NODE_EXTRA_CA_CERTS);
   } catch (err) {
     console.warn('⚠️  Failed to load CA certificate:', err instanceof Error ? err.message : String(err));
   }
+} else {
+  // Even without explicit CA, disable verification for local testing
+  clientConfig.httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+  });
+  console.log('⚠️  No CA certificate configured, disabling certificate verification');
 }
 
 const dynamodbClient = new DynamoDBClient(clientConfig);
