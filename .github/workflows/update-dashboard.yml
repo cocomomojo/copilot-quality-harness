@@ -349,6 +349,12 @@ jobs:
             echo "⚠️  E2E details page generation skipped"
           fi
       
+      - name: Cleanup old E2E report artifacts
+        continue-on-error: true
+        run: |
+          echo "🧹 Cleaning up old E2E report files (keeping only latest)..."
+          node scripts/cleanup-old-reports.mjs
+      
       - name: Verify dashboard
         run: |
           if [ -f docs/dashboard/index.html ]; then
