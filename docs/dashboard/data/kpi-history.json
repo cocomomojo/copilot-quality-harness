@@ -1,28 +1,5 @@
 [
   {
-    "timestamp": "2026-11-01T09:41:44.714Z",
-    "pass_rate": 80,
-    "test_count": 5,
-    "passed": 4,
-    "failed": 1,
-    "coverage": 0,
-    "ai_danger_rank": "E",
-    "risk_level": "CRITICAL",
-    "composite_score": 42,
-    "data_source": "GITHUB_API",
-    "details": {
-      "test_source": "github-api",
-      "github_run_id": 41293925774,
-      "coverage_source": "NO_SUCCESSFUL_TEST_RUN",
-      "explicit_test_run_id": "41293925774"
-    },
-    "trend": "STABLE",
-    "trend_details": {
-      "pass_rate_change": 0,
-      "coverage_change": 0
-    }
-  },
-  {
     "timestamp": "2026-11-01T09:45:52.484Z",
     "pass_rate": 80,
     "test_count": 5,
@@ -2090,6 +2067,31 @@
       "github_run_id": 43588881213,
       "coverage_source": "ARTIFACT_RUN:43588881213",
       "explicit_test_run_id": "43588881213"
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+  },
+  {
+    "timestamp": "2026-11-14T11:35:28.688Z",
+    "pass_rate": 59,
+    "test_count": 189,
+    "passed": 112,
+    "failed": 77,
+    "coverage": 33,
+    "global_e2e_count": 53,
+    "global_unit_count": 136,
+    "ai_danger_rank": "D",
+    "risk_level": "HIGH",
+    "composite_score": 54,
+    "data_source": "TEST_MATRIX_ARTIFACT",
+    "details": {
+      "test_source": "test-matrix-artifact",
+      "github_run_id": 43589921812,
+      "coverage_source": "ARTIFACT_RUN:43589921812",
+      "explicit_test_run_id": "43589921812"
     },
     "trend": "STABLE",
     "trend_details": {
