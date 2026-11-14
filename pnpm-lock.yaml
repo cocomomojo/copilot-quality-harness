@@ -45,6 +45,9 @@ importers:
         specifier: ^4.21.2
         version: 4.22.3(supports-color@8.1.1)
     devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^2.1.8
+        version: 2.1.9(supports-color@8.1.1)(vitest@2.1.9(@types/node@20.19.43)(jsdom@25.0.1(supports-color@8.1.1))(supports-color@8.1.1))
       eslint:
         specifier: ^9.17.0
         version: 9.39.5(supports-color@8.1.1)
