@@ -1,297 +1,39 @@
 {
-  "generated_at": "2026-11-14T08:22:09.512Z",
-  "source_pr": 85,
+  "generated_at": "2026-11-14T12:11:09.401Z",
+  "source_pr": 91,
   "reports": [
     {
       "issue_number": 44,
-      "pr_number": 49,
-      "workflow_run_id": 41293004461,
-      "generated_at": "2026-11-01T09:25:40.771Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 44,
-      "total_passed": 44,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 89.57,
-          "branches_pct": 89.52,
-          "functions_pct": 83.33,
-          "status": "pass"
-        },
-        "files": [
-          {
-            "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/main.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "backend/src/app.js",
-            "lines_pct": 82.28,
-            "branches_pct": 94.74,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "backend/src/utils/validators.js",
-            "lines_pct": 94.44,
-            "branches_pct": 92.86,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/App.jsx",
-            "lines_pct": 94.44,
-            "branches_pct": 95.45,
-            "functions_pct": 83.33,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/components/Footer.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/UserProfile.jsx",
-            "lines_pct": 95,
-            "branches_pct": 86.66,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/utils/dateFormatter.js",
-            "lines_pct": 93.33,
-            "branches_pct": 87.09,
-            "functions_pct": 100,
-            "status": "pass"
-          }
-        ],
-        "non_pass_count": 2,
-        "thresholds": {
-          "lines": 80,
-          "branches": 75,
-          "functions": 80
-        }
-      },
-      "traceability": {
-        "perspective_count": 8,
-        "quality_items_count": 34,
-        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
-        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
-        "spec_files": [
-          {
-            "path": "tests/specs/feature-1792976619882.yml",
-            "feature": "ボタンのホバー（フォーカス）時の視認性改善"
-          }
-        ],
-        "ut_cases": 1,
-        "e2e_cases": 2,
-        "ut_details": [
-          {
-            "id": "UT-001",
-            "title": "プレースホルダー: 自動生成用ユニットテスト"
-          }
-        ],
-        "e2e_details": [
-          {
-            "id": "E2E-001",
-            "title": "シナリオ 1: アプリケーションのメイン画面（`frontend/src/A..."
-          },
-          {
-            "id": "E2E-002",
-            "title": "シナリオ 2: ボタンのホバースタイルが変更されたとき..."
-          }
-        ]
-      },
-      "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/test-matrix.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/kpi-history.json",
-        "docs/dashboard/data/kpi-history.json.bak",
-        "scripts/collect-kpi-advanced.mjs",
-        "scripts/generate-dashboard.mjs"
-      ]
-    },
-    {
-      "issue_number": 56,
-      "pr_number": 60,
-      "workflow_run_id": null,
-      "generated_at": "2026-11-07T08:18:11.405Z",
-      "pass_rate": 100,
-      "total_tests": 103,
-      "total_passed": 103,
-      "total_failed": 0,
-      "coverage": {
-        "overall": {
-          "lines_pct": 81.41,
-          "branches_pct": 89.47,
-          "functions_pct": 82.14,
-          "status": "pass"
-        },
-        "files": [
-          {
-            "path": "frontend/src/App.jsx",
-            "lines_pct": 94.44,
-            "branches_pct": 95.45,
-            "functions_pct": 83.33,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/UserProfile.jsx",
-            "lines_pct": 95,
-            "branches_pct": 84.61,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/components/Footer.jsx",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "frontend/src/utils/dateFormatter.js",
-            "lines_pct": 93.33,
-            "branches_pct": 87.5,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "backend/src/app.js",
-            "lines_pct": 82.28,
-            "branches_pct": 94.74,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "backend/src/db.js",
-            "lines_pct": 100,
-            "branches_pct": 100,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "backend/src/utils/validators.js",
-            "lines_pct": 94.44,
-            "branches_pct": 92.86,
-            "functions_pct": 100,
-            "status": "pass"
-          },
-          {
-            "path": "backend/src/server.js",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/main.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/Header.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          },
-          {
-            "path": "frontend/src/components/LoadingSpinner.jsx",
-            "lines_pct": 0,
-            "branches_pct": 0,
-            "functions_pct": 0,
-            "status": "fail"
-          }
-        ],
-        "non_pass_count": 4,
-        "thresholds": {
-          "lines": 80,
-          "branches": 75,
-          "functions": 80
-        }
-      },
-      "traceability": {
-        "perspective_count": 8,
-        "quality_items_count": 48,
-        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
-        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
-        "spec_files": [
-          {
-            "path": "tests/specs/web.yml",
-            "feature": "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加"
-          }
-        ],
-        "ut_cases": 1,
-        "e2e_cases": 3,
-        "ut_details": [
-          {
-            "id": "UT-001",
-            "title": "プレースホルダー: 自動生成用ユニットテスト"
-          }
-        ],
-        "e2e_details": [
-          {
-            "id": "E2E-001",
-            "title": "シナリオ 1: ユーザーがシステムにアクセス可能である..."
-          },
-          {
-            "id": "E2E-002",
-            "title": "シナリオ 2: ユーザーがシステムにアクセス可能である..."
-          },
-          {
-            "id": "E2E-003",
-            "title": "シナリオ 3: システムが準備状態である..."
-          }
-        ]
-      },
-      "implementation_files": [
-        "frontend/src/components/Header.jsx",
-        "frontend/src/components/LoadingSpinner.jsx",
-        "frontend/src/App.test.jsx",
-        "frontend/src/App-advanced.test.jsx",
-        "frontend/src/components/Footer.test.jsx"
-      ]
-    },
-    {
-      "issue_number": 61,
-      "pr_number": 83,
-      "workflow_run_id": "42476155179",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42476155179",
-      "generated_at": "2026-11-08T11:32:58.979Z",
-      "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
-      "total_failed": 0,
-      "coverage": {
-        "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
-          "functions_pct": 62.5,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
+          {
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
           {
             "path": "frontend/src/AppRouter.jsx",
             "lines_pct": 0,
@@ -356,6 +98,27 @@
             "status": "fail"
           },
           {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
             "path": "frontend/src/App.jsx",
             "lines_pct": 95.04,
             "branches_pct": 87.5,
@@ -391,7 +154,415 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 9,
+        "non_pass_count": 11,
+        "thresholds": {
+          "lines": 80,
+          "branches": 75,
+          "functions": 80
+        }
+      },
+      "traceability": {
+        "perspective_count": 8,
+        "quality_items_count": 34,
+        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
+        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
+        "spec_files": [
+          {
+            "path": "tests/specs/feature-1792976619882.yml",
+            "feature": "ボタンのホバー（フォーカス）時の視認性改善"
+          }
+        ],
+        "ut_cases": 1,
+        "e2e_cases": 2,
+        "ut_details": [
+          {
+            "id": "UT-001",
+            "title": "プレースホルダー: 自動生成用ユニットテスト"
+          }
+        ],
+        "e2e_details": [
+          {
+            "id": "E2E-001",
+            "title": "シナリオ 1: アプリケーションのメイン画面（`frontend/src/A..."
+          },
+          {
+            "id": "E2E-002",
+            "title": "シナリオ 2: ボタンのホバースタイルが変更されたとき..."
+          }
+        ]
+      },
+      "implementation_files": [
+        ".github/workflows/test-matrix.yml",
+        "backend/package.json",
+        "backend/src/lib/aws.ts",
+        "docker-compose.yml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
+      ]
+    },
+    {
+      "issue_number": 56,
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
+      "pass_rate": 100,
+      "total_tests": 225,
+      "total_passed": 225,
+      "total_failed": 0,
+      "coverage": {
+        "overall": {
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
+          "status": "fail"
+        },
+        "files": [
+          {
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/AppRouter.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/Header.jsx",
+            "lines_pct": 100,
+            "branches_pct": 28.57,
+            "functions_pct": 100,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/LoadingSpinner.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/main.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/DashboardPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/NotFoundPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/QualityChecksPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/SettingsPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/URLValidatorPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/components/Footer.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/pages/HomePage.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/UserProfile.jsx",
+            "lines_pct": 95.71,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/utils/dateFormatter.js",
+            "lines_pct": 93.4,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          }
+        ],
+        "non_pass_count": 11,
+        "thresholds": {
+          "lines": 80,
+          "branches": 75,
+          "functions": 80
+        }
+      },
+      "traceability": {
+        "perspective_count": 8,
+        "quality_items_count": 34,
+        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
+        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
+        "spec_files": [
+          {
+            "path": "tests/specs/web.yml",
+            "feature": "【機能要望】検証用Webアプリのヘッダーナビゲーションおよびローディング表示の追加"
+          }
+        ],
+        "ut_cases": 1,
+        "e2e_cases": 3,
+        "ut_details": [
+          {
+            "id": "UT-001",
+            "title": "プレースホルダー: 自動生成用ユニットテスト"
+          }
+        ],
+        "e2e_details": [
+          {
+            "id": "E2E-001",
+            "title": "シナリオ 1: ユーザーがシステムにアクセス可能である..."
+          },
+          {
+            "id": "E2E-002",
+            "title": "シナリオ 2: ユーザーがシステムにアクセス可能である..."
+          },
+          {
+            "id": "E2E-003",
+            "title": "シナリオ 3: システムが準備状態である..."
+          }
+        ]
+      },
+      "implementation_files": [
+        ".github/workflows/test-matrix.yml",
+        "backend/package.json",
+        "backend/src/lib/aws.ts",
+        "docker-compose.yml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
+      ]
+    },
+    {
+      "issue_number": 61,
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
+      "pass_rate": 100,
+      "total_tests": 225,
+      "total_passed": 225,
+      "total_failed": 0,
+      "coverage": {
+        "overall": {
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
+          "status": "fail"
+        },
+        "files": [
+          {
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/AppRouter.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/Header.jsx",
+            "lines_pct": 100,
+            "branches_pct": 28.57,
+            "functions_pct": 100,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/LoadingSpinner.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/main.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/DashboardPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/NotFoundPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/QualityChecksPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/SettingsPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/URLValidatorPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/components/Footer.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/pages/HomePage.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/UserProfile.jsx",
+            "lines_pct": 95.71,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/utils/dateFormatter.js",
+            "lines_pct": 93.4,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          }
+        ],
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -449,38 +620,171 @@
         ]
       },
       "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        ".github/workflows/test-matrix.yml",
+        "backend/package.json",
+        "backend/src/lib/aws.ts",
+        "docker-compose.yml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 63,
-      "pr_number": null,
-      "workflow_run_id": 42374236123,
-      "generated_at": "2026-11-07T22:37:48.737190Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 3,
-      "total_passed": 3,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 100,
-          "branches_pct": 100,
-          "functions_pct": 100,
-          "status": "pass"
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
+          "status": "fail"
         },
         "files": [
+          {
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/AppRouter.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/Header.jsx",
+            "lines_pct": 100,
+            "branches_pct": 28.57,
+            "functions_pct": 100,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/LoadingSpinner.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/main.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/DashboardPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/NotFoundPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/QualityChecksPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/SettingsPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/URLValidatorPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
+            "status": "pass"
+          },
           {
             "path": "frontend/src/components/Footer.jsx",
             "lines_pct": 100,
             "branches_pct": 100,
             "functions_pct": 100,
             "status": "pass"
+          },
+          {
+            "path": "frontend/src/pages/HomePage.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/UserProfile.jsx",
+            "lines_pct": 95.71,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/utils/dateFormatter.js",
+            "lines_pct": 93.4,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
           }
         ],
-        "non_pass_count": 0,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -488,10 +792,10 @@
         }
       },
       "traceability": {
-        "perspective_count": 0,
-        "quality_items_count": 0,
-        "perspectives_file": null,
-        "test_items_file": null,
+        "perspective_count": 8,
+        "quality_items_count": 34,
+        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
+        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
         "spec_files": [
           {
             "path": "tests/specs/feature-1794053074631.yml",
@@ -509,40 +813,182 @@
         "e2e_details": []
       },
       "implementation_files": [
-        "frontend/src/components/Footer.jsx",
-        "frontend/src/components/Footer.test.jsx"
+        ".github/workflows/test-matrix.yml",
+        "backend/package.json",
+        "backend/src/lib/aws.ts",
+        "docker-compose.yml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 65,
-      "pr_number": 66,
-      "workflow_run_id": 42448103245,
-      "generated_at": "2026-11-08T04:47:12.000Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 141,
-      "total_passed": 141,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42448103245",
       "coverage": {
         "overall": {
-          "lines_pct": 59,
-          "branches_pct": 55,
-          "functions_pct": 62,
-          "status": "pass"
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
+          "status": "fail"
         },
-        "files": [],
-        "non_pass_count": 0,
+        "files": [
+          {
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/AppRouter.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/Header.jsx",
+            "lines_pct": 100,
+            "branches_pct": 28.57,
+            "functions_pct": 100,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/components/LoadingSpinner.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/main.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/DashboardPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/NotFoundPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/QualityChecksPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/SettingsPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "frontend/src/pages/URLValidatorPage.jsx",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/App.jsx",
+            "lines_pct": 95.04,
+            "branches_pct": 87.5,
+            "functions_pct": 83.33,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/components/Footer.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/pages/HomePage.jsx",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/UserProfile.jsx",
+            "lines_pct": 95.71,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "frontend/src/utils/dateFormatter.js",
+            "lines_pct": 93.4,
+            "branches_pct": 87.5,
+            "functions_pct": 100,
+            "status": "pass"
+          }
+        ],
+        "non_pass_count": 11,
         "thresholds": {
-          "lines": 50,
-          "branches": 50,
-          "functions": 50
+          "lines": 80,
+          "branches": 75,
+          "functions": 80
         }
       },
       "traceability": {
-        "perspective_count": 3,
-        "quality_items_count": 5,
-        "perspectives_file": null,
-        "test_items_file": null,
+        "perspective_count": 8,
+        "quality_items_count": 34,
+        "perspectives_file": "qa/quality-characteristics/generated/test-perspectives-simple.json",
+        "test_items_file": "qa/quality-characteristics/generated/test-items-simple.json",
         "spec_files": [
           {
             "path": "tests/specs/feature-1794098655594.yml",
@@ -558,7 +1004,19 @@
           }
         ],
         "e2e_details": []
-      }
+      },
+      "implementation_files": [
+        ".github/workflows/test-matrix.yml",
+        "backend/package.json",
+        "backend/src/lib/aws.ts",
+        "docker-compose.yml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
+      ]
     },
     {
       "issue_number": 67,
@@ -608,22 +1066,36 @@
     },
     {
       "issue_number": 69,
-      "pr_number": 83,
-      "workflow_run_id": "42476155179",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42476155179",
-      "generated_at": "2026-11-08T11:32:58.979Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
-          "functions_pct": 62.5,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
+          {
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
           {
             "path": "frontend/src/AppRouter.jsx",
             "lines_pct": 0,
@@ -688,6 +1160,27 @@
             "status": "fail"
           },
           {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
             "path": "frontend/src/App.jsx",
             "lines_pct": 95.04,
             "branches_pct": 87.5,
@@ -723,7 +1216,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 9,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -752,30 +1245,50 @@
         "e2e_details": []
       },
       "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        ".github/workflows/test-matrix.yml",
+        "backend/package.json",
+        "backend/src/lib/aws.ts",
+        "docker-compose.yml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 76,
-      "pr_number": 83,
-      "workflow_run_id": "42476155179",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42476155179",
-      "generated_at": "2026-11-08T11:32:58.979Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
-          "functions_pct": 62.5,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
+          {
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
           {
             "path": "frontend/src/AppRouter.jsx",
             "lines_pct": 0,
@@ -840,6 +1353,27 @@
             "status": "fail"
           },
           {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
             "path": "frontend/src/App.jsx",
             "lines_pct": 95.04,
             "branches_pct": 87.5,
@@ -875,7 +1409,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 9,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -904,30 +1438,50 @@
         "e2e_details": []
       },
       "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        ".github/workflows/test-matrix.yml",
+        "backend/package.json",
+        "backend/src/lib/aws.ts",
+        "docker-compose.yml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
       "issue_number": 78,
-      "pr_number": 83,
-      "workflow_run_id": "42476155179",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/42476155179",
-      "generated_at": "2026-11-08T11:32:58.979Z",
+      "pr_number": 91,
+      "workflow_run_id": "43593499522",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43593499522",
+      "generated_at": "2026-11-14T12:11:09.401Z",
       "pass_rate": 100,
-      "total_tests": 172,
-      "total_passed": 172,
+      "total_tests": 225,
+      "total_passed": 225,
       "total_failed": 0,
       "coverage": {
         "overall": {
-          "lines_pct": 61.16,
-          "branches_pct": 76.29,
-          "functions_pct": 62.5,
+          "lines_pct": 61.87,
+          "branches_pct": 79.7,
+          "functions_pct": 62.07,
           "status": "fail"
         },
         "files": [
+          {
+            "path": "backend/src/lib/aws.ts",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
+          {
+            "path": "backend/src/server.js",
+            "lines_pct": 0,
+            "branches_pct": 0,
+            "functions_pct": 0,
+            "status": "fail"
+          },
           {
             "path": "frontend/src/AppRouter.jsx",
             "lines_pct": 0,
@@ -992,6 +1546,27 @@
             "status": "fail"
           },
           {
+            "path": "backend/src/app.js",
+            "lines_pct": 82.28,
+            "branches_pct": 94.74,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/db.js",
+            "lines_pct": 100,
+            "branches_pct": 100,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
+            "path": "backend/src/utils/validators.js",
+            "lines_pct": 94.44,
+            "branches_pct": 92.86,
+            "functions_pct": 100,
+            "status": "pass"
+          },
+          {
             "path": "frontend/src/App.jsx",
             "lines_pct": 95.04,
             "branches_pct": 87.5,
@@ -1027,7 +1602,7 @@
             "status": "pass"
           }
         ],
-        "non_pass_count": 9,
+        "non_pass_count": 11,
         "thresholds": {
           "lines": 80,
           "branches": 75,
@@ -1056,10 +1631,16 @@
         "e2e_details": []
       },
       "implementation_files": [
-        ".github/workflows/quality-report-pr.yml",
-        ".github/workflows/update-dashboard.yml",
-        "docs/dashboard/data/issue-reports.json",
-        "frontend/src/App.jsx"
+        ".github/workflows/test-matrix.yml",
+        "backend/package.json",
+        "backend/src/lib/aws.ts",
+        "docker-compose.yml",
+        "package.json",
+        "pnpm-lock.yaml",
+        "scripts/health-aws-emulator.sh",
+        "scripts/init-aws-resources.ts",
+        "scripts/start-aws-emulator.sh",
+        "scripts/stop-aws-emulator.sh"
       ]
     },
     {
