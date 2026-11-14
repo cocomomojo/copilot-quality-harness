@@ -344,22 +344,14 @@ jobs:
             }
 
             const specsDir = 'tests/specs';
-            console.log(`[DEBUG] Checking specs directory: ${specsDir}, exists: ${fs.existsSync(specsDir)}`);
-            console.log(`[DEBUG] Current working directory: ${process.cwd()}`);
             if (fs.existsSync(specsDir)) {
               const specFiles = fs.readdirSync(specsDir);
-              console.log(`[DEBUG] Found ${specFiles.length} files in ${specsDir}:`, specFiles);
-              
+              let processedCount = 0;
               for (const specFile of specFiles) {
                 if (!specFile.endsWith('.yml') && !specFile.endsWith('.yaml')) continue;
                 const fullPath = path.join(specsDir, specFile);
                 const content = fs.readFileSync(fullPath, 'utf-8');
                 const issueMatches = [...content.matchAll(/#\s*Issue:\s*Closes\s+#(\d+)/gi)];
-                
-                if (issueMatches.length > 0) {
-                  console.log(`[DEBUG] ${specFile}: found ${issueMatches.length} issue references:`, issueMatches.map(m => `#${m[1]}`));
-                }
-                
                 if (issueMatches.length === 0) continue;
 
                 let specObject = {};
@@ -372,9 +364,6 @@ jobs:
                 const testSpec = specObject.test_spec || {};
                 const utCases = Array.isArray(testSpec.ut) ? testSpec.ut : [];
                 const e2eCases = Array.isArray(testSpec.e2e) ? testSpec.e2e : [];
-                
-                console.log(`[DEBUG] ${specFile}: ${utCases.length} UT cases, ${e2eCases.length} E2E cases`);
-                
                 for (const issueMatch of issueMatches) {
                   traceability.spec_issue_mapping.push({
                     issue: Number(issueMatch[1]),
@@ -391,11 +380,12 @@ jobs:
                       title: item.title
                     }))
                   });
+                  processedCount++;
                 }
               }
-              console.log(`[DEBUG] Total spec_issue_mapping entries: ${traceability.spec_issue_mapping.length}`);
-            } else {
-              console.warn(`[WARN] Tests/specs directory not found at: ${specsDir}`);
+              if (processedCount > 0) {
+                console.log(`✅ Loaded ${processedCount} spec files (${traceability.spec_issue_mapping.length} issue mappings)`);
+              }
             }
           }
 
