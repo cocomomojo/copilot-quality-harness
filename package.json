@@ -8,6 +8,10 @@
   ],
   "scripts": {
     "dev": "concurrently \"pnpm --filter quality-harness-backend dev\" \"pnpm --filter quality-harness-frontend dev\"",
+    "dev:aws": "bash scripts/start-aws-emulator.sh",
+    "health:aws": "bash scripts/health-aws-emulator.sh",
+    "stop:aws": "bash scripts/stop-aws-emulator.sh",
+    "init:aws": "ts-node scripts/init-aws-resources.ts",
     "build": "pnpm --filter quality-harness-frontend build",
     "test": "pnpm --filter quality-harness-backend run test && pnpm --filter quality-harness-frontend run test",
     "test:coverage": "pnpm --filter quality-harness-backend run test && pnpm --filter quality-harness-frontend run test",
