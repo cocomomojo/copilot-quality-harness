@@ -1,28 +1,5 @@
 [
   {
-    "timestamp": "2026-11-01T11:55:28.730Z",
-    "pass_rate": 100,
-    "test_count": 44,
-    "passed": 44,
-    "failed": 0,
-    "coverage": 91,
-    "ai_danger_rank": "C",
-    "risk_level": "MEDIUM",
-    "composite_score": 83,
-    "data_source": "TEST_MATRIX_ARTIFACT",
-    "details": {
-      "test_source": "test-matrix-artifact",
-      "github_run_id": 41303720262,
-      "coverage_source": "ARTIFACT_RUN:41303720262",
-      "explicit_test_run_id": "41303720262"
-    },
-    "trend": "STABLE",
-    "trend_details": {
-      "pass_rate_change": 0,
-      "coverage_change": 0
-    }
-  },
-  {
     "timestamp": "2026-11-03T10:14:04.608Z",
     "pass_rate": 100,
     "test_count": 44,
@@ -2087,7 +2064,7 @@
     }
   },
   {
-    "timestamp": "2026-11-14T12:32:48.754Z",
+    "timestamp": "2026-11-14T12:34:02.734Z",
     "pass_rate": 100,
     "test_count": 130,
     "passed": 130,
@@ -2101,9 +2078,34 @@
     "data_source": "TEST_MATRIX_ARTIFACT",
     "details": {
       "test_source": "test-matrix-artifact",
-      "github_run_id": 43595178768,
-      "coverage_source": "ARTIFACT_RUN:43595178768",
-      "explicit_test_run_id": "43595178768"
+      "github_run_id": 43595178840,
+      "coverage_source": "ARTIFACT_RUN:43595178840",
+      "explicit_test_run_id": "43595178840"
+    },
+    "trend": "STABLE",
+    "trend_details": {
+      "pass_rate_change": 0,
+      "coverage_change": 0
+    }
+  },
+  {
+    "timestamp": "2026-11-14T12:39:29.495Z",
+    "pass_rate": 100,
+    "test_count": 130,
+    "passed": 130,
+    "failed": 0,
+    "coverage": 17,
+    "global_e2e_count": 0,
+    "global_unit_count": 130,
+    "ai_danger_rank": "C",
+    "risk_level": "MEDIUM",
+    "composite_score": 72,
+    "data_source": "TEST_MATRIX_ARTIFACT",
+    "details": {
+      "test_source": "test-matrix-artifact",
+      "github_run_id": 43595545879,
+      "coverage_source": "ARTIFACT_RUN:43595545879",
+      "explicit_test_run_id": "43595545879"
     },
     "trend": "STABLE",
     "trend_details": {
