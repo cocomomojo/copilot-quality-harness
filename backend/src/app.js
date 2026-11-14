@@ -11,6 +11,17 @@ export function createApp(db = createDatabase()) {
   const app = express();
   app.use(express.json({ limit: '10kb' }));
 
+  // Enable CORS for all routes
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
+    }
+    next();
+  });
+
   app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
   app.get('/api/checks', (_request, response) => {
     response.json(db.prepare("SELECT id, name, status, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS createdAt FROM checks ORDER BY id DESC").all());

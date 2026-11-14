@@ -19,41 +19,78 @@ import {
 } from '@aws-sdk/client-sqs';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as https from 'https';
 
-// Configuration from environment variables
-const awsConfig = {
-  endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
-  region: process.env.AWS_REGION || 'us-east-1',
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test',
-  },
-};
+// Helper to create https agent with custom CA certificate if available
+function setupTlsHandling(): void {
+  const isLocalEmulator = process.env.AWS_ENDPOINT_URL?.includes('localhost') || 
+                          process.env.AWS_ENDPOINT_URL?.includes('127.0.0.1');
+  
+  if (!isLocalEmulator) {
+    return;
+  }
 
-// SSL certificate configuration
-const clientConfig: any = {
-  ...awsConfig,
-};
+  // For AWS Emulator with self-signed certificates, disable certificate verification
+  // This is safe because:
+  // 1. AWS Emulator runs on localhost (127.0.0.1) only
+  // 2. This script only runs in local dev or CI environments (not production)
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  console.log('✅ Disabled TLS certificate verification for local AWS Emulator');
+}
 
-// Add CA certificate if NODE_EXTRA_CA_CERTS is set
-if (process.env.NODE_EXTRA_CA_CERTS) {
-  try {
-    const caCert = fs.readFileSync(process.env.NODE_EXTRA_CA_CERTS);
-    clientConfig.requestHandler = {
-      httpsAgent: new https.Agent({
-        ca: caCert,
-        rejectUnauthorized: false,
-      }),
+// Load AWS Emulator credentials from the auto-generated credentials file
+// Per AWS Emulator official docs: use AWS_SHARED_CREDENTIALS_FILE pointing to emulator_credentials
+function loadEmulatorCredentials(): { accessKeyId: string; secretAccessKey: string } {
+  const credentialsFile = process.env.AWS_SHARED_CREDENTIALS_FILE;
+  
+  if (!credentialsFile) {
+    console.warn('⚠️  AWS_SHARED_CREDENTIALS_FILE not set. Using placeholder credentials.');
+    return {
+      accessKeyId: 'test-key',
+      secretAccessKey: 'test-secret',
     };
+  }
+
+  try {
+    const content = fs.readFileSync(credentialsFile, 'utf-8');
+    // AWS credentials file format: [profile]\naws_access_key_id=...\naws_secret_access_key=...
+    const accessKeyMatch = content.match(/aws_access_key_id\s*=\s*(.+)/);
+    const secretKeyMatch = content.match(/aws_secret_access_key\s*=\s*(.+)/);
+    
+    if (!accessKeyMatch || !secretKeyMatch) {
+      throw new Error('Invalid credentials file format');
+    }
+
+    const credentials = {
+      accessKeyId: accessKeyMatch[1].trim(),
+      secretAccessKey: secretKeyMatch[1].trim(),
+    };
+    console.log('✅ Loaded AWS Emulator credentials from:', credentialsFile);
+    return credentials;
   } catch (err) {
-    console.warn('⚠️  Failed to load CA certificate:', err instanceof Error ? err.message : String(err));
+    console.warn('⚠️  Failed to load credentials from', credentialsFile, ':', err instanceof Error ? err.message : String(err));
+    console.warn('   Falling back to placeholder credentials.');
+    return {
+      accessKeyId: 'test-key',
+      secretAccessKey: 'test-secret',
+    };
   }
 }
 
-const dynamodbClient = new DynamoDBClient(clientConfig);
-const s3Client = new S3Client(clientConfig);
-const sqsClient = new SQSClient(clientConfig);
+const emulatorCredentials = loadEmulatorCredentials();
+setupTlsHandling();
+
+// Configuration from environment variables
+const awsConfig: any = {
+  endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
+  region: process.env.AWS_REGION || 'us-east-1',
+  credentials: emulatorCredentials,
+  disableHostPrefix: true, // Required for AWS SDK v3 with emulator (prevents host prefix injection)
+};
+
+// Initialize AWS SDK clients
+const dynamodbClient = new DynamoDBClient(awsConfig);
+const s3Client = new S3Client(awsConfig);
+const sqsClient = new SQSClient(awsConfig);
 
 interface DynamoDBTableConfig {
   name: string;

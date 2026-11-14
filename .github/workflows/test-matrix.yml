@@ -171,20 +171,51 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: E2E Tests ===================="
-          echo ""
-          echo "⏭️  E2E tests skipped in GitHub Actions (require local AWS Emulator setup)"
-          echo "   To run E2E tests locally:"
-          echo "   1. npm run dev:aws          # Start AWS Emulator"
-          echo "   2. npm run test:e2e         # Run E2E tests"
-          echo ""
-          echo "   CI limitation: AWS Emulator requires special Docker permissions"
-          echo "   and persistent volume mounts not available in GitHub Actions runners."
-          echo ""
-          echo "🏁 ==================== END: E2E Tests (SKIPPED) ===================="
           
-          # Create empty log file for consistency
-          echo "E2E tests skipped in CI environment" > test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
-          exit 0
+          echo ""
+          echo "✅【ステップ 0】AWS Emulator セットアップ..."
+          echo "   • docker-compose で AWS Emulator を起動"
+          echo "   • リソース初期化（DynamoDB、S3、SQS）を実行"
+          
+          # Use the startup script which handles:
+          # 1. Building and starting AWS Emulator via docker-compose
+          # 2. Waiting for it to be healthy
+          # 3. Copying credentials and CA certificate to certs/
+          bash scripts/start-aws-emulator.sh || { echo "❌ Failed to start AWS Emulator"; exit 1; }
+          
+          # Set AWS SDK environment variables per AWS Emulator official docs
+          # The startup script already copied credentials and CA to certs/
+          echo ""
+          echo "📝 Configuring AWS SDK environment variables..."
+          export NODE_EXTRA_CA_CERTS="$(pwd)/certs/ca.pem"
+          export AWS_SHARED_CREDENTIALS_FILE="$(pwd)/certs/emulator_credentials"
+          export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
+          export AWS_REGION="us-east-1"
+          echo "✅ AWS SDK configured"
+          
+          # Initialize AWS resources
+          echo ""
+          echo "📊 Initializing AWS resources..."
+          pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
+          
+          echo ""
+          echo "✅【ステップ 1】Playwright バージョン確認..."
+          pnpm exec playwright --version
+          
+          echo ""
+          echo "🚀【ステップ 2】E2E テスト実行..."
+          echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
+          echo ""
+          
+          pnpm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          E2E_EXIT_CODE=$?
+          
+          echo ""
+          echo "✅ E2E test execution completed with exit code: $E2E_EXIT_CODE"
+          echo "📊 Test results saved to test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log"
+          echo "🏁 ==================== END: E2E Tests ===================="
+          
+          exit $E2E_EXIT_CODE
       
       - name: Verify E2E test log was created
         if: matrix.test-type == 'e2e'
@@ -390,3 +421,4 @@ jobs:
           fi
         shell: bash
 # Trigger test-matrix
+

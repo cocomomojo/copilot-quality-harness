@@ -2,11 +2,14 @@
 set -e
 
 # AWS Emulator startup script using docker-compose
+# AWS Emulator auto-generates credentials and CA certificate on startup
+# This script waits for those files to be created and makes them accessible to the host
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 CERTS_DIR="$ROOT_DIR/certs"
 CA_PEM="$CERTS_DIR/ca.pem"
+CREDENTIALS_FILE="$CERTS_DIR/emulator_credentials"
 
 # Create certificates directory if it doesn't exist
 mkdir -p "$CERTS_DIR"
@@ -14,11 +17,17 @@ mkdir -p "$CERTS_DIR"
 echo "🚀 Starting AWS Emulator..."
 cd "$ROOT_DIR"
 
-# Ensure home directory exists for emulator data
-mkdir -p ~/.aws/emulator
+# Clean up any existing containers and images to ensure fresh build
+echo "🧹 Cleaning up previous Docker build cache..."
+docker compose down -v 2>/dev/null || true
+docker rmi copilot-quality-harness-aws-emulator 2>/dev/null || true
 
-# Build and start docker compose
-docker compose up -d --build aws-emulator
+# Build with --no-cache using docker build directly, then start with docker-compose
+echo "🔨 Building AWS Emulator image with no cache..."
+docker build -f Dockerfile.aws-emulator --no-cache -t copilot-quality-harness-aws-emulator . 2>&1 | tail -20
+
+# Start the service (image already built, so no build needed)
+docker compose up -d aws-emulator
 
 # Wait for container to be healthy
 echo "⏳ Waiting for AWS Emulator to be healthy..."
@@ -26,13 +35,13 @@ max_attempts=60
 attempt=0
 
 while [ $attempt -lt $max_attempts ]; do
-  if docker compose exec -T aws-emulator curl -f -k https://127.0.0.1:9297/health >/dev/null 2>&1; then
+  if docker compose exec -T aws-emulator curl -f -k https://127.0.0.1:9297/__admin/health >/dev/null 2>&1; then
     echo "✅ AWS Emulator is healthy"
     break
   fi
   attempt=$((attempt + 1))
   echo "  Attempt $attempt/$max_attempts..."
-  sleep 2
+  sleep 1
 done
 
 if [ $attempt -eq $max_attempts ]; then
@@ -43,35 +52,42 @@ if [ $attempt -eq $max_attempts ]; then
   exit 1
 fi
 
-# Extract certificate from container (AWS Emulator generates certificates)
-echo "📜 Extracting certificate from AWS Emulator..."
-if docker compose exec -T aws-emulator test -f /.aws-emulator/ca.pem >/dev/null 2>&1; then
-  docker compose cp "aws-emulator:/.aws-emulator/ca.pem" "$CA_PEM"
-  echo "✅ Certificate extracted to $CA_PEM"
-  chmod 644 "$CA_PEM"
-elif docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/ca.pem >/dev/null 2>&1; then
-  docker compose cp "aws-emulator:/home/emulator/.aws/emulator/ca.pem" "$CA_PEM"
-  echo "✅ Certificate extracted to $CA_PEM"
-  chmod 644 "$CA_PEM"
-else
-  echo "⚠️  CA certificate not found in expected locations"
-fi
+# Wait for credentials and CA certificate to be generated in container
+echo "⏳ Waiting for AWS Emulator to generate credentials and certificate..."
+max_attempts=30
+attempt=0
+
+while [ $attempt -lt $max_attempts ]; do
+  if docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/9297/emulator_credentials >/dev/null 2>&1; then
+    echo "✅ Credentials file generated"
+    break
+  fi
+  attempt=$((attempt + 1))
+  sleep 0.5
+done
+
+# Copy credentials and certificate from container to host
+echo "📋 Copying credentials and certificate from container..."
+docker compose cp "aws-emulator:/home/emulator/.aws/emulator/9297/ca.pem" "$CA_PEM"
+docker compose cp "aws-emulator:/home/emulator/.aws/emulator/9297/emulator_credentials" "$CREDENTIALS_FILE"
+
+echo "✅ Certificate copied to $CA_PEM"
+echo "✅ Credentials copied to $CREDENTIALS_FILE"
+chmod 644 "$CA_PEM" "$CREDENTIALS_FILE"
 
 # Export environment variables for use
 export NODE_EXTRA_CA_CERTS="$CA_PEM"
+export AWS_SHARED_CREDENTIALS_FILE="$CREDENTIALS_FILE"
 export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
 export AWS_REGION="us-east-1"
-export AWS_ACCESS_KEY_ID="test"
-export AWS_SECRET_ACCESS_KEY="test"
 
 echo ""
 echo "✅ AWS Emulator started successfully!"
 echo ""
 echo "📝 Set these environment variables to use AWS services:"
 echo "   export NODE_EXTRA_CA_CERTS=$CA_PEM"
+echo "   export AWS_SHARED_CREDENTIALS_FILE=$CREDENTIALS_FILE"
 echo "   export AWS_ENDPOINT_URL=$AWS_ENDPOINT_URL"
 echo "   export AWS_REGION=$AWS_REGION"
-echo "   export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
-echo "   export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
 echo ""
 

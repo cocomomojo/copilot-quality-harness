@@ -2,13 +2,21 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:2023-minimal
 
 # Install AWS Emulator
 ADD https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/latest/aws-emulator-x86_64.rpm /tmp/aws-emulator.rpm
-RUN rpm -i /tmp/aws-emulator.rpm && rm /tmp/aws-emulator.rpm \
-    && mkdir -p /home/emulator && chown 1000 /home/emulator
+RUN rpm -i /tmp/aws-emulator.rpm && rm /tmp/aws-emulator.rpm
 
-# Set up user and environment
-USER 1000
-ENV HOME=/home/emulator
+# AWS Emulator may try to use /home/emulator or /root for data storage
+# Pre-create directories so AWS Emulator can write to them
+RUN mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator /root/.aws/emulator /root/.emulator \
+    && chmod -R 777 /home/emulator /root/.aws /root/.emulator \
+    && mkdir -p /.emulator /.aws-emulator \
+    && chmod -R 777 /.emulator /.aws-emulator /tmp
+
+# Copy entrypoint script from build context
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 9297
 
-# Run AWS Emulator listening on all addresses
-ENTRYPOINT ["aws-emulator", "-b", "0.0.0.0"]
+# Run entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+

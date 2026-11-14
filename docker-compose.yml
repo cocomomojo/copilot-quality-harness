@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   aws-emulator:
     build:
@@ -10,8 +8,9 @@ services:
       - "127.0.0.1:9297:9297"
     environment:
       - HOME=/home/emulator
+      - EMULATOR_TELEMETRY=off
     volumes:
-      - ~/.aws/emulator:/home/emulator/.aws/emulator
+      - ${HOME}/.aws/emulator:/home/emulator/.aws/emulator
     healthcheck:
       test: ["CMD", "curl", "-f", "-k", "https://127.0.0.1:9297/health"]
       interval: 5s
