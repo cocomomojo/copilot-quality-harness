@@ -17,7 +17,7 @@
     "test:coverage": "pnpm --filter quality-harness-backend run test && pnpm --filter quality-harness-frontend run test",
     "test:api": "pnpm --filter quality-harness-backend run test:api",
     "test:e2e": "playwright test",
-    "test:e2e:advanced": "playwright test e2e/quality-checks-advanced.spec.js",
+    "test:e2e:advanced": "playwright test e2e/quality-checks-advanced-v2.spec.js",
     "test:advanced": "pnpm --filter quality-harness-backend run test:advanced && pnpm --filter quality-harness-frontend run test:advanced",
     "test:m2": "node --test scripts/m2-validation.test.mjs",
     "m2:validate": "node scripts/m2-validation.mjs --issue fixtures/m2/valid-issue.json --catalog qa/test-management/test-observation-catalog.yml --root . --output qa/test-management/reports/m2-validation.json",

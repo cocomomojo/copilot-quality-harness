@@ -251,24 +251,10 @@ jobs:
         id: test-advanced
         continue-on-error: true
         run: |
-          echo "🚀 ==================== START: Advanced Tests (SKIPPED - E2E tests are primary) ===================="
-          echo "Advanced テストは新しい Web アプリでは実装されていません。"
-          echo "E2E テスト（Playwright）が代わりに実行されます。"
-          
-          # Create empty test result to satisfy workflow
-          cat > test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log << 'EOF'
-          {
-            "test_type": "advanced",
-            "node_version": 20,
-            "status": "skipped",
-            "passed": 0,
-            "failed": 0,
-            "skipped": 0,
-            "note": "Advanced tests are skipped for new web app - E2E tests are primary"
-          }
-          EOF
-          echo "✅ Advanced tests skipped (E2E tests primary)"
-          echo "🏁 ==================== END: Advanced Tests ===================="
+          echo "🚀 ==================== START: Advanced E2E Tests (v2) ===================="
+          pnpm run test:e2e:advanced 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          echo "✅ Advanced E2E tests completed"
+          echo "🏁 ==================== END: Advanced E2E Tests ===================="
       
       - name: Parse test results
         id: parse_results
