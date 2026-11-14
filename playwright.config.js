@@ -14,7 +14,14 @@ export default defineConfig({
       timeout: 120000,  // サーバー起動タイムアウト: 120秒
       stdout: 'pipe',
       stderr: 'pipe',
-      env: { NODE_ENV: 'test' }
+      env: { 
+        NODE_ENV: 'test',
+        // Pass AWS Emulator environment to backend server
+        NODE_EXTRA_CA_CERTS: process.env.NODE_EXTRA_CA_CERTS || '',
+        AWS_SHARED_CREDENTIALS_FILE: process.env.AWS_SHARED_CREDENTIALS_FILE || '',
+        AWS_ENDPOINT_URL: process.env.AWS_ENDPOINT_URL || '',
+        AWS_REGION: process.env.AWS_REGION || 'us-east-1',
+      }
     },
     { 
       command: 'pnpm --filter quality-harness-frontend dev',
