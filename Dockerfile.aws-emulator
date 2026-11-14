@@ -11,33 +11,12 @@ RUN mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator /root/.aws/em
     && mkdir -p /.emulator /.aws-emulator \
     && chmod -R 777 /.emulator /.aws-emulator /tmp
 
-# Create a startup script line by line to avoid heredoc parsing issues
-RUN echo '#!/bin/sh' > /usr/local/bin/start-emulator.sh && \
-    echo 'set -e' >> /usr/local/bin/start-emulator.sh && \
-    echo '' >> /usr/local/bin/start-emulator.sh && \
-    echo '# Start AWS Emulator in background' >> /usr/local/bin/start-emulator.sh && \
-    echo 'aws-emulator -b 0.0.0.0 &' >> /usr/local/bin/start-emulator.sh && \
-    echo 'EMULATOR_PID=$!' >> /usr/local/bin/start-emulator.sh && \
-    echo '' >> /usr/local/bin/start-emulator.sh && \
-    echo '# Wait for credentials to be generated (up to 10 seconds)' >> /usr/local/bin/start-emulator.sh && \
-    echo 'for i in $(seq 1 20); do' >> /usr/local/bin/start-emulator.sh && \
-    echo '    if [ -f /home/emulator/.aws/emulator/9297/emulator_credentials ]; then' >> /usr/local/bin/start-emulator.sh && \
-    echo '        echo "✅ Credentials file created"' >> /usr/local/bin/start-emulator.sh && \
-    echo '        break' >> /usr/local/bin/start-emulator.sh && \
-    echo '    fi' >> /usr/local/bin/start-emulator.sh && \
-    echo '    sleep 0.5' >> /usr/local/bin/start-emulator.sh && \
-    echo 'done' >> /usr/local/bin/start-emulator.sh && \
-    echo '' >> /usr/local/bin/start-emulator.sh && \
-    echo '# Make all generated files world-readable so host can copy them' >> /usr/local/bin/start-emulator.sh && \
-    echo 'chmod -R 755 /home/emulator/.aws/emulator/9297/' >> /usr/local/bin/start-emulator.sh && \
-    echo 'echo "✅ Fixed permissions on credentials directory"' >> /usr/local/bin/start-emulator.sh && \
-    echo '' >> /usr/local/bin/start-emulator.sh && \
-    echo '# Wait for the emulator process (this keeps the container running)' >> /usr/local/bin/start-emulator.sh && \
-    echo 'wait $EMULATOR_PID' >> /usr/local/bin/start-emulator.sh && \
-    chmod +x /usr/local/bin/start-emulator.sh
+# Copy entrypoint script from build context
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 9297
 
-# Run startup script
-ENTRYPOINT ["/usr/local/bin/start-emulator.sh"]
+# Run entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
