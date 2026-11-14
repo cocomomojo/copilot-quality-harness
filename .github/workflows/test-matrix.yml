@@ -218,21 +218,21 @@ jobs:
           
           # Extract certificate from container
           mkdir -p certs
-          if docker compose exec -T aws-emulator test -f /.aws-emulator/ca.pem >/dev/null 2>&1; then
+          if docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/9297/ca.pem >/dev/null 2>&1; then
+            docker compose cp "aws-emulator:/home/emulator/.aws/emulator/9297/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
+            export NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem"
+            echo "✅ Certificate configured (/home/emulator/.aws/emulator/9297/ca.pem)"
+          elif docker compose exec -T aws-emulator test -f /.aws-emulator/ca.pem >/dev/null 2>&1; then
             docker compose cp "aws-emulator:/.aws-emulator/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
             export NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem"
             echo "✅ Certificate configured (/.aws-emulator/ca.pem)"
-          elif docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/ca.pem >/dev/null 2>&1; then
-            docker compose cp "aws-emulator:/home/emulator/.aws/emulator/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
-            export NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem"
-            echo "✅ Certificate configured (/home/emulator/.aws/emulator/ca.pem)"
           else
             echo "⚠️  CA certificate not found in container"
           fi
           
           # Initialize AWS resources
           echo "📊 Initializing AWS resources..."
-          pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
+          NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem" pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
           
           echo ""
           echo "✅【ステップ 1】Playwright バージョン確認..."
@@ -243,7 +243,7 @@ jobs:
           echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
           echo ""
           
-          pnpm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem" pnpm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
           E2E_EXIT_CODE=$?
           
           echo ""
