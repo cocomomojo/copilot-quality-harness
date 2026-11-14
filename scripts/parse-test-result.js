@@ -112,6 +112,7 @@ const isSkipped = cleanedContent.includes('skipped') && result.passed === 0 && r
 // Determine overall status
 if (isSkipped) {
   result.status = 'skipped';
+  result.skipped = 1; // Mark that 1 test run was skipped
 } else if (result.failed > 0) {
   result.status = 'failed';
 } else if (result.passed > 0) {
@@ -120,7 +121,7 @@ if (isSkipped) {
   result.status = 'error';
 }
 
-console.log(`\n📊 Final result: { test_type: '${result.test_type}', passed: ${result.passed}, failed: ${result.failed}, status: '${result.status}' }`);
+console.log(`\n📊 Final result: { test_type: '${result.test_type}', passed: ${result.passed}, failed: ${result.failed}, skipped: ${result.skipped}, status: '${result.status}' }`);
 
 // Include log file content in JSON for diagnostics
 result.log_content = content.substring(0, 5000); // First 5000 chars
