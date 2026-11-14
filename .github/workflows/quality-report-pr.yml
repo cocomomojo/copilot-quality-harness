@@ -344,41 +344,58 @@ jobs:
             }
 
             const specsDir = 'tests/specs';
-            if (!fs.existsSync(specsDir)) return;
-            for (const specFile of fs.readdirSync(specsDir)) {
-              if (!specFile.endsWith('.yml') && !specFile.endsWith('.yaml')) continue;
-              const fullPath = path.join(specsDir, specFile);
-              const content = fs.readFileSync(fullPath, 'utf-8');
-              const issueMatches = [...content.matchAll(/#\s*Issue:\s*Closes\s+#(\d+)/gi)];
-              if (issueMatches.length === 0) continue;
+            console.log(`[DEBUG] Checking specs directory: ${specsDir}, exists: ${fs.existsSync(specsDir)}`);
+            console.log(`[DEBUG] Current working directory: ${process.cwd()}`);
+            if (fs.existsSync(specsDir)) {
+              const specFiles = fs.readdirSync(specsDir);
+              console.log(`[DEBUG] Found ${specFiles.length} files in ${specsDir}:`, specFiles);
+              
+              for (const specFile of specFiles) {
+                if (!specFile.endsWith('.yml') && !specFile.endsWith('.yaml')) continue;
+                const fullPath = path.join(specsDir, specFile);
+                const content = fs.readFileSync(fullPath, 'utf-8');
+                const issueMatches = [...content.matchAll(/#\s*Issue:\s*Closes\s+#(\d+)/gi)];
+                
+                if (issueMatches.length > 0) {
+                  console.log(`[DEBUG] ${specFile}: found ${issueMatches.length} issue references:`, issueMatches.map(m => `#${m[1]}`));
+                }
+                
+                if (issueMatches.length === 0) continue;
 
-              let specObject = {};
-              try {
-                specObject = yaml.parse(content) || {};
-              } catch (e) {
-                console.warn(`Could not parse spec YAML (${specFile}):`, e.message);
-              }
+                let specObject = {};
+                try {
+                  specObject = yaml.parse(content) || {};
+                } catch (e) {
+                  console.warn(`Could not parse spec YAML (${specFile}):`, e.message);
+                }
 
-              const testSpec = specObject.test_spec || {};
-              const utCases = Array.isArray(testSpec.ut) ? testSpec.ut : [];
-              const e2eCases = Array.isArray(testSpec.e2e) ? testSpec.e2e : [];
-              for (const issueMatch of issueMatches) {
-                traceability.spec_issue_mapping.push({
-                  issue: Number(issueMatch[1]),
-                  spec_file: `tests/specs/${specFile}`,
-                  feature: testSpec.feature || specFile,
-                  ut_cases: utCases.length,
-                  e2e_cases: e2eCases.length,
-                  ut_details: utCases.slice(0, 6).map((item) => ({
-                    id: item.id,
-                    title: item.title
-                  })),
-                  e2e_details: e2eCases.slice(0, 6).map((item) => ({
-                    id: item.id,
-                    title: item.title
-                  }))
-                });
+                const testSpec = specObject.test_spec || {};
+                const utCases = Array.isArray(testSpec.ut) ? testSpec.ut : [];
+                const e2eCases = Array.isArray(testSpec.e2e) ? testSpec.e2e : [];
+                
+                console.log(`[DEBUG] ${specFile}: ${utCases.length} UT cases, ${e2eCases.length} E2E cases`);
+                
+                for (const issueMatch of issueMatches) {
+                  traceability.spec_issue_mapping.push({
+                    issue: Number(issueMatch[1]),
+                    spec_file: `tests/specs/${specFile}`,
+                    feature: testSpec.feature || specFile,
+                    ut_cases: utCases.length,
+                    e2e_cases: e2eCases.length,
+                    ut_details: utCases.slice(0, 6).map((item) => ({
+                      id: item.id,
+                      title: item.title
+                    })),
+                    e2e_details: e2eCases.slice(0, 6).map((item) => ({
+                      id: item.id,
+                      title: item.title
+                    }))
+                  });
+                }
               }
+              console.log(`[DEBUG] Total spec_issue_mapping entries: ${traceability.spec_issue_mapping.length}`);
+            } else {
+              console.warn(`[WARN] Tests/specs directory not found at: ${specsDir}`);
             }
           }
 
