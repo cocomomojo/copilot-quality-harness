@@ -11,6 +11,23 @@ function generateUserId() {
   return uuidv4();
 }
 
+// Validate password strength
+function validatePassword(password) {
+  if (password.length < 8) {
+    return { valid: false, error: 'Password must be at least 8 characters long' };
+  }
+  if (!/[A-Z]/.test(password)) {
+    return { valid: false, error: 'Password must contain at least one uppercase letter' };
+  }
+  if (!/[a-z]/.test(password)) {
+    return { valid: false, error: 'Password must contain at least one lowercase letter' };
+  }
+  if (!/[0-9]/.test(password)) {
+    return { valid: false, error: 'Password must contain at least one number' };
+  }
+  return { valid: true };
+}
+
 // Register new user
 router.post('/register', async (req, res) => {
   try {
@@ -18,6 +35,12 @@ router.post('/register', async (req, res) => {
     
     if (!email || !password || !name) {
       return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    // Validate password strength
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+      return res.status(422).json({ error: passwordValidation.error });
     }
     
     // Check if user already exists (search by email since Users table has userId as key)
