@@ -2,7 +2,7 @@
 
 **Issue を作成するだけで、テスト設計・実装・品質レポートまで自動化する**品質ハーネスです。
 
-> **最新状態** (2026-11-08): E2E 51テスト / Unit 58テスト / API 16テスト / Advanced 44テスト = **計 169 テスト / 合格率 100%**  
+> **最新状態** (2026-11-14): E2E 53テスト / Unit 172テスト = **計 225 テスト / 合格率 100%** 📈  
 > 📊 [品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/) | 🔍 [E2Eレポート](https://cocomomojo.github.io/copilot-quality-harness/reports/e2e-latest.html)
 
 ---
@@ -101,16 +101,18 @@ Workflow の重複排除・最適化の詳細について → **[`docs/WORKFLOW_
 
 ```
 Issue 作成（#100）
-  ↓ [M2 Issue Intake] 自動解析
-テスト観点生成（質問事項作成）
-  ↓ [Generate Quality Items] テスト項目自動生成
+  ↓ [M2 Issue Intake] ルールベース解析（safe/manual-only 判定）
+テスト観点生成（ISO/IEC 25010 項目自動生成）
+  ↓ [Generate Quality Items] テスト項目詳細化
 テスト仕様 YAML 作成
   ↓ [Spec to Implementation] UT + E2E コード自動生成
 開発者: 実装 + ローカルテスト
-  ↓ PR 作成
-Test Matrix: UT + E2E 自動実行（8 並列）
-  ↓ Quality Report: PR コメント投稿（自動）
-AI Review: Copilot による品質チェック（自動）
+  ↓ PR 作成 + Push
+Test Matrix: UT + E2E 並列実行
+  ├─ Quality Report PR コメント投稿（自動）
+  ├─ Update Dashboard ダッシュボード更新（自動）
+  └─ E2E 失敗時 → E2E Auto Healing トリガー
+AI Review: Copilot による品質分析（自動）
   ↓ 人間レビュー + マージ
 Pages デプロイ（自動）
 ```
@@ -141,14 +143,15 @@ Pages デプロイ（自動）
 | 6 | **quality-report-pr.yml** | テスト結果集約 + PR コメント投稿 | workflow_run（test-matrix 完了） | ~1m |
 | 7 | **ai-review.yml** | Copilot AI による品質レビュー | PR 作成/更新 | ~2-3m |
 | 8 | **auto-code-review.yml** | Lint + スタイル自動チェック | PR | ~1m |
-| 9 | **update-dashboard.yml** | 品質ダッシュボード自動更新 | workflow_run（test-matrix または quality-report-pr 完了） | ~30s |
+| 9 | **update-dashboard.yml** | 品質ダッシュボード自動更新 | workflow_run（test-matrix 完了） | ~30s |
+| 10 | **e2e-healing-trigger.yml** | E2E テスト失敗時の自動修復トリガー | workflow_run（test-matrix 失敗） | ~3-4m |
 
 ### 📅 スケジュール・特殊 ワークフロー
 
 | # | ワークフロー | 役割 | トリガー | 実行時間 |
 |---|----------|------|---------|--------|
-| 10 | **quality-schedule.yml** | 週次品質チェック | Cron（毎週金曜 5:00 JST） | ~5m |
-| 11 | **copilot-analyze-trace.yml** | Playwright トレース自動分析（テスト失敗時） | Manual / PR | ~3-4m |
+| 11 | **quality-schedule.yml** | 週次品質チェック | Cron（毎週金曜 5:00 JST） | ~5m |
+| 12 | **copilot-analyze-trace.yml** | Playwright トレース自動分析（テスト失敗時） | Manual / 必要に応じて手動実行 | ~3-4m |
 
 ---
 
@@ -159,14 +162,15 @@ graph LR
     A["m2-issue-intake<br/>(Manual)"] -->|テスト観点生成| B["generate-quality-items<br/>(Manual)"]
     B -->|テスト項目確認| C["spec-to-implementation<br/>(Manual)"]
     C -->|UT/E2E 自動生成| D["test-matrix<br/>(PR/Push)"]
-    D -->|テスト完了| E["quality-report-pr<br/>(workflow_run)"]
-    D -->|テスト完了| K["update-dashboard<br/>(workflow_run)"]
+    D -->|✅ テスト完了| E["quality-report-pr<br/>(workflow_run)"]
+    D -->|✅ テスト完了| K["update-dashboard<br/>(workflow_run)"]
+    D -->|❌ テスト失敗| N["e2e-healing-trigger<br/>(workflow_run)"]
     D -->|並列実行| F["test-coverage-analysis<br/>(PR/Push)"]
+    N -->|修復案生成| O["Draft PR + 修復コミット<br/>(auto)"]
     E -->|品質チェック| G["ai-review<br/>(PR)"]
     G -->|AI コメント投稿| H["人間レビュー<br/>(Manual)"]
     H -->|マージ| I["Pages Deploy<br/>(auto)"]
     J["quality-schedule<br/>(Cron)"] -->|週次チェック| D
-    L["copilot-analyze-trace<br/>(Manual)"] -->|失敗分析| M["Draft PR + 修正案<br/>(auto)"]
     
     style A fill:#e1f5ff
     style C fill:#e8f5e9
@@ -175,29 +179,32 @@ graph LR
     style G fill:#e0f2f1
     style I fill:#c8e6c9
     style H fill:#fff9c4
+    style N fill:#ffebee
+    style O fill:#ffcdd2
 ```
 
 ---
 
-## 現在のテスト構成（2026-11-08 時点）
+## 現在のテスト構成（2026-11-14 時点）
 
 | テスト種別 | ファイル数 | テスト数 | 実行方法 |
 |-----------|-----------|---------|---------|
-| E2E (Playwright) | ~5ファイル | ~51 テスト | `npx playwright test` |
-| Unit (Vitest) | ~6ファイル | ~58 テスト | `npx vitest run` |
-| API | ~2ファイル | ~16 テスト | `npx vitest run --config vitest.api.config` |
-| Advanced | ~3ファイル | ~44 テスト | `npx vitest run --config vitest.advanced.config` |
-| **合計** | | **~169 テスト** | test-matrix (4並列) |
+| E2E (Playwright) | ~6ファイル | 53 テスト | `npx playwright test` |
+| Unit (Vitest) | ~8ファイル | 172 テスト | `npx vitest run` |
+| **合計** | | **225 テスト** | test-matrix (並列実行) |
+
+> **注**: Unit テストには backend/frontend の unit / api / advanced テストが統合されています。
 
 ### ワークフロー自動トリガーチェーン
 
 ```
 PR / Push → test-matrix.yml
-  └─ 完了後 → quality-report-pr.yml (PR issue レポート生成)
-  └─ 完了後 → update-dashboard.yml (KPI + ダッシュボード更新)
+  ├─ ✅ 成功時 → quality-report-pr.yml (PR コメント生成)
+  ├─ ✅ 成功時 → update-dashboard.yml (KPI + ダッシュボード更新)
+  └─ ❌ E2E失敗時 → e2e-healing-trigger.yml (修復案自動生成)
 ```
 
-**重要**: `update-dashboard.yml` は `test-matrix.yml` の `workflow_run` で直接トリガーされます。フォールバック時は `--branch main --status success` で最新の main ブランチの成功 run を使用します。
+**重要**: `update-dashboard.yml` は `test-matrix.yml` の完了後に自動トリガーされます。test-matrix が成功した時点でダッシュボード更新が開始されます。
 
 ### quality-report-pr.yml の依存パッケージ
 
@@ -236,16 +243,24 @@ PR / Push → test-matrix.yml
 ```markdown
 ## ✅ Quality Report
 
-### Test Results Summary
-| Node Version | Unit Tests | E2E Tests | Coverage |
-|--------------|-----------|-----------|----------|
-| 18           | ✅ 45/45   | ✅ 12/12  | 92%      |
-| 20           | ✅ 45/45   | ✅ 12/12  | 91%      |
+### Test Results Summary（最新実績 2026-11-14）
+| テスト種別 | 実行数 | 合格数 | 失敗数 | 合格率 |
+|-----------|-----:|-----:|-----:|-----:|
+| E2E (Playwright) | 53 | 53 | 0 | 100% ✅ |
+| Unit (Vitest) | 172 | 172 | 0 | 100% ✅ |
+| **合計** | **225** | **225** | **0** | **100%** ✅ |
+
+### 📊 品質メトリクス
+- **カバレッジ**: 61% （ソース：test-matrix artifacts）
+- **合格率**: 100%
+- **コンポジットスコア**: 88/100
+- **リスクレベル**: LOW-MEDIUM
+- **トレンド**: STABLE
 
 ### 🔗 Issue Traceability
 | Issue | テスト観点 | テスト項目 | 実装 | テスト実行 |
 |---|---|---|---|---|
-| #123 | 8 perspectives ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-perspectives-simple.json)) | UT 7 / E2E 4, 48 items ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-items-simple.json)) | 6 files changed in PR | Pass rate 97% (67/69) |
+| #123 | 8 perspectives ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-perspectives-simple.json)) | UT 7 / E2E 4, 48 items ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-items-simple.json)) | 6 files changed in PR | Pass rate 100% (225/225) |
 
 #### テスト観点（具体・抜粋）
 - **機能適合性 (Functional Suitability)**: happy-path-testing, boundary-value-testing, input-validation, error-handling
@@ -255,19 +270,10 @@ PR / Push → test-matrix.yml
 - `FS-001` (happy-path-testing): 正常系: 正常な入力で正しく機能することを確認
 - `FS-003` (input-validation): 入力検証: 無効な入力を適切に処理
 
-### 📊 Coverage Status
-- Lines: 92% (target: 80%) ✅
-- Branches: 85% (target: 75%) ✅
-- Functions: 90% (target: 80%) ✅
-
-### 📈 Coverage Details (File-level)
-| File | Lines | Branches | Functions | Status |
-|---|---:|---:|---:|---|
-| `frontend/src/App.jsx` | 94.44% | 95.45% | 83.33% | ✅ PASS |
-| `frontend/src/main.jsx` | 0.00% | 0.00% | 0.00% | ❌ FAIL |
-
-### ✨ Recommendations
-- Ready to merge
+### 📊 Coverage Status（最新）
+- Lines: 61%
+- Branches: Coverage tracked via artifacts
+- Functions: Coverage tracked via artifacts
 ```
 
 ### ai-review.yml の出力
@@ -783,14 +789,32 @@ gh secret set AUTO_MERGE_ENABLED --body "true"
 
 ### 📚 詳細ドキュメント
 
-- [仕様テンプレ詳細](.github/ISSUE_TEMPLATE/acceptance.md)
-- [テスト設計テンプレ詳細](tests/specs/acceptance-example.yml)
-- [自動マージポリシー詳細](.github/auto-merge-policy.md)
-- [PII フィルタ実装詳細](scripts/pii-filter.ts)
+| ドキュメント | 説明 |
+|---|---|
+| [**`docs/OPERATION_FLOW.md`**](docs/OPERATION_FLOW.md) | 完全な運用手順（Issue 作成→テスト生成→マージまで）⭐ **必読** |
+| [**`docs/WORKFLOWS_GUIDE.md`**](docs/WORKFLOWS_GUIDE.md) | 全 11 ワークフローの詳細説明 + 10分運用チェックリスト |
+| [**`docs/WORKFLOW_DEPENDENCY_MAP.md`**](docs/WORKFLOW_DEPENDENCY_MAP.md) | ワークフロー依存関係・トリガー条件・最適化方針 🗺️ |
+| [**`docs/E2E_REPORTS_GUIDE.md`**](docs/E2E_REPORTS_GUIDE.md) | E2E トレース・動画・error-context の見方 📹 |
+| [**`docs/QA_POLICY.md`**](docs/QA_POLICY.md) | 品質保証ポリシー・テスト基準 |
+| [**`docs/SPEC_TO_IMPLEMENTATION_GUIDE.md`**](docs/SPEC_TO_IMPLEMENTATION_GUIDE.md) | テスト仕様 → 実装コード生成ガイド |
+| [**`docs/CONTRIBUTING.md`**](docs/CONTRIBUTING.md) | 貢献ガイド（新規テスト追加など） |
+| [**`.github/ISSUE_TEMPLATE/acceptance.md`**](.github/ISSUE_TEMPLATE/acceptance.md) | Issue テンプレート（受け入れ条件・テスト要求） |
 
 ---
 
 ### ⚠️ 注意点・FAQ
+
+**Q: M2 Issue Intake は何ですか？**  
+A: Issue の要件を解析して、テスト実装が safe（安全に実装・テスト可能）か manual-only（人間レビュー必須）かを判定します。ルールベース判定のため、OpenAI などの外部 API は不要で、高速かつ決定論的です。
+
+**Q: test-matrix 実行後、次は何をするのか？**  
+A: `test-matrix` が完了すると、自動的に `quality-report-pr` と `update-dashboard` が並列実行され、ダッシュボードが最新化されます。特に追加作業は不要です。
+
+**Q: E2E テストが失敗したら？**  
+A: `test-matrix` 失敗時は自動的に `e2e-healing-trigger` がトリガーされ、Playwright トレース/スクリーンショット分析から修正案が生成されます。修復失敗時は Issue が作成されます。
+
+**Q: テスト数が 169 から 225 に増えた理由は？**  
+A: API テスト と Advanced テスト が Unit テスト に統合され、より細粒度のテストが追加されました。test-matrix で自動集計されるため、個別ファイル数ではなく総数が重要です。
 
 **Q: 完全に人間 0% にできる？**  
 A: 理論上は可能ですが、本番運用では以下はリスク大：
@@ -798,14 +822,8 @@ A: 理論上は可能ですが、本番運用では以下はリスク大：
 - 外部 API 契約変更（下流システムへの影響）
 - DB スキーマ変更（既存データ互換性）
 
-**Q: 自動マージ後に不具合が見つかったら？**  
-A: 30 分の監視期間で自動ロールバック可能。その後新 Draft PR が作成され、人間が調査・修正します。
-
-**Q: PII フィルタは過剰に除去しないか？**  
-A: Copilot 診断に必要な情報は置換トークン (`[REDACTED_EMAIL]` 等) で保持。原本は 180 日間 Admin のみアクセス可能な監査ログに保管。
-
-**Q: Copilot がバージョンアップしたら？**  
-A: 監査ログに `model_version` を記録しているため、結果の再現性を追跡可能。必要ならロールバック・再実行可能。
+**Q: ダッシュボードはどこで見られる？**  
+A: https://cocomomojo.github.io/copilot-quality-harness/dashboard/ で、テスト数・合格率・カバレッジ・リスクレベル を確認できます。
 
 ---
 
@@ -874,7 +892,7 @@ A: 監査ログに `model_version` を記録しているため、結果の再現
 
 ---
 
-### 📦 npm Scripts (新規追加)
+### 📦 npm Scripts (実行例)
 
 ```bash
 # テストコード自動生成
@@ -888,30 +906,38 @@ GITHUB_TOKEN=xxx npm run collect-kpi
 
 # Trace の PII 自動除去
 npm run sanitize-trace -- artifacts/trace.json
+
+# test-matrix 実行（フロントエンド + バックエンド UT/E2E）
+pnpm run test:all
+
+# E2E テストのみ実行
+cd frontend && npx playwright test
 ```
+
+> 詳細は各パッケージの `package.json` の `scripts` セクションを参照してください。
 
 ---
 
 ## 今後の拡張案 🚀
-- Phase 2D Part 3: レート制限とリトライロジック
-- Phase 3: 実装修正の自動適用（Draft PR → コミット）
-- Phase 4: 運用レポート生成（週次・月次集計）
-- **Phase 3.5: スキル統合** - 仕様テンプレ・テストテンプレを Copilot Skill として登録
-- **Phase 4: 機械学習** - 修正案の優先度を学習、採用率向上
+- 実装修正の自動適用（Draft PR → コミット）
+- 運用レポート生成（週次・月次集計）
+- スキル統合 - テンプレを Copilot Skill として登録
+- 機械学習による修正案優先度学習
 - マルチリポジトリ対応
 
 ---
 
 ## お困りのとき 📬
 - Issues に報告してください: フィードバック・改善案を歓迎します
-- PR レビュー・マージはコードオーナーに相談してください
-- 自動マージ・テンプレに関する質問: [`.github/auto-merge-policy.md`](.github/auto-merge-policy.md) の FAQ を参照
+- ワークフロー実行に関する質問: [`docs/WORKFLOWS_GUIDE.md`](docs/WORKFLOWS_GUIDE.md) を参照
+- 運用手順に関する質問: [`docs/OPERATION_FLOW.md`](docs/OPERATION_FLOW.md) の 10分チェックリストを確認
 
 ---
 
-**Version**: Phase 2D Complete + Copilot Automation Setup  
-**Last Updated**: 2026-10-17  
+**Version**: Phase 3 + E2E Auto Healing + Quality Dashboard  
+**Last Updated**: 2026-11-14  
 **Status**: ✅ Production Ready
 
-🎉 複数トレース並列分析システム稼働中！  
-🤖 Copilot による自動化・テンプレシステム導入完了！
+🎉 完全自動化ワークフロー稼働中！  
+🤖 Copilot による品質分析・E2E 自動修復・ダッシュボード最新化システム導入完了！  
+📊 テスト数: **225 テスト / 合格率: 100%**
