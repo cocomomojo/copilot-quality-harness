@@ -1,29 +1,29 @@
 {
-  "timestamp": "2026-11-14T22:14:34.345Z",
-  "totalSuites": 1,
-  "totalTests": 10,
-  "passed": 10,
+  "timestamp": "2026-11-14T22:28:17.644Z",
+  "totalSuites": 6,
+  "totalTests": 25,
+  "passed": 25,
   "failed": 0,
   "skipped": 0,
   "passRate": 100,
-  "duration": 196,
+  "duration": 314,
   "metadata": {},
   "suites": [
     {
-      "name": "API Integration Tests",
-      "file": "api-integration.spec.js",
-      "totalTests": 10,
-      "passed": 10,
+      "name": "Authentication - Registration & Login",
+      "file": "auth.spec.js",
+      "totalTests": 7,
+      "passed": 7,
       "failed": 0,
       "skipped": 0,
-      "duration": 196,
+      "duration": 157,
       "tests": [
         {
-          "name": "E2E-001: API health endpoint returns 200",
-          "title": "E2E-001: API health endpoint returns 200",
+          "name": "E2E-001: User can register via API",
+          "title": "E2E-001: User can register via API",
           "status": "passed",
-          "duration": 42,
-          "file": "api-integration.spec.js",
+          "duration": 61,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -35,11 +35,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-002: User can register via API",
-          "title": "E2E-002: User can register via API",
+          "name": "E2E-002: User can login via API",
+          "title": "E2E-002: User can login via API",
           "status": "passed",
-          "duration": 40,
-          "file": "api-integration.spec.js",
+          "duration": 29,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -51,11 +51,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-003: User can login and receive token",
-          "title": "E2E-003: User can login and receive token",
+          "name": "E2E-003: Invalid login credentials return error",
+          "title": "E2E-003: Invalid login credentials return error",
           "status": "passed",
-          "duration": 19,
-          "file": "api-integration.spec.js",
+          "duration": 18,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -67,11 +67,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-004: Protected endpoints require token",
-          "title": "E2E-004: Protected endpoints require token",
+          "name": "E2E-004: Duplicate email registration is rejected",
+          "title": "E2E-004: Duplicate email registration is rejected",
           "status": "passed",
-          "duration": 16,
-          "file": "api-integration.spec.js",
+          "duration": 22,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -83,11 +83,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-005: TODO endpoints are accessible",
-          "title": "E2E-005: TODO endpoints are accessible",
+          "name": "E2E-005: User can retrieve profile",
+          "title": "E2E-005: User can retrieve profile",
           "status": "passed",
-          "duration": 19,
-          "file": "api-integration.spec.js",
+          "duration": 9,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -99,11 +99,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-006: File endpoints are accessible",
-          "title": "E2E-006: File endpoints are accessible",
+          "name": "E2E-006: Protected endpoint requires authentication",
+          "title": "E2E-006: Protected endpoint requires authentication",
           "status": "passed",
-          "duration": 11,
-          "file": "api-integration.spec.js",
+          "duration": 7,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -115,27 +115,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-007: Audit trail is accessible",
-          "title": "E2E-007: Audit trail is accessible",
-          "status": "passed",
-          "duration": 11,
-          "file": "api-integration.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-008: Dashboard endpoint is accessible",
-          "title": "E2E-008: Dashboard endpoint is accessible",
+          "name": "E2E-007: Health check endpoint is available",
+          "title": "E2E-007: Health check endpoint is available",
           "status": "passed",
           "duration": 11,
-          "file": "api-integration.spec.js",
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -145,29 +129,340 @@
           "errorContexts": [],
           "stdout": [],
           "stderr": []
-        },
+        }
+      ]
+    },
+    {
+      "name": "API Authentication Flow",
+      "file": "auth.spec.js",
+      "totalTests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 25,
+      "tests": [
         {
-          "name": "E2E-009: Frontend assets are served",
-          "title": "E2E-009: Frontend assets are served",
-          "status": "passed",
-          "duration": 14,
-          "file": "api-integration.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-010: API error handling",
-          "title": "E2E-010: API error handling",
+          "name": "E2E-008: Registration endpoint accepts valid data",
+          "title": "E2E-008: Registration endpoint accepts valid data",
           "status": "passed",
           "duration": 13,
-          "file": "api-integration.spec.js",
+          "file": "auth.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-009: Login endpoint validates credentials",
+          "title": "E2E-009: Login endpoint validates credentials",
+          "status": "passed",
+          "duration": 12,
+          "file": "auth.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "File Management API",
+      "file": "files.spec.js",
+      "totalTests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 48,
+      "tests": [
+        {
+          "name": "E2E-201: Upload file endpoint exists",
+          "title": "E2E-201: Upload file endpoint exists",
+          "status": "passed",
+          "duration": 9,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-202: List files endpoint exists",
+          "title": "E2E-202: List files endpoint exists",
+          "status": "passed",
+          "duration": 10,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-203: Get file details endpoint",
+          "title": "E2E-203: Get file details endpoint",
+          "status": "passed",
+          "duration": 6,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-204: Download file endpoint",
+          "title": "E2E-204: Download file endpoint",
+          "status": "passed",
+          "duration": 8,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-205: Delete file endpoint",
+          "title": "E2E-205: Delete file endpoint",
+          "status": "passed",
+          "duration": 8,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-206: Get presigned URL for upload",
+          "title": "E2E-206: Get presigned URL for upload",
+          "status": "passed",
+          "duration": 7,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "File Management UI",
+      "file": "files.spec.js",
+      "totalTests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 19,
+      "tests": [
+        {
+          "name": "E2E-207: Files page accessible",
+          "title": "E2E-207: Files page accessible",
+          "status": "passed",
+          "duration": 10,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-208: File list renders",
+          "title": "E2E-208: File list renders",
+          "status": "passed",
+          "duration": 9,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "TODO Management API",
+      "file": "todos.spec.js",
+      "totalTests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 47,
+      "tests": [
+        {
+          "name": "E2E-101: Create TODO via API",
+          "title": "E2E-101: Create TODO via API",
+          "status": "passed",
+          "duration": 7,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-102: List TODOs via API",
+          "title": "E2E-102: List TODOs via API",
+          "status": "passed",
+          "duration": 8,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-103: Get TODO by ID via API",
+          "title": "E2E-103: Get TODO by ID via API",
+          "status": "passed",
+          "duration": 7,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-104: Update TODO via API",
+          "title": "E2E-104: Update TODO via API",
+          "status": "passed",
+          "duration": 7,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-105: Delete TODO via API",
+          "title": "E2E-105: Delete TODO via API",
+          "status": "passed",
+          "duration": 11,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-106: Filter TODOs by status",
+          "title": "E2E-106: Filter TODOs by status",
+          "status": "passed",
+          "duration": 7,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "TODO List UI",
+      "file": "todos.spec.js",
+      "totalTests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 18,
+      "tests": [
+        {
+          "name": "E2E-107: TODO page is accessible",
+          "title": "E2E-107: TODO page is accessible",
+          "status": "passed",
+          "duration": 8,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-108: Dashboard TODO summary accessible",
+          "title": "E2E-108: Dashboard TODO summary accessible",
+          "status": "passed",
+          "duration": 10,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
