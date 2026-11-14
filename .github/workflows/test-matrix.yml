@@ -173,9 +173,12 @@ jobs:
           echo "🚀 ==================== START: E2E Tests ===================="
           
           echo ""
-          echo "✅【ステップ -1】AWS Emulator ディレクトリ作成..."
+          echo "✅【ステップ -1】AWS Emulator ディレクトリ準備..."
+          # Create directory with proper permissions for Docker user (UID 1000)
           mkdir -p ~/.aws/emulator
-          echo "✅ Created ~/.aws/emulator directory"
+          # Ensure directory is writable by UID 1000 (running inside container)
+          chmod 777 ~/.aws/emulator
+          echo "✅ Created ~/.aws/emulator with permissions 777"
           
           echo ""
           echo "✅【ステップ 0】AWS Emulator セットアップ..."

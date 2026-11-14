@@ -2,8 +2,12 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:2023-minimal
 
 # Install AWS Emulator
 ADD https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/latest/aws-emulator-x86_64.rpm /tmp/aws-emulator.rpm
-RUN rpm -i /tmp/aws-emulator.rpm && rm /tmp/aws-emulator.rpm \
-    && mkdir -p /home/emulator && chown 1000 /home/emulator
+RUN rpm -i /tmp/aws-emulator.rpm && rm /tmp/aws-emulator.rpm
+
+# Verify the emulator user was created (typically UID 1000) and fix permissions
+RUN id emulator || useradd -u 1000 -d /home/emulator -m -s /sbin/nologin emulator || true \
+    && mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator \
+    && chown -R 1000:1000 /home/emulator
 
 # Set up user and environment
 USER 1000
