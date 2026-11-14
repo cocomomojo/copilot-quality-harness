@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-14T08:15:43.241Z",
+  "generated_at": "2026-11-14T08:18:46.173Z",
   "source_pr": 85,
   "reports": [
     {
@@ -1227,9 +1227,9 @@
     {
       "issue_number": 84,
       "pr_number": 85,
-      "workflow_run_id": "43574892380",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43574892380",
-      "generated_at": "2026-11-14T08:15:43.241Z",
+      "workflow_run_id": "43575166465",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43575166465",
+      "generated_at": "2026-11-14T08:18:46.173Z",
       "pass_rate": 100,
       "total_tests": 225,
       "total_passed": 225,
