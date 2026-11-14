@@ -11,11 +11,8 @@ RUN mkdir -p /home/emulator/.aws/emulator /home/emulator/.emulator /root/.aws/em
     && mkdir -p /.emulator /.aws-emulator \
     && chmod -R 777 /.emulator /.aws-emulator /tmp
 
-# Create a startup script that:
-# 1. Starts AWS Emulator
-# 2. Waits for files to be created
-# 3. Makes them readable by all users
-RUN cat > /usr/local/bin/start-emulator.sh << 'EOF'
+# Create a startup script via tee
+RUN tee /usr/local/bin/start-emulator.sh > /dev/null << 'EOF'
 #!/bin/sh
 set -e
 
