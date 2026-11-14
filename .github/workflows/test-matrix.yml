@@ -201,7 +201,7 @@ jobs:
           attempt=0
           
           while [ $attempt -lt $max_attempts ]; do
-            if docker compose exec -T aws-emulator curl -f -k https://localhost:9297/health >/dev/null 2>&1; then
+            if docker compose exec -T aws-emulator curl -f -k https://localhost:9297/__admin/health >/dev/null 2>&1; then
               echo "✅ AWS Emulator is healthy"
               break
             fi
