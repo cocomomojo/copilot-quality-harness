@@ -171,20 +171,79 @@ jobs:
         continue-on-error: true
         run: |
           echo "🚀 ==================== START: E2E Tests ===================="
-          echo ""
-          echo "⏭️  E2E tests skipped in GitHub Actions (require local AWS Emulator setup)"
-          echo "   To run E2E tests locally:"
-          echo "   1. npm run dev:aws          # Start AWS Emulator"
-          echo "   2. npm run test:e2e         # Run E2E tests"
-          echo ""
-          echo "   CI limitation: AWS Emulator requires special Docker permissions"
-          echo "   and persistent volume mounts not available in GitHub Actions runners."
-          echo ""
-          echo "🏁 ==================== END: E2E Tests (SKIPPED) ===================="
           
-          # Create empty log file for consistency
-          echo "E2E tests skipped in CI environment" > test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
-          exit 0
+          echo ""
+          echo "✅【ステップ 0】AWS Emulator セットアップ..."
+          echo "   • docker-compose で AWS Emulator を起動"
+          echo "   • リソース初期化（DynamoDB、S3、SQS）を実行"
+          
+          # Set AWS environment variables
+          export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
+          export AWS_REGION="us-east-1"
+          export AWS_ACCESS_KEY_ID="test"
+          export AWS_SECRET_ACCESS_KEY="test"
+          
+          # Start AWS Emulator
+          echo "🐳 Starting AWS Emulator via docker compose..."
+          docker compose up -d aws-emulator 2>&1 || { echo "❌ Failed to start AWS Emulator"; docker compose ps; exit 1; }
+          
+          # Wait for emulator to be ready
+          echo "⏳ Waiting for AWS Emulator to be healthy..."
+          max_attempts=60
+          attempt=0
+          
+          while [ $attempt -lt $max_attempts ]; do
+            if docker compose exec -T aws-emulator curl -f -k https://localhost:9297/health >/dev/null 2>&1; then
+              echo "✅ AWS Emulator is healthy"
+              break
+            fi
+            attempt=$((attempt + 1))
+            echo "  Attempt $attempt/$max_attempts..."
+            sleep 2
+          done
+          
+          if [ $attempt -eq $max_attempts ]; then
+            echo "❌ AWS Emulator failed to become healthy"
+            docker compose logs aws-emulator | tail -50 || true
+            exit 1
+          fi
+          
+          # Extract certificate from container
+          mkdir -p certs
+          if docker compose exec -T aws-emulator test -f /.aws-emulator/ca.pem >/dev/null 2>&1; then
+            docker compose cp "aws-emulator:/.aws-emulator/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
+            export NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem"
+            echo "✅ Certificate configured (/.aws-emulator/ca.pem)"
+          elif docker compose exec -T aws-emulator test -f /home/emulator/.aws/emulator/ca.pem >/dev/null 2>&1; then
+            docker compose cp "aws-emulator:/home/emulator/.aws/emulator/ca.pem" certs/ca.pem || echo "⚠️ Failed to copy CA"
+            export NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem"
+            echo "✅ Certificate configured (/home/emulator/.aws/emulator/ca.pem)"
+          else
+            echo "⚠️  CA certificate not found in container"
+          fi
+          
+          # Initialize AWS resources
+          echo "📊 Initializing AWS resources..."
+          pnpm run init:aws 2>&1 || { echo "⚠️ AWS resource initialization failed, continuing..."; }
+          
+          echo ""
+          echo "✅【ステップ 1】Playwright バージョン確認..."
+          pnpm exec playwright --version
+          
+          echo ""
+          echo "🚀【ステップ 2】E2E テスト実行..."
+          echo "   • テストが自動でサーバーを起動します（playwright.config.js の webServer 設定）"
+          echo ""
+          
+          pnpm run test:e2e 2>&1 | tee test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log
+          E2E_EXIT_CODE=$?
+          
+          echo ""
+          echo "✅ E2E test execution completed with exit code: $E2E_EXIT_CODE"
+          echo "📊 Test results saved to test-result-${{ matrix.node-version }}-${{ matrix.test-type }}.log"
+          echo "🏁 ==================== END: E2E Tests ===================="
+          
+          exit $E2E_EXIT_CODE
       
       - name: Verify E2E test log was created
         if: matrix.test-type == 'e2e'
