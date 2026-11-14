@@ -22,8 +22,12 @@ echo "🧹 Cleaning up previous Docker build cache..."
 docker compose down -v 2>/dev/null || true
 docker rmi copilot-quality-harness-aws-emulator 2>/dev/null || true
 
-# Build and start docker compose with no-cache to ensure latest Dockerfile is used
-docker compose up -d --build --no-cache aws-emulator
+# Build with --no-cache using docker build directly, then start with docker-compose
+echo "🔨 Building AWS Emulator image with no cache..."
+docker build -f Dockerfile.aws-emulator --no-cache -t copilot-quality-harness-aws-emulator . 2>&1 | tail -20
+
+# Start the service (image already built, so no build needed)
+docker compose up -d aws-emulator
 
 # Wait for container to be healthy
 echo "⏳ Waiting for AWS Emulator to be healthy..."
