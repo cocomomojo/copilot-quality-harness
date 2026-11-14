@@ -173,6 +173,11 @@ jobs:
           echo "🚀 ==================== START: E2E Tests ===================="
           
           echo ""
+          echo "✅【ステップ -1】AWS Emulator ディレクトリ作成..."
+          mkdir -p ~/.aws/emulator
+          echo "✅ Created ~/.aws/emulator directory"
+          
+          echo ""
           echo "✅【ステップ 0】AWS Emulator セットアップ..."
           echo "   • docker-compose で AWS Emulator を起動"
           echo "   • リソース初期化（DynamoDB、S3、SQS）を実行"

@@ -2,16 +2,8 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:2023-minimal
 
 # Install AWS Emulator
 ADD https://downloads.aws.com/aws-emulator/packages/aws-emulator/LTS/latest/aws-emulator-x86_64.rpm /tmp/aws-emulator.rpm
-RUN rpm -i /tmp/aws-emulator.rpm && rm /tmp/aws-emulator.rpm
-
-# Create and set proper permissions for emulator user and directories
-RUN mkdir -p /home/emulator /home/emulator/.aws/emulator /home/emulator/.emulator/telemetry \
-    && useradd -u 1000 -d /home/emulator -m emulator 2>/dev/null || true \
-    && chown -R 1000:1000 /home/emulator \
-    && chmod -R 755 /home/emulator
-
-# Disable telemetry to avoid permission issues
-RUN echo '[telemetry]' > /etc/aws-emulator/config.toml && echo 'enabled = false' >> /etc/aws-emulator/config.toml
+RUN rpm -i /tmp/aws-emulator.rpm && rm /tmp/aws-emulator.rpm \
+    && mkdir -p /home/emulator && chown 1000 /home/emulator
 
 # Set up user and environment
 USER 1000
