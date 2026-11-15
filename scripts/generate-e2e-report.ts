@@ -91,6 +91,13 @@ function findTestResultFiles(): string[] {
         
         if (stat.isDirectory()) {
           console.log(`    📂 ${entry}/`);
+          const isE2EArtifactDir =
+            entry.startsWith('e2e-test-results-') ||
+            entry.startsWith('playwright-report-') ||
+            /^test-results-node-\d+-e2e$/.test(entry);
+          if (!isE2EArtifactDir) {
+            continue;
+          }
           // ディレクトリ内のすべての .json ファイルを探す
           const dirFiles = fs.readdirSync(entryPath);
           for (const dirFile of dirFiles) {
@@ -100,7 +107,7 @@ function findTestResultFiles(): string[] {
               files.push(jsonPath);
             }
           }
-        } else if (entry.endsWith('.json')) {
+        } else if (entry.endsWith('.json') && entry.includes('-e2e')) {
           // ディレクトリではなく、直接 JSON ファイルの場合
           console.log(`    ✓ ${entry}`);
           files.push(entryPath);

@@ -251,9 +251,11 @@ jobs:
           fi
 
           echo "📥 Downloading artifacts from test run: $TARGET_TEST_RUN"
+          echo "target_test_run=$TARGET_TEST_RUN" >> $GITHUB_OUTPUT
           
-          # 指定された実行からアーティファクトをダウンロード
-          mkdir -p ./artifacts
+          # 以前の残骸を削除（古いデータ混入防止）
+          rm -rf ./artifacts qa/e2e-report
+          mkdir -p ./artifacts qa/e2e-report
           
           # すべてのテスト結果アーティファクトをダウンロード
           echo "  • Downloading test-results-* artifacts..."
@@ -294,10 +296,19 @@ jobs:
         id: e2e_report
         continue-on-error: true
         run: |
+          # 旧データを先に削除して、生成失敗時に古い表示を残さない
+          rm -f qa/e2e-report/test-cases.json docs/reports/data/test-cases.json docs/reports/e2e-latest.html
+
           echo "📊 Generating E2E test report..."
           pnpm exec ts-node scripts/generate-e2e-report.ts qa/e2e-report
           
           if [ -f qa/e2e-report/test-cases.json ]; then
+            RUN_ID=$(node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('qa/e2e-report/test-cases.json','utf8'));process.stdout.write(String((j.metadata&&j.metadata.test_run_id)||''));")
+            if [ -n "${{ steps.download_playwright.outputs.target_test_run }}" ] && [ "$RUN_ID" != "${{ steps.download_playwright.outputs.target_test_run }}" ]; then
+              echo "❌ E2E report run_id mismatch: expected=${{ steps.download_playwright.outputs.target_test_run }} actual=$RUN_ID"
+              rm -f qa/e2e-report/test-cases.json
+              exit 1
+            fi
             echo "✅ E2E report generated"
             mkdir -p docs/reports/data
             cp qa/e2e-report/test-cases.json docs/reports/data/ 2>/dev/null || true
@@ -311,6 +322,11 @@ jobs:
         id: e2e_page
         continue-on-error: true
         run: |
+          if [ ! -f qa/e2e-report/test-cases.json ]; then
+            echo "⚠️  skip: qa/e2e-report/test-cases.json not found"
+            exit 0
+          fi
+
           echo "🎬 Generating E2E details page..."
           mkdir -p docs/reports/videos docs/reports/screenshots docs/reports/traces docs/reports/logs
 
