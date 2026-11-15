@@ -74,8 +74,10 @@ test.describe('Web UI flows', () => {
     await page.getByTestId('todo-create-button').click();
 
     const firstItem = page.locator('.todo-item').first();
-    await firstItem.getByRole('combobox').selectOption('completed');
-    await expect(firstItem.getByText('completed')).toBeVisible();
+    const statusSelect = firstItem.getByRole('combobox');
+    await statusSelect.selectOption('completed');
+    await expect(statusSelect).toHaveValue('completed');
+    await expect(firstItem.locator('.status-badge')).toHaveText('completed');
   });
 
   test('E2E-406 filter todo list by status and search query', async ({ request, page }) => {
@@ -146,11 +148,12 @@ test.describe('Web UI flows', () => {
       buffer: Buffer.from('delete me'),
     });
 
-    await expect(page.getByText('deleteme.txt')).toBeVisible();
+    const fileRow = page.locator('tr', { hasText: 'deleteme.txt' });
+    await expect(fileRow).toBeVisible();
     page.once('dialog', async (dialog) => {
       await dialog.accept();
     });
-    await page.getByRole('button', { name: 'Delete' }).nth(0).click();
+    await fileRow.getByRole('button', { name: 'Delete' }).click();
     await expect(page.getByText('deleteme.txt')).toHaveCount(0);
   });
 
