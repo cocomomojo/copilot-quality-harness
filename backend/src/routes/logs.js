@@ -10,7 +10,12 @@ router.get('/', async (req, res) => {
     const userId = req.user.userId;
     const { type, limit = '100' } = req.query;
     
-    let logs = await queryItems(TABLE_NAME, 'userId = :userId', { ':userId': userId });
+    let logs = [];
+    try {
+      logs = await queryItems(TABLE_NAME, 'userId = :userId', { ':userId': userId });
+    } catch (queryError) {
+      logs = await scanItems(TABLE_NAME, 'userId = :userId', { ':userId': userId });
+    }
     
     if (type) {
       logs = logs.filter(log => log.eventType === type);

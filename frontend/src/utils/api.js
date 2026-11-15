@@ -65,9 +65,9 @@ export const api = {
   },
   files: {
     getPresignedUrl: (fileName, fileType) =>
-      apiFetch('/api/files/presigned-upload', {
+      apiFetch('/api/files/presigned-url', {
         method: 'POST',
-        body: JSON.stringify({ fileName, fileType }),
+        body: JSON.stringify({ filename: fileName, contentType: fileType }),
       }),
     recordUpload: (fileName, fileSize, fileType, fileId, key) =>
       apiFetch('/api/files/record-upload', {
