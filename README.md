@@ -148,7 +148,40 @@ AWS Emulator は **ローカルの DynamoDB / S3 / SQS 相当サービスを用�
 
 ## 🔁 Frontend・Backend・AWS Emulator 間のシーケンス
 
-### ToDo の作成・監査ログ記録
+### 🔐 ログイン（AWS Emulator の DynamoDB を利用）
+
+ログインは **Frontend → Backend → AWS Emulator の DynamoDB (`Users`)** の順に処理します。Frontend が AWS Emulator へ直接接続することはありません。Backend がユーザーを検索して password hash を照合し、JWT を発行します。ログインでは SQS は使用しません。
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 利用者
+    participant FE as Frontend (React)
+    participant BE as Backend (Express)
+    participant DDB as AWS Emulator / DynamoDB Users
+
+    User->>FE: Email と password を入力
+    FE->>BE: POST /api/auth/login (email, password)
+    BE->>DDB: Scan Users by email
+    DDB-->>BE: ユーザー情報 + passwordHash
+    BE->>BE: password hash を照合
+    BE->>BE: JWT を生成
+    BE-->>FE: 200 OK (token, userId, email, name)
+    FE->>FE: token と userData を localStorage に保存
+    FE-->>User: ログイン成功・Dashboard へ遷移
+```
+
+| ステップ | 内容 |
+|---:|---|
+| 1 | Frontend が `POST /api/auth/login` を Backend に送信します。 |
+| 2 | Backend が AWS SDK 経由で `Users` テーブルを email で検索します。 |
+| 3 | Backend が保存済み password hash と入力 password を照合します。 |
+| 4 | 認証成功時、Backend が JWT を返し、Frontend は token / userData を `localStorage` に保存します。 |
+| 5 | 以降の保護 API 呼び出しでは Frontend が `Authorization: Bearer <token>` を付け、Backend が JWT を検証します。 |
+
+> ⚠️ 初回ログイン前に Emulator が起動し、DynamoDB の `Users` テーブルとユーザーが存在する必要があります。ユーザーは登録 API (`POST /api/auth/register`) から作成できます。登録も `Users` を利用し、password は hash 化して保存されます。
+
+### ✅ ToDo の作成・監査ログ記録
 
 ```mermaid
 sequenceDiagram
@@ -186,7 +219,7 @@ sequenceDiagram
     FE-->>User: アクティビティログを表示
 ```
 
-### ファイルの upload
+### 📁 ファイルの upload
 
 ```mermaid
 sequenceDiagram
