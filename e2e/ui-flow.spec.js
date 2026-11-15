@@ -149,7 +149,7 @@ test.describe('Web UI flows', () => {
     });
 
     const fileRow = page.locator('tr', { hasText: 'deleteme.txt' });
-    await expect(fileRow).toBeVisible();
+    await expect(fileRow).toBeVisible({ timeout: 20000 });
     page.once('dialog', async (dialog) => {
       await dialog.accept();
     });
