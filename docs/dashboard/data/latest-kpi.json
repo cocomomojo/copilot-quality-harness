@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-15T04:34:42.959Z",
+  "timestamp": "2026-11-15T04:43:03.917Z",
   "pass_rate": 100,
   "test_count": 60,
   "passed": 60,
@@ -17,9 +17,9 @@
     "coverage_source": "ARTIFACT_RUN:43677001425",
     "explicit_test_run_id": "43677001425"
   },
-  "trend": "IMPROVING",
+  "trend": "STABLE",
   "trend_details": {
-    "pass_rate_change": 3,
+    "pass_rate_change": 0,
     "coverage_change": 0
   }
 }
