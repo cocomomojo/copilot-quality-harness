@@ -445,12 +445,8 @@ jobs:
           if [ "$DASHBOARD_CHANGES" -gt 0 ] || [ "$REPORTS_CHANGES" -gt 0 ]; then
             echo "📝 Committing updated dashboard and E2E report data..."
 
-            # Clean untracked files that would conflict with git pull
-            echo "🧹 Cleaning untracked files..."
-            git clean -fd docs/reports/ 2>/dev/null || true
-
-            # Pull latest main using merge (not rebase) to avoid autostash conflicts
-            git pull --no-rebase origin main || {
+            # Pull latest main while preserving generated report assets
+            git pull --rebase --autostash origin main || {
               echo "⚠️ Pull failed before commit. Skipping push for this run."
               exit 0
             }
@@ -471,7 +467,7 @@ jobs:
               fi
 
               echo "⚠️ Push rejected. Pulling latest and retrying..."
-              git pull --no-rebase origin main || {
+              git pull --rebase --autostash origin main || {
                 echo "⚠️ Pull failed during retry loop."
                 break
               }
