@@ -8,18 +8,17 @@ export default defineConfig({
   },
   webServer: [
     { 
-      command: 'pnpm --filter quality-harness-backend start',
+      command: 'bash -lc "bash scripts/start-aws-emulator.sh && export NODE_EXTRA_CA_CERTS=\"$(pwd)/certs/ca.pem\" && export AWS_SHARED_CREDENTIALS_FILE=\"$(pwd)/certs/emulator_credentials\" && export AWS_ENDPOINT_URL=\"https://127.0.0.1:9297\" && export AWS_REGION=\"us-east-1\" && pnpm run init:aws && pnpm --filter quality-harness-backend start"',
       url: 'http://127.0.0.1:3000/api/health',
       reuseExistingServer: true,
-      timeout: 120000,  // サーバー起動タイムアウト: 120秒
+      timeout: 180000,  // サーバー起動タイムアウト: 180秒
       stdout: 'pipe',
       stderr: 'pipe',
       env: { 
         NODE_ENV: 'test',
-        // Pass AWS Emulator environment to backend server
-        NODE_EXTRA_CA_CERTS: process.env.NODE_EXTRA_CA_CERTS || '',
-        AWS_SHARED_CREDENTIALS_FILE: process.env.AWS_SHARED_CREDENTIALS_FILE || '',
-        AWS_ENDPOINT_URL: process.env.AWS_ENDPOINT_URL || '',
+        NODE_EXTRA_CA_CERTS: process.env.NODE_EXTRA_CA_CERTS || 'certs/ca.pem',
+        AWS_SHARED_CREDENTIALS_FILE: process.env.AWS_SHARED_CREDENTIALS_FILE || 'certs/emulator_credentials',
+        AWS_ENDPOINT_URL: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
         AWS_REGION: process.env.AWS_REGION || 'us-east-1',
       }
     },
