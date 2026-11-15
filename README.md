@@ -89,11 +89,137 @@ trace の解析・原因候補・修正案
 | AWS 連携 | DynamoDB、S3、SQS を使ったローカル開発・テスト |
 | SQLite | checks などのローカル用データストア |
 
+### 🏗️ アプリケーション構成図
+
+下図はローカル開発・E2E テスト時のアプリケーションとデータストアの関係です。AWS Emulator は Docker container 内で動作し、Backend から AWS SDK 経由で接続します。Frontend は通常の API 操作では Backend にリクエストし、ファイル本体は Backend が発行する署名付き URL を使って S3 に直接送受信します。
+
+```mermaid
+flowchart LR
+    User[利用者 / Browser] --> FE[Frontend<br/>React + Vite<br/>localhost:5173]
+    FE -->|HTTP / JSON API| BE[Backend<br/>Express API<br/>localhost:3000]
+
+    subgraph LocalDocker[ローカル Docker Compose]
+        EM[AWS Emulator<br/>HTTPS :9297]
+        DDB[(DynamoDB<br/>Users / Todos / AuditLogs / FileMetadata)]
+        S3[(S3<br/>app-uploads-bucket)]
+        SQS[[SQS<br/>task-notification-queue]]
+        EM --- DDB
+        EM --- S3
+        EM --- SQS
+    end
+
+    BE -->|AWS SDK| EM
+    FE -->|署名付き URL でファイル本体を送受信| S3
+    BE -->|SQLite driver| SQLITE[(SQLite<br/>checks など)]
+    BE -->|SQS polling| SQS
+    SQS -->|イベントを監査ログに記録| DDB
+```
+
+#### 構成要素と接続先
+
+| コンポーネント | 役割 | ローカル接続先・データ |
+|---|---|---|
+| Frontend | ブラウザ UI。ログイン後、ToDo・ファイル・ログを操作 | Vite: `http://localhost:5173`。API 呼び出しは Backend 経由 |
+| Backend | REST API、認証、AWS SDK 操作、SQS listener | Express: `http://localhost:3000`。`/api/health` で確認 |
+| AWS Emulator | AWS サービスのローカル開発・テスト用 endpoint | HTTPS: `https://127.0.0.1:9297`。Docker Compose で起動 |
+| SQLite | checks など Backend 内のローカルデータ | `backend/src/db.js` の設定を参照 |
+| Playwright | Frontend / Backend / Emulator を使った E2E テスト | `playwright.config.js` で webServer と browser を設定 |
+
+---
+
+## ☁️ AWS Emulator で利用しているサービス
+
+AWS Emulator は **ローカルの DynamoDB / S3 / SQS 相当サービスを用意し、AWS 接続が必要な機能を開発・テストするため**に使います。実際の AWS アカウントや AWS リソースの代わりにローカル endpoint を使います。
+
+| AWS サービス | Emulator 内のリソース | 主な用途・データの流れ |
+|---|---|---|
+| **DynamoDB** | `Users` | 登録ユーザーと password hash などの認証情報を保存。登録・ログイン時に Backend が読み書き |
+| **DynamoDB** | `Todos` | ユーザーごとの ToDo を保存。Backend が作成・一覧・更新・削除 |
+| **DynamoDB** | `FileMetadata` | S3 オブジェクトに対応するファイル名・key・サイズなどの metadata |
+| **DynamoDB** | `AuditLogs` | ToDo / ファイル操作などのイベントを監査ログとして保存 |
+| **S3** | `app-uploads-bucket` | ファイル本体を保存。Backend が署名付き URL を発行し、Frontend が直接 upload / download |
+| **SQS** | `task-notification-queue` | ToDo / ファイル操作の通知イベントをキューイング。Backend listener が受信し、`AuditLogs` に記録 |
+
+リソース名・作成処理は [`scripts/init-aws-resources.ts`](./scripts/init-aws-resources.ts)、endpoint / credentials の設定は [`backend/src/lib/aws.js`](./backend/src/lib/aws.js)、Docker のポート・volume は [`docker-compose.yml`](./docker-compose.yml) を参照してください。
+
+> ℹ️ **S3 の接続経路**: Backend は upload / download 用の署名付き URL を生成します。ファイル本体はブラウザから Emulator の S3 endpoint へ直接送受信し、metadata の登録・一覧・削除は Backend API を通します。
+
+---
+
+## 🔁 Frontend・Backend・AWS Emulator 間のシーケンス
+
+### ToDo の作成・監査ログ記録
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 利用者
+    participant FE as Frontend (React)
+    participant BE as Backend (Express)
+    participant DDB as AWS Emulator / DynamoDB
+    participant SQS as AWS Emulator / SQS
+    participant Worker as Backend SQS listener
+
+    User->>FE: ToDo を入力して作成
+    FE->>BE: POST /api/todos (Bearer token)
+    BE->>BE: JWT を検証・入力を確認
+    BE->>DDB: PutItem (Todos)
+    DDB-->>BE: 保存結果
+    BE->>SQS: SendMessage (todo_created)
+    SQS-->>BE: 送信結果
+    BE-->>FE: 201 Created + ToDo JSON
+    FE-->>User: ToDo 一覧を更新
+
+    loop 定期的な long polling
+        Worker->>SQS: ReceiveMessage
+        SQS-->>Worker: todo_created event
+        Worker->>DDB: PutItem (AuditLogs)
+        DDB-->>Worker: 保存結果
+        Worker->>SQS: DeleteMessage
+    end
+
+    User->>FE: アクティビティログを表示
+    FE->>BE: GET /api/logs (Bearer token)
+    BE->>DDB: Query (AuditLogs, userId)
+    DDB-->>BE: 監査ログ一覧
+    BE-->>FE: 200 OK + logs JSON
+    FE-->>User: アクティビティログを表示
+```
+
+### ファイルの upload
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 利用者
+    participant FE as Frontend (Browser)
+    participant BE as Backend (Express)
+    participant EM as AWS Emulator
+    participant S3 as S3 (app-uploads-bucket)
+    participant DDB as DynamoDB (FileMetadata)
+    participant SQS as SQS (task-notification-queue)
+
+    User->>FE: ファイルを選択
+    FE->>BE: POST /api/files/presigned-url (fileName, fileType)
+    BE->>EM: AWS SDK で署名付き URL を生成
+    EM-->>BE: presigned URL + fileId + key
+    BE-->>FE: presigned URL + fileId + key
+    FE->>S3: PUT file bytes (presigned URL)
+    S3-->>FE: upload success
+    FE->>BE: POST /api/files/record-upload (metadata)
+    BE->>DDB: PutItem (FileMetadata)
+    DDB-->>BE: 保存結果
+    BE->>SQS: SendMessage (file_uploaded)
+    SQS-->>BE: 送信結果
+    BE-->>FE: 201 Created + metadata
+    FE-->>User: upload 完了を表示
+```
+
+> 図は代表的な成功時の流れです。認証失敗・入力検証・AWS 接続失敗時は別のエラーレスポンスになります。Backend は SQS 通知の送信失敗をログに記録して処理を継続する実装です。E2E 環境では AWS Emulator の endpoint と生成された証明書・credentials を使用します。
+
 ---
 
 ## ☁️ AWS Emulator を使ったローカル開発・E2E テスト
-
-AWS Emulator は **ローカルの DynamoDB / S3 / SQS 相当サービスを用意し、AWS 接続が必要な機能を開発・テストするため**に使います。実際の AWS アカウントや AWS リソースの代わりにローカル endpoint を使います。
 
 ### 前提条件
 
