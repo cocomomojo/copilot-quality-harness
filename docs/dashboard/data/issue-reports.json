@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-11-15T03:02:26.944Z",
+  "generated_at": "2026-11-15T03:53:53.018Z",
   "source_pr": 113,
   "reports": [
     {
       "issue_number": 44,
       "pr_number": 113,
-      "workflow_run_id": "43670456752",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43670456752",
-      "generated_at": "2026-11-15T03:02:26.944Z",
-      "pass_rate": 100,
-      "total_tests": 50,
+      "workflow_run_id": "43674031252",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43674031252",
+      "generated_at": "2026-11-15T03:53:53.018Z",
+      "pass_rate": 83,
+      "total_tests": 60,
       "total_passed": 50,
-      "total_failed": 0,
+      "total_failed": 10,
       "coverage": {
         "overall": {
           "lines_pct": 1.56,
@@ -350,13 +350,13 @@
     {
       "issue_number": 56,
       "pr_number": 113,
-      "workflow_run_id": "43670456752",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43670456752",
-      "generated_at": "2026-11-15T03:02:26.944Z",
-      "pass_rate": 100,
-      "total_tests": 50,
+      "workflow_run_id": "43674031252",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43674031252",
+      "generated_at": "2026-11-15T03:53:53.018Z",
+      "pass_rate": 83,
+      "total_tests": 60,
       "total_passed": 50,
-      "total_failed": 0,
+      "total_failed": 10,
       "coverage": {
         "overall": {
           "lines_pct": 1.56,
@@ -699,13 +699,13 @@
     {
       "issue_number": 61,
       "pr_number": 113,
-      "workflow_run_id": "43670456752",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43670456752",
-      "generated_at": "2026-11-15T03:02:26.944Z",
-      "pass_rate": 100,
-      "total_tests": 50,
+      "workflow_run_id": "43674031252",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43674031252",
+      "generated_at": "2026-11-15T03:53:53.018Z",
+      "pass_rate": 83,
+      "total_tests": 60,
       "total_passed": 50,
-      "total_failed": 0,
+      "total_failed": 10,
       "coverage": {
         "overall": {
           "lines_pct": 1.56,
@@ -1064,13 +1064,13 @@
     {
       "issue_number": 63,
       "pr_number": 113,
-      "workflow_run_id": "43670456752",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43670456752",
-      "generated_at": "2026-11-15T03:02:26.944Z",
-      "pass_rate": 100,
-      "total_tests": 50,
+      "workflow_run_id": "43674031252",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43674031252",
+      "generated_at": "2026-11-15T03:53:53.018Z",
+      "pass_rate": 83,
+      "total_tests": 60,
       "total_passed": 50,
-      "total_failed": 0,
+      "total_failed": 10,
       "coverage": {
         "overall": {
           "lines_pct": 1.56,
@@ -1400,13 +1400,13 @@
     {
       "issue_number": 65,
       "pr_number": 113,
-      "workflow_run_id": "43670456752",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43670456752",
-      "generated_at": "2026-11-15T03:02:26.944Z",
-      "pass_rate": 100,
-      "total_tests": 50,
+      "workflow_run_id": "43674031252",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43674031252",
+      "generated_at": "2026-11-15T03:53:53.018Z",
+      "pass_rate": 83,
+      "total_tests": 60,
       "total_passed": 50,
-      "total_failed": 0,
+      "total_failed": 10,
       "coverage": {
         "overall": {
           "lines_pct": 1.56,
@@ -1782,13 +1782,13 @@
     {
       "issue_number": 69,
       "pr_number": 113,
-      "workflow_run_id": "43670456752",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43670456752",
-      "generated_at": "2026-11-15T03:02:26.944Z",
-      "pass_rate": 100,
-      "total_tests": 50,
+      "workflow_run_id": "43674031252",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43674031252",
+      "generated_at": "2026-11-15T03:53:53.018Z",
+      "pass_rate": 83,
+      "total_tests": 60,
       "total_passed": 50,
-      "total_failed": 0,
+      "total_failed": 10,
       "coverage": {
         "overall": {
           "lines_pct": 1.56,
@@ -2118,13 +2118,13 @@
     {
       "issue_number": 76,
       "pr_number": 113,
-      "workflow_run_id": "43670456752",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43670456752",
-      "generated_at": "2026-11-15T03:02:26.944Z",
-      "pass_rate": 100,
-      "total_tests": 50,
+      "workflow_run_id": "43674031252",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43674031252",
+      "generated_at": "2026-11-15T03:53:53.018Z",
+      "pass_rate": 83,
+      "total_tests": 60,
       "total_passed": 50,
-      "total_failed": 0,
+      "total_failed": 10,
       "coverage": {
         "overall": {
           "lines_pct": 1.56,
@@ -2454,13 +2454,13 @@
     {
       "issue_number": 78,
       "pr_number": 113,
-      "workflow_run_id": "43670456752",
-      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43670456752",
-      "generated_at": "2026-11-15T03:02:26.944Z",
-      "pass_rate": 100,
-      "total_tests": 50,
+      "workflow_run_id": "43674031252",
+      "github_run_url": "https://github.com/cocomomojo/copilot-quality-harness/actions/runs/43674031252",
+      "generated_at": "2026-11-15T03:53:53.018Z",
+      "pass_rate": 83,
+      "total_tests": 60,
       "total_passed": 50,
-      "total_failed": 0,
+      "total_failed": 10,
       "coverage": {
         "overall": {
           "lines_pct": 1.56,
