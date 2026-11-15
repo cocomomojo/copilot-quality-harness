@@ -123,6 +123,7 @@ jobs:
 
   generate-dashboard:
     runs-on: ubuntu-latest
+    needs: collect-kpi
     
     steps:
       - uses: actions/checkout@v4
@@ -316,7 +317,7 @@ jobs:
             echo "⚠️  E2E report not generated (no test results found)"
           fi
         env:
-          TEST_MATRIX_RUN_ID: ${{ needs.collect-kpi.outputs.test_run_id }}
+          TEST_MATRIX_RUN_ID: ${{ steps.download_playwright.outputs.target_test_run }}
       
       - name: Generate E2E details page
         id: e2e_page
