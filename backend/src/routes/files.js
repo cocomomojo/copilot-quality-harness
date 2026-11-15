@@ -1,7 +1,7 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { getS3Client } from '../lib/aws.js';
-import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
+import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { putItem, getItem, queryItems, deleteItem } from '../utils/dynamodb.js';
 import { sendTaskNotification } from '../utils/sqs.js';
@@ -14,10 +14,10 @@ function generateFileId() {
   return uuidv4();
 }
 
-// Get presigned URL for upload
-router.post('/presigned-url', async (req, res) => {
+async function handlePresignedUpload(req, res) {
   try {
-    const { filename, contentType } = req.body;
+    const filename = req.body?.filename || req.body?.fileName;
+    const contentType = req.body?.contentType || req.body?.fileType;
     
     if (!filename || !contentType) {
       return res.status(400).json({ error: 'filename and contentType are required' });
@@ -40,6 +40,43 @@ router.post('/presigned-url', async (req, res) => {
   } catch (error) {
     console.error('Get presigned URL error:', error);
     res.status(500).json({ error: 'Failed to get presigned URL' });
+  }
+}
+
+// Get presigned URL for upload
+router.post('/presigned-url', handlePresignedUpload);
+
+// Backward-compatible alias used by frontend/api client
+router.post('/presigned-upload', handlePresignedUpload);
+
+// Record upload metadata after successful S3 PUT
+router.post('/record-upload', async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { fileName, fileSize, fileType, fileId, key } = req.body || {};
+
+    if (!fileName || !fileType || !fileId || !key) {
+      return res.status(400).json({ error: 'fileName, fileType, fileId and key are required' });
+    }
+
+    const item = {
+      userId,
+      fileId,
+      fileName,
+      fileSize: Number(fileSize || 0),
+      fileType,
+      key,
+      s3Key: key,
+      uploadedAt: new Date().toISOString(),
+    };
+
+    await putItem(DYNAMODB_TABLE, item);
+    await sendTaskNotification('file_uploaded', userId, fileId, 'create', { fileName });
+
+    res.status(201).json(item);
+  } catch (error) {
+    console.error('Record upload error:', error);
+    res.status(500).json({ error: 'Failed to record upload' });
   }
 });
 
@@ -94,7 +131,7 @@ router.delete('/:fileId', async (req, res) => {
     
     await s3Client.send(deleteCommand);
     await deleteItem(DYNAMODB_TABLE, { userId, fileId });
-    await sendTaskNotification('file_deleted', userId, fileId, 'delete', { fileName: fileMetadata.filename });
+    await sendTaskNotification('file_deleted', userId, fileId, 'delete', { fileName: fileMetadata.fileName || fileMetadata.filename });
     
     res.status(204).end();
   } catch (error) {

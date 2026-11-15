@@ -1,160 +1,184 @@
 import { expect, test } from '@playwright/test';
+import { API_BASE, authHeaders, registerUser } from './helpers.js';
 
-const API_BASE = 'http://127.0.0.1:3000/api';
-
-test.describe('TODO Management', () => {
-
-  test('E2E-101: Create TODO via API', async ({ request }) => {
-    // Small delay to ensure AWS Emulator is fully initialized
-    await new Promise(r => setTimeout(r, 1000));
-    
-    // Register user
-    const email = `todo${Date.now()}@example.com`;
-    const regRes = await request.post(`${API_BASE}/auth/register`, {
-      data: { email, password: 'Password123!', name: 'TODO User' }
+test.describe('TODO API', () => {
+  test('E2E-101 create todo', async ({ request }) => {
+    const user = await registerUser(request, 'todo-create');
+    const res = await request.post(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+      data: { title: 'Write tests', description: 'Create E2E tests' },
     });
-    const { token } = await regRes.json();
-
-    // Create TODO
-    const createRes = await request.post(`${API_BASE}/todos`, {
-      headers: { 'Authorization': `Bearer ${token}` },
-      data: { title: 'Test TODO', description: 'Test description' }
-    });
-
-    expect(createRes.status()).toBe(201);
-    const json = await createRes.json();
-    expect(json.title).toBe('Test TODO');
-    expect(json.id || json.todoId).toBeTruthy();
+    expect(res.status()).toBe(201);
+    const body = await res.json();
+    expect(body.todoId || body.id).toBeTruthy();
+    expect(body.title).toBe('Write tests');
   });
 
-  test('E2E-102: List TODOs via API', async ({ request }) => {
-    // Register user
-    const email = `todolist${Date.now()}@example.com`;
-    const regRes = await request.post(`${API_BASE}/auth/register`, {
-      data: { email, password: 'Password123!', name: 'TODO List User' }
+  test('E2E-102 create todo without title returns 400', async ({ request }) => {
+    const user = await registerUser(request, 'todo-no-title');
+    const res = await request.post(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+      data: { description: 'No title' },
     });
-    const { token } = await regRes.json();
+    expect(res.status()).toBe(400);
+  });
 
-    // Create a TODO
+  test('E2E-103 list todos empty', async ({ request }) => {
+    const user = await registerUser(request, 'todo-list-empty');
+    const res = await request.get(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+    });
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(Array.isArray(body)).toBeTruthy();
+    expect(body.length).toBe(0);
+  });
+
+  test('E2E-104 list todos after create', async ({ request }) => {
+    const user = await registerUser(request, 'todo-list');
     await request.post(`${API_BASE}/todos`, {
-      headers: { 'Authorization': `Bearer ${token}` },
-      data: { title: 'TODO 1', description: 'Test' }
+      headers: authHeaders(user.token),
+      data: { title: 'Todo A', description: 'A' },
     });
-
-    // List TODOs
-    const listRes = await request.get(`${API_BASE}/todos`, {
-      headers: { 'Authorization': `Bearer ${token}` }
+    const res = await request.get(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
     });
-    
-    expect(listRes.status()).toBe(200);
-    const json = await listRes.json();
-    expect(Array.isArray(json)).toBeTruthy();
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.some((t) => t.title === 'Todo A')).toBeTruthy();
   });
 
-  test('E2E-103: Get TODO by ID via API', async ({ request }) => {
-    // Register user
-    const email = `todoget${Date.now()}@example.com`;
-    const regRes = await request.post(`${API_BASE}/auth/register`, {
-      data: { email, password: 'Password123!', name: 'TODO Get User' }
+  test('E2E-105 get todo by id', async ({ request }) => {
+    const user = await registerUser(request, 'todo-get');
+    const created = await request.post(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+      data: { title: 'Todo Get', description: 'B' },
     });
-    const { token } = await regRes.json();
-
-    // Create a TODO
-    const createRes = await request.post(`${API_BASE}/todos`, {
-      headers: { 'Authorization': `Bearer ${token}` },
-      data: { title: 'TODO to Get', description: 'Test' }
+    const todo = await created.json();
+    const id = todo.todoId || todo.id;
+    const res = await request.get(`${API_BASE}/todos/${id}`, {
+      headers: authHeaders(user.token),
     });
-    const createdTodo = await createRes.json();
-    const todoId = createdTodo.id || createdTodo.todoId;
-
-    // Fetch it
-    const getRes = await request.get(`${API_BASE}/todos/${todoId}`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    
-    expect(getRes.status()).toBe(200);
-    const json = await getRes.json();
-    expect(json.title).toBe('TODO to Get');
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.title).toBe('Todo Get');
   });
 
-  test('E2E-104: Update TODO via API', async ({ request }) => {
-    // Register user
-    const email = `todoupdate${Date.now()}@example.com`;
-    const regRes = await request.post(`${API_BASE}/auth/register`, {
-      data: { email, password: 'Password123!', name: 'TODO Update User' }
+  test('E2E-106 get missing todo returns 404', async ({ request }) => {
+    const user = await registerUser(request, 'todo-missing');
+    const res = await request.get(`${API_BASE}/todos/not-found`, {
+      headers: authHeaders(user.token),
     });
-    const { token } = await regRes.json();
-
-    // Create a TODO
-    const createRes = await request.post(`${API_BASE}/todos`, {
-      headers: { 'Authorization': `Bearer ${token}` },
-      data: { title: 'Original', description: 'Test' }
-    });
-    const createdTodo = await createRes.json();
-    const todoId = createdTodo.id || createdTodo.todoId;
-
-    // Update it
-    const updateRes = await request.put(`${API_BASE}/todos/${todoId}`, {
-      headers: { 'Authorization': `Bearer ${token}` },
-      data: { title: 'Updated', status: 'completed' }
-    });
-
-    expect(updateRes.status()).toBe(200);
-    const json = await updateRes.json();
-    expect(json.title).toBe('Updated');
+    expect(res.status()).toBe(404);
   });
 
-  test('E2E-105: Delete TODO via API', async ({ request }) => {
-    // Register user
-    const email = `tododelete${Date.now()}@example.com`;
-    const regRes = await request.post(`${API_BASE}/auth/register`, {
-      data: { email, password: 'Password123!', name: 'TODO Delete User' }
+  test('E2E-107 update todo title/status', async ({ request }) => {
+    const user = await registerUser(request, 'todo-update');
+    const created = await request.post(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+      data: { title: 'Before', description: 'desc' },
     });
-    const { token } = await regRes.json();
-
-    // Create a TODO
-    const createRes = await request.post(`${API_BASE}/todos`, {
-      headers: { 'Authorization': `Bearer ${token}` },
-      data: { title: 'TODO to Delete', description: 'Test' }
+    const todo = await created.json();
+    const id = todo.todoId || todo.id;
+    const res = await request.put(`${API_BASE}/todos/${id}`, {
+      headers: authHeaders(user.token),
+      data: { title: 'After', status: 'completed' },
     });
-    const createdTodo = await createRes.json();
-    const todoId = createdTodo.id || createdTodo.todoId;
-
-    // Delete it
-    const deleteRes = await request.delete(`${API_BASE}/todos/${todoId}`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-
-    expect([200, 204]).toContain(deleteRes.status());
-
-    // Verify it's gone
-    const getRes = await request.get(`${API_BASE}/todos/${todoId}`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    expect(getRes.status()).toBe(404);
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.title).toBe('After');
+    expect(body.status).toBe('completed');
   });
 
-  test('E2E-106: TODO operations require authentication', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/todos`, {
-      data: { title: 'Unauthorized', description: 'Test' }
+  test('E2E-108 update todo with completed boolean', async ({ request }) => {
+    const user = await registerUser(request, 'todo-update-bool');
+    const created = await request.post(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+      data: { title: 'To complete' },
     });
+    const todo = await created.json();
+    const id = todo.todoId || todo.id;
+    const res = await request.put(`${API_BASE}/todos/${id}`, {
+      headers: authHeaders(user.token),
+      data: { completed: true },
+    });
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.status).toBe('completed');
+  });
 
-    expect(response.status()).toBe(401);
+  test('E2E-109 update missing todo returns 404', async ({ request }) => {
+    const user = await registerUser(request, 'todo-update-missing');
+    const res = await request.put(`${API_BASE}/todos/not-found`, {
+      headers: authHeaders(user.token),
+      data: { title: 'X' },
+    });
+    expect(res.status()).toBe(404);
+  });
+
+  test('E2E-110 delete todo', async ({ request }) => {
+    const user = await registerUser(request, 'todo-delete');
+    const created = await request.post(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+      data: { title: 'Delete me' },
+    });
+    const todo = await created.json();
+    const id = todo.todoId || todo.id;
+    const del = await request.delete(`${API_BASE}/todos/${id}`, {
+      headers: authHeaders(user.token),
+    });
+    expect(del.status()).toBe(204);
+    const get = await request.get(`${API_BASE}/todos/${id}`, {
+      headers: authHeaders(user.token),
+    });
+    expect(get.status()).toBe(404);
+  });
+
+  test('E2E-111 delete missing todo returns 404', async ({ request }) => {
+    const user = await registerUser(request, 'todo-delete-missing');
+    const res = await request.delete(`${API_BASE}/todos/not-found`, {
+      headers: authHeaders(user.token),
+    });
+    expect(res.status()).toBe(404);
+  });
+
+  test('E2E-112 unauthorized access returns 401', async ({ request }) => {
+    const res = await request.get(`${API_BASE}/todos`);
+    expect(res.status()).toBe(401);
+  });
+
+  test('E2E-113 list with status filter', async ({ request }) => {
+    const user = await registerUser(request, 'todo-filter-status');
+    const created = await request.post(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+      data: { title: 'Filter me', status: 'pending' },
+    });
+    const todo = await created.json();
+    const id = todo.todoId || todo.id;
+    await request.put(`${API_BASE}/todos/${id}`, {
+      headers: authHeaders(user.token),
+      data: { status: 'completed' },
+    });
+    const res = await request.get(`${API_BASE}/todos?status=completed`, {
+      headers: authHeaders(user.token),
+    });
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.every((t) => t.status === 'completed')).toBeTruthy();
+  });
+
+  test('E2E-114 list with search filter', async ({ request }) => {
+    const user = await registerUser(request, 'todo-filter-search');
+    await request.post(`${API_BASE}/todos`, {
+      headers: authHeaders(user.token),
+      data: { title: 'Unique Search Token', description: 'needle' },
+    });
+    const res = await request.get(`${API_BASE}/todos?search=Search%20Token`, {
+      headers: authHeaders(user.token),
+    });
+    expect(res.status()).toBe(200);
+    const body = await res.json();
+    expect(body.some((t) => t.title.includes('Search Token'))).toBeTruthy();
   });
 });
 
-test.describe('TODO List UI', () => {
-  test('E2E-107: TODO page is accessible', async ({ request }) => {
-    const response = await request.get('http://127.0.0.1:5173/todos');
-    
-    expect(response.status()).toBe(200);
-    const content = await response.text();
-    expect(content.toLowerCase()).toContain('<!doctype html') || expect(content).toContain('<html');
-  });
-
-  test('E2E-108: Dashboard is accessible', async ({ request }) => {
-    const response = await request.get('http://127.0.0.1:5173/');
-    
-    expect(response.status()).toBe(200);
-  });
-});

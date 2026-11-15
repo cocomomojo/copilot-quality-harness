@@ -4,7 +4,8 @@ import {
   DynamoDBClient, 
   CreateTableCommand, 
   ListTablesCommand,
-  DescribeTableCommand
+  DescribeTableCommand,
+  waitUntilTableExists
 } from '@aws-sdk/client-dynamodb';
 import { 
   S3Client, 
@@ -129,6 +130,10 @@ async function createDynamoDBTable(table: DynamoDBTableConfig): Promise<void> {
         BillingMode: 'PAY_PER_REQUEST',
       })
     );
+    await waitUntilTableExists(
+      { client: dynamodbClient, maxWaitTime: 60 },
+      { TableName: table.name }
+    );
     console.log(`✅ Created DynamoDB table '${table.name}'`);
   } catch (err) {
     console.error(`❌ Failed to create table '${table.name}':`, err instanceof Error ? err.message : String(err));
@@ -248,10 +253,23 @@ async function initializeAWSResources(): Promise<void> {
     {
       name: 'AuditLogs',
       keySchema: [
-        { AttributeName: 'logId', KeyType: 'HASH' },
+        { AttributeName: 'userId', KeyType: 'HASH' },
+        { AttributeName: 'logId', KeyType: 'RANGE' },
       ],
       attributeDefinitions: [
+        { AttributeName: 'userId', AttributeType: 'S' },
         { AttributeName: 'logId', AttributeType: 'S' },
+      ],
+    },
+    {
+      name: 'FileMetadata',
+      keySchema: [
+        { AttributeName: 'userId', KeyType: 'HASH' },
+        { AttributeName: 'fileId', KeyType: 'RANGE' },
+      ],
+      attributeDefinitions: [
+        { AttributeName: 'userId', AttributeType: 'S' },
+        { AttributeName: 'fileId', AttributeType: 'S' },
       ],
     },
   ];

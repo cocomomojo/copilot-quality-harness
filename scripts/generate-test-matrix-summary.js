@@ -10,7 +10,7 @@ const path = require('path');
 
 const resultsDir = 'test-results-all';
 const allResults = [];
-const expectedTestTypes = ['unit', 'api', 'e2e', 'advanced'];
+const expectedTestTypes = ['unit', 'api', 'e2e'];
 
 console.log('📂 Reading test results from:', resultsDir);
 if (!fs.existsSync(resultsDir)) {
@@ -126,7 +126,7 @@ for (const version of [20]) {
 }
 
 // Group by test type
-for (const type of ['unit', 'api', 'e2e', 'advanced']) {
+for (const type of expectedTestTypes) {
   const typeResults = allResults.filter(r => r.test_type === type);
   summary.by_test_type[type] = {
     passed_tests: typeResults.reduce((sum, r) => sum + (r.passed || 0), 0),

@@ -1,6 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { generateToken } from '../middleware/auth.js';
+import { authMiddleware, generateToken } from '../middleware/auth.js';
 import { hashPassword, verifyPassword } from '../utils/password.js';
 import { putItem, getItem, scanItems } from '../utils/dynamodb.js';
 
@@ -102,7 +102,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Get current user
-router.get('/me', async (req, res) => {
+router.get('/me', authMiddleware, async (req, res) => {
   try {
     if (!req.user || !req.user.userId) {
       return res.status(401).json({ error: 'Unauthorized' });
