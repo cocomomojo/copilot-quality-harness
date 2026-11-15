@@ -5,6 +5,9 @@ const API_BASE = 'http://127.0.0.1:3000/api';
 test.describe('TODO Management', () => {
 
   test('E2E-101: Create TODO via API', async ({ request }) => {
+    // Small delay to ensure AWS Emulator is fully initialized
+    await new Promise(r => setTimeout(r, 1000));
+    
     // Register user
     const email = `todo${Date.now()}@example.com`;
     const regRes = await request.post(`${API_BASE}/auth/register`, {
