@@ -1,69 +1,29 @@
 {
-  "timestamp": "2026-11-15T00:12:20.605Z",
-  "totalSuites": 2,
-  "totalTests": 8,
-  "passed": 6,
-  "failed": 2,
+  "timestamp": "2026-11-15T00:29:57.734Z",
+  "totalSuites": 3,
+  "totalTests": 35,
+  "passed": 35,
+  "failed": 0,
   "skipped": 0,
-  "passRate": 75,
-  "duration": 508,
+  "passRate": 100,
+  "duration": 2453,
   "metadata": {},
   "suites": [
     {
-      "name": "TODO Management",
-      "file": "todos.spec.js",
-      "totalTests": 6,
-      "passed": 4,
-      "failed": 2,
+      "name": "Authentication API",
+      "file": "auth.spec.js",
+      "totalTests": 10,
+      "passed": 10,
+      "failed": 0,
       "skipped": 0,
-      "duration": 488,
+      "duration": 588,
       "tests": [
         {
-          "name": "E2E-101: Create TODO via API",
-          "title": "E2E-101: Create TODO via API",
-          "status": "failed",
-          "duration": 69,
-          "file": "todos.spec.js",
-          "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m401\u001b[39m"
-          ],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-102: List TODOs via API",
-          "title": "E2E-102: List TODOs via API",
-          "status": "failed",
-          "duration": 49,
-          "file": "todos.spec.js",
-          "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m401\u001b[39m"
-          ],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-103: Get TODO by ID via API",
-          "title": "E2E-103: Get TODO by ID via API",
+          "name": "E2E-201 register success",
+          "title": "E2E-201 register success",
           "status": "passed",
-          "duration": 145,
-          "file": "todos.spec.js",
+          "duration": 119,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -75,11 +35,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-104: Update TODO via API",
-          "title": "E2E-104: Update TODO via API",
+          "name": "E2E-202 duplicate email returns 409",
+          "title": "E2E-202 duplicate email returns 409",
           "status": "passed",
-          "duration": 107,
-          "file": "todos.spec.js",
+          "duration": 80,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -91,11 +51,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-105: Delete TODO via API",
-          "title": "E2E-105: Delete TODO via API",
+          "name": "E2E-203 weak password returns 422",
+          "title": "E2E-203 weak password returns 422",
           "status": "passed",
-          "duration": 109,
-          "file": "todos.spec.js",
+          "duration": 12,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -107,11 +67,107 @@
           "stderr": []
         },
         {
-          "name": "E2E-106: TODO operations require authentication",
-          "title": "E2E-106: TODO operations require authentication",
+          "name": "E2E-204 missing fields returns 400",
+          "title": "E2E-204 missing fields returns 400",
           "status": "passed",
-          "duration": 9,
-          "file": "todos.spec.js",
+          "duration": 8,
+          "file": "auth.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-205 login success",
+          "title": "E2E-205 login success",
+          "status": "passed",
+          "duration": 133,
+          "file": "auth.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-206 login wrong password returns 401",
+          "title": "E2E-206 login wrong password returns 401",
+          "status": "passed",
+          "duration": 135,
+          "file": "auth.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-207 login unknown user returns 401",
+          "title": "E2E-207 login unknown user returns 401",
+          "status": "passed",
+          "duration": 12,
+          "file": "auth.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-208 /auth/me with valid token",
+          "title": "E2E-208 /auth/me with valid token",
+          "status": "passed",
+          "duration": 77,
+          "file": "auth.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-209 /auth/me without token returns 401",
+          "title": "E2E-209 /auth/me without token returns 401",
+          "status": "passed",
+          "duration": 6,
+          "file": "auth.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-210 /auth/me invalid token returns 401",
+          "title": "E2E-210 /auth/me invalid token returns 401",
+          "status": "passed",
+          "duration": 6,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -125,19 +181,206 @@
       ]
     },
     {
-      "name": "TODO List UI",
-      "file": "todos.spec.js",
-      "totalTests": 2,
-      "passed": 2,
+      "name": "Files API",
+      "file": "files.spec.js",
+      "totalTests": 11,
+      "passed": 11,
       "failed": 0,
       "skipped": 0,
-      "duration": 20,
+      "duration": 839,
       "tests": [
         {
-          "name": "E2E-107: TODO page is accessible",
-          "title": "E2E-107: TODO page is accessible",
+          "name": "E2E-301 list files empty",
+          "title": "E2E-301 list files empty",
           "status": "passed",
-          "duration": 12,
+          "duration": 76,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-302 create presigned upload URL",
+          "title": "E2E-302 create presigned upload URL",
+          "status": "passed",
+          "duration": 75,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-303 presigned-upload alias works",
+          "title": "E2E-303 presigned-upload alias works",
+          "status": "passed",
+          "duration": 69,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-304 missing upload fields returns 400",
+          "title": "E2E-304 missing upload fields returns 400",
+          "status": "passed",
+          "duration": 68,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-305 record upload metadata",
+          "title": "E2E-305 record upload metadata",
+          "status": "passed",
+          "duration": 83,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-306 list files after record",
+          "title": "E2E-306 list files after record",
+          "status": "passed",
+          "duration": 88,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-307 get file detail by id",
+          "title": "E2E-307 get file detail by id",
+          "status": "passed",
+          "duration": 82,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-308 get missing file returns 404",
+          "title": "E2E-308 get missing file returns 404",
+          "status": "passed",
+          "duration": 73,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-309 get download URL by file id",
+          "title": "E2E-309 get download URL by file id",
+          "status": "passed",
+          "duration": 123,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-310 delete file",
+          "title": "E2E-310 delete file",
+          "status": "passed",
+          "duration": 97,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-311 unauthorized file list returns 401",
+          "title": "E2E-311 unauthorized file list returns 401",
+          "status": "passed",
+          "duration": 5,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        }
+      ]
+    },
+    {
+      "name": "TODO API",
+      "file": "todos.spec.js",
+      "totalTests": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 1026,
+      "tests": [
+        {
+          "name": "E2E-101 create todo",
+          "title": "E2E-101 create todo",
+          "status": "passed",
+          "duration": 76,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
@@ -150,10 +393,202 @@
           "stderr": []
         },
         {
-          "name": "E2E-108: Dashboard is accessible",
-          "title": "E2E-108: Dashboard is accessible",
+          "name": "E2E-102 create todo without title returns 400",
+          "title": "E2E-102 create todo without title returns 400",
           "status": "passed",
-          "duration": 8,
+          "duration": 68,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-103 list todos empty",
+          "title": "E2E-103 list todos empty",
+          "status": "passed",
+          "duration": 69,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-104 list todos after create",
+          "title": "E2E-104 list todos after create",
+          "status": "passed",
+          "duration": 81,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-105 get todo by id",
+          "title": "E2E-105 get todo by id",
+          "status": "passed",
+          "duration": 87,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-106 get missing todo returns 404",
+          "title": "E2E-106 get missing todo returns 404",
+          "status": "passed",
+          "duration": 76,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-107 update todo title/status",
+          "title": "E2E-107 update todo title/status",
+          "status": "passed",
+          "duration": 83,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-108 update todo with completed boolean",
+          "title": "E2E-108 update todo with completed boolean",
+          "status": "passed",
+          "duration": 83,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-109 update missing todo returns 404",
+          "title": "E2E-109 update missing todo returns 404",
+          "status": "passed",
+          "duration": 69,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-110 delete todo",
+          "title": "E2E-110 delete todo",
+          "status": "passed",
+          "duration": 83,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-111 delete missing todo returns 404",
+          "title": "E2E-111 delete missing todo returns 404",
+          "status": "passed",
+          "duration": 68,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-112 unauthorized access returns 401",
+          "title": "E2E-112 unauthorized access returns 401",
+          "status": "passed",
+          "duration": 4,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-113 list with status filter",
+          "title": "E2E-113 list with status filter",
+          "status": "passed",
+          "duration": 92,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-114 list with search filter",
+          "title": "E2E-114 list with search filter",
+          "status": "passed",
+          "duration": 87,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
