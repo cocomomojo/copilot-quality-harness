@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { API_BASE } from './helpers.js';
+import { API_BASE, authHeaders } from './helpers.js';
 
 async function seedUser(request, email, password = 'Password123!', name = 'UI User') {
   const res = await request.post(`${API_BASE}/auth/register`, {
@@ -138,33 +138,36 @@ test.describe('Web UI flows', () => {
 
   test('E2E-409 delete uploaded file from UI', async ({ request, page }) => {
     const email = `ui-file-delete-${Date.now()}@example.com`;
-    await seedUser(request, email, 'Password123!', 'UI File Delete User');
+    const user = await seedUser(request, email, 'Password123!', 'UI File Delete User');
     await loginWithUi(page, email, 'Password123!');
 
-    await page.goto('/files');
-    let uploadedFileId = '';
-    const presignedResponsePromise = page.waitForResponse((response) => (
-      response.url().includes('/api/files/presigned-url') && response.status() === 200
-    ));
-    const recordResponsePromise = page.waitForResponse((response) => (
-      response.url().includes('/api/files/record-upload') && response.status() === 200
-    ));
-    await page.locator('input[type="file"]').setInputFiles({
-      name: 'deleteme.txt',
-      mimeType: 'text/plain',
-      buffer: Buffer.from('delete me'),
+    const presigned = await request.post(`${API_BASE}/files/presigned-url`, {
+      headers: authHeaders(user.token),
+      data: { filename: 'deleteme.txt', contentType: 'text/plain' },
     });
-    const presignedResponse = await presignedResponsePromise;
-    const presignedBody = await presignedResponse.json();
-    uploadedFileId = presignedBody.fileId;
-    await recordResponsePromise;
-    const deleteButton = page.getByTestId(`file-delete-button-${uploadedFileId}`);
+    expect(presigned.status()).toBe(200);
+    const { fileId, key } = await presigned.json();
+
+    const record = await request.post(`${API_BASE}/files/record-upload`, {
+      headers: authHeaders(user.token),
+      data: {
+        fileName: 'deleteme.txt',
+        fileSize: 9,
+        fileType: 'text/plain',
+        fileId,
+        key,
+      },
+    });
+    expect(record.status()).toBe(201);
+
+    await page.goto('/files');
+    const deleteButton = page.getByTestId(`file-delete-button-${fileId}`);
     await expect(deleteButton).toBeVisible({ timeout: 20000 });
     page.once('dialog', async (dialog) => {
       await dialog.accept();
     });
     await deleteButton.click();
-    await expect(page.getByText('deleteme.txt')).toHaveCount(0);
+    await expect(page.getByTestId(`file-item-${fileId}`)).toHaveCount(0);
   });
 
   test('E2E-410 navigate between dashboard and TODO/files pages while authenticated', async ({ request, page }) => {
