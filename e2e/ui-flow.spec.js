@@ -142,18 +142,28 @@ test.describe('Web UI flows', () => {
     await loginWithUi(page, email, 'Password123!');
 
     await page.goto('/files');
+    let uploadedFileId = '';
+    const presignedResponsePromise = page.waitForResponse((response) => (
+      response.url().includes('/api/files/presigned-url') && response.status() === 200
+    ));
+    const recordResponsePromise = page.waitForResponse((response) => (
+      response.url().includes('/api/files/record-upload') && response.status() === 200
+    ));
     await page.locator('input[type="file"]').setInputFiles({
       name: 'deleteme.txt',
       mimeType: 'text/plain',
       buffer: Buffer.from('delete me'),
     });
-
-    const fileRow = page.locator('tr', { hasText: 'deleteme.txt' });
-    await expect(fileRow).toBeVisible({ timeout: 20000 });
+    const presignedResponse = await presignedResponsePromise;
+    const presignedBody = await presignedResponse.json();
+    uploadedFileId = presignedBody.fileId;
+    await recordResponsePromise;
+    const deleteButton = page.getByTestId(`file-delete-button-${uploadedFileId}`);
+    await expect(deleteButton).toBeVisible({ timeout: 20000 });
     page.once('dialog', async (dialog) => {
       await dialog.accept();
     });
-    await fileRow.getByRole('button', { name: 'Delete' }).click();
+    await deleteButton.click();
     await expect(page.getByText('deleteme.txt')).toHaveCount(0);
   });
 
