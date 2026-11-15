@@ -1,943 +1,339 @@
 # Copilot Quality Harness 🛠️🤖
 
-**Issue を作成するだけで、テスト設計・実装・品質レポートまで自動化する**品質ハーネスです。
+**Issue の受け入れ条件から、テスト設計・実装支援・テスト実行・品質レポートまでをつなぐ品質ハーネス**です。Playwright trace の解析や品質ダッシュボードに加え、React + Express のサンプル Web アプリも含みます。
 
-> **最新状態** (2026-11-14): E2E 53テスト / Unit 172テスト = **計 225 テスト / 合格率 100%** 📈  
-> 📊 [品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/) | 🔍 [E2Eレポート](https://cocomomojo.github.io/copilot-quality-harness/reports/e2e-latest.html)
+📊 [品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/)　|　📚 [運用フロー](./docs/OPERATION_FLOW.md)　|　🔧 [ワークフローガイド](./docs/WORKFLOWS_GUIDE.md)　|　✅ [QA ポリシー](./docs/QA_POLICY.md)
 
----
-
-## ⚡ 運用パス（全体像）
-
-```
-Issue 作成 → M2 Issue Intake → 実装・テスト → test-matrix → update-dashboard
-    ↑             ↑（手動実行）      ↑（PR作成）    ↑（自動）       ↑（自動）
-```
-
-**判定方式**: M2 Intake はルールベース判定（`scripts/m2-auto-judgment.mjs`）
-- 生成AI・外部APIを使用しない（無料・高速・決定論的）
-- OpenJEV 的なアプローチ（ルールベースによる実行ルーティング）
-- ただし OpenJEV パッケージは未リリース（npm 未公開）のため直接は未使用
+> ⚠️ **開発・テスト用リポジトリです。** AWS Emulator とテスト用エンドポイントを使います。本番環境に公開したり、本番データ・認証情報を使用したりしないでください。特に「セキュリティ上の注意」を確認してください。
 
 ---
 
-## 🐣 はじめての方向け（まずここだけ）
+## 🧭 1 分で分かる全体像
 
-「情報が多くてどこから読めばいいか分からない…」という方向けに、最短ルートを先に置きます。
+```text
+Issue / 受け入れ条件
+  ↓ M2 Issue Intake（Issue のルールベース解析）
+テスト観点・項目（ISO/IEC 25010）
+  ↓ spec-to-implementation（仕様からテスト生成を支援）
+開発者が実装・レビュー
+  ↓ Pull Request / Push
+Test Matrix（Unit / API job / Playwright E2E）
+  ├─ 品質レポート・PR コメント
+  ├─ KPI / ダッシュボード更新
+  └─ E2E 失敗時の修復支援・trace 解析
+  ↓ 人間が結果を確認して判断
+マージ・Pages 更新
+```
 
-### 最初のゴール
-
-- ✅ Issue を 1 件作る
-- ✅ テスト観点を自動生成する
-- ✅ PR を作って `test-matrix` を通す
-- ✅ ダッシュボード / E2E レポートを確認する
-
-### 30分クイックスタート 🚀
-
-| ステップ | やること | 目安 | 完了の目印 |
-|---|---|---:|---|
-| 1 | Issue 作成（Acceptance Template） | 5分 | Issue が作成される |
-| 2 | `m2-issue-intake.yml` 実行 | 5分 | テスト設計のたたき台が出る |
-| 3 | `generate-quality-items.yml` 実行 | 5分 | quality items artifact が生成される |
-| 4 | `spec-to-implementation.yml` 実行 | 5分 | テストコード付き PR ができる |
-| 5 | PR を更新して `test-matrix` 実行 | 10分 | Actions が成功し、レポートが出る |
-
-> 詳細手順は [`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md) の「ステップ 1〜10」を順に実行すれば OK です。
->
-> レビュー直前の最終確認は [`docs/WORKFLOWS_GUIDE.md`](./docs/WORKFLOWS_GUIDE.md) 内の **「✅ 10分運用チェックリスト（日本語）」** を使うと迷いません。
-
-### 読み順ガイド 📚
-
-1. **全体像だけ知りたい** → この `README.md`
-2. **実作業を順番どおり進めたい** → [`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)
-3. **E2E証跡（動画/trace/log）を見たい** → [`docs/E2E_REPORTS_GUIDE.md`](./docs/E2E_REPORTS_GUIDE.md)
-4. **ワークフロー内部を詳しく知りたい** → [`docs/WORKFLOWS_GUIDE.md`](./docs/WORKFLOWS_GUIDE.md)
-5. **PR前の最終確認をしたい** → `docs/WORKFLOWS_GUIDE.md` の「✅ 10分運用チェックリスト（日本語）」
-
-### 用語ミニ辞典 🧩
-
-| 用語 | ひとことで言うと |
+| 用語 | 意味 |
 |---|---|
-| Test Matrix | 単体/API/E2E などを並列実行する本体テスト workflow |
-| Artifact | workflow 間で受け渡す成果物（JSON, レポート, 動画など） |
-| run_id | 実行ごとの一意ID（KPI と E2E の整合に重要） |
-| E2E Evidence | 動画・trace・error-context・実行ログへの導線 |
+| **Test Matrix** | Unit / API job / E2E を実行し、結果を集約する GitHub Actions workflow |
+| **Artifact** | workflow 間で受け渡すテスト結果、品質項目、レポートなどの成果物 |
+| **run_id** | Actions 実行ごとの ID。関連する品質データとテスト結果の参照に使います |
+| **E2E evidence** | Playwright の trace、スクリーンショット、HTML レポートなどの調査材料 |
+
+M2 Issue Intake はルールベースの判定を行い、生成 AI や外部 API を前提にしません。Copilot を使う分析・提案も、生成結果を人間がレビューする前提です。**自動マージや AI の提案を人間の確認の代わりにしないでください。**
 
 ---
 
-## ざっくり 1 分説明 ⏱️
-- **目的**: Playwright トレースから テスト失敗を自動分析 → Copilot が修正案を提示 → 並列処理で 3-4 倍高速化
-- **方針**: AI（Copilot）は「分析・提案」のみ。マージ・確定は人間が行います
-- **スタック**: GitHub Actions (Dynamic Workflows) + Copilot CLI + TypeScript + 並列マトリックス
+## 🚀 はじめての方向け
+
+### 標準的な品質ハーネスの流れ
+
+| ステップ | 操作 | 結果・確認先 |
+|---:|---|---|
+| 1 | Acceptance Template で Issue を作成 | 受け入れ条件・背景・テスト観点を明記 |
+| 2 | Actions から `M2 Issue Intake` を実行 | Issue 解析とテスト設計のたたき台 |
+| 3 | `Generate Quality Items` を実行 | ISO/IEC 25010 に基づく項目・artifact |
+| 4 | 仕様 YAML を確認し `Spec to Implementation` を実行 | 生成されたテストや PR をレビュー |
+| 5 | 実装・修正後に PR を更新 | `Test Matrix` と必要な review workflow を確認 |
+| 6 | 結果・品質レポートを確認 | Actions、PR コメント、[ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/) |
+| 7 | 人間がレビューしてマージ | 変更内容・テスト・セキュリティを確認 |
+
+実行 workflow や入力値は変更される可能性があるため、実際の設定は [`.github/workflows/`](./.github/workflows/) と [運用フローガイド](./docs/OPERATION_FLOW.md) を参照してください。
+
+### Playwright trace の解析フロー
+
+```text
+E2E 失敗 → trace / screenshot / log を確認
+  ↓ copilot-analyze-trace または E2E healing workflow
+trace の解析・原因候補・修正案
+  ↓
+人間が分析結果と差分を確認 → 修正 → Test Matrix を再実行
+```
+
+解析結果はあくまで調査・修正の支援です。自動生成された変更をそのまま採用したり、自動マージしたりせず、差分・テスト結果を人間が確認してください。trace 内の個人情報や秘密情報にも注意してください。
 
 ---
 
-## 目次 📚
-- [はじめての方向け（まずここだけ）](#-はじめての方向けまずここだけ)
-- [ざっくり 1 分説明](#ざっくり-1-分説明-)
-- [完全な運用フロー](#完全な運用フロー)
-- [システムアーキテクチャ](#システムアーキテクチャ)
-- [全ワークフロー一覧](#全ワークフロー一覧)
-- [ワークフロー相互関係マッピング](#ワークフロー相互関係マッピング)
-- [簡単な利用手順](#簡単な利用手順)
-- [FAQ / 注意点](#faq--注意点)
-- [ドキュメント](#ドキュメント)
+## 🧩 リポジトリの構成
+
+| パス | 内容 |
+|---|---|
+| `backend/` | Express API、認証、ToDo・ファイル・ログの API、Backend tests |
+| `frontend/` | React + Vite の Web アプリ、Frontend tests |
+| `e2e/` | Playwright の E2E テスト |
+| `scripts/` | AWS Emulator 起動・初期化、品質検証・レポート生成など |
+| `.github/workflows/` | テスト、Issue Intake、品質レポート、trace 解析などの Actions workflow |
+| `docs/` | 運用・QA・ダッシュボード・E2E レポートのガイド |
+| `qa/` | テスト管理、品質特性、ダッシュボード用データ |
+| `docker-compose.yml` | ローカル AWS Emulator の定義 |
+| `playwright.config.js` | Playwright の browser / webServer / reporter 設定 |
+
+### Web アプリの機能
+
+| 領域 | 主な内容 |
+|---|---|
+| Frontend | ログイン、ダッシュボード、ToDo、ファイル、アクティビティログ |
+| Backend | JWT 認証、ToDo API、ファイル API、ログ API、health check |
+| AWS 連携 | DynamoDB、S3、SQS を使ったローカル開発・テスト |
+| SQLite | checks などのローカル用データストア |
 
 ---
 
-## 完全な運用フロー 🌊
+## ☁️ AWS Emulator を使ったローカル開発・E2E テスト
 
-**Issue 作成 → テスト観点 → テスト項目 → 実装 → テストコード → UT → E2E → Pages デプロイ**
+AWS Emulator は **ローカルの DynamoDB / S3 / SQS 相当サービスを用意し、AWS 接続が必要な機能を開発・テストするため**に使います。実際の AWS アカウントや AWS リソースの代わりにローカル endpoint を使います。
 
-詳細な運用ガイドはこちら → **[`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)** ⭐ **新規（必読！）**
+### 前提条件
 
-### ⭐ Workflow 依存関係を詳しく知りたい方へ
+| 必要なもの | 用途・確認 |
+|---|---|
+| Node.js 20 以上 | Frontend / Backend / scripts の実行 |
+| pnpm 12 | workspace の依存関係と scripts（CI と同じバージョン） |
+| Docker Engine と Docker Compose | Emulator の image build・container 起動 |
+| Emulator が利用可能な環境 | `Dockerfile.aws-emulator` の内容・利用条件を確認してください |
+| 空きポート `9297` | Emulator endpoint。`docker-compose.yml` では `127.0.0.1:9297` に bind |
+| 空きポート `3000`, `5173` | Backend API、Vite 開発サーバー |
 
-Workflow の重複排除・最適化の詳細について → **[`docs/WORKFLOW_DEPENDENCY_MAP.md`](./docs/WORKFLOW_DEPENDENCY_MAP.md)** 🗺️
+### 起動から停止まで
 
-このドキュメントでは、12 個すべての workflow の依存チェーン、トリガー条件、改善方針を可視化しています。
+以下はリポジトリのルートディレクトリで実行します。
 
-### ざっくり流れ
-
-```
-Issue 作成（#100）
-  ↓ [M2 Issue Intake] ルールベース解析（safe/manual-only 判定）
-テスト観点生成（ISO/IEC 25010 項目自動生成）
-  ↓ [Generate Quality Items] テスト項目詳細化
-テスト仕様 YAML 作成
-  ↓ [Spec to Implementation] UT + E2E コード自動生成
-開発者: 実装 + ローカルテスト
-  ↓ PR 作成 + Push
-Test Matrix: UT + E2E 並列実行
-  ├─ Quality Report PR コメント投稿（自動）
-  ├─ Update Dashboard ダッシュボード更新（自動）
-  └─ E2E 失敗時 → E2E Auto Healing トリガー
-AI Review: Copilot による品質分析（自動）
-  ↓ 人間レビュー + マージ
-Pages デプロイ（自動）
-```
-
----
-
-## 全ワークフロー一覧 📋
-
-### 🔵 テスト設計・実装 ワークフロー
-
-| # | ワークフロー | 役割 | トリガー | 実行時間 |
-|---|----------|------|---------|--------|
-| 1 | **m2-issue-intake.yml** | Issue 自動解析 + テスト観点生成 | Manual | ~30s |
-| 2 | **generate-quality-items.yml** | テスト項目・観点の詳細生成（ISO/IEC 25010） | Manual | ~1m |
-| 3 | **spec-to-implementation.yml** | 仕様 YAML → UT/E2E/実装コード自動生成 | Manual | ~2m |
-
-### 🔷 テスト実行 ワークフロー
-
-| # | ワークフロー | 役割 | トリガー | 実行時間 |
-|---|----------|------|---------|--------|
-| 4 | **test-matrix.yml** | UT + E2E 並列実行（Node 20） | PR / Push | ~30-45s |
-| 5 | **test-coverage-analysis.yml** | カバレッジギャップ検出 | PR / Push | ~20s |
-
-### 🟢 品質レポート・デプロイ ワークフロー
-
-| # | ワークフロー | 役割 | トリガー | 実行時間 |
-|---|----------|------|---------|--------|
-| 6 | **quality-report-pr.yml** | テスト結果集約 + PR コメント投稿 | workflow_run（test-matrix 完了） | ~1m |
-| 7 | **ai-review.yml** | Copilot AI による品質レビュー | PR 作成/更新 | ~2-3m |
-| 8 | **auto-code-review.yml** | Lint + スタイル自動チェック | PR | ~1m |
-| 9 | **update-dashboard.yml** | 品質ダッシュボード自動更新 | workflow_run（test-matrix 完了） | ~30s |
-| 10 | **e2e-healing-trigger.yml** | E2E テスト失敗時の自動修復トリガー | workflow_run（test-matrix 失敗） | ~3-4m |
-
-### 📅 スケジュール・特殊 ワークフロー
-
-| # | ワークフロー | 役割 | トリガー | 実行時間 |
-|---|----------|------|---------|--------|
-| 11 | **quality-schedule.yml** | 週次品質チェック | Cron（毎週金曜 5:00 JST） | ~5m |
-| 12 | **copilot-analyze-trace.yml** | Playwright トレース自動分析（テスト失敗時） | Manual / 必要に応じて手動実行 | ~3-4m |
-
----
-
-## ワークフロー相互関係マッピング 🗺️
-
-```mermaid
-graph LR
-    A["m2-issue-intake<br/>(Manual)"] -->|テスト観点生成| B["generate-quality-items<br/>(Manual)"]
-    B -->|テスト項目確認| C["spec-to-implementation<br/>(Manual)"]
-    C -->|UT/E2E 自動生成| D["test-matrix<br/>(PR/Push)"]
-    D -->|✅ テスト完了| E["quality-report-pr<br/>(workflow_run)"]
-    D -->|✅ テスト完了| K["update-dashboard<br/>(workflow_run)"]
-    D -->|❌ テスト失敗| N["e2e-healing-trigger<br/>(workflow_run)"]
-    D -->|並列実行| F["test-coverage-analysis<br/>(PR/Push)"]
-    N -->|修復案生成| O["Draft PR + 修復コミット<br/>(auto)"]
-    E -->|品質チェック| G["ai-review<br/>(PR)"]
-    G -->|AI コメント投稿| H["人間レビュー<br/>(Manual)"]
-    H -->|マージ| I["Pages Deploy<br/>(auto)"]
-    J["quality-schedule<br/>(Cron)"] -->|週次チェック| D
-    
-    style A fill:#e1f5ff
-    style C fill:#e8f5e9
-    style D fill:#f1f8e9
-    style E fill:#ede7f6
-    style G fill:#e0f2f1
-    style I fill:#c8e6c9
-    style H fill:#fff9c4
-    style N fill:#ffebee
-    style O fill:#ffcdd2
-```
-
----
-
-## 現在のテスト構成（2026-11-14 時点）
-
-| テスト種別 | ファイル数 | テスト数 | 実行方法 |
-|-----------|-----------|---------|---------|
-| E2E (Playwright) | ~6ファイル | 53 テスト | `npx playwright test` |
-| Unit (Vitest) | ~8ファイル | 172 テスト | `npx vitest run` |
-| **合計** | | **225 テスト** | test-matrix (並列実行) |
-
-> **注**: Unit テストには backend/frontend の unit / api / advanced テストが統合されています。
-
-### ワークフロー自動トリガーチェーン
-
-```
-PR / Push → test-matrix.yml
-  ├─ ✅ 成功時 → quality-report-pr.yml (PR コメント生成)
-  ├─ ✅ 成功時 → update-dashboard.yml (KPI + ダッシュボード更新)
-  └─ ❌ E2E失敗時 → e2e-healing-trigger.yml (修復案自動生成)
-```
-
-**重要**: `update-dashboard.yml` は `test-matrix.yml` の完了後に自動トリガーされます。test-matrix が成功した時点でダッシュボード更新が開始されます。
-
-### quality-report-pr.yml の依存パッケージ
-
-`quality-report-pr.yml` 内の Node スクリプトは **`yaml`** パッケージ（`require('yaml')`）を使用します。  
-`js-yaml` は未インストールのため使用不可。`yaml.parse()` で YAML を解析します（PR #77 で修正済み）。
-
-### Issue単位レポートの蓄積
-
-`quality-report-pr.yml` は PR マージのたびに `docs/dashboard/data/issue-reports.json` を読み込み、  
-新しい Issue レポートとマージして蓄積します（PR #77 で修正済み）。
-
-
-
-### test-matrix.yml の出力
-
-```json
-// Artifacts:
-{
-  "test-results-node18-unit.json": {
-    "passed": 45,
-    "failed": 0,
-    "skipped": 2,
-    "duration": "2.3s",
-    "coverage": { "lines": 92, "branches": 85, "functions": 90 }
-  },
-  "test-results-node20-e2e.json": {
-    "passed": 12,
-    "failed": 0,
-    "duration": "15.4s"
-  }
-}
-```
-
-### quality-report-pr.yml の出力
-
-```markdown
-## ✅ Quality Report
-
-### Test Results Summary（最新実績 2026-11-14）
-| テスト種別 | 実行数 | 合格数 | 失敗数 | 合格率 |
-|-----------|-----:|-----:|-----:|-----:|
-| E2E (Playwright) | 53 | 53 | 0 | 100% ✅ |
-| Unit (Vitest) | 172 | 172 | 0 | 100% ✅ |
-| **合計** | **225** | **225** | **0** | **100%** ✅ |
-
-### 📊 品質メトリクス
-- **カバレッジ**: 61% （ソース：test-matrix artifacts）
-- **合格率**: 100%
-- **コンポジットスコア**: 88/100
-- **リスクレベル**: LOW-MEDIUM
-- **トレンド**: STABLE
-
-### 🔗 Issue Traceability
-| Issue | テスト観点 | テスト項目 | 実装 | テスト実行 |
-|---|---|---|---|---|
-| #123 | 8 perspectives ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-perspectives-simple.json)) | UT 7 / E2E 4, 48 items ([detail](https://github.com/cocomomojo/copilot-quality-harness/blob/main/qa/quality-characteristics/generated/test-items-simple.json)) | 6 files changed in PR | Pass rate 100% (225/225) |
-
-#### テスト観点（具体・抜粋）
-- **機能適合性 (Functional Suitability)**: happy-path-testing, boundary-value-testing, input-validation, error-handling
-- **セキュリティ (Security)**: authentication-testing, authorization-testing, injection-attack-testing, data-exposure-testing
-
-#### テスト項目（具体・抜粋）
-- `FS-001` (happy-path-testing): 正常系: 正常な入力で正しく機能することを確認
-- `FS-003` (input-validation): 入力検証: 無効な入力を適切に処理
-
-### 📊 Coverage Status（最新）
-- Lines: 61%
-- Branches: Coverage tracked via artifacts
-- Functions: Coverage tracked via artifacts
-```
-
-### ai-review.yml の出力
-
-```markdown
-## 🤖 Copilot AI Review
-
-### Security Check
-- ✅ No SQL injection risks
-- ✅ No XSS vulnerabilities
-- ⚠️ CORS: Check Access-Control headers
-
-### Performance
-- ✅ Algorithm complexity: O(n) acceptable
-- ⚠️ Consider caching email validation regex
-
-### Test Coverage
-- ✅ New code: 92% coverage (target: 80%)
-- ⚠️ Edge cases: Add test for empty email
-
-**Recommendation**: Ready to merge with suggested improvements
-**Confidence**: 8.5/10
-```
-
----
-
-## Phase 2: 実装完了 ✅
-
-### Trace 分析ユースケース（Playwright テスト失敗時）
-
-```
-Playwright Trace (Single or Multiple)
-        ↓
-  [Pull Request / Manual Trigger]
-        ↓
-  detect-artifacts (ジョブ)
-  ├─ Scan for .zip artifacts
-  └─ Output: artifacts[], has_artifacts flag
-        ↓
-  analyze-traces (Matrix: 1-8 parallel)
-  ├─ Per-trace analysis (Copilot CLI)
-  ├─ Extract: failure, solutions, code snippets
-  └─ Output: analysis-{trace}.json (per job)
-        ↓
-  aggregate-results (ジョブ)
-  ├─ Merge all analyses
-  ├─ Deduplicate solutions (85% similarity)
-  ├─ Cross-trace issue detection
-  └─ Output: aggregated-analysis.json
-        ↓
-  post-aggregated-comment (ジョブ)
-  └─ Post single PR comment (no duplicates)
-```
-
-### 主要コンポーネント 🧩
-
-#### ワークフロー
-- `.github/workflows/copilot-analyze-trace.yml` — Playwright トレース分析（5 ジョブパイプライン）
-- `.github/workflows/test-matrix.yml` — テスト並列実行（4 並列、Node 20）
-- `.github/workflows/quality-schedule.yml` — 週次スケジュール実行（毎週金曜 AM 5:00 JST）
-- `.github/workflows/spec-to-implementation.yml` — 仕様 YAML → UT/E2E 自動生成
-- `.github/workflows/m2-issue-intake.yml` — Issue 自動解析
-- `.github/workflows/generate-quality-items.yml` — テスト観点・項目自動生成
-- `.github/workflows/ai-review.yml` — Copilot による品質レビュー
-- `.github/workflows/quality-report-pr.yml` — PR コメント自動生成
-
-#### スクリプト
-- `scripts/trace-summary.ts` — Playwright trace.zip パース & PII フィルタ
-- `scripts/copilot-client.ts` — Copilot CLI ラッパー
-- `scripts/detect-trace-artifacts.ts` — アーティファクト検出
-- `scripts/aggregate-trace-results.ts` — 複数トレース集約 & デダプリケーション
-- `scripts/generate-tests-from-spec.ts` — 仕様 YAML → UT/E2E コード生成
-- `scripts/generate-quality-characteristics.ts` — テスト観点・項目生成（ISO/IEC 25010）
-- `scripts/m2-validation.mjs` — Issue 解析と M2 レポート生成
-- `scripts/pii-filter.ts` — PII（個人情報）自動除去
-
-#### エージェント・拡張
-- `.github/agents/trace-analyzer.md` — Copilot エージェント用プロンプト
-- `.github/extensions/analyze-trace/extension.mjs` — Copilot Canvas 拡張
-- `.github/skills/` — Copilot Skills 定義
-
----
-
-## Phase 2: 実装完了 ✅
-
-4 つの段階的フェーズで完全実装しました。
-
-### Phase 2A: トレース解析基礎 (PR #7 ✅)
-- ✅ Playwright trace.zip パース
-- ✅ テスト失敗情報の自動抽出
-- ✅ PII（個人情報）フィルタ
-- ✅ Draft PR 自動生成
-
-### Phase 2B: Copilot CLI 統合 (PR #8 ✅)
-- ✅ 実際の Copilot CLI による分析
-- ✅ Extension ベースのエージェントパイプライン
-- ✅ 構造化 JSON I/O
-- ✅ Mock から本物の API へ移行
-
-### Phase 2C: 自動化と最適化 (PR #9 ✅)
-- ✅ Auto `pull_request` トリガー
-- ✅ 重複分析検出 (**30% API コスト削減**)
-- ✅ 動的プロンプト生成
-- ✅ PR コメント自動投稿
-- ✅ AI Review ワークフロー統合
-
-### Phase 2D: 並列処理と統合 (PR #10 ✅)
-- ✅ Matrix strategy（1-8 並列実行）
-- ✅ 複数トレース結果集約
-- ✅ デダプリケーション（85% 類似度）
-- ✅ **3-4 倍の性能向上**
-- ✅ 100% 後方互換性
-
-**性能ベンチマーク:**
-
-| Scenario | Duration | Speedup | Cost |
-|----------|----------|---------|------|
-| 単一トレース | 2-3 min | 1.7x | -40% |
-| 4 並列トレース | 3-4 min | 3.3x | -25% |
-| 8 並列トレース | 3-4 min | 4x | -30% |
-
----
-
-## 運用フロー（図） 🌊
-
-```mermaid
-graph TD
-    A["Playwright テスト失敗"] --> B["trace.zip 生成"]
-    B --> C["PR / Manual Trigger"]
-    C --> D["detect-artifacts"]
-    D -->|has_artifacts=true| E["analyze-traces Matrix<br/>1-8 並列実行"]
-    D -->|has_artifacts=false| F["Skip（成果物なし）"]
-    E --> G["aggregate-results"]
-    G -->|重複検出| H["Deduplicate<br/>85% 類似度"]
-    H --> I["post-aggregated-comment"]
-    I --> J["単一 PR コメント投稿<br/>修正案提示"]
-    J --> K["人間レビュー"]
-    K --> L["マージ判定<br/>自動マージなし"]
-    style L fill:#90EE90
-```
-
----
-
-## 主要ワークフロー一覧 📋
-
-### ワークフロー
-
-| ワークフロー | トリガー | 説明 |
-|------------|---------|------|
-| `copilot-analyze-trace.yml` | PR / Manual | Playwright トレース分析（5 ジョブパイプライン） |
-| `test-matrix.yml` | Push / PR | テスト並列実行（4 並列、Node 20） |
-| `quality-schedule.yml` | Cron (毎週金曜 5:00 JST) | 週次品質チェック |
-| `auto-code-review.yml` | PR | リント + テスト影響度分析 |
-| `quality-report-pr.yml` | workflow_run | テスト結果集約と PR コメント |
-| `test-coverage-analysis.yml` | Push / PR | テストカバレッジギャップ検出 |
-| `ai-review.yml` | PR | Copilot AI による品質レビュー |
-| `m2-issue-intake.yml` | Manual | Issue 自動解析 + テスト観点生成 |
-| `generate-quality-items.yml` | Manual | テスト項目・観点自動生成（ISO/IEC 25010） |
-| `spec-to-implementation.yml` | Manual | 仕様 YAML → UT/E2E/実装コード自動生成 |
-| `update-dashboard.yml` | workflow_run | ダッシュボード自動更新 |
-
-### スクリプト
-
-| スクリプト | 役割 |
-|-----------|------|
-| `scripts/trace-summary.ts` | Trace.zip パース & 失敗情報抽出 |
-| `scripts/copilot-client.ts` | Copilot CLI ラッパー（修正案生成） |
-| `scripts/detect-trace-artifacts.ts` | アーティファクト検出 & Matrix 入力生成 |
-| `scripts/aggregate-trace-results.ts` | 複数トレース集約 & デダプリケーション |
-| `scripts/generate-aggregated-comment.ts` | PR コメント本文生成 |
-| `scripts/create-draft-pr.ts` | Draft PR 作成 |
-| `scripts/generate-tests-from-spec.ts` | 仕様 YAML → UT/E2E コード生成 |
-| `scripts/generate-quality-characteristics.ts` | テスト観点・項目生成 |
-| `scripts/m2-validation.mjs` | Issue 解析と M2 レポート生成 |
-| `scripts/pii-filter.ts` | PII フィルタ処理 |
-
----
-
-## 簡単な利用手順 🧪
-
-### 標準的なワークフロー（推奨）
-
-詳細は **[`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)** を参照してください。
-
-#### 1. Issue 作成 (5分)
-```bash
-GitHub UI → Issues → New → Acceptance Test Template
-```
-
-#### 2. テスト観点生成 (5分)
-```bash
-gh workflow run m2-issue-intake.yml -f issue_number=100
-# または GitHub UI → Actions → M2 Issue Intake → Run workflow
-```
-
-#### 3. テスト項目生成 (5分)
-```bash
-gh workflow run generate-quality-items.yml -f mode=detailed
-```
-
-#### 4. テスト仕様作成 (10分)
-```bash
-# tests/specs/feature-name.yml を作成
-# 詳細は docs/OPERATION_FLOW.md → ステップ 4 を参照
-```
-
-#### 5. UT/E2E 自動生成 (5分)
-```bash
-gh workflow run spec-to-implementation.yml -f spec_file='tests/specs/feature-name.yml'
-```
-
-#### 6. 開発実装 (ローカル)
-```bash
-git checkout feature/spec-generated-tests-{timestamp}
-npm run test  # UT 確認
-npm run test:e2e  # E2E 確認
-# 実装コード作成 → テストをパスさせる
-```
-
-#### 7. テスト・品質チェック (自動)
-```bash
-# test-matrix.yml が自動実行される
-# quality-report-pr.yml が自動実行される
-# ai-review.yml が自動実行される
-```
-
-#### 8. PR マージ (手動)
-```bash
-# GitHub UI → PR コメント確認
-# AI Review 確認
-# Merge
-```
-
-#### 9. Pages デプロイ (自動)
-```bash
-# 完了！ https://cocomomojo.github.io/copilot-quality-harness
-```
-
-### Playwright トレース分析（ホットフィックス向け）
-
-テスト失敗時:
+#### 1. 依存関係をインストール
 
 ```bash
-# Step 1: E2E テストを実行して trace.zip を生成
-npm run test:e2e
-
-# Step 2: ワークフロー手動トリガー
-gh workflow run copilot-analyze-trace.yml \
-  -f artifact_name='trace.zip' \
-  -f branch='main'
-
-# Step 3: 分析完了待機
-# → Draft PR に修正案が投稿される
-
-# Step 4: PR コメント確認
-# → 修正案を実装
-
-# Step 5: マージ
+pnpm install
 ```
 
-## FAQ / 注意点 ❗
+#### 2. AWS Emulator を起動
 
-**Q: 完全な運用フローはどこに？**
-- A: **[`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)** を必ず読んでください。Issue 作成 → デプロイまでの完全なステップバイステップが記載されています。
+```bash
+pnpm dev:aws
+# 同等のスクリプト: bash scripts/start-aws-emulator.sh
+```
 
-**Q: 自動でマージされますか？**
-- A: いいえ。Copilot は修正案を提案するのみ。マージは必ず人間が行います。
+起動スクリプトは Docker Compose を使い、主に次の処理を行います。
 
-**Q: 複数トレースの場合、速度はどれくらい？**
-- A: 単一: 2-3 分、4 トレース並列: 3-4 分（順次なら 20 分）、8 並列: 3-4 分（順次なら 40 分）
+1. `docker compose down -v` で既存の Compose container / volume を停止・削除します。
+2. `Dockerfile.aws-emulator` から image を `--no-cache` で build します。
+3. `aws-emulator` container を起動し、health endpoint をポーリングします。
+4. Emulator が生成した CA 証明書と認証情報を `certs/ca.pem` と `certs/emulator_credentials` にコピーします。
+5. AWS SDK 用の endpoint・region などを出力します。
 
-**Q: API コストはいくら削減されますか？**
-- A: 重複分析の検出により約 30% 削減（85% 類似度で自動デダプリケーション）
+> ⚠️ 起動スクリプトは既存 volume も削除するので、Emulator のローカル状態を保持したい場合は実行前に注意してください。生成される `certs/` のファイルはローカル用です。共有・コミット・本番利用しないでください。
 
-**Q: テスト観点（test perspectives）とは？**
-- A: ISO/IEC 25010 品質特性に基づいた「どういった観点からテストするか」という視点。機能性、セキュリティ、パフォーマンスなど。詳細は [docs/OPERATION_FLOW.md - ステップ 3](./docs/OPERATION_FLOW.md#-ステップ-3-テスト観点項目生成) を参照。
+#### 3. AWS SDK の環境変数を設定
 
-**Q: スペック YAML（仕様 YAML）とは？**
-- A: テストケース・実装要件を構造化した YAML ファイル。UT/E2E テストコードを自動生成するための入力。詳細は [docs/OPERATION_FLOW.md - ステップ 4](./docs/OPERATION_FLOW.md#-ステップ-4-仕様-yaml--実装--テストコード自動生成) を参照。
+`pnpm dev:aws` が表示するファイルパスを使います。標準のルート実行時は次のとおりです。
 
-**Q: Pages デプロイはどう設定する？**
-- A: Settings → Pages → Source を「GitHub Actions」に設定。デプロイスクリプト例は [docs/OPERATION_FLOW.md - ステップ 10](./docs/OPERATION_FLOW.md#-ステップ-10-pages-デプロイ自動) を参照。
+```bash
+export NODE_EXTRA_CA_CERTS="$PWD/certs/ca.pem"
+export AWS_SHARED_CREDENTIALS_FILE="$PWD/certs/emulator_credentials"
+export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
+export AWS_REGION="us-east-1"
+```
 
-**Q: 環境変数・シークレットは何が必要？**
-- A: `COPILOT_GITHUB_TOKEN` が必須。詳細は [WORKFLOWS_GUIDE.md - Environment Variables](./docs/WORKFLOWS_GUIDE.md) を参照。
+これらの変数は **初期化スクリプトと Backend の AWS SDK クライアントを実行するシェルで有効**にしてください。別のターミナルを使う場合は、そちらにも設定するか、同じ環境変数を設定して実行します。
 
-**Q: 失敗トレースが多い場合は？**
-- A: Matrix strategy の max-parallel を調整してください。デフォルト 8 並列。
+| 環境変数 | 役割 |
+|---|---|
+| `NODE_EXTRA_CA_CERTS` | Emulator が生成した CA 証明書のパス |
+| `AWS_SHARED_CREDENTIALS_FILE` | Emulator が生成した credentials file のパス |
+| `AWS_ENDPOINT_URL` | ローカル AWS endpoint（既定値の例: `https://127.0.0.1:9297`） |
+| `AWS_REGION` | AWS SDK の region（この構成では `us-east-1`） |
 
-**Q: Fork PR でも動きますか？**
-- A: 動きますが、fork PR は repository secret にアクセスできないため、token なし時は mock モードになります。
+#### 4. 必要な AWS リソースを初期化
 
-**Q: Secrets が差分に含まれても検出できますか？**
-- A: 簡易パターンで検出する仕組みはありますが 100% ではありません。本番では専用の secret scanning を併用してください。
+```bash
+pnpm init:aws
+# 同等のスクリプト: ts-node scripts/init-aws-resources.ts
+```
+
+初期化スクリプトは存在確認をしてから、次のリソースを用意します。
+
+| サービス | リソース |
+|---|---|
+| DynamoDB | `Users`, `Todos`, `AuditLogs`, `FileMetadata` テーブル |
+| S3 | `app-uploads-bucket` bucket（CORS 設定を含む） |
+| SQS | `task-notification-queue` queue |
+
+同じ Emulator endpoint に接続していること、証明書・credentials のパスが正しいことを確認してください。アプリ側では SQS listener が起動します（無効化する場合は `ENABLE_SQS_WORKER=false` を設定）。
+
+#### 5. Frontend と Backend を起動
+
+```bash
+pnpm dev
+```
+
+| サービス | URL |
+|---|---|
+| Frontend (Vite) | http://localhost:5173 |
+| Backend health check | http://localhost:3000/api/health |
+| AWS Emulator | https://127.0.0.1:9297 |
+
+Frontend と Backend を別々に起動したい場合:
+
+```bash
+pnpm --filter quality-harness-backend dev
+pnpm --filter quality-harness-frontend dev
+```
+
+#### 6. E2E テストを実行
+
+```bash
+pnpm exec playwright install chromium   # 初回など、browser が未導入の場合
+pnpm test:e2e
+```
+
+`playwright.config.js` の `webServer` 設定は、Backend / Frontend の起動と AWS Emulator の準備を行います。CI の `Test Matrix` E2E job も Emulator を起動し、リソース初期化後に Playwright を実行します。ローカルでは Docker が動作し、必要な ports が空いていることを確認してください。
+
+Playwright は HTML と JSON レポートを生成し、trace を収集します。設定や失敗時の証跡の見方は [E2E レポートガイド](./docs/E2E_REPORTS_GUIDE.md)を参照してください。
+
+#### 7. Emulator を停止
+
+```bash
+pnpm stop:aws
+# health check: pnpm health:aws
+```
+
+> **接続トラブル時の確認順**: `docker compose ps` → `pnpm health:aws` → container log → `certs/ca.pem` / `certs/emulator_credentials` の存在 → 4 つの AWS 環境変数 → `pnpm init:aws` の成功 → ports `9297/3000/5173` の競合。
 
 ---
 
-## ドキュメント 📚
+## 🧪 テスト・開発コマンド
 
-### 🎯 ユーザー向けドキュメント
+| コマンド | 内容 |
+|---|---|
+| `pnpm dev` | Frontend と Backend を同時に起動 |
+| `pnpm build` | Frontend を build |
+| `pnpm test` | Backend と Frontend の Vitest tests（coverage 付き） |
+| `pnpm test:coverage` | Backend / Frontend の coverage tests |
+| `pnpm test:api` | Backend API tests |
+| `pnpm test:advanced` | Backend / Frontend の advanced tests |
+| `pnpm test:e2e` | Playwright E2E tests |
+| `pnpm test:m2` | M2 validation script の Node.js tests |
+| `pnpm lint` | Backend と Frontend の ESLint |
+| `pnpm run generate:quality-items -- simple` | ISO/IEC 25010 品質項目を簡易モードで生成 |
+| `pnpm run generate:quality-items -- detailed` | 品質項目を詳細モードで生成 |
+| `pnpm run generate-tests -- tests/specs/<spec>.yml` | 仕様 YAML からテストコードを生成 |
+| `pnpm run analyze:trace -- <trace-file>` | Playwright trace の概要を解析 |
+| `pnpm run sanitize-trace -- <trace-file>` | trace の PII 除去処理 |
+| `pnpm run collect-kpi` | KPI 収集スクリプトを実行 |
+| `pnpm run generate:dashboard` | ダッシュボードを生成 |
 
-| ドキュメント | 対象 | 内容 |
-|-----------|------|------|
-| **[`docs/OPERATION_FLOW.md`](./docs/OPERATION_FLOW.md)** ⭐ **必読** | 全員 | Issue 作成 → テスト観点 → テスト項目 → 実装 → テストコード → UT → E2E → Pages デプロイの完全ガイド（ユーザー視点） |
-| **[`docs/WORKFLOW_SCRIPT_SKILL_MAPPING.md`](./docs/WORKFLOW_SCRIPT_SKILL_MAPPING.md)** | 開発者 | 各ワークフロー・スクリプト・Skill の関係マッピング表 |
-| **[`docs/ARTIFACTS_SCHEMA.md`](./docs/ARTIFACTS_SCHEMA.md)** | 開発者 | ワークフロー間で受け渡されるアーティファクトの完全スキーマ定義 |
-| [`WORKFLOWS_GUIDE.md`](./docs/WORKFLOWS_GUIDE.md) | 開発者 | 各ワークフローの詳細技術仕様・入出力・トラブルシューティング |
-| [`QA_POLICY.md`](./docs/QA_POLICY.md) | 全員 | 品質方針・テスト戦略・カバレッジ基準・マージ条件 |
-| [`CONTRIBUTING.md`](./docs/CONTRIBUTING.md) | 開発者 | コントリビューションガイド・PR ラベル・チェックリスト |
-| [`.github/auto-merge-policy.md`](.github/auto-merge-policy.md) | リーダー | 自動マージポリシー・セキュリティ実装チェック |
+> 引数・出力先などは package script の実装を確認してください。特に `pnpm test:e2e` は Playwright 設定に基づくサービスや Docker / Emulator の準備が必要です。
 
-### 📚 技術ドキュメント
+---
+
+## ⚙️ GitHub Actions workflow の主な役割
+
+workflow のトリガー・入力・権限は変更されることがあるため、ここでは主な役割を示します。最新の詳細は [workflow directory](./.github/workflows/)を参照してください。
+
+| Workflow | 主な役割 |
+|---|---|
+| `m2-issue-intake.yml` | Issue の内容を解析し、テスト設計を支援 |
+| `generate-quality-items.yml` | ISO/IEC 25010 に基づくテスト観点・項目を生成 |
+| `spec-to-implementation.yml` | 仕様からテスト・実装作業を支援 |
+| `test-matrix.yml` | Unit / API job / E2E の実行・結果 artifact の集約 |
+| `test-coverage-analysis.yml` | カバレッジの分析支援 |
+| `quality-report-pr.yml` | テスト結果を集約し、PR レポートを生成 |
+| `ai-review.yml` / `auto-code-review.yml` | PR の分析・レビュー支援 |
+| `update-dashboard.yml` | 品質指標・ダッシュボードを更新 |
+| `e2e-healing-trigger.yml` / `e2e-auto-healing-agent.yml` | E2E 失敗時の修復支援 |
+| `copilot-analyze-trace.yml` | Playwright trace の解析 |
+| `quality-schedule.yml` | スケジュールによる品質チェック |
+| `auto-merge.yml` | 自動マージ関連の workflow。実際の有効条件・設定を必ず確認 |
+
+### Test Matrix の現在の構成
+
+[`.github/workflows/test-matrix.yml`](./.github/workflows/test-matrix.yml) を参照した構成です。
+
+| 項目 | 現在の設定 |
+|---|---|
+| トリガー | `main` への対象パスの push、対象パスを含む pull request、手動実行 |
+| Node.js | 20 |
+| matrix のテスト種別 | `unit`, `api`, `e2e` |
+| Unit job | Backend と Frontend の Vitest tests を実行 |
+| API job | 現 workflow では API tests の実行は skip 扱い |
+| E2E job | AWS Emulator を立ち上げ、リソース初期化後に Playwright を実行 |
+| 主な artifact | Test results、Playwright report / results、coverage、summary（保持期間は workflow 設定を確認） |
+
+テスト件数・合格率・カバレッジは実行時点で変動します。README に古い固定値は記載せず、最新の実行結果は [GitHub Actions](https://github.com/cocomomojo/copilot-quality-harness/actions) と[品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/)で確認してください。
+
+---
+
+## 📊 レポートとダッシュボード
+
+- **品質ダッシュボード**: [公開ページ](https://cocomomojo.github.io/copilot-quality-harness/dashboard/) — KPI・テスト結果の現在値を確認します。
+- **品質レポート**: `quality-report-pr.yml` が Test Matrix の結果を扱い、設定に応じて PR コメントを作成します。
+- **E2E 証跡**: Playwright HTML report / trace / screenshot などは Actions run の artifact を確認します。
+- **run_id の整合性**: dashboard と E2E report がどの Test Matrix run を参照するかを確認してください。
+
+生成手順や artifact の仕様:
 
 | ドキュメント | 内容 |
-|-----------|------|
-| [`docs/SPEC_TO_IMPLEMENTATION_GUIDE.md`](./docs/SPEC_TO_IMPLEMENTATION_GUIDE.md) | 仕様 YAML → UT/E2E/実装 の完全ガイド |
-| [`docs/DASHBOARD.md`](./docs/DASHBOARD.md) | 品質ダッシュボード実装・使用方法 |
-| `docs/phases/phase-2d/PHASE2D_COMPLETE_SUMMARY.md` | Phase 2D 実装完了報告 |
-| `.github/skills/SKILLS_INDEX.md` | Copilot Skills 完全定義 |
-| `.github/agents/trace-analyzer.md` | Trace 分析エージェントプロンプト |
-
-### 🔗 関連リソース
-
-- [QA_POLICY.md](./docs/QA_POLICY.md) — ISO/IEC 25010 品質特性・テスト観点定義
-- [QUALITY_DASHBOARD_IMPLEMENTATION.md](./docs/QUALITY_DASHBOARD_IMPLEMENTATION.md) — ダッシュボード実装詳細
-- [ops/rollout-checklist.md](./ops/rollout-checklist.md) — ロールアウトチェックリスト
-
----
-
-## トラブルシューティング 🔧
-
-### ワークフローが失敗した場合
-1. **ワークフロー実行ログを確認**: Actions タブ → 実行履歴 → ステップ別ログ
-2. **一般的な原因**:
-   - `COPILOT_GITHUB_TOKEN` が未設定 → Repository Secrets に追加
-   - Trace.zip が見つからない → `detect-artifacts` ジョブのログを確認
-   - Matrix がスキップされた → `has_artifacts=false` をチェック
-
-### PR コメントが投稿されない場合
-1. `post-aggregated-comment` ジョブのログを確認
-2. アーティファクトが正しく集約されたか確認: `aggregated-analysis.json`
-3. GitHub token の権限確認（`contents:write` 必須）
-
-### デダプリケーション結果が想定と異なる場合
-1. 類似度の計算方法: `scripts/aggregate-trace-results.ts` の `calculateSimilarity()` 参照
-2. 閾値: デフォルト 85% （カスタマイズ可能）
-
----
-
-## 🤖 Copilot 自動化 - 仕様・テストテンプレ導入ガイド
-
-**目的**: テスト設計・実行・UT・E2E の自動化比率を高め、人間:Copilot = 1:9（合計 10/90 以上）を達成する
-
-### 📁 新しく追加されたテンプレ・実装ファイル
-
-#### 1️⃣ **仕様テンプレ** (Acceptance Criteria)
-- **パス**: [`.github/ISSUE_TEMPLATE/acceptance.md`](.github/ISSUE_TEMPLATE/acceptance.md)
-- **用途**: 新規 Issue 作成時に使う。Given/When/Then 形式で受け入れ基準を厳格に定義
-- **効果**: Copilot がテストコード・実装を自動生成する際の精度が向上
-
-#### 2️⃣ **テスト設計テンプレ** (UT/E2E 仕様)
-- **パス**: [`tests/specs/acceptance-example.yml`](tests/specs/acceptance-example.yml)
-- **用途**: Copilot がテストコード（UT/E2E）を自動生成するための入力
-- **特徴**: 
-  - UT ケース、E2E シナリオを YAML で構造化
-  - `seed` 値を必須化して再現性を確保
-  - `mocks` セクションで外部 API を完全に隔離
-  - カバレッジ要件を明示
-
-#### 3️⃣ **PII フィルタ実装** (Trace 前処理)
-- **パス**: [`scripts/pii-filter.ts`](scripts/pii-filter.ts)
-- **用途**: trace ログから メール・トークン・IP・UUID を自動除去
-- **使用例**: 
-  ```bash
-  npx ts-node scripts/pii-filter.ts artifacts/trace.json
-  ```
-- **効果**: 個人情報保護 + Copilot に安全に trace を渡せる
-
-#### 4️⃣ **自動マージ条件ポリシー**
-- **パス**: [`.github/auto-merge-policy.md`](.github/auto-merge-policy.md)
-- **用途**: ドキュメント・フォーマット修正のみ自動マージを許可する
-- **特徴**:
-  - 変更タイプチェック（コード変更は禁止）
-  - CI チェック（Lint/Type/SAST/UT）必須
-  - 監査ログ記録（全マージイベントを追跡）
-  - KPI 監視（採用率 95%、セキュリティ 0 件が目標）
-
-#### 5️⃣ **自動マージワークフロー**
-- **パス**: [`.github/workflows/auto-merge.yml`](.github/workflows/auto-merge.yml)
-- **用途**: PR が自動マージ条件を満たすか判定し、条件合致時に自動マージ実行
-- **トリガー**: PR 作成・更新時 + 全 CI チェック完了時
-
-#### 6️⃣ **PR テンプレ** (Copilot メタ情報付き)
-- **パス**: [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md)
-- **用途**: PR 作成時に自動マージチェックボックス・Copilot 提案情報を表示
-- **効果**: 誰が見ても「このPRは自動マージ可か」が一目瞭然
-
----
-
-### 🚀 導入手順（最小セット - 30 分）
-
-#### **ステップ 1: テンプレファイルの確認**
-```bash
-ls -la .github/ISSUE_TEMPLATE/acceptance.md
-ls -la tests/specs/acceptance-example.yml
-ls -la .github/auto-merge-policy.md
-```
-
-#### **ステップ 2: PII フィルタをテストRun**
-```bash
-# 依存インストール（必要に応じて）
-npm install
-
-# テスト実行
-npx ts-node scripts/pii-filter.ts --help
-```
-
-#### **ステップ 3: 自動マージを有効化（リポジトリ Admin のみ）**
-```bash
-# GitHub Secrets に以下を追加
-gh secret set AUTO_MERGE_ENABLED --body "true"
-```
-
-#### **ステップ 4: ワークフロー有効化**
-- GitHub UI → Settings → Actions → `.github/workflows/auto-merge.yml` を有効化
-- ブランチ保護ルールで「Require status checks」を有効化
-
-#### **ステップ 5: 最初の Issue を試す**
-- 新規 Issue を `.github/ISSUE_TEMPLATE/acceptance.md` で作成
-- Copilot に「このテスト設計から UT を生成して」と依頼
-- 生成されたテストコードを `tests/specs/` に格納
-- UT を実行して合格することを確認
-
----
-
-### 📊 運用ルール
-
-#### **自動マージ対象**（以下を **全て** 満たす場合のみ）
-```
-✅ ドキュメント・フォーマット修正のみ（コード変更なし）
-✅ Lint / Type / SAST / UT 全て合格
-✅ テストカバレッジが低下していない
-✅ PR に `copilot-suggestion` ラベル付与
-✅ PR 本文の「自動マージ条件チェックボックス」にチェック ☑
-```
-
-#### **自動マージ不可**（以下の場合は Draft PR で人間レビュー）
-```
-❌ 実装コード（.js/.ts）の変更
-❌ 外部 API・認証・DB スキーマ変更
-❌ E2E テスト失敗
-❌ セキュリティアラート
-❌ 依存ライブラリのメジャー更新
-```
-
----
-
-### 🔍 監査・KPI 監視
-
-#### **監査ログ保管**
-- 全自動マージイベント → `.github/audit/auto-merge-log.jsonl`
-- 各エントリに以下を記録:
-  - `pr_number`, `pr_title`, `pr_sha`, `merged_at`, `merged_by`
-  - `trace_summary_hash`（改ざん検知用）
-  - `model_version`（Copilot バージョン）
-
-#### **KPI（目標値）**
-| 指標 | 目標 | 警告 | 報告 |
-|-----|-----|------|------|
-| 自動マージ成功率 | 95% | <85% | 日次 |
-| セキュリティ脆弱性 | 0 件 | ≥1 件 | リアルタイム |
-| ロールバック率 | <1% | >3% | 日次 |
-| UT カバレッジ | 90% | <85% | PR ごと |
-
----
-
-### 💡 使用例：Issue → テスト生成 → 自動マージ
-
-```
-1. GitHub UI で新規 Issue を作成
-   → Template: Acceptance Criteria を選択
-   → Given/When/Then で受け入れ基準を記述
-
-2. Copilot に依頼（Issue コメント）
-   「このテスト設計から UT と E2E を自動生成してください」
-
-3. Copilot が生成
-   → tests/specs/{issue-id}.yml
-   → tests/unit/{issue-id}.test.ts
-   → tests/e2e/{issue-id}.spec.ts
-
-4. GitHub Actions 自動実行
-   → UT 実行 ✅
-   → E2E 実行 ✅
-   → Lint + Type Check ✅
-   → SAST（CodeQL）✅
-
-5. Draft PR 作成（Copilot による）
-   → 「自動マージ条件満たし」チェックボックス ☑
-   → `copilot-suggestion` ラベル自動付与
-
-6. 自動マージ実行
-   → .github/workflows/auto-merge.yml が判定
-   → 全条件合格 → 自動 Squash Merge
-   → 監査ログに記録
-
-7. 監視（30分間）
-   → エラーレート監視
-   → P0 アラート発生時は自動ロールバック
-```
-
----
-
-### 📚 詳細ドキュメント
-
-| ドキュメント | 説明 |
 |---|---|
-| [**`docs/OPERATION_FLOW.md`**](docs/OPERATION_FLOW.md) | 完全な運用手順（Issue 作成→テスト生成→マージまで）⭐ **必読** |
-| [**`docs/WORKFLOWS_GUIDE.md`**](docs/WORKFLOWS_GUIDE.md) | 全 11 ワークフローの詳細説明 + 10分運用チェックリスト |
-| [**`docs/WORKFLOW_DEPENDENCY_MAP.md`**](docs/WORKFLOW_DEPENDENCY_MAP.md) | ワークフロー依存関係・トリガー条件・最適化方針 🗺️ |
-| [**`docs/E2E_REPORTS_GUIDE.md`**](docs/E2E_REPORTS_GUIDE.md) | E2E トレース・動画・error-context の見方 📹 |
-| [**`docs/QA_POLICY.md`**](docs/QA_POLICY.md) | 品質保証ポリシー・テスト基準 |
-| [**`docs/SPEC_TO_IMPLEMENTATION_GUIDE.md`**](docs/SPEC_TO_IMPLEMENTATION_GUIDE.md) | テスト仕様 → 実装コード生成ガイド |
-| [**`docs/CONTRIBUTING.md`**](docs/CONTRIBUTING.md) | 貢献ガイド（新規テスト追加など） |
-| [**`.github/ISSUE_TEMPLATE/acceptance.md`**](.github/ISSUE_TEMPLATE/acceptance.md) | Issue テンプレート（受け入れ条件・テスト要求） |
+| [Dashboard](./docs/DASHBOARD.md) | KPI、ダッシュボードの確認・生成 |
+| [E2E Reports Guide](./docs/E2E_REPORTS_GUIDE.md) | E2E report と trace の確認 |
+| [Artifacts Schema](./docs/ARTIFACTS_SCHEMA.md) | workflow 間で受け渡すデータ |
+| [Workflow Dependency Map](./docs/WORKFLOW_DEPENDENCY_MAP.md) | workflow の依存関係 |
 
 ---
 
-### ⚠️ 注意点・FAQ
+## 🔐 セキュリティ上の注意
 
-**Q: M2 Issue Intake は何ですか？**  
-A: Issue の要件を解析して、テスト実装が safe（安全に実装・テスト可能）か manual-only（人間レビュー必須）かを判定します。ルールベース判定のため、OpenAI などの外部 API は不要で、高速かつ決定論的です。
+このアプリは学習・開発・テスト用です。**現状のコードを本番サービスとして公開しないでください。**
 
-**Q: test-matrix 実行後、次は何をするのか？**  
-A: `test-matrix` が完了すると、自動的に `quality-report-pr` と `update-dashboard` が並列実行され、ダッシュボードが最新化されます。特に追加作業は不要です。
+- `backend/src/app.js` の CORS は全 origin (`*`) を許可しています。
+- 同ファイルの `/api/user/me` は認証 middleware を通さずユーザーデータを返す旨のセキュリティ警告があります。
+- `NODE_ENV !== 'production'` の場合、E2E 向け seed / reset endpoint が登録され、データを作成・削除できます。
+- AWS Emulator 用の TLS 証明書・credentials とテスト用認証情報を本番 AWS や本番データに使用しないでください。
+- trace、ログ、artifact に個人情報・token・secret が入らないようにしてください。PII filter は補助機能であり、完全な秘密情報検出を保証しません。
+- Copilot / AI の分析・修正案は誤る可能性があります。人間のレビュー、テスト、セキュリティ確認を省略しないでください。
+- 自動マージ workflow が存在しても、本番運用への安全性を意味しません。workflow の実装・設定・権限を確認し、必要なら無効化してください。
 
-**Q: E2E テストが失敗したら？**  
-A: `test-matrix` 失敗時は自動的に `e2e-healing-trigger` がトリガーされ、Playwright トレース/スクリーンショット分析から修正案が生成されます。修復失敗時は Issue が作成されます。
-
-**Q: テスト数が 169 から 225 に増えた理由は？**  
-A: API テスト と Advanced テスト が Unit テスト に統合され、より細粒度のテストが追加されました。test-matrix で自動集計されるため、個別ファイル数ではなく総数が重要です。
-
-**Q: 完全に人間 0% にできる？**  
-A: 理論上は可能ですが、本番運用では以下はリスク大：
-- セキュリティ・認証関連変更（常に人間承認必須）
-- 外部 API 契約変更（下流システムへの影響）
-- DB スキーマ変更（既存データ互換性）
-
-**Q: ダッシュボードはどこで見られる？**  
-A: https://cocomomojo.github.io/copilot-quality-harness/dashboard/ で、テスト数・合格率・カバレッジ・リスクレベル を確認できます。
+本番用途に転用する場合は、認証・認可、CORS、入力検証、ファイルアップロード、秘密情報管理、権限、監査、TLS を含むセキュリティレビューと設計変更が必要です。
 
 ---
 
-### 🛠️ 新規追加：スクリプト・ツール一覧
+## 📚 ドキュメント一覧
 
-#### **1. テスト自動生成スクリプト**
-- **パス**: [`scripts/generate-tests-from-spec.ts`](scripts/generate-tests-from-spec.ts)
-- **用途**: YAML テスト設計 → Jest UT / Playwright E2E を自動生成
-- **実行**:
-  ```bash
-  npm run generate-tests -- tests/specs/user-registration.yml
-  ```
-- **出力**:
-  - `src/tests/unit/user-registration.test.ts` (Jest UT)
-  - `tests/e2e/user-registration.spec.ts` (Playwright E2E)
-  - `tests/fixtures/user-registration-mocks.ts` (Mock 定義)
-- **効果**: テスト設計 → テストコード化の時間が **80% 削減**
-
-#### **2. KPI 集計スクリプト** (週次自動実行)
-- **パス**: [`ops/kpi-collector.js`](ops/kpi-collector.js)
-- **用途**: 過去 7 日間の Copilot 提案採用率・マージ成功率・セキュリティアラートを集計
-- **実行**:
-  ```bash
-  GITHUB_TOKEN=xxx npm run collect-kpi
-  ```
-- **出力**: `ops/kpi-weekly.json`
-- **監視項目**:
-  - Adoption rate（採用率、目標 80%）
-  - Auto-merge success rate（成功率、目標 95%）
-  - Human interventions（人間介入数、目標 < 1）
-  - Security alerts（セキュリティ脆弱性、目標 0）
-  - Flake rate（テストフレーク率、目標 < 2%）
-- **効果**: KPI 監視が自動化され、問題を即座に検知
-
-#### **3. Copilot スキル定義**
-- **パス**: [`.copilot/skills.json`](.copilot/skills.json)
-- **用途**: Copilot の挙動・回答方針を統一するスキル定義ファイル
-- **定義済みスキル**:
-  - `spec_to_tests` - テスト設計 YAML → UT/E2E コード
-  - `trace_analyzer` - Trace ファイル → 失敗診断 + 修正案 3 件
-  - `implementation_generator` - 受け入れ基準 + テスト仕様 → 実装コード
-  - `pr_metadata_adder` - PR に 監査メタデータ（hash, model_version, risk_level）を追記
-- **効果**: Copilot の回答が安定化・再現可能に
-
-#### **4. チーム運用ガイド**
-- **パス**: [`CONTRIBUTING.md`](CONTRIBUTING.md)
-- **用途**: Issue 作成 → テスト設計 → テストコード生成 → 実装 → UT/E2E → 自動マージ の 7 段階フロー
-- **含まれる内容**:
-  - PR ラベル定義（`copilot-generated`, `auto-merge-candidate`, `risk-low/medium/high` 等）
-  - セキュリティ実装チェックリスト（パスワードハッシュ、入力検証、CSRF、PII 処理）
-  - 自動マージ対象外の判定基準
-  - 緊急時の自動ロールバック手順
-  - GitHub 監査ログの確認方法
-- **効果**: チーム全体が **統一された品質基準** で開発可能に
-
-#### **5. ロールアウトチェックリスト**
-- **パス**: [`ops/rollout-checklist.md`](ops/rollout-checklist.md)
-- **用途**: Copilot 自動化を段階的に導入するための完全チェックリスト
-- **5 フェーズ構成**:
-  - **Phase 0** (Week 0): 基盤整備 - Secrets, ワークフロー, テンプレ配置
-  - **Phase 1** (Week 1-2): テスト設計運用 - Issue → テスト設計 YAML が標準化
-  - **Phase 2** (Week 3-4): UT 自動化 - テスト設計 → テストコード → カバレッジ検証
-  - **Phase 3** (Week 5-6): E2E 自動化 - Trace 収集 → 失敗分析 → 修正提案
-  - **Phase 4** (Week 7-8): 低リスク自動マージ - ドキュメント修正のみ本当の自動マージ
-- **効果**: 導入失敗リスクを **90% 低減**、段階的な信頼醸成
+| ドキュメント | 内容 |
+|---|---|
+| [運用フロー](./docs/OPERATION_FLOW.md) | Issue 作成からテスト・レポートまで |
+| [ワークフローガイド](./docs/WORKFLOWS_GUIDE.md) | Actions の詳細、実行・トラブルシューティング |
+| [ワークフロー依存関係](./docs/WORKFLOW_DEPENDENCY_MAP.md) | workflow の起動関係・依存 |
+| [QA Policy](./docs/QA_POLICY.md) | 品質方針・テスト戦略 |
+| [Dashboard](./docs/DASHBOARD.md) | 品質指標・ダッシュボード |
+| [E2E Reports Guide](./docs/E2E_REPORTS_GUIDE.md) | Playwright report・証跡 |
+| [Spec to Implementation Guide](./docs/SPEC_TO_IMPLEMENTATION_GUIDE.md) | 仕様 YAML とテスト生成 |
+| [Artifacts Schema](./docs/ARTIFACTS_SCHEMA.md) | artifact の schema |
+| [Contributing Guide](./docs/CONTRIBUTING.md) | 貢献・レビュー手順 |
+| [Copilot CLI migration](./docs/COPILOT_CLI_MIGRATION.md) | Copilot CLI 関連の移行情報 |
 
 ---
 
-### 📦 npm Scripts (実行例)
+## 🤝 貢献・困ったとき
 
-```bash
-# テストコード自動生成
-npm run generate-tests -- tests/specs/feature-name.yml
+1. Issue に目的・再現手順・期待する結果を記載してください。
+2. 変更に関係する `pnpm test`、`pnpm lint`、必要に応じて `pnpm test:e2e` を実行してください。
+3. workflow・操作・構成に変更があれば README と関連ドキュメントも更新してください。
+4. PR では変更内容、テスト結果、既知の制約を説明してください。
 
-# テストコード生成のヘルプ表示
-npm run generate-tests:help
-
-# KPI 集計（週次実行）
-GITHUB_TOKEN=xxx npm run collect-kpi
-
-# Trace の PII 自動除去
-npm run sanitize-trace -- artifacts/trace.json
-
-# test-matrix 実行（フロントエンド + バックエンド UT/E2E）
-pnpm run test:all
-
-# E2E テストのみ実行
-cd frontend && npx playwright test
-```
-
-> 詳細は各パッケージの `package.json` の `scripts` セクションを参照してください。
+Actions の失敗は該当 run のログと artifact を確認し、運用手順は[ワークフローガイド](./docs/WORKFLOWS_GUIDE.md)と[運用フロー](./docs/OPERATION_FLOW.md)を参照してください。改善提案や不具合報告は [Issues](https://github.com/cocomomojo/copilot-quality-harness/issues) へお願いします。
 
 ---
 
-## 今後の拡張案 🚀
-- 実装修正の自動適用（Draft PR → コミット）
-- 運用レポート生成（週次・月次集計）
-- スキル統合 - テンプレを Copilot Skill として登録
-- 機械学習による修正案優先度学習
-- マルチリポジトリ対応
-
----
-
-## お困りのとき 📬
-- Issues に報告してください: フィードバック・改善案を歓迎します
-- ワークフロー実行に関する質問: [`docs/WORKFLOWS_GUIDE.md`](docs/WORKFLOWS_GUIDE.md) を参照
-- 運用手順に関する質問: [`docs/OPERATION_FLOW.md`](docs/OPERATION_FLOW.md) の 10分チェックリストを確認
-
----
-
-**Version**: Phase 3 + E2E Auto Healing + Quality Dashboard  
-**Last Updated**: 2026-11-14  
-**Status**: ✅ Production Ready
-
-🎉 完全自動化ワークフロー稼働中！  
-🤖 Copilot による品質分析・E2E 自動修復・ダッシュボード最新化システム導入完了！  
-📊 テスト数: **225 テスト / 合格率: 100%**
+**最終更新**: 2026-11-15  
+**状態**: 開発・テスト用品質ハーネス（テスト実績は Actions / Dashboard の最新データを参照）
