@@ -33,12 +33,13 @@ router.post('/', async (req, res) => {
       createdAt: now,
       updatedAt: now,
       completedAt: null,
+      id: todoId
     };
     
     await putItem(TABLE_NAME, todo);
     await sendTaskNotification('todo_created', userId, todoId, 'create', { title });
     
-    res.json(todo);
+    res.status(201).json(todo);
   } catch (error) {
     console.error('Create todo error:', error);
     res.status(500).json({ error: 'Failed to create todo' });
@@ -99,7 +100,7 @@ router.put('/:todoId', async (req, res) => {
   try {
     const { todoId } = req.params;
     const userId = req.user.userId;
-    const { title, description, status, priority } = req.body;
+    const { title, description, status, priority, completed } = req.body;
     
     const existing = await getItem(TABLE_NAME, { userId, todoId });
     if (!existing) {
@@ -126,6 +127,19 @@ router.put('/:todoId', async (req, res) => {
       names['#status'] = 'status';
       
       if (status === 'completed' && existing.status !== 'completed') {
+        updateExpression += ', completedAt = :completedAt';
+        values[':completedAt'] = new Date().toISOString();
+      }
+    }
+    
+    // Support 'completed' boolean field for test compatibility
+    if (completed !== undefined) {
+      const newStatus = completed ? 'completed' : 'pending';
+      updateExpression += ', #status = :status';
+      values[':status'] = newStatus;
+      names['#status'] = 'status';
+      
+      if (completed && existing.status !== 'completed') {
         updateExpression += ', completedAt = :completedAt';
         values[':completedAt'] = new Date().toISOString();
       }
@@ -161,7 +175,7 @@ router.delete('/:todoId', async (req, res) => {
     await deleteItem(TABLE_NAME, { userId, todoId });
     await sendTaskNotification('todo_deleted', userId, todoId, 'delete', { title: existing.title });
     
-    res.json({ success: true });
+    res.status(204).end();
   } catch (error) {
     console.error('Delete todo error:', error);
     res.status(500).json({ error: 'Failed to delete todo' });

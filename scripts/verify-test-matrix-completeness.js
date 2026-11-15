@@ -18,7 +18,7 @@ try {
   console.log('📊 Test Matrix Status:');
   console.log('  Total combinations:', summary.total_combinations);
   console.log('  Total tests:', summary.total_tests);
-  console.log('  Expected test types: 4 (unit, api, e2e, advanced)');
+  console.log('  Expected test types: 3 (unit, api, e2e)');
   console.log('  Found test types:', summary.completeness_check.found_test_types.length);
 
   const hasAllTypes = summary.completeness_check.missing_test_types.length === 0;

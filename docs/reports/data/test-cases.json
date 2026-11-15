@@ -1,29 +1,29 @@
 {
-  "timestamp": "2026-11-14T15:13:41.205Z",
-  "totalSuites": 5,
-  "totalTests": 27,
-  "passed": 23,
-  "failed": 4,
+  "timestamp": "2026-11-15T02:52:02.345Z",
+  "totalSuites": 3,
+  "totalTests": 35,
+  "passed": 35,
+  "failed": 0,
   "skipped": 0,
-  "passRate": 85,
-  "duration": 75414,
+  "passRate": 100,
+  "duration": 3811,
   "metadata": {},
   "suites": [
     {
-      "name": "User Profile - Account Created At Display (E2E)",
-      "file": "profile-created-at.spec.js",
+      "name": "Authentication API",
+      "file": "auth.spec.js",
       "totalTests": 10,
       "passed": 10,
       "failed": 0,
       "skipped": 0,
-      "duration": 27898,
+      "duration": 932,
       "tests": [
         {
-          "name": "E2E-001: Display profile with valid createdAt",
-          "title": "E2E-001: Display profile with valid createdAt",
+          "name": "E2E-201 register success",
+          "title": "E2E-201 register success",
           "status": "passed",
-          "duration": 1879,
-          "file": "profile-created-at.spec.js",
+          "duration": 193,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -35,11 +35,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-002: Display fallback when createdAt is null",
-          "title": "E2E-002: Display fallback when createdAt is null",
+          "name": "E2E-202 duplicate email returns 409",
+          "title": "E2E-202 duplicate email returns 409",
           "status": "passed",
-          "duration": 1778,
-          "file": "profile-created-at.spec.js",
+          "duration": 128,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -51,11 +51,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-003: Handle 404 API error when user not found",
-          "title": "E2E-003: Handle 404 API error when user not found",
+          "name": "E2E-203 weak password returns 422",
+          "title": "E2E-203 weak password returns 422",
           "status": "passed",
-          "duration": 1923,
-          "file": "profile-created-at.spec.js",
+          "duration": 19,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -67,11 +67,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-004: Fetch createdAt from API and display formatted",
-          "title": "E2E-004: Fetch createdAt from API and display formatted",
+          "name": "E2E-204 missing fields returns 400",
+          "title": "E2E-204 missing fields returns 400",
           "status": "passed",
-          "duration": 1228,
-          "file": "profile-created-at.spec.js",
+          "duration": 14,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -83,11 +83,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-005: Handle invalid createdAt format with fallback",
-          "title": "E2E-005: Handle invalid createdAt format with fallback",
+          "name": "E2E-205 API login success",
+          "title": "E2E-205 API login success",
           "status": "passed",
-          "duration": 1243,
-          "file": "profile-created-at.spec.js",
+          "duration": 202,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -99,11 +99,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-006: Verify element structure and accessibility",
-          "title": "E2E-006: Verify element structure and accessibility",
+          "name": "E2E-206 login wrong password returns 401",
+          "title": "E2E-206 login wrong password returns 401",
           "status": "passed",
-          "duration": 1247,
-          "file": "profile-created-at.spec.js",
+          "duration": 204,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -115,11 +115,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-007: Verify multiple renders and state consistency",
-          "title": "E2E-007: Verify multiple renders and state consistency",
+          "name": "E2E-207 login unknown user returns 401",
+          "title": "E2E-207 login unknown user returns 401",
           "status": "passed",
-          "duration": 13270,
-          "file": "profile-created-at.spec.js",
+          "duration": 18,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -131,11 +131,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-101: Display user avatar image when available",
-          "title": "E2E-101: Display user avatar image when available",
+          "name": "E2E-208 /auth/me with valid token",
+          "title": "E2E-208 /auth/me with valid token",
           "status": "passed",
-          "duration": 1775,
-          "file": "profile-created-at.spec.js",
+          "duration": 122,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -147,11 +147,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-102: Display default avatar when avatar_url is not provided",
-          "title": "E2E-102: Display default avatar when avatar_url is not provided",
+          "name": "E2E-209 /auth/me without token returns 401",
+          "title": "E2E-209 /auth/me without token returns 401",
           "status": "passed",
-          "duration": 1779,
-          "file": "profile-created-at.spec.js",
+          "duration": 19,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -163,11 +163,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-103: Avatar displays with correct styling and dimensions",
-          "title": "E2E-103: Avatar displays with correct styling and dimensions",
+          "name": "E2E-210 /auth/me invalid token returns 401",
+          "title": "E2E-210 /auth/me invalid token returns 401",
           "status": "passed",
-          "duration": 1776,
-          "file": "profile-created-at.spec.js",
+          "duration": 13,
+          "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -181,20 +181,20 @@
       ]
     },
     {
-      "name": "Error Path Tests",
-      "file": "quality-checks-advanced.spec.js",
-      "totalTests": 4,
-      "passed": 4,
+      "name": "Files API",
+      "file": "files.spec.js",
+      "totalTests": 11,
+      "passed": 11,
       "failed": 0,
       "skipped": 0,
-      "duration": 13233,
+      "duration": 1281,
       "tests": [
         {
-          "name": "displays error when adding check with only whitespace",
-          "title": "displays error when adding check with only whitespace",
+          "name": "E2E-301 list files empty",
+          "title": "E2E-301 list files empty",
           "status": "passed",
-          "duration": 3284,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 117,
+          "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -206,11 +206,11 @@
           "stderr": []
         },
         {
-          "name": "displays error when name exceeds 50 characters",
-          "title": "displays error when name exceeds 50 characters",
+          "name": "E2E-302 create presigned upload URL",
+          "title": "E2E-302 create presigned upload URL",
           "status": "passed",
-          "duration": 2260,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 122,
+          "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -222,11 +222,11 @@
           "stderr": []
         },
         {
-          "name": "clears error message when user corrects input",
-          "title": "clears error message when user corrects input",
+          "name": "E2E-303 presigned-upload alias works",
+          "title": "E2E-303 presigned-upload alias works",
           "status": "passed",
-          "duration": 5341,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 112,
+          "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -238,11 +238,123 @@
           "stderr": []
         },
         {
-          "name": "shows appropriate error when API is unavailable",
-          "title": "shows appropriate error when API is unavailable",
+          "name": "E2E-304 missing upload fields returns 400",
+          "title": "E2E-304 missing upload fields returns 400",
           "status": "passed",
-          "duration": 2348,
-          "file": "quality-checks-advanced.spec.js",
+          "duration": 110,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-305 record upload metadata",
+          "title": "E2E-305 record upload metadata",
+          "status": "passed",
+          "duration": 129,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-306 list files after record",
+          "title": "E2E-306 list files after record",
+          "status": "passed",
+          "duration": 140,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-307 get file detail by id",
+          "title": "E2E-307 get file detail by id",
+          "status": "passed",
+          "duration": 130,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-308 get missing file returns 404",
+          "title": "E2E-308 get missing file returns 404",
+          "status": "passed",
+          "duration": 115,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-309 get download URL by file id",
+          "title": "E2E-309 get download URL by file id",
+          "status": "passed",
+          "duration": 133,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-310 delete file",
+          "title": "E2E-310 delete file",
+          "status": "passed",
+          "duration": 162,
+          "file": "files.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-311 unauthorized file list returns 401",
+          "title": "E2E-311 unauthorized file list returns 401",
+          "status": "passed",
+          "duration": 11,
+          "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -256,146 +368,20 @@
       ]
     },
     {
-      "name": "Character Count Tests",
-      "file": "quality-checks-advanced.spec.js",
-      "totalTests": 3,
-      "passed": 1,
-      "failed": 2,
-      "skipped": 0,
-      "duration": 16987,
-      "tests": [
-        {
-          "name": "shows character count when typing",
-          "title": "shows character count when typing",
-          "status": "failed",
-          "duration": 7326,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('char-count')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('char-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('char-count')\u001b[22m\n"
-          ],
-          "screenshots": [
-            "./test-failed-1.png"
-          ],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "shows warning color when 10 or fewer characters remaining",
-          "title": "shows warning color when 10 or fewer characters remaining",
-          "status": "failed",
-          "duration": 7337,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveClass\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('char-count')\nExpected pattern: \u001b[32m/char-count-warning/\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveClass\" getByTestId('char-count') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('char-count')\u001b[22m\n"
-          ],
-          "screenshots": [
-            "./test-failed-1.png"
-          ],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "enforces maximum 50 character limit",
-          "title": "enforces maximum 50 character limit",
-          "status": "passed",
-          "duration": 2324,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [],
-          "screenshots": [],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [],
-          "stdout": [],
-          "stderr": []
-        }
-      ]
-    },
-    {
-      "name": "Status Badge Tooltip Tests",
-      "file": "quality-checks-advanced.spec.js",
-      "totalTests": 2,
-      "passed": 0,
-      "failed": 2,
-      "skipped": 0,
-      "duration": 16700,
-      "tests": [
-        {
-          "name": "E2E-078-01: status badge has tooltip title attribute",
-          "title": "E2E-078-01: status badge has tooltip title attribute",
-          "status": "failed",
-          "duration": 8329,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('status-badge').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('status-badge').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('status-badge').first()\u001b[22m\n"
-          ],
-          "screenshots": [
-            "./test-failed-1.png"
-          ],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
-          "stdout": [],
-          "stderr": []
-        },
-        {
-          "name": "E2E-078-02: status badge is keyboard accessible with tabindex",
-          "title": "E2E-078-02: status badge is keyboard accessible with tabindex",
-          "status": "failed",
-          "duration": 8371,
-          "file": "quality-checks-advanced.spec.js",
-          "errors": [
-            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('status-badge').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('status-badge').first() with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('status-badge').first()\u001b[22m\n"
-          ],
-          "screenshots": [
-            "./test-failed-1.png"
-          ],
-          "videos": [],
-          "traceFiles": [
-            "./trace.zip"
-          ],
-          "errorContexts": [
-            "./error-context.md"
-          ],
-          "stdout": [],
-          "stderr": []
-        }
-      ]
-    },
-    {
-      "name": "URL Validator API",
-      "file": "url-validator.spec.js",
-      "totalTests": 8,
-      "passed": 8,
+      "name": "TODO API",
+      "file": "todos.spec.js",
+      "totalTests": 14,
+      "passed": 14,
       "failed": 0,
       "skipped": 0,
-      "duration": 596,
+      "duration": 1598,
       "tests": [
         {
-          "name": "E2E-001: Check valid HTTPS URL endpoint",
-          "title": "E2E-001: Check valid HTTPS URL endpoint",
+          "name": "E2E-101 create todo",
+          "title": "E2E-101 create todo",
           "status": "passed",
-          "duration": 72,
-          "file": "url-validator.spec.js",
+          "duration": 119,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -407,11 +393,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-002: Check invalid URL format",
-          "title": "E2E-002: Check invalid URL format",
+          "name": "E2E-102 create todo without title returns 400",
+          "title": "E2E-102 create todo without title returns 400",
           "status": "passed",
-          "duration": 100,
-          "file": "url-validator.spec.js",
+          "duration": 108,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -423,11 +409,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-003: Check empty string input",
-          "title": "E2E-003: Check empty string input",
+          "name": "E2E-103 list todos empty",
+          "title": "E2E-103 list todos empty",
           "status": "passed",
-          "duration": 78,
-          "file": "url-validator.spec.js",
+          "duration": 110,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -439,11 +425,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-004: Check null input",
-          "title": "E2E-004: Check null input",
+          "name": "E2E-104 list todos after create",
+          "title": "E2E-104 list todos after create",
           "status": "passed",
-          "duration": 68,
-          "file": "url-validator.spec.js",
+          "duration": 124,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -455,11 +441,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-005: Check valid HTTP URL with port",
-          "title": "E2E-005: Check valid HTTP URL with port",
+          "name": "E2E-105 get todo by id",
+          "title": "E2E-105 get todo by id",
           "status": "passed",
-          "duration": 70,
-          "file": "url-validator.spec.js",
+          "duration": 127,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -471,11 +457,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-006: Check valid GitHub URL",
-          "title": "E2E-006: Check valid GitHub URL",
+          "name": "E2E-106 get missing todo returns 404",
+          "title": "E2E-106 get missing todo returns 404",
           "status": "passed",
-          "duration": 67,
-          "file": "url-validator.spec.js",
+          "duration": 114,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -487,11 +473,11 @@
           "stderr": []
         },
         {
-          "name": "E2E-007: Check FTP protocol (not allowed)",
-          "title": "E2E-007: Check FTP protocol (not allowed)",
+          "name": "E2E-107 update todo title/status",
+          "title": "E2E-107 update todo title/status",
           "status": "passed",
-          "duration": 68,
-          "file": "url-validator.spec.js",
+          "duration": 129,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
@@ -503,11 +489,107 @@
           "stderr": []
         },
         {
-          "name": "E2E-008: Response time performance check",
-          "title": "E2E-008: Response time performance check",
+          "name": "E2E-108 update todo with completed boolean",
+          "title": "E2E-108 update todo with completed boolean",
           "status": "passed",
-          "duration": 73,
-          "file": "url-validator.spec.js",
+          "duration": 127,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-109 update missing todo returns 404",
+          "title": "E2E-109 update missing todo returns 404",
+          "status": "passed",
+          "duration": 113,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-110 delete todo",
+          "title": "E2E-110 delete todo",
+          "status": "passed",
+          "duration": 140,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-111 delete missing todo returns 404",
+          "title": "E2E-111 delete missing todo returns 404",
+          "status": "passed",
+          "duration": 111,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-112 unauthorized access returns 401",
+          "title": "E2E-112 unauthorized access returns 401",
+          "status": "passed",
+          "duration": 8,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-113 list with status filter",
+          "title": "E2E-113 list with status filter",
+          "status": "passed",
+          "duration": 142,
+          "file": "todos.spec.js",
+          "errors": [],
+          "screenshots": [],
+          "videos": [],
+          "traceFiles": [
+            "./trace.zip"
+          ],
+          "errorContexts": [],
+          "stdout": [],
+          "stderr": []
+        },
+        {
+          "name": "E2E-114 list with search filter",
+          "title": "E2E-114 list with search filter",
+          "status": "passed",
+          "duration": 126,
+          "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],

@@ -1,10 +1,13 @@
 #!/usr/bin/env ts-node
 
+import * as fs from 'fs';
+import * as path from 'path';
 import { 
   DynamoDBClient, 
   CreateTableCommand, 
   ListTablesCommand,
-  DescribeTableCommand
+  DescribeTableCommand,
+  waitUntilTableExists
 } from '@aws-sdk/client-dynamodb';
 import { 
   S3Client, 
@@ -17,13 +20,20 @@ import {
   CreateQueueCommand, 
   ListQueuesCommand 
 } from '@aws-sdk/client-sqs';
-import * as fs from 'fs';
-import * as path from 'path';
+
+function resolveLocalEmulatorPaths() {
+  const repoRoot = path.resolve(process.cwd(), '.');
+  return {
+    credentialsFile: process.env.AWS_SHARED_CREDENTIALS_FILE || path.join(repoRoot, 'certs', 'emulator_credentials'),
+    caFile: process.env.NODE_EXTRA_CA_CERTS || path.join(repoRoot, 'certs', 'ca.pem'),
+    endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
+  };
+}
 
 // Helper to create https agent with custom CA certificate if available
 function setupTlsHandling(): void {
-  const isLocalEmulator = process.env.AWS_ENDPOINT_URL?.includes('localhost') || 
-                          process.env.AWS_ENDPOINT_URL?.includes('127.0.0.1');
+  const endpoint = process.env.AWS_ENDPOINT_URL || resolveLocalEmulatorPaths().endpoint;
+  const isLocalEmulator = endpoint.includes('localhost') || endpoint.includes('127.0.0.1');
   
   if (!isLocalEmulator) {
     return;
@@ -40,8 +50,10 @@ function setupTlsHandling(): void {
 // Load AWS Emulator credentials from the auto-generated credentials file
 // Per AWS Emulator official docs: use AWS_SHARED_CREDENTIALS_FILE pointing to emulator_credentials
 function loadEmulatorCredentials(): { accessKeyId: string; secretAccessKey: string } {
-  const credentialsFile = process.env.AWS_SHARED_CREDENTIALS_FILE;
-  
+  const defaultPaths = resolveLocalEmulatorPaths();
+  const credentialsFile = process.env.AWS_SHARED_CREDENTIALS_FILE ||
+    (fs.existsSync(defaultPaths.credentialsFile) ? defaultPaths.credentialsFile : undefined);
+
   if (!credentialsFile) {
     console.warn('⚠️  AWS_SHARED_CREDENTIALS_FILE not set. Using placeholder credentials.');
     return {
@@ -80,8 +92,9 @@ const emulatorCredentials = loadEmulatorCredentials();
 setupTlsHandling();
 
 // Configuration from environment variables
+const defaultPaths = resolveLocalEmulatorPaths();
 const awsConfig: any = {
-  endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
+  endpoint: process.env.AWS_ENDPOINT_URL || defaultPaths.endpoint,
   region: process.env.AWS_REGION || 'us-east-1',
   credentials: emulatorCredentials,
   disableHostPrefix: true, // Required for AWS SDK v3 with emulator (prevents host prefix injection)
@@ -128,6 +141,10 @@ async function createDynamoDBTable(table: DynamoDBTableConfig): Promise<void> {
         AttributeDefinitions: table.attributeDefinitions,
         BillingMode: 'PAY_PER_REQUEST',
       })
+    );
+    await waitUntilTableExists(
+      { client: dynamodbClient, maxWaitTime: 60 },
+      { TableName: table.name }
     );
     console.log(`✅ Created DynamoDB table '${table.name}'`);
   } catch (err) {
@@ -248,10 +265,23 @@ async function initializeAWSResources(): Promise<void> {
     {
       name: 'AuditLogs',
       keySchema: [
-        { AttributeName: 'logId', KeyType: 'HASH' },
+        { AttributeName: 'userId', KeyType: 'HASH' },
+        { AttributeName: 'logId', KeyType: 'RANGE' },
       ],
       attributeDefinitions: [
+        { AttributeName: 'userId', AttributeType: 'S' },
         { AttributeName: 'logId', AttributeType: 'S' },
+      ],
+    },
+    {
+      name: 'FileMetadata',
+      keySchema: [
+        { AttributeName: 'userId', KeyType: 'HASH' },
+        { AttributeName: 'fileId', KeyType: 'RANGE' },
+      ],
+      attributeDefinitions: [
+        { AttributeName: 'userId', AttributeType: 'S' },
+        { AttributeName: 'fileId', AttributeType: 'S' },
       ],
     },
   ];

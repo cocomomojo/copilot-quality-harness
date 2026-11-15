@@ -3,12 +3,24 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { SQSClient } from '@aws-sdk/client-sqs';
 import fs from 'fs';
 import https from 'https';
+import path from 'path';
+
+function resolveLocalEmulatorPaths() {
+  const repoRoot = path.resolve(process.cwd(), '..');
+  return {
+    credentialsFile: process.env.AWS_SHARED_CREDENTIALS_FILE || path.join(repoRoot, 'certs', 'emulator_credentials'),
+    caFile: process.env.NODE_EXTRA_CA_CERTS || path.join(repoRoot, 'certs', 'ca.pem'),
+    endpoint: process.env.AWS_ENDPOINT_URL || 'https://127.0.0.1:9297',
+  };
+}
 
 // Load AWS Emulator credentials from the auto-generated credentials file
 // Per AWS Emulator official docs: use AWS_SHARED_CREDENTIALS_FILE pointing to emulator_credentials
 function loadEmulatorCredentials() {
-  const credentialsFile = process.env.AWS_SHARED_CREDENTIALS_FILE;
-  
+  const defaultPaths = resolveLocalEmulatorPaths();
+  const credentialsFile = process.env.AWS_SHARED_CREDENTIALS_FILE ||
+    (fs.existsSync(defaultPaths.credentialsFile) ? defaultPaths.credentialsFile : undefined);
+
   if (!credentialsFile) {
     console.warn('⚠️  AWS_SHARED_CREDENTIALS_FILE not set. Using environment variables or placeholders.');
     return {
@@ -46,8 +58,9 @@ function loadEmulatorCredentials() {
 const emulatorCredentials = loadEmulatorCredentials();
 
 // Read configuration from environment
+const defaultPaths = resolveLocalEmulatorPaths();
 const awsConfig = {
-  endpoint: process.env.AWS_ENDPOINT_URL,
+  endpoint: process.env.AWS_ENDPOINT_URL || defaultPaths.endpoint,
   region: process.env.AWS_REGION || 'us-east-1',
   credentials: emulatorCredentials,
   disableHostPrefix: true, // Required for AWS SDK v3 with emulator
@@ -68,8 +81,9 @@ function buildClientConfig() {
   }
 
   // Try to load CA certificate if available
-  const caPath = process.env.NODE_EXTRA_CA_CERTS;
-  
+  const caPath = process.env.NODE_EXTRA_CA_CERTS ||
+    (fs.existsSync(defaultPaths.caFile) ? defaultPaths.caFile : undefined);
+
   if (caPath) {
     try {
       const caCert = fs.readFileSync(caPath);
