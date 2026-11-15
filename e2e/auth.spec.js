@@ -35,7 +35,7 @@ test.describe('Authentication API', () => {
     expect(res.status()).toBe(400);
   });
 
-  test('E2E-205 login success', async ({ request }) => {
+  test('E2E-205 API login success', async ({ request }) => {
     const email = `auth-login-${Date.now()}@example.com`;
     await request.post(`${API_BASE}/auth/register`, {
       data: { email, password: 'Password123!', name: 'Login User' },
