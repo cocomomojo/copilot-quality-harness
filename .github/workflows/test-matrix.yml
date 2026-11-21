@@ -120,23 +120,17 @@ jobs:
           
           echo "✅ Unit tests completed with exit code: $TEST_EXIT_CODE"
           
-          echo "📊 Generating coverage report..."
-          pnpm run test:coverage 2>&1 || true
-          
-          # Extract coverage percentage
-          if [ -f coverage/coverage-final.json ]; then
-            NODE_PATH=. node -e "
-              const coverage = require('./coverage/coverage-final.json');
-              if (coverage && typeof coverage === 'object') {
-                const lines = Object.values(coverage).map(f => f.s).filter(Boolean).length;
-                const total = Object.values(coverage).length;
-                const pct = total > 0 ? Math.round((lines / total) * 100) : 0;
-                console.log('COVERAGE_PCT=' + pct);
-              }
-            " >> $GITHUB_ENV || echo "COVERAGE_PCT=0" >> $GITHUB_ENV
-          else
-            echo "COVERAGE_PCT=0" >> $GITHUB_ENV
-          fi
+          # Coverage is produced by the test runs above (vitest run --coverage) in
+          # backend/coverage and frontend/coverage; aggregate it by line count.
+          echo "📊 Aggregating coverage (frontend + backend)..."
+          node --input-type=module -e "
+            import { aggregateCoverageFiles, findCoverageFiles } from './scripts/lib/coverage.mjs';
+            const files = ['backend/coverage', 'frontend/coverage'].flatMap((d) => findCoverageFiles(d));
+            const result = aggregateCoverageFiles(files);
+            for (const p of result?.packages || []) console.error('  ' + p.file + ': ' + p.pct + '%');
+            console.log('COVERAGE_PCT=' + (result ? result.coverage : 0));
+          " >> $GITHUB_ENV || echo "COVERAGE_PCT=0" >> $GITHUB_ENV
+          grep COVERAGE_PCT $GITHUB_ENV | tail -1
           
           echo "🏁 ==================== END: Unit Tests ===================="
       

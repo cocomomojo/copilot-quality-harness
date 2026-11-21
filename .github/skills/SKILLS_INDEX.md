@@ -21,6 +21,8 @@
 **重要ルール**:
 - KPI と E2E レポートは同一 Test Matrix run_id を使用する
 - coverage=0 フォールバック時は source 情報を残す
+- coverage は `scripts/lib/coverage.mjs` で frontend + backend を行数加重集計する（`node scripts/report-coverage.mjs` で確認）
+- Trace Viewer リンクはテスト固有の trace（`./traces/<sha1>.zip`）のみ。basename や並び順で推測しない
 - E2E ページから Run URL / test-cases.json / Workflow URL を辿れること
 
 ### [00] AI-Powered Automated Failure Analysis (汎用テンプレート)

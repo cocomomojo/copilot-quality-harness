@@ -122,6 +122,30 @@ docs/dashboard/data/latest-kpi.json
 2. `coverage` は同一 run の coverage artifact 由来を優先する
 3. E2Eレポート（`docs/reports/data/test-cases.json`）の `metadata.test_run_id` と一致していること
 
+### カバレッジの算出方法
+
+ダッシュボードの `coverage` は **frontend + backend のユニットテストの行カバレッジ（行数加重）** です。
+
+| 項目 | 内容 |
+|------|------|
+| 計測 | `pnpm test`（各パッケージで `vitest run --coverage`、provider: v8） |
+| 出力 | `frontend/coverage/`・`backend/coverage/` に `coverage-summary.json`（json-summary）と `coverage-final.json`（json） |
+| 対象 | frontend: `src/**/*.{js,jsx}`（`App.jsx` から未マウントの旧 UI は `frontend/vite.config.js` で除外）／ backend: `src/**/*.js` |
+| 集計 | `scripts/lib/coverage.mjs` の `aggregateCoverageFiles()` が `Σcovered lines / Σtotal lines` を計算（ディレクトリごとに summary を優先し二重計上しない） |
+| CI | `test-matrix.yml` が `coverage-report-node-20` artifact をアップロード → `update-dashboard.yml` がダウンロードし `scripts/collect-kpi-advanced.mjs` で集計 |
+| 内訳 | `latest-kpi.json` の `details.coverage_breakdown`（パッケージ別 covered/total/pct）と `details.coverage_source` |
+
+ローカル確認:
+
+```bash
+pnpm test               # frontend/backend の coverage を生成
+node scripts/report-coverage.mjs   # ダッシュボードと同じ集計値を表示
+pnpm run test:scripts   # 集計ロジック・E2E trace 対応付けの回帰テスト
+```
+
+> 以前は CI で「ファイル数」を分母にした誤った計算や、ほぼ未テストの frontend だけを読む経路があり、0〜1% と表示されていました。
+> `coverage_source` が `DEFAULT_ZERO_FALLBACK` の場合は coverage artifact が見つかっていないので、Test Matrix の `coverage-report-node-20` を確認してください。
+
 ### KPI 履歴 (kpi-history.json)
 
 ```json

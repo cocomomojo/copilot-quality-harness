@@ -167,7 +167,8 @@ function parseTestResults(filePath: string): TestSuite[] {
             for (const spec of suiteLevelOrSpecs.specs) {
               if (spec.tests && Array.isArray(spec.tests)) {
                 for (const test of spec.tests) {
-                  const result = test.results && test.results[0] ? test.results[0] : null;
+                  // Use the final attempt so retried tests report their final status/evidence
+                  const result = Array.isArray(test.results) && test.results.length > 0 ? test.results[test.results.length - 1] : null;
                   const attachments = result && Array.isArray(result.attachments) ? result.attachments : [];
                   const testStatus = result
                     ? (result.status || 'skipped')
@@ -176,8 +177,8 @@ function parseTestResults(filePath: string): TestSuite[] {
                   const normalizeAttachmentList = (items: any[], filterFn: (attachment: any) => boolean): string[] => {
                     return items
                       .filter(filterFn)
-                      .map((a: any) => normalizeReportAssetPath(a.path) || a.path)
-                      .filter(Boolean);
+                      .map((a: any) => resolveReportAssetPath(a.path))
+                      .filter((p): p is string => Boolean(p));
                   };
 
                   const toTextArray = (chunks: any[] | undefined): string[] => {
@@ -303,21 +304,65 @@ function parseTestResults(filePath: string): TestSuite[] {
   }
 }
 
-function normalizeReportAssetPath(filePath: string | null | undefined): string | null {
+const ARTIFACTS_DIR = './artifacts';
+const ASSET_SUBDIRS: Array<[RegExp, string]> = [
+  [/\.zip$/i, 'traces'],
+  [/\.(png|jpg|jpeg)$/i, 'screenshots'],
+  [/\.(webm|mp4)$/i, 'videos'],
+  [/\.(md|txt|log)$/i, 'logs'],
+];
+
+let artifactFileIndex: string[] | null = null;
+
+function listArtifactFiles(): string[] {
+  if (artifactFileIndex) return artifactFileIndex;
+  artifactFileIndex = [];
+  if (!fs.existsSync(ARTIFACTS_DIR)) return artifactFileIndex;
+  const stack = [ARTIFACTS_DIR];
+  while (stack.length > 0) {
+    const current = stack.pop() as string;
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      // Keep the "./artifacts/..." form: update-dashboard.yml hashes `find ./artifacts` output
+      const fullPath = `${current}/${entry.name}`;
+      if (entry.isDirectory()) stack.push(fullPath);
+      else artifactFileIndex.push(fullPath);
+    }
+  }
+  return artifactFileIndex;
+}
+
+/**
+ * Map a Playwright attachment path (absolute path on the CI runner, e.g.
+ * /home/runner/work/<repo>/<repo>/test-results/<test-dir>/trace.zip) to the published copy
+ * under docs/reports. update-dashboard.yml copies every artifact file to
+ * docs/reports/<subdir>/<sha1("./artifacts/<artifact>/<path>")>.<ext>, so we locate the
+ * downloaded artifact file with the same relative path and compute the same hash.
+ * Matching on the per-test directory keeps each test linked to its own trace
+ * (every trace is named trace.zip, so the basename alone is ambiguous).
+ */
+function resolveReportAssetPath(filePath: string | null | undefined): string | null {
   if (!filePath) return null;
-  const normalized = filePath.replace(/\\/g, '/');
-  const basename = normalized.split('/').pop();
-  if (!basename || !/\.(webm|mp4|png|jpg|jpeg|zip|md|txt|log)$/i.test(basename)) return null;
+  const normalized = String(filePath).replace(/\\/g, '/');
+  if (/^https?:\/\//.test(normalized)) return normalized;
 
-  if (normalized.startsWith('http://') || normalized.startsWith('https://') || normalized.startsWith('./') || normalized.startsWith('../')) {
-    return normalized;
+  const subdirEntry = ASSET_SUBDIRS.find(([regex]) => regex.test(normalized));
+  if (!subdirEntry) return null;
+  const ext = normalized.split('.').pop()!.toLowerCase();
+
+  const marker = '/test-results/';
+  const markerIndex = normalized.lastIndexOf(marker);
+  const relative = markerIndex >= 0
+    ? normalized.slice(markerIndex + marker.length)
+    : normalized.replace(/^(\.\/)+/, '');
+  if (!relative.includes('/')) {
+    // Basename only (e.g. "trace.zip") cannot identify the test; do not guess.
+    return null;
   }
 
-  if (normalized.startsWith('/') || /^[A-Za-z]:\//.test(normalized) || normalized.includes('/home/') || normalized.includes('/tmp/')) {
-    return `./${basename}`;
-  }
-
-  return normalized;
+  const match = listArtifactFiles().find((candidate) => candidate.endsWith(`/${relative}`));
+  if (!match) return null;
+  const hash = createHash('sha1').update(match).digest('hex');
+  return `./${subdirEntry[1]}/${hash}.${ext}`;
 }
 
 interface VideoCandidate {

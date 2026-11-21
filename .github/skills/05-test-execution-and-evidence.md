@@ -14,11 +14,10 @@ AIの自己申告ではなくCI実測値で結果を確定する。
 
 ## Required evidence set
 - `test-matrix-summary.json`（件数・合否）
-- `coverage-report-node-*/coverage-summary.json` または `coverage-final.json`
+- `coverage-report-node-*/{frontend,backend}/coverage/coverage-summary.json`（なければ `coverage-final.json`）
 - `e2e-test-results-node-*`（Playwright JSON）
 - `playwright-report-node-*`
-- `e2e-videos-node-*`（全テスト動画）
-- 失敗時: screenshot / trace.zip / job log URL
+- 全テスト: trace.zip（`trace: 'on'`）、失敗時: screenshot / error-context / job log URL
 ## Trigger
 実装とテストが揃ったとき。
 ## Required inputs
@@ -54,3 +53,11 @@ Unit、API、build、必要なE2Eを実行し、同一runIdの結果JSONと失�
 - `failed` 件数が `test-matrix-summary.json.total_failed` と一致
 - `coverage_source` が 0% フォールバック理由を説明できる
 - 動画リンクが実在ファイル（同名上書きなし）
+- `coverage` が frontend + backend の行数加重値であること（`node scripts/report-coverage.mjs` と一致、`details.coverage_breakdown` で内訳確認）
+- `test-cases.json` の `traceFiles[]` がテストごとに一意の `./traces/<sha1>.zip` であり、Trace Viewer のテスト名がクリックしたテストと一致すること
+- `pnpm run test:scripts` が成功すること（coverage 集計・trace 対応付けの回帰テスト）
+
+### よくある誤り（過去の不具合）
+- coverage を「instrumented ファイル数」で割る／片方のパッケージだけ読む → 0〜1% のような不正値になる。集計は `scripts/lib/coverage.mjs` を使う
+- trace を basename（すべて `trace.zip`）や並び順で割り当てる → 別テストの trace が開く。`test-results/` 以降の相対パスで artifact を特定する
+- 未マウントの旧 UI を coverage 対象に含める → 実際のアプリと無関係に値が下がる。対象外は `frontend/vite.config.js` の `coverage.exclude` に理由付きで記載する
