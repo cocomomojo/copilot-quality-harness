@@ -379,14 +379,18 @@ function summarizeCoverage(files, sourceLabel) {
 function readCoverageData() {
   console.log('\n📈 Reading coverage data...');
 
-  const localFiles = [
-    'frontend/coverage',
-    'backend/coverage',
-    'coverage',
-    'artifacts/coverage-report-node-20'
-  ].flatMap((dir) => findCoverageFiles(dir));
+  // Use one source only so different runs are never mixed: the downloaded Test Matrix
+  // artifact (canonical) first, then reports from a local `pnpm test`.
+  const fromDownloadedArtifact = summarizeCoverage(
+    findCoverageFiles('artifacts/coverage-report-node-20'),
+    INPUT_TEST_MATRIX_RUN_ID ? `ARTIFACT_RUN:${INPUT_TEST_MATRIX_RUN_ID}` : 'ARTIFACT_DOWNLOADED'
+  );
+  if (fromDownloadedArtifact) return fromDownloadedArtifact;
 
-  const local = summarizeCoverage(localFiles, 'LOCAL_FILES');
+  const local = summarizeCoverage(
+    ['frontend/coverage', 'backend/coverage'].flatMap((dir) => findCoverageFiles(dir)),
+    'LOCAL_FILES'
+  );
   if (local) return local;
 
   console.log('  ℹ️  Coverage data not found locally');
