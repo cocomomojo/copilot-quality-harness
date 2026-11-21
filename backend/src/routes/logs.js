@@ -1,37 +1,26 @@
 import express from 'express';
-import { queryItems, scanItems } from '../utils/dynamodb.js';
+import { TABLES } from '../config.js';
+import { queryByUser, scanItems } from '../utils/dynamodb.js';
+import { asyncRoute } from '../utils/http.js';
 
 const router = express.Router();
-const TABLE_NAME = 'AuditLogs';
 
-// Get activity logs
-router.get('/', async (req, res) => {
+async function fetchUserLogs(userId) {
   try {
-    const userId = req.user.userId;
-    const { type, limit = '100' } = req.query;
-    
-    let logs = [];
-    try {
-      logs = await queryItems(TABLE_NAME, 'userId = :userId', { ':userId': userId });
-    } catch (queryError) {
-      logs = await scanItems(TABLE_NAME, 'userId = :userId', { ':userId': userId });
-    }
-    
-    if (type) {
-      logs = logs.filter(log => log.eventType === type);
-    }
-    
-    // Sort by timestamp descending
-    logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    
-    // Apply limit
-    logs = logs.slice(0, parseInt(limit, 10));
-    
-    res.json(logs);
-  } catch (error) {
-    console.error('Get logs error:', error);
-    res.status(500).json({ error: 'Failed to get logs' });
+    return await queryByUser(TABLES.auditLogs, userId);
+  } catch {
+    return scanItems(TABLES.auditLogs, 'userId = :userId', { ':userId': userId });
   }
-});
+}
+
+router.get('/', asyncRoute('Get logs error', 'Failed to get logs', async (req, res) => {
+  const { type, limit = '100' } = req.query;
+  const logs = (await fetchUserLogs(req.user.userId))
+    .filter((log) => !type || log.eventType === type)
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    .slice(0, parseInt(limit, 10));
+
+  res.json(logs);
+}));
 
 export default router;

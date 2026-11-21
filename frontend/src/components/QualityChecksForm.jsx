@@ -33,7 +33,7 @@ function QualityChecksForm() {
 
     const trimmedInput = input.trim();
 
-    if (!trimmedInput || trimmedInput.length === 0 || trimmedInput.length > 120) {
+    if (!trimmedInput || trimmedInput.length > 120) {
       setError('name must be between 1 and 120 characters');
       return;
     }
@@ -48,7 +48,7 @@ function QualityChecksForm() {
 
       if (response.ok) {
         const newCheck = await response.json();
-        setChecks([newCheck, ...checks]);
+        setChecks((prev) => [newCheck, ...prev]);
         setInput('');
         setSuccessMessage('Check added successfully!');
         setTimeout(() => setSuccessMessage(''), 3000);

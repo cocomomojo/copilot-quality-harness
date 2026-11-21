@@ -1,23 +1,25 @@
+import { clearAuth, getAuthToken } from './authStorage.js';
+
+function withQuery(endpoint, filters) {
+  return `${endpoint}?${new URLSearchParams(filters).toString()}`;
+}
+
+function jsonBody(method, body) {
+  return { method, body: JSON.stringify(body) };
+}
+
 export async function apiFetch(endpoint, options = {}) {
-  const token = localStorage.getItem('authToken');
+  const token = getAuthToken();
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
+    ...(token && { Authorization: `Bearer ${token}` }),
   };
 
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
-  const response = await fetch(endpoint, {
-    ...options,
-    headers,
-  });
+  const response = await fetch(endpoint, { ...options, headers });
 
   if (response.status === 401) {
-    // Clear auth and redirect to login
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
+    clearAuth();
     window.location.href = '/login';
     throw new Error('Unauthorized');
   }
@@ -32,58 +34,28 @@ export async function apiFetch(endpoint, options = {}) {
 
 export const api = {
   auth: {
-    register: (email, password, name) =>
-      apiFetch('/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({ email, password, name }),
-      }),
-    login: (email, password) =>
-      apiFetch('/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      }),
+    register: (email, password, name) => apiFetch('/api/auth/register', jsonBody('POST', { email, password, name })),
+    login: (email, password) => apiFetch('/api/auth/login', jsonBody('POST', { email, password })),
     me: () => apiFetch('/api/auth/me'),
   },
   todos: {
     create: (title, description, status, priority) =>
-      apiFetch('/api/todos', {
-        method: 'POST',
-        body: JSON.stringify({ title, description, status, priority }),
-      }),
-    list: (filters) => {
-      const params = new URLSearchParams(filters).toString();
-      return apiFetch(`/api/todos?${params}`);
-    },
+      apiFetch('/api/todos', jsonBody('POST', { title, description, status, priority })),
+    list: (filters) => apiFetch(withQuery('/api/todos', filters)),
     get: (todoId) => apiFetch(`/api/todos/${todoId}`),
-    update: (todoId, data) =>
-      apiFetch(`/api/todos/${todoId}`, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-    delete: (todoId) =>
-      apiFetch(`/api/todos/${todoId}`, { method: 'DELETE' }),
+    update: (todoId, data) => apiFetch(`/api/todos/${todoId}`, jsonBody('PUT', data)),
+    delete: (todoId) => apiFetch(`/api/todos/${todoId}`, { method: 'DELETE' }),
   },
   files: {
     getPresignedUrl: (fileName, fileType) =>
-      apiFetch('/api/files/presigned-url', {
-        method: 'POST',
-        body: JSON.stringify({ filename: fileName, contentType: fileType }),
-      }),
+      apiFetch('/api/files/presigned-url', jsonBody('POST', { filename: fileName, contentType: fileType })),
     recordUpload: (fileName, fileSize, fileType, fileId, key) =>
-      apiFetch('/api/files/record-upload', {
-        method: 'POST',
-        body: JSON.stringify({ fileName, fileSize, fileType, fileId, key }),
-      }),
+      apiFetch('/api/files/record-upload', jsonBody('POST', { fileName, fileSize, fileType, fileId, key })),
     list: () => apiFetch('/api/files'),
-    delete: (fileId) =>
-      apiFetch(`/api/files/${fileId}`, { method: 'DELETE' }),
-    getDownloadUrl: (fileId) =>
-      apiFetch(`/api/files/${fileId}/presigned-url`),
+    delete: (fileId) => apiFetch(`/api/files/${fileId}`, { method: 'DELETE' }),
+    getDownloadUrl: (fileId) => apiFetch(`/api/files/${fileId}/presigned-url`),
   },
   logs: {
-    list: (filters) => {
-      const params = new URLSearchParams(filters).toString();
-      return apiFetch(`/api/logs?${params}`);
-    },
+    list: (filters) => apiFetch(withQuery('/api/logs', filters)),
   },
 };

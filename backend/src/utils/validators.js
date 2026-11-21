@@ -39,3 +39,15 @@ export function isValidURL(url) {
     return { valid: false, error: 'Invalid URL format' };
   }
 }
+
+const PASSWORD_RULES = [
+  { test: (password) => password.length >= 8, error: 'Password must be at least 8 characters long' },
+  { test: (password) => /[A-Z]/.test(password), error: 'Password must contain at least one uppercase letter' },
+  { test: (password) => /[a-z]/.test(password), error: 'Password must contain at least one lowercase letter' },
+  { test: (password) => /[0-9]/.test(password), error: 'Password must contain at least one number' },
+];
+
+export function validatePassword(password) {
+  const failed = PASSWORD_RULES.find((rule) => !rule.test(password));
+  return failed ? { valid: false, error: failed.error } : { valid: true };
+}

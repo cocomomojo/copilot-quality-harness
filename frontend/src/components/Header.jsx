@@ -1,27 +1,30 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 
+const NAV_ITEMS = [
+  { to: '/', label: 'Home', testId: 'nav-home' },
+  { to: '/quality-checks', label: 'Quality Checks', testId: 'nav-quality' },
+  { to: '/url-validator', label: 'URL Validator', testId: 'nav-validator' },
+  { to: '/dashboard', label: 'Dashboard', testId: 'nav-dashboard' },
+  { to: '/settings', label: 'Settings', testId: 'nav-settings' },
+];
+
 /**
  * Header コンポーネント
- * 
- * React Router v6 を使用したナビゲーション対応ヘッダー
- * 
+ *
  * Props:
  *   - title (string): ヘッダーに表示するタイトル（デフォルト: "Copilot Quality Harness"）
  *   - backgroundColor (string): ヘッダーの背景色（デフォルト: "#1f2937"）
  */
-const Header = ({ 
+const Header = ({
   title = 'Copilot Quality Harness',
   backgroundColor = '#1f2937'
 }) => {
-  const location = useLocation();
-
-  const isActive = (path) => location.pathname === path;
+  const { pathname } = useLocation();
 
   return (
-    <header 
-      className="header" 
+    <header
+      className="header"
       style={{ backgroundColor }}
       data-testid="header"
     >
@@ -31,51 +34,13 @@ const Header = ({
         </h1>
         <nav className="header-nav" data-testid="header-nav">
           <ul>
-            <li>
-              <Link 
-                to="/" 
-                className={isActive('/') ? 'active' : ''}
-                data-testid="nav-home"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link 
-                to="/quality-checks" 
-                className={isActive('/quality-checks') ? 'active' : ''}
-                data-testid="nav-quality"
-              >
-                Quality Checks
-              </Link>
-            </li>
-            <li>
-              <Link 
-                to="/url-validator" 
-                className={isActive('/url-validator') ? 'active' : ''}
-                data-testid="nav-validator"
-              >
-                URL Validator
-              </Link>
-            </li>
-            <li>
-              <Link 
-                to="/dashboard" 
-                className={isActive('/dashboard') ? 'active' : ''}
-                data-testid="nav-dashboard"
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link 
-                to="/settings" 
-                className={isActive('/settings') ? 'active' : ''}
-                data-testid="nav-settings"
-              >
-                Settings
-              </Link>
-            </li>
+            {NAV_ITEMS.map(({ to, label, testId }) => (
+              <li key={to}>
+                <Link to={to} className={pathname === to ? 'active' : ''} data-testid={testId}>
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
