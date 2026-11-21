@@ -11,7 +11,8 @@
  */
 
 import { execSync } from 'node:child_process';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { aggregateCoverageFiles, findCoverageFiles } from './lib/coverage.mjs';
 
 const GITHUB_TOKEN = process.env.GH_TOKEN;
 const REPO = process.env.GITHUB_REPOSITORY || 'cocomomojo/copilot-quality-harness';
@@ -354,165 +355,65 @@ function parseTestResults(testData) {
 
 /**
  * ローカルファイル、またはダウンロードされたアーティファクトからカバレッジデータを読み込む
+ * frontend / backend の両レポートを行数加重で合算する（scripts/lib/coverage.mjs）
  */
-function extractCoverageFromData(data) {
-  if (!data || typeof data !== 'object') return null;
-
-  if (data.total && data.total.lines && typeof data.total.lines.pct === 'number') {
-    return Math.round(data.total.lines.pct);
+function summarizeCoverage(files, sourceLabel) {
+  const result = aggregateCoverageFiles(files);
+  if (!result) return null;
+  for (const pkg of result.packages) {
+    console.log(`  • ${pkg.file}: ${pkg.covered}/${pkg.total} lines (${pkg.pct}%)`);
   }
-
-  if (typeof data.coverage === 'number') {
-    return Math.round(data.coverage);
-  }
-
-  // coverage-final.json (istanbul) format fallback
-  const files = Object.values(data);
-  if (files.length > 0 && files.every((f) => f && typeof f === 'object' && f.s && typeof f.s === 'object')) {
-    let covered = 0;
-    let total = 0;
-    for (const file of files) {
-      for (const count of Object.values(file.s)) {
-        total += 1;
-        if (typeof count === 'number' && count > 0) covered += 1;
-      }
-    }
-    if (total > 0) {
-      return Math.round((covered / total) * 100);
-    }
-  }
-
-  return null;
+  console.log(`  ✓ Aggregated coverage: ${result.coverage}% (${result.covered}/${result.total} lines, ${sourceLabel})`);
+  return {
+    coverage: result.coverage,
+    source: sourceLabel,
+    breakdown: result.packages.map((pkg) => ({
+      package: pkg.file.includes('frontend') ? 'frontend' : pkg.file.includes('backend') ? 'backend' : pkg.file,
+      covered: pkg.covered,
+      total: pkg.total,
+      pct: pkg.pct
+    }))
+  };
 }
 
 function readCoverageData() {
   console.log('\n📈 Reading coverage data...');
-  
-  const possiblePaths = [
-    // ローカルパス
-    'frontend/coverage/coverage-summary.json',
-    'backend/coverage/coverage-summary.json',
-    'frontend/coverage/coverage-final.json',
-    'backend/coverage/coverage-final.json',
-    'coverage/coverage-final.json',
-    'qa/test-management/coverage.json',
-    // CI からダウンロードされたアーティファクトパス
-    'artifacts/coverage-report-node-20/coverage/coverage-summary.json',
-    'artifacts/coverage-report-node-20/coverage/coverage-final.json',
-    'artifacts/coverage-report-node-20/coverage-final.json',
-    'artifacts/coverage-report-node-20/frontend/coverage/coverage-summary.json',
-    'artifacts/coverage-report-node-20/frontend/coverage/coverage-final.json',
-    'artifacts/coverage-report-node-20/backend/coverage/coverage-summary.json',
-    'artifacts/coverage-report-node-20/backend/coverage/coverage-final.json'
-  ];
-  
-  for (const filePath of possiblePaths) {
-    if (existsSync(filePath)) {
-      try {
-        const data = JSON.parse(readFileSync(filePath, 'utf-8'));
-        const coverage = extractCoverageFromData(data);
-        if (coverage !== null) {
-          console.log(`  ✓ Found coverage: ${coverage}% (from ${filePath})`);
-          return { coverage, source: `LOCAL_FILE:${filePath}` };
-        }
-      } catch (e) {
-        // Continue to next path
-      }
-    }
-  }
-  
+
+  const localFiles = [
+    'frontend/coverage',
+    'backend/coverage',
+    'coverage',
+    'artifacts/coverage-report-node-20'
+  ].flatMap((dir) => findCoverageFiles(dir));
+
+  const local = summarizeCoverage(localFiles, 'LOCAL_FILES');
+  if (local) return local;
+
   console.log('  ℹ️  Coverage data not found locally');
-  
-  // アーティファクトから coverage を取得してみる
+
   try {
     console.log('  🔍 Searching in GitHub artifacts...');
-    const cmd = `gh run list --workflow=test-matrix.yml --branch=main --status=success --limit=3 --json databaseId,conclusion,status -q '.[]'`;
-    const runsOutput = execSync(cmd, {
-      encoding: 'utf-8',
-      env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
-    }).trim();
-    
-    if (!runsOutput) {
-      console.log('  ℹ️  No successful test runs found');
-      return { coverage: 0, source: 'NO_SUCCESSFUL_TEST_RUN' };
-    }
-    
-    const runs = runsOutput.split('\n').map(line => {
-      try {
-        return JSON.parse(line);
-      } catch (e) {
-        return null;
-      }
-    }).filter(Boolean);
-    
     const prioritizedRuns = [];
     if (INPUT_TEST_MATRIX_RUN_ID) {
-      prioritizedRuns.push({ databaseId: INPUT_TEST_MATRIX_RUN_ID, conclusion: 'unknown' });
+      prioritizedRuns.push(String(INPUT_TEST_MATRIX_RUN_ID));
     }
-    for (const run of runs) {
-      if (!prioritizedRuns.find(r => String(r.databaseId) === String(run.databaseId))) {
-        prioritizedRuns.push(run);
-      }
+    const runsOutput = execSync(
+      `gh run list --workflow=test-matrix.yml --branch=main --status=success --limit=3 --json databaseId -q '.[].databaseId'`,
+      { encoding: 'utf-8', env: { ...process.env, GH_TOKEN: GITHUB_TOKEN } }
+    ).trim();
+    for (const id of runsOutput.split('\n').map((v) => v.trim()).filter(Boolean)) {
+      if (!prioritizedRuns.includes(id)) prioritizedRuns.push(id);
     }
 
-    const findCoverageFilesRecursively = (dir) => {
-      const result = [];
-      if (!existsSync(dir)) return result;
-      const stack = [dir];
-      while (stack.length > 0) {
-        const current = stack.pop();
-        let entries = [];
-        try {
-          entries = readdirSync(current, { withFileTypes: true });
-        } catch {
-          continue;
-        }
-        for (const entry of entries) {
-          const fullPath = `${current}/${entry.name}`;
-          if (entry.isDirectory()) {
-            stack.push(fullPath);
-            continue;
-          }
-          if (entry.name === 'coverage-summary.json' || entry.name === 'coverage-final.json') {
-            result.push(fullPath);
-          }
-        }
-      }
-      return result;
-    };
-
-    for (const run of prioritizedRuns) {
+    for (const runId of prioritizedRuns) {
       try {
-        const tempDir = `/tmp/coverage-${run.databaseId}`;
-        execSync(`gh run download ${run.databaseId} --name coverage-report-node-20 --dir ${tempDir} 2>/dev/null`, {
+        const tempDir = `/tmp/coverage-${runId}`;
+        execSync(`gh run download ${runId} --name coverage-report-node-20 --dir ${tempDir} 2>/dev/null`, {
           encoding: 'utf-8',
           env: { ...process.env, GH_TOKEN: GITHUB_TOKEN }
         });
-
-        const coverageFiles = [
-          `${tempDir}/coverage/coverage-summary.json`,
-          `${tempDir}/coverage-summary.json`,
-          `${tempDir}/coverage/coverage-final.json`,
-          `${tempDir}/coverage-final.json`,
-          `${tempDir}/frontend/coverage/coverage-summary.json`,
-          `${tempDir}/frontend/coverage/coverage-final.json`,
-          `${tempDir}/backend/coverage/coverage-summary.json`,
-          `${tempDir}/backend/coverage/coverage-final.json`,
-          ...findCoverageFilesRecursively(tempDir)
-        ];
-
-        const uniqueCoverageFiles = Array.from(new Set(coverageFiles));
-
-        for (const coverageFile of uniqueCoverageFiles) {
-          if (existsSync(coverageFile)) {
-            const data = JSON.parse(readFileSync(coverageFile, 'utf-8'));
-            const coverage = extractCoverageFromData(data);
-            if (coverage !== null) {
-              console.log(`  ✓ Found coverage: ${coverage}% (from artifact: run ${run.databaseId})`);
-              return { coverage, source: `ARTIFACT_RUN:${run.databaseId}` };
-            }
-          }
-        }
+        const fromArtifact = summarizeCoverage(findCoverageFiles(tempDir), `ARTIFACT_RUN:${runId}`);
+        if (fromArtifact) return fromArtifact;
       } catch (e) {
         // Continue to next run
       }
@@ -520,9 +421,9 @@ function readCoverageData() {
   } catch (e) {
     console.log(`  ⚠️  Could not fetch coverage from artifacts: ${e.message.split('\n')[0]}`);
   }
-  
+
   console.log('  ℹ️  Using 0% as default coverage');
-  return { coverage: 0, source: 'DEFAULT_ZERO_FALLBACK' };
+  return { coverage: 0, source: 'DEFAULT_ZERO_FALLBACK', breakdown: [] };
 }
 
 /**
@@ -686,6 +587,7 @@ async function main() {
       test_source: testData.source,
       github_run_id: testData.runId || null,
       coverage_source: coverageInfo.source,
+      coverage_breakdown: coverageInfo.breakdown || [],
       explicit_test_run_id: INPUT_TEST_MATRIX_RUN_ID || null
     }
   };

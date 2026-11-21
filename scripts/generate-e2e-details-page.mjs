@@ -60,10 +60,9 @@ async function generateE2EDetailsPage(config) {
     if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('./') || trimmed.startsWith('../')) {
       return trimmed;
     }
+    // Absolute runner paths cannot be published as-is; generate-e2e-report.ts resolves them to
+    // ./traces/<sha1>.zip. Never guess by basename: every Playwright trace is named trace.zip.
     if (/^(?:[A-Za-z]:\\|\/|\\\\)/.test(trimmed) || trimmed.includes('/home/') || trimmed.includes('/tmp/')) {
-      const basename = trimmed.split('/').pop() || '';
-      if (/\.zip$/i.test(basename)) return `./traces/${basename}`;
-      if (/\.(md|txt|log)$/i.test(basename)) return `./logs/${basename}`;
       return null;
     }
     return trimmed;
@@ -74,25 +73,6 @@ async function generateE2EDetailsPage(config) {
     if (!reportData.suites || reportData.suites.length === 0) {
       return '<p style="text-align: center; color: #999; padding: 20px;">テストデータがありません</p>';
     }
-
-    const collectFallbackFiles = (dirName, regex, publicPrefix) => {
-      const items = [];
-      const dir = join(config.outputDir, dirName);
-      if (!existsSync(dir)) return items;
-      try {
-        for (const name of readdirSync(dir).filter((n) => regex.test(n)).sort((a, b) => a.localeCompare(b))) {
-          items.push(`${publicPrefix}/${name}`);
-        }
-      } catch {
-        // ignore scan errors
-      }
-      return items;
-    };
-
-    const traceFallbackPool = collectFallbackFiles('traces', /\.zip$/i, './traces');
-    const contextFallbackPool = collectFallbackFiles('logs', /\.(md|txt|log)$/i, './logs');
-    let traceFallbackCursor = 0;
-    let contextFallbackCursor = 0;
 
     const isLinkAvailable = (relativePath) => {
       if (!relativePath || typeof relativePath !== 'string') return false;
@@ -136,12 +116,8 @@ async function generateE2EDetailsPage(config) {
             .filter(Boolean)
             .filter((src) => isLinkAvailable(src));
 
-          if (normalizedTraceLinks.length === 0 && traceFallbackCursor < traceFallbackPool.length) {
-            normalizedTraceLinks.push(traceFallbackPool[traceFallbackCursor++]);
-          }
-          if (normalizedContextLinks.length === 0 && contextFallbackCursor < contextFallbackPool.length) {
-            normalizedContextLinks.push(contextFallbackPool[contextFallbackCursor++]);
-          }
+          // No positional fallback: a test without its own trace shows no Trace Viewer link
+          // rather than evidence from a different test.
 
           html += `
         <div class="test-item ${statusClass}" onclick="toggleTestDetails(this)" style="cursor: pointer;">

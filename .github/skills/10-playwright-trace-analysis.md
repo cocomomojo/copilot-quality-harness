@@ -212,11 +212,21 @@ inputs:
 
 ---
 
+## E2E レポートの trace 対応付け（前提確認）
+
+解析対象の trace が「本当にそのテストのもの」であることを最初に確認する。
+
+- Playwright の trace はすべて `trace.zip` という名前で、テストごとのディレクトリ（`test-results/<spec>-<suite>-<test>/`）で区別される
+- E2E レポートでは `scripts/generate-e2e-report.ts` がディレクトリ単位で artifact を特定し、`./traces/<sha1("./artifacts/<artifact>/<path>")>.zip` を `traceFiles[]` に記録する
+- Trace Viewer を開いたら、Actions/Metadata のテスト名がレポート上のテスト名と一致するか確認する。不一致ならレポート生成側の不具合として扱う（`docs/E2E_REPORTS_GUIDE.md` の「Trace Viewer リンクの対応付け」参照）
+- 回帰テスト: `pnpm run test:scripts`
+
 ## トラブルシューティング
 
 | 問題 | 原因 | 解決方法 |
 |------|------|---------|
 | trace artifact がない | artifact 名が違う | inputs で正しい名前を指定 |
+| 別テストの trace が開く | basename/並び順での割当 | `traceFiles[]` がテスト固有の `./traces/<sha1>.zip` か確認 |
 | trace-summary.ts 失敗 | trace 形式が不正 | trace ファイルをチェック |
 | Copilot が応答しない | ネットワークエラー | リトライ or タイムアウト確認 |
 | Draft PR が作成されない | gh コマンド権限不足 | GITHUB_TOKEN を確認 |

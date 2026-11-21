@@ -154,8 +154,33 @@ GitHub Actions `update-dashboard.yml` ワークフローが以下を自動実行
 1. `metadata.test_run_id` は KPI 側 `details.github_run_id` と一致すること
 2. `videos[]` は固有パスを優先し、汎用 `./video.webm` への収束を避けること
 3. 実行エビデンス（Run URL, test-cases.json）をページ内から辿れること
+4. `traceFiles[]` はテスト固有の trace を指し、basename（`trace.zip`）や並び順で推測しないこと
+
+## 🔍 Trace Viewer リンクの対応付け
+
+Playwright は各テストの trace を `test-results/<テストごとのディレクトリ>/trace.zip` に保存します。**ファイル名はすべて `trace.zip`** なので、ファイル名だけで対応付けると別テストの trace を開いてしまいます。
+
+対応付けの流れ:
+
+1. `summary.json` の attachment に CI ランナー上の絶対パス（`/home/runner/.../test-results/<dir>/trace.zip`）が記録される
+2. `scripts/generate-e2e-report.ts` が `test-results/` 以降の相対パスで `./artifacts/e2e-test-results-node-*/<dir>/trace.zip` を特定し、
+   `update-dashboard.yml` のコピー処理と同じ `sha1("./artifacts/<artifact>/<path>")` で `./traces/<sha1>.zip` を `traceFiles[]` に書き込む
+3. `scripts/generate-e2e-details-page.mjs` は `traceFiles[]` が実在する場合のみ「🔍 Trace Viewerで開く」を表示する
+   （該当 trace がないテストに別テストの trace を割り当てる位置ベースのフォールバックは行わない）
+
+確認方法:
+
+- `docs/reports/data/test-cases.json` の `traceFiles[]` がテストごとに異なる `./traces/<sha1>.zip` であること
+- Trace Viewer のタイトル／Actions に表示されるテスト名が、クリックしたテスト名と一致すること
+- 回帰テスト: `pnpm run test:scripts`（`scripts/lib/e2e-report.test.mjs`）
 
 ## トラブルシューティング
+
+### Trace Viewer で別のテストの画面が表示される／リンクが出ない
+
+1. `test-cases.json` の `traceFiles[]` が `./trace.zip` のような basename だけになっていないか確認（旧ロジックの出力）
+2. `update-dashboard.yml` で `./artifacts/e2e-test-results-node-20/` がダウンロードされているか確認
+3. artifact のパス構造が `<artifact>/<テストディレクトリ>/trace.zip` のままか確認（パスを変えるとハッシュが一致しない）
 
 ### テスト動画が表示されない
 
