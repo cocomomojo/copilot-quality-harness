@@ -35,20 +35,26 @@ jobs:
         id: check
         run: |
           echo "🔍 Checking E2E test results..."
-          
-          # Find E2E test result files
-          E2E_RESULTS=$(find test-artifacts -name "*e2e*.json" -type f | head -1)
-          
-          if [ -z "$E2E_RESULTS" ]; then
+  
+          # 全E2E結果ファイルを対象に、Playwright JSON の stats を集計
+          FAILURE_COUNT=0
+          FOUND=false
+
+          while IFS= read -r FILE; do
+            FOUND=true
+            # stats.unexpected（失敗）+ stats.flaky を失敗としてカウント
+            COUNT=$(jq '(.stats.unexpected // 0) + (.stats.flaky // 0)' "$FILE" 2>/dev/null || echo 0)
+            echo "  $FILE: $COUNT failures"
+            FAILURE_COUNT=$((FAILURE_COUNT + COUNT))
+          done < <(find test-artifacts -name "*e2e*.json" -o -name "summary.json" | grep -v '^$')
+  
+          if [ "$FOUND" = false ]; then
             echo "❌ E2E test results not found"
             echo "has_failures=false" >> $GITHUB_OUTPUT
             echo "failure_count=0" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
-          # Check for failures in the test results
-          FAILURE_COUNT=$(grep -o '"fail' "$E2E_RESULTS" | wc -l)
-          
+  
           if [ "$FAILURE_COUNT" -gt 0 ]; then
             echo "⚠️ Found $FAILURE_COUNT E2E test failures"
             echo "has_failures=true" >> $GITHUB_OUTPUT
