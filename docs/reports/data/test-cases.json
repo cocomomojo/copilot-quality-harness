@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-11-21T11:39:35.163Z",
+  "timestamp": "2026-11-21T11:55:37.765Z",
   "totalSuites": 4,
   "totalTests": 45,
   "passed": 45,
   "failed": 0,
   "skipped": 0,
   "passRate": 100,
-  "duration": 76086,
+  "duration": 78407,
   "metadata": {
-    "test_run_id": "44899606141"
+    "test_run_id": "44900371106"
   },
   "suites": [
     {
@@ -18,19 +18,19 @@
       "passed": 10,
       "failed": 0,
       "skipped": 0,
-      "duration": 579,
+      "duration": 789,
       "tests": [
         {
           "name": "E2E-201 register success",
           "title": "E2E-201 register success",
           "status": "passed",
-          "duration": 119,
+          "duration": 162,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/3d28c8e7e278f307beeb215d4e38ff57cfbf4653.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -40,13 +40,13 @@
           "name": "E2E-202 duplicate email returns 409",
           "title": "E2E-202 duplicate email returns 409",
           "status": "passed",
-          "duration": 79,
+          "duration": 108,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/e04378acfce59f09a167f7361813655a603ae41d.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -56,13 +56,13 @@
           "name": "E2E-203 weak password returns 422",
           "title": "E2E-203 weak password returns 422",
           "status": "passed",
-          "duration": 11,
+          "duration": 15,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/53b75b948d1a41a0d1b3ad536ca240e2ae286076.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -72,13 +72,13 @@
           "name": "E2E-204 missing fields returns 400",
           "title": "E2E-204 missing fields returns 400",
           "status": "passed",
-          "duration": 7,
+          "duration": 11,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/447c4dfa78f08e0469092d56d9fa9190bb5b9ba3.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -88,13 +88,13 @@
           "name": "E2E-205 API login success",
           "title": "E2E-205 API login success",
           "status": "passed",
-          "duration": 127,
+          "duration": 173,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/f44f9f1eacda213eb38b87dd8af00c849132c921.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -104,13 +104,13 @@
           "name": "E2E-206 login wrong password returns 401",
           "title": "E2E-206 login wrong password returns 401",
           "status": "passed",
-          "duration": 133,
+          "duration": 183,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/bc25e59bd2b18d1fb7db9b5ee91d21cc0fe1d253.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -120,13 +120,13 @@
           "name": "E2E-207 login unknown user returns 401",
           "title": "E2E-207 login unknown user returns 401",
           "status": "passed",
-          "duration": 11,
+          "duration": 15,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/dc2bd85ede6b6d53e0c265d556eb50ecdf75c760.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -136,13 +136,13 @@
           "name": "E2E-208 /auth/me with valid token",
           "title": "E2E-208 /auth/me with valid token",
           "status": "passed",
-          "duration": 79,
+          "duration": 103,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/110b5ac27c9948b286c157c907dea8ec288d0d72.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -152,13 +152,13 @@
           "name": "E2E-209 /auth/me without token returns 401",
           "title": "E2E-209 /auth/me without token returns 401",
           "status": "passed",
-          "duration": 6,
+          "duration": 9,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/128812e738ccd2ee66059e5e41198fd32fc32b9b.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -168,13 +168,13 @@
           "name": "E2E-210 /auth/me invalid token returns 401",
           "title": "E2E-210 /auth/me invalid token returns 401",
           "status": "passed",
-          "duration": 7,
+          "duration": 10,
           "file": "auth.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/ff0a40816cf73482ae393b0c1c6c37db983c8c9c.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -189,19 +189,19 @@
       "passed": 11,
       "failed": 0,
       "skipped": 0,
-      "duration": 780,
+      "duration": 1107,
       "tests": [
         {
           "name": "E2E-301 list files empty",
           "title": "E2E-301 list files empty",
           "status": "passed",
-          "duration": 75,
+          "duration": 102,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/82fc52bb49e9ce91cdb17146d32c5c71b70532da.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -211,13 +211,13 @@
           "name": "E2E-302 create presigned upload URL",
           "title": "E2E-302 create presigned upload URL",
           "status": "passed",
-          "duration": 76,
+          "duration": 105,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/e8f6b8eaa5af4f92ad0ea8369c1dfb4db8a89876.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -227,13 +227,13 @@
           "name": "E2E-303 presigned-upload alias works",
           "title": "E2E-303 presigned-upload alias works",
           "status": "passed",
-          "duration": 71,
+          "duration": 97,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/04c880601c1583ef6d14056f2907b6ca346fc061.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -243,13 +243,13 @@
           "name": "E2E-304 missing upload fields returns 400",
           "title": "E2E-304 missing upload fields returns 400",
           "status": "passed",
-          "duration": 69,
+          "duration": 98,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/a3a9faadca12369b3fd27af8cc054a0ae79a93d4.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -259,13 +259,13 @@
           "name": "E2E-305 record upload metadata",
           "title": "E2E-305 record upload metadata",
           "status": "passed",
-          "duration": 78,
+          "duration": 113,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/e036bfb3f6fccb2bb322d7412d5ebc7cb499bada.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -275,13 +275,13 @@
           "name": "E2E-306 list files after record",
           "title": "E2E-306 list files after record",
           "status": "passed",
-          "duration": 80,
+          "duration": 119,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/3f57302d235a7a7c8c9d6b02967ee0f441b85dfe.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -291,13 +291,13 @@
           "name": "E2E-307 get file detail by id",
           "title": "E2E-307 get file detail by id",
           "status": "passed",
-          "duration": 80,
+          "duration": 115,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/27cc1db1725f822e977b6a210e23a58a7b5617fd.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -307,13 +307,13 @@
           "name": "E2E-308 get missing file returns 404",
           "title": "E2E-308 get missing file returns 404",
           "status": "passed",
-          "duration": 71,
+          "duration": 98,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/2013970ebefff283078c1843963630bbb2e8536e.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -323,13 +323,13 @@
           "name": "E2E-309 get download URL by file id",
           "title": "E2E-309 get download URL by file id",
           "status": "passed",
-          "duration": 81,
+          "duration": 116,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/43168a725816d9c37fe7a0498c86773b152554bb.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -339,13 +339,13 @@
           "name": "E2E-310 delete file",
           "title": "E2E-310 delete file",
           "status": "passed",
-          "duration": 94,
+          "duration": 135,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/f5a7d76389c599a3457c3e2d2022cd2186126c06.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -355,13 +355,13 @@
           "name": "E2E-311 unauthorized file list returns 401",
           "title": "E2E-311 unauthorized file list returns 401",
           "status": "passed",
-          "duration": 5,
+          "duration": 9,
           "file": "files.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/508f083355a26b7de06f51cc908b80623ea5fb23.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -376,19 +376,19 @@
       "passed": 14,
       "failed": 0,
       "skipped": 0,
-      "duration": 1014,
+      "duration": 1418,
       "tests": [
         {
           "name": "E2E-101 create todo",
           "title": "E2E-101 create todo",
           "status": "passed",
-          "duration": 78,
+          "duration": 105,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/6f471a9c8b3ab88809943b459995053dd109ea19.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -398,13 +398,13 @@
           "name": "E2E-102 create todo without title returns 400",
           "title": "E2E-102 create todo without title returns 400",
           "status": "passed",
-          "duration": 67,
+          "duration": 95,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/105a3592086415dc7824a3544bf5ab549ce6c679.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -414,13 +414,13 @@
           "name": "E2E-103 list todos empty",
           "title": "E2E-103 list todos empty",
           "status": "passed",
-          "duration": 77,
+          "duration": 97,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/cf1fbd9159e1824beb34dd1fc0cd9902162be925.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -430,13 +430,13 @@
           "name": "E2E-104 list todos after create",
           "title": "E2E-104 list todos after create",
           "status": "passed",
-          "duration": 78,
+          "duration": 107,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/2cdd009a7bfcbfddfa8ccbab81bd9c900a728daf.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -446,13 +446,13 @@
           "name": "E2E-105 get todo by id",
           "title": "E2E-105 get todo by id",
           "status": "passed",
-          "duration": 78,
+          "duration": 111,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/3c42bafff1dd7ab6492e9198728f185f14bc180a.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -462,13 +462,13 @@
           "name": "E2E-106 get missing todo returns 404",
           "title": "E2E-106 get missing todo returns 404",
           "status": "passed",
-          "duration": 71,
+          "duration": 107,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/1bd794e6682a215599c99bdd67dd0a0479fe863a.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -478,13 +478,13 @@
           "name": "E2E-107 update todo title/status",
           "title": "E2E-107 update todo title/status",
           "status": "passed",
-          "duration": 84,
+          "duration": 138,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/0697273408e173e7bab8e070d85dfe7c0f75a3c3.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -494,13 +494,13 @@
           "name": "E2E-108 update todo with completed boolean",
           "title": "E2E-108 update todo with completed boolean",
           "status": "passed",
-          "duration": 82,
+          "duration": 116,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/110c0d7fa72f093c3a05105211b9037d50136a69.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -510,13 +510,13 @@
           "name": "E2E-109 update missing todo returns 404",
           "title": "E2E-109 update missing todo returns 404",
           "status": "passed",
-          "duration": 71,
+          "duration": 96,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/f1160a709ae16691bcdc579ccfc99331d7eb22d1.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -526,13 +526,13 @@
           "name": "E2E-110 delete todo",
           "title": "E2E-110 delete todo",
           "status": "passed",
-          "duration": 87,
+          "duration": 119,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/b791b7b64ae7b83f842bb9623e91035a65e6964f.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -542,13 +542,13 @@
           "name": "E2E-111 delete missing todo returns 404",
           "title": "E2E-111 delete missing todo returns 404",
           "status": "passed",
-          "duration": 70,
+          "duration": 93,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/8f830d8c26c9370bab95fb1e66a869a4cc0ac68b.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -558,13 +558,13 @@
           "name": "E2E-112 unauthorized access returns 401",
           "title": "E2E-112 unauthorized access returns 401",
           "status": "passed",
-          "duration": 4,
+          "duration": 7,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/4ed8cd9f516a30357353c2b018b620627b450896.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -574,13 +574,13 @@
           "name": "E2E-113 list with status filter",
           "title": "E2E-113 list with status filter",
           "status": "passed",
-          "duration": 88,
+          "duration": 119,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/05c0fe786be489c287584603c46350649d312e18.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -590,13 +590,13 @@
           "name": "E2E-114 list with search filter",
           "title": "E2E-114 list with search filter",
           "status": "passed",
-          "duration": 79,
+          "duration": 108,
           "file": "todos.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/b5d71d5cf82a88a59667c78e423e286d6fe22ba4.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -611,19 +611,19 @@
       "passed": 10,
       "failed": 0,
       "skipped": 0,
-      "duration": 73713,
+      "duration": 75093,
       "tests": [
         {
           "name": "E2E-401 login page renders and redirects unauthenticated users",
           "title": "E2E-401 login page renders and redirects unauthenticated users",
           "status": "passed",
-          "duration": 1349,
+          "duration": 1441,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/e6cf090e39dc829135b1df11142f1468c9d93f22.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -633,13 +633,13 @@
           "name": "E2E-402 register through UI succeeds and lands on dashboard",
           "title": "E2E-402 register through UI succeeds and lands on dashboard",
           "status": "passed",
-          "duration": 6310,
+          "duration": 6448,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/900322c3c4dab9f2c5b5e3d86709be6198e9e387.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -649,13 +649,13 @@
           "name": "E2E-403 login through UI succeeds with existing account",
           "title": "E2E-403 login through UI succeeds with existing account",
           "status": "passed",
-          "duration": 4356,
+          "duration": 4451,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/fdb019a98a365e2f42480531a5fe88db2f7e4b39.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -665,13 +665,13 @@
           "name": "E2E-404 create todo from UI and show it on list",
           "title": "E2E-404 create todo from UI and show it on list",
           "status": "passed",
-          "duration": 8515,
+          "duration": 8638,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/84f233fce3e4ecf90669f863ffefbee124285aba.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -681,13 +681,13 @@
           "name": "E2E-405 update todo status from UI",
           "title": "E2E-405 update todo status from UI",
           "status": "passed",
-          "duration": 9476,
+          "duration": 9663,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/db832f5fa9fe39b7f92d4a38c61b4a583ef2702d.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -697,13 +697,13 @@
           "name": "E2E-406 filter todo list by status and search query",
           "title": "E2E-406 filter todo list by status and search query",
           "status": "passed",
-          "duration": 13608,
+          "duration": 13798,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/c42529588867f3653ad78ff274fde1cb8af49d6a.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -713,13 +713,13 @@
           "name": "E2E-407 delete todo from UI and remove it",
           "title": "E2E-407 delete todo from UI and remove it",
           "status": "passed",
-          "duration": 9530,
+          "duration": 9679,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/e447baf92e9e17467d30c9b54f6c5fb23f3bf01c.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -729,13 +729,13 @@
           "name": "E2E-408 upload a file through UI and list it",
           "title": "E2E-408 upload a file through UI and list it",
           "status": "passed",
-          "duration": 6468,
+          "duration": 6585,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/01526cda7e40d45c8c1252b5fb761b65c0b993c3.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -745,13 +745,13 @@
           "name": "E2E-409 delete uploaded file from UI",
           "title": "E2E-409 delete uploaded file from UI",
           "status": "passed",
-          "duration": 6512,
+          "duration": 6642,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/59f468c1dbb54cba51d8379221c0afca4e7d9445.zip"
           ],
           "errorContexts": [],
           "stdout": [],
@@ -761,13 +761,13 @@
           "name": "E2E-410 navigate between dashboard and TODO/files pages while authenticated",
           "title": "E2E-410 navigate between dashboard and TODO/files pages while authenticated",
           "status": "passed",
-          "duration": 7589,
+          "duration": 7748,
           "file": "ui-flow.spec.js",
           "errors": [],
           "screenshots": [],
           "videos": [],
           "traceFiles": [
-            "./trace.zip"
+            "./traces/f2d1c980d47f9945ed725cf085a6cd67e3c89941.zip"
           ],
           "errorContexts": [],
           "stdout": [],
