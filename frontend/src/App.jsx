@@ -10,6 +10,13 @@ import ActivityLogs from './pages/ActivityLogs.jsx';
 import Toast from './components/Toast.jsx';
 import './App.css';
 
+const PROTECTED_ROUTES = [
+  { path: '/', Page: Dashboard },
+  { path: '/todos', Page: Todos },
+  { path: '/files', Page: Files },
+  { path: '/logs', Page: ActivityLogs },
+];
+
 function App() {
   return (
     <Router>
@@ -17,38 +24,17 @@ function App() {
         <AppProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/todos"
-              element={
-                <ProtectedRoute>
-                  <Todos />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/files"
-              element={
-                <ProtectedRoute>
-                  <Files />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/logs"
-              element={
-                <ProtectedRoute>
-                  <ActivityLogs />
-                </ProtectedRoute>
-              }
-            />
+            {PROTECTED_ROUTES.map(({ path, Page }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <ProtectedRoute>
+                    <Page />
+                  </ProtectedRoute>
+                }
+              />
+            ))}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           <Toast />

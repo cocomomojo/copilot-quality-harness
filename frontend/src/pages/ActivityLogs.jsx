@@ -3,6 +3,16 @@ import { api } from '../utils/api.js';
 import { useApp } from '../context/AppContext.jsx';
 import './ActivityLogs.css';
 
+const EVENT_TYPES = [
+  { value: '', label: 'All Events' },
+  { value: 'user_login', label: 'User Login' },
+  { value: 'todo_created', label: 'TODO Created' },
+  { value: 'todo_updated', label: 'TODO Updated' },
+  { value: 'todo_deleted', label: 'TODO Deleted' },
+  { value: 'file_uploaded', label: 'File Uploaded' },
+  { value: 'file_deleted', label: 'File Deleted' },
+];
+
 function ActivityLogs() {
   const { showToast } = useApp();
   const [logs, setLogs] = useState([]);
@@ -43,16 +53,6 @@ function ActivityLogs() {
     }
   };
 
-  const eventTypes = [
-    { value: '', label: 'All Events' },
-    { value: 'user_login', label: 'User Login' },
-    { value: 'todo_created', label: 'TODO Created' },
-    { value: 'todo_updated', label: 'TODO Updated' },
-    { value: 'todo_deleted', label: 'TODO Deleted' },
-    { value: 'file_uploaded', label: 'File Uploaded' },
-    { value: 'file_deleted', label: 'File Deleted' },
-  ];
-
   return (
     <main className="activity-logs-page" data-testid="logs-page">
       <header className="page-header">
@@ -71,7 +71,7 @@ function ActivityLogs() {
               onChange={(e) => setTypeFilter(e.target.value)}
               className="form-select"
             >
-              {eventTypes.map((type) => (
+              {EVENT_TYPES.map((type) => (
                 <option key={type.value} value={type.value}>
                   {type.label}
                 </option>

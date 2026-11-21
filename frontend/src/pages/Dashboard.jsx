@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../utils/api.js';
 import { useApp } from '../context/AppContext.jsx';
+import { formatFileSize } from '../utils/format.js';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -49,14 +50,6 @@ function Dashboard() {
   const completionRate = stats.totalTodos > 0
     ? Math.round((stats.completedTodos / stats.totalTodos) * 100)
     : 0;
-
-  const formatFileSize = (bytes) => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
-  };
 
   if (isLoading) {
     return <div className="dashboard-loading">Loading dashboard...</div>;

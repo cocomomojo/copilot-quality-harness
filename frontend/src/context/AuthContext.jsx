@@ -1,6 +1,20 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { clearAuth, getAuthToken, getStoredUser, saveAuth } from '../utils/authStorage.js';
 
 const AuthContext = createContext();
+
+// Uses fetch directly (not apiFetch) so a 401 on login does not trigger a redirect.
+async function postCredentials(endpoint, payload, failureMessage) {
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    throw new Error(failureMessage);
+  }
+  return response.json();
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -8,66 +22,34 @@ export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
+    if (getAuthToken()) {
       setIsAuthenticated(true);
-      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-      setUser(userData);
+      setUser(getStoredUser());
     }
     setIsLoading(false);
   }, []);
 
-  const login = async (email, password) => {
+  const authenticate = async (logLabel, endpoint, payload, failureMessage) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const data = await response.json();
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('userData', JSON.stringify(data));
+      const data = await postCredentials(endpoint, payload, failureMessage);
+      saveAuth(data);
       setUser(data);
       setIsAuthenticated(true);
       return data;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error(`${logLabel}:`, error);
       throw error;
     }
   };
 
-  const register = async (email, password, name) => {
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name }),
-      });
+  const login = (email, password) =>
+    authenticate('Login error', '/api/auth/login', { email, password }, 'Login failed');
 
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-
-      const data = await response.json();
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('userData', JSON.stringify(data));
-      setUser(data);
-      setIsAuthenticated(true);
-      return data;
-    } catch (error) {
-      console.error('Register error:', error);
-      throw error;
-    }
-  };
+  const register = (email, password, name) =>
+    authenticate('Register error', '/api/auth/register', { email, password, name }, 'Registration failed');
 
   const logout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
+    clearAuth();
     setUser(null);
     setIsAuthenticated(false);
   };
