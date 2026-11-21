@@ -46,7 +46,7 @@ jobs:
             COUNT=$(jq '(.stats.unexpected // 0) + (.stats.flaky // 0)' "$FILE" 2>/dev/null || echo 0)
             echo "  $FILE: $COUNT failures"
             FAILURE_COUNT=$((FAILURE_COUNT + COUNT))
-          done < <(find test-artifacts -name "*e2e*.json" -o -name "summary.json" | grep -v '^$')
+          done < <(find test-artifacts -type f \( -name "*e2e*.json" -o -name "summary.json" \)  )
   
           if [ "$FOUND" = false ]; then
             echo "❌ E2E test results not found"
