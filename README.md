@@ -1,10 +1,10 @@
 # Copilot Quality Harness 🛠️🤖
 
-**Issue の受け入れ条件から、テスト設計・実装支援・テスト実行・品質レポートまでをつなぐ品質ハーネス**です。Playwright trace の解析や品質ダッシュボードに加え、React + Express のサンプル Web アプリも含みます。
+**Issue の受け入れ条件から、テスト設計・実装支援・テスト実行・品質レポートまでをつなぐ品質ハーネス**です。Playwright trace の解析や品質ダッシュボードを通じて、開発者の品質確認を支援します。
 
-📊 [品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/)　|　📚 [運用フロー](./docs/OPERATION_FLOW.md)　|　🔧 [ワークフローガイド](./docs/WORKFLOWS_GUIDE.md)　|　✅ [QA ポリシー](./docs/QA_POLICY.md)
+📊 [品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/)　|　📚 [運用フロー](./docs/OPERATION_FLOW.md)　|　🔧 [ワークフローガイド](./docs/WORKFLOWS_GUIDE.md)　|　🧪 [QA Policy](./docs/QA_POLICY.md)
 
-> ⚠️ **開発・テスト用リポジトリです。** AWS Emulator とテスト用エンドポイントを使います。本番環境に公開したり、本番データ・認証情報を使用したりしないでください。特に「セキュリティ上の注意」を確認してください。
+> ⚠️ **開発・テスト用リポジトリです。** AWS Emulator とテスト用エンドポイントを使います。本番環境に公開したり、本番データ・認証情報を使ったりしないでください。
 
 ---
 
@@ -32,7 +32,7 @@ Test Matrix（Unit / API job / Playwright E2E）
 | **run_id** | Actions 実行ごとの ID。関連する品質データとテスト結果の参照に使います |
 | **E2E evidence** | Playwright の trace、スクリーンショット、HTML レポートなどの調査材料 |
 
-M2 Issue Intake はルールベースの判定を行い、生成 AI や外部 API を前提にしません。Copilot を使う分析・提案も、生成結果を人間がレビューする前提です。**自動マージや AI の提案を人間の確認の代わりにしないでください。**
+M2 Issue Intake はルールベースの判定を行い、生成 AI や外部 API を前提にしません。Copilot を使う分析・提案も、生成結果を人間がレビューする前提です。
 
 ---
 
@@ -50,7 +50,7 @@ M2 Issue Intake はルールベースの判定を行い、生成 AI や外部 AP
 | 6 | 結果・品質レポートを確認 | Actions、PR コメント、[ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/) |
 | 7 | 人間がレビューしてマージ | 変更内容・テスト・セキュリティを確認 |
 
-実行 workflow や入力値は変更される可能性があるため、実際の設定は [`.github/workflows/`](./.github/workflows/) と [運用フローガイド](./docs/OPERATION_FLOW.md) を参照してください。
+実行 workflow や入力値は変更される可能性があるため、実際の設定は [`.github/workflows/`](./.github/workflows/) と [運用フローガイド](./docs/OPERATION_FLOW.md) を確認してください。
 
 ### Playwright trace の解析フロー
 
@@ -62,7 +62,7 @@ trace の解析・原因候補・修正案
 人間が分析結果と差分を確認 → 修正 → Test Matrix を再実行
 ```
 
-解析結果はあくまで調査・修正の支援です。自動生成された変更をそのまま採用したり、自動マージしたりせず、差分・テスト結果を人間が確認してください。trace 内の個人情報や秘密情報にも注意してください。
+解析結果はあくまで調査・修正の支援です。自動生成された変更をそのまま採用したり、自動マージしたりせず、差分・テスト結果を人間が確認してください。
 
 ---
 
@@ -75,8 +75,10 @@ trace の解析・原因候補・修正案
 | `e2e/` | Playwright の E2E テスト |
 | `scripts/` | AWS Emulator 起動・初期化、品質検証・レポート生成など |
 | `.github/workflows/` | テスト、Issue Intake、品質レポート、trace 解析などの Actions workflow |
-| `docs/` | 運用・QA・ダッシュボード・E2E レポートのガイド |
+| `.github/skills/` | Copilot skills |
+| `docs/` | 運用・QA・ダッシュボード・E2E レポートなどのガイド |
 | `qa/` | テスト管理、品質特性、ダッシュボード用データ |
+| `ops/` | KPI 収集、AWS runtime IAM role 例など |
 | `docker-compose.yml` | ローカル AWS Emulator の定義 |
 | `playwright.config.js` | Playwright の browser / webServer / reporter 設定 |
 
@@ -86,12 +88,12 @@ trace の解析・原因候補・修正案
 |---|---|
 | Frontend | ログイン、ダッシュボード、ToDo、ファイル、アクティビティログ |
 | Backend | JWT 認証、ToDo API、ファイル API、ログ API、health check |
-| AWS 連携 | DynamoDB、S3、SQS を使ったローカル開発・テスト |
+| AWS 連携 | DynamoDB、S3、SQS を使った開発・テスト。本番 AWS では実行環境の IAM role を利用 |
 | SQLite | checks などのローカル用データストア |
 
 ### 🏗️ アプリケーション構成図
 
-下図はローカル開発・E2E テスト時のアプリケーションとデータストアの関係です。AWS Emulator は Docker container 内で動作し、Backend から AWS SDK 経由で接続します。Frontend は通常の API 操作では Backend にリクエストし、ファイル本体は Backend が発行する署名付き URL を使って S3 に直接送受信します。
+下図はローカル開発・E2E テスト時のアプリケーションとデータストアの関係です。AWS Emulator は Docker container 内で動作し、Backend から AWS SDK 経由で接続します。
 
 ```mermaid
 flowchart LR
@@ -115,8 +117,6 @@ flowchart LR
     SQS -->|イベントを監査ログに記録| DDB
 ```
 
-#### 構成要素と接続先
-
 | コンポーネント | 役割 | ローカル接続先・データ |
 |---|---|---|
 | Frontend | ブラウザ UI。ログイン後、ToDo・ファイル・ログを操作 | Vite: `http://localhost:5173`。API 呼び出しは Backend 経由 |
@@ -129,7 +129,7 @@ flowchart LR
 
 ## ☁️ AWS Emulator で利用しているサービス
 
-AWS Emulator は **ローカルの DynamoDB / S3 / SQS 相当サービスを用意し、AWS 接続が必要な機能を開発・テストするため**に使います。実際の AWS アカウントや AWS リソースの代わりにローカル endpoint を使います。
+AWS Emulator は **ローカルの DynamoDB / S3 / SQS 相当サービスを用意し、AWS 接続が必要な機能を開発・テストするため**に使います。実際の AWS アカウントや本番データに接続するものではありません。
 
 | AWS サービス | Emulator 内のリソース | 主な用途・データの流れ |
 |---|---|---|
@@ -140,9 +140,9 @@ AWS Emulator は **ローカルの DynamoDB / S3 / SQS 相当サービスを用�
 | **S3** | `app-uploads-bucket` | ファイル本体を保存。Backend が署名付き URL を発行し、Frontend が直接 upload / download |
 | **SQS** | `task-notification-queue` | ToDo / ファイル操作の通知イベントをキューイング。Backend listener が受信し、`AuditLogs` に記録 |
 
-リソース名・作成処理は [`scripts/init-aws-resources.ts`](./scripts/init-aws-resources.ts)、endpoint / credentials の設定は [`backend/src/lib/aws.js`](./backend/src/lib/aws.js)、Docker のポート・volume は [`docker-compose.yml`](./docker-compose.yml) を参照してください。
+リソース名・作成処理は [`scripts/init-aws-resources.ts`](./scripts/init-aws-resources.ts)、endpoint / credentials の設定は [`backend/src/lib/aws.js`](./backend/src/lib/aws.js)、Docker の設定は [`docker-compose.yml`](./docker-compose.yml) を参照してください。`NODE_ENV=production` では Backend は AWS endpoint や Emulator credentials を設定せず、AWS SDK の default credential provider chain（ECS task role など）を使用します。ローカルでは Emulator endpoint / credentials を利用します。詳細は [Backend AWS 認証情報と IAM ロール](./docs/AWS_IAM_CREDENTIALS.md) を参照してください。
 
-> ℹ️ **S3 の接続経路**: Backend は upload / download 用の署名付き URL を生成します。ファイル本体はブラウザから Emulator の S3 endpoint へ直接送受信し、metadata の登録・一覧・削除は Backend API を通します。
+> ℹ️ **S3 の接続経路**: Backend は upload / download 用の署名付き URL を生成します。ファイル本体はブラウザから Emulator �� S3 endpoint へ直接送受信し、ファイル metadata は Backend が DynamoDB に記録します。
 
 ---
 
@@ -150,7 +150,7 @@ AWS Emulator は **ローカルの DynamoDB / S3 / SQS 相当サービスを用�
 
 ### 🔐 ログイン（AWS Emulator の DynamoDB を利用）
 
-ログインは **Frontend → Backend → AWS Emulator の DynamoDB (`Users`)** の順に処理します。Frontend が AWS Emulator へ直接接続することはありません。Backend がユーザーを検索して password hash を照合し、JWT を発行します。ログインでは SQS は使用しません。
+ログインは **Frontend → Backend → AWS Emulator の DynamoDB (`Users`)** の順に処理します。Frontend が AWS Emulator へ直接接続することはありません。Backend が email と password を検証し、JWT を発行します。
 
 ```mermaid
 sequenceDiagram
@@ -171,15 +171,7 @@ sequenceDiagram
     FE-->>User: ログイン成功・Dashboard へ遷移
 ```
 
-| ステップ | 内容 |
-|---:|---|
-| 1 | Frontend が `POST /api/auth/login` を Backend に送信します。 |
-| 2 | Backend が AWS SDK 経由で `Users` テーブルを email で検索します。 |
-| 3 | Backend が保存済み password hash と入力 password を照合します。 |
-| 4 | 認証成功時、Backend が JWT を返し、Frontend は token / userData を `localStorage` に保存します。 |
-| 5 | 以降の保護 API 呼び出しでは Frontend が `Authorization: Bearer <token>` を付け、Backend が JWT を検証します。 |
-
-> ⚠️ 初回ログイン前に Emulator が起動し、DynamoDB の `Users` テーブルとユーザーが存在する必要があります。ユーザーは登録 API (`POST /api/auth/register`) から作成できます。登録も `Users` を利用し、password は hash 化して保存されます。
+保護 API 呼び出しでは Frontend が `Authorization: Bearer <token>` を付け、Backend が JWT を検証します。初回ログイン前に Emulator が起動し、DynamoDB の `Users` テーブルとユーザーが存在する必要があります。ユーザーは登録 API (`POST /api/auth/register`) から登録できます。
 
 ### ✅ ToDo の作成・監査ログ記録
 
@@ -248,7 +240,7 @@ sequenceDiagram
     FE-->>User: upload 完了を表示
 ```
 
-> 図は代表的な成功時の流れです。認証失敗・入力検証・AWS 接続失敗時は別のエラーレスポンスになります。Backend は SQS 通知の送信失敗をログに記録して処理を継続する実装です。E2E 環境では AWS Emulator の endpoint と生成された証明書・credentials を使用します。
+図は代表的な成功時の流れです。認証失敗・入力検証・AWS 接続失敗時は別のエラーレスポンスになります。Backend は SQS 通知の送信失敗をログに記録します。
 
 ---
 
@@ -290,7 +282,7 @@ pnpm dev:aws
 4. Emulator が生成した CA 証明書と認証情報を `certs/ca.pem` と `certs/emulator_credentials` にコピーします。
 5. AWS SDK 用の endpoint・region などを出力します。
 
-> ⚠️ 起動スクリプトは既存 volume も削除するので、Emulator のローカル状態を保持したい場合は実行前に注意してください。生成される `certs/` のファイルはローカル用です。共有・コミット・本番利用しないでください。
+> ⚠️ 起動スクリプトは既存 volume も削除するので、Emulator のローカル状態を保持したい場合は実行前に注意してください。生成される `certs/` の証明書・credentials はローカル開発専用です。
 
 #### 3. AWS SDK の環境変数を設定
 
@@ -303,7 +295,7 @@ export AWS_ENDPOINT_URL="https://127.0.0.1:9297"
 export AWS_REGION="us-east-1"
 ```
 
-これらの変数は **初期化スクリプトと Backend の AWS SDK クライアントを実行するシェルで有効**にしてください。別のターミナルを使う場合は、そちらにも設定するか、同じ環境変数を設定して実行します。
+これらの変数は **初期化スクリプトと Backend の AWS SDK クライアントを実行するシェルで有効**にしてください。別のターミナルを使う場合は、そのターミナルでも設定します。
 
 | 環境変数 | 役割 |
 |---|---|
@@ -318,8 +310,6 @@ export AWS_REGION="us-east-1"
 pnpm init:aws
 # 同等のスクリプト: ts-node scripts/init-aws-resources.ts
 ```
-
-初期化スクリプトは存在確認をしてから、次のリソースを用意します。
 
 | サービス | リソース |
 |---|---|
@@ -355,9 +345,9 @@ pnpm exec playwright install chromium   # 初回など、browser が未導入の
 pnpm test:e2e
 ```
 
-`playwright.config.js` の `webServer` 設定は、Backend / Frontend の起動と AWS Emulator の準備を行います。CI の `Test Matrix` E2E job も Emulator を起動し、リソース初期化後に Playwright を実行します。ローカルでは Docker が動作し、必要な ports が空いていることを確認してください。
+`playwright.config.js` の `webServer` 設定は、Backend / Frontend の起動と AWS Emulator の準備を行います。CI の `Test Matrix` E2E job も Emulator を起動し、リソース初期化後に Playwright を実行します。
 
-Playwright は HTML と JSON レポートを生成し、trace を収集します。設定や失敗時の証跡の見方は [E2E レポートガイド](./docs/E2E_REPORTS_GUIDE.md)を参照してください。
+Playwright は HTML と JSON レポートを生成し、trace を収集します。設定や失敗時の証跡の見方は [E2E レポートガイド](./docs/E2E_REPORTS_GUIDE.md) を参照してください。
 
 #### 7. Emulator を停止
 
@@ -366,7 +356,7 @@ pnpm stop:aws
 # health check: pnpm health:aws
 ```
 
-> **接続トラブル時の確認順**: `docker compose ps` → `pnpm health:aws` → container log → `certs/ca.pem` / `certs/emulator_credentials` の存在 → 4 つの AWS 環境変数 → `pnpm init:aws` の成功 → ports `9297/3000/5173` の競合。
+> **接続トラブル時の確認順**: `docker compose ps` → `pnpm health:aws` → container log → `certs/ca.pem` / `certs/emulator_credentials` の存在 → AWS 環境変数 → `pnpm init:aws` の結果 → ports `9297/3000/5173` の利用状況
 
 ---
 
@@ -377,7 +367,8 @@ pnpm stop:aws
 | `pnpm dev` | Frontend と Backend を同時に起動 |
 | `pnpm build` | Frontend を build |
 | `pnpm test` | Backend と Frontend の Vitest tests（coverage 付き） |
-| `pnpm test:coverage` | Backend / Frontend の coverage tests |
+| `pnpm test:coverage` | Backend / Frontend の coverage tests + `scripts/report-coverage.mjs` で集計値を表示 |
+| `pnpm test:scripts` | coverage 集計・E2E trace 対応付けの回帰テスト（`scripts/lib/*.test.mjs`） |
 | `pnpm test:api` | Backend API tests |
 | `pnpm test:advanced` | Backend / Frontend の advanced tests |
 | `pnpm test:e2e` | Playwright E2E tests |
@@ -391,13 +382,13 @@ pnpm stop:aws
 | `pnpm run collect-kpi` | KPI 収集スクリプトを実行 |
 | `pnpm run generate:dashboard` | ダッシュボードを生成 |
 
-> 引数・出力先などは package script の実装を確認してください。特に `pnpm test:e2e` は Playwright 設定に基づくサービスや Docker / Emulator の準備が必要です。
+引数・出力先などは package script の実装を確認してください。特に `pnpm test:e2e` は Playwright 設定に基づくサービスや Docker / Emulator の準備が必要です。
 
 ---
 
 ## ⚙️ GitHub Actions workflow の主な役割
 
-workflow のトリガー・入力・権限は変更されることがあるため、ここでは主な役割を示します。最新の詳細は [workflow directory](./.github/workflows/)を参照してください。
+workflow のトリガー・入力・権限は変更されることがあるため、ここでは主な役割を示します。最新の詳細は [workflow directory](./.github/workflows/) を参照してください。
 
 | Workflow | 主な役割 |
 |---|---|
@@ -428,7 +419,7 @@ workflow のトリガー・入力・権限は変更されることがあるた�
 | E2E job | AWS Emulator を立ち上げ、リソース初期化後に Playwright を実行 |
 | 主な artifact | Test results、Playwright report / results、coverage、summary（保持期間は workflow 設定を確認） |
 
-テスト件数・合格率・カバレッジは実行時点で変動します。README に古い固定値は記載せず、最新の実行結果は [GitHub Actions](https://github.com/cocomomojo/copilot-quality-harness/actions) と[品質ダッシュボード](https://cocomomojo.github.io/copilot-quality-harness/dashboard/)で確認してください。
+テスト件数・合格率・カバレッジは実行時点で変動します。README に古い固定値は記載せず、最新の実行結果は [GitHub Actions](https://github.com/cocomomojo/copilot-quality-harness/actions) とダッシュボードで確認してください。
 
 ---
 
@@ -438,8 +429,6 @@ workflow のトリガー・入力・権限は変更されることがあるた�
 - **品質レポート**: `quality-report-pr.yml` が Test Matrix の結果を扱い、設定に応じて PR コメントを作成します。
 - **E2E 証跡**: Playwright HTML report / trace / screenshot などは Actions run の artifact を確認します。
 - **run_id の整合性**: dashboard と E2E report がどの Test Matrix run を参照するかを確認してください。
-
-生成手順や artifact の仕様:
 
 | ドキュメント | 内容 |
 |---|---|
@@ -454,29 +443,29 @@ workflow のトリガー・入力・権限は変更されることがあるた�
 
 このアプリは学習・開発・テスト用です。**現状のコードを本番サービスとして公開しないでください。**
 
-- `backend/src/app.js` の CORS は全 origin (`*`) を許可しています。
-- 同ファイルの `/api/user/me` は認証 middleware を通さずユーザーデータを返す旨のセキュリティ警告があります。
-- `NODE_ENV !== 'production'` の場合、E2E 向け seed / reset endpoint が登録され、データを作成・削除できます。
+- `backend/src/middleware/cors.js` の CORS は全 origin (`*`) を許可しています。
+- `backend/src/routes/users.js` の `/api/user/me` は認証 middleware を通さずユーザーデータを返す旨のセキュリティ警告があります。
+- `backend/src/routes/testSupport.js` は E2E 向け seed / reset endpoint を実装しています。これらは `NODE_ENV !== 'production'` の場合のみ `/api/test` にマウントされ、データを作成・削除できます。
 - AWS Emulator 用の TLS 証明書・credentials とテスト用認証情報を本番 AWS や本番データに使用しないでください。
 - trace、ログ、artifact に個人情報・token・secret が入らないようにしてください。PII filter は補助機能であり、完全な秘密情報検出を保証しません。
 - Copilot / AI の分析・修正案は誤る可能性があります。人間のレビュー、テスト、セキュリティ確認を省略しないでください。
 - 自動マージ workflow が存在しても、本番運用への安全性を意味しません。workflow の実装・設定・権限を確認し、必要なら無効化してください。
 
-本番用途に転用する場合は、認証・認可、CORS、入力検証、ファイルアップロード、秘密情報管理、権限、監査、TLS を含むセキュリティレビューと設計変更が必要です。
+本番用途に転用する場合は、認証・認可、CORS、入力検証、ファイルアップロード、秘密情報管理、権限、監査、TLS を含むセキュリティレビューが必要です。
 
 ---
 
 ## 📝 TODO: AWS 標準のユーザー認証方式を検討
 
-現状のアプリログインは、AWS IAM ユーザー／ロールを使ったログインではありません。アプリ独自の email/password を DynamoDB `Users` テーブルで管理し、Backend がパスワードを照合して JWT を発行します。ローカルの AWS Emulator credentials は Backend から Emulator の AWS API へ接続するためのものであり、アプリ利用者の認証には使いません。
+現状のアプリログインは、AWS IAM ユーザー／ロールを使ったログインではありません。アプリ独自の email/password を DynamoDB `Users` テーブルで管理し、Backend が JWT を発行・検証します。Backend の AWS サービスアクセスに対する IAM runtime role 対応は実施済みです。`backend/src/lib/aws.js` は `NODE_ENV=production` で AWS SDK の default credential provider chain（ECS task role 等）を使用し、ローカルでは Emulator credentials を使用します。CloudFormation の runtime role 例は `ops/aws-backend-runtime-role.yaml` にあります。詳細は [Backend AWS 認証情報と IAM ロール](./docs/AWS_IAM_CREDENTIALS.md) を参照してください。
 
 | 状態 | 課題 |
 |---|---|
 | ☐ TODO | アプリ利用者の認証を AWS のマネージドな認証基盤（例: Amazon Cognito User Pools）へ移行・統合する方式を検討する |
-| ☐ TODO | Backend の AWS サービスアクセスには、実環境で最小権限の IAM ロールを利用する構成を設計する。IAM ロールはアプリ利用者のログイン手段とは分けて扱う |
+| ✅ 実施済み | Backend の AWS サービスアクセスに最小権限の IAM runtime role を利用する構成を実装する。IAM ロールはアプリ利用者のログイン手段ではなく、Backend が DynamoDB / S3 / SQS にアクセスする権限です |
 | ☐ TODO | ローカル開発・E2E での認証方法、Emulator との役割分担、移行・テスト手順を定義する |
 
-> ℹ️ Amazon Cognito はアプリ利用者向け認証の候補です。IAM ユーザー／ロールは主に AWS リソースへのアクセス権を制御する仕組みで、一般ユーザーが Web アプリにログインする仕組みとは役割が異なります。具体的な方式は要件・運用環境を確認して決定してください。
+> ℹ️ Amazon Cognito はアプリ利用者向け認証の候補です。IAM ユーザー／ロールは主に AWS リソースへのアクセス権を制御する仕組みで、一般ユーザーのサインインには使用しません。
 
 ---
 
@@ -490,6 +479,7 @@ workflow のトリガー・入力・権限は変更されることがあるた�
 | [QA Policy](./docs/QA_POLICY.md) | 品質方針・テスト戦略 |
 | [Dashboard](./docs/DASHBOARD.md) | 品質指標・ダッシュボード |
 | [E2E Reports Guide](./docs/E2E_REPORTS_GUIDE.md) | Playwright report・証跡 |
+| [Backend AWS 認証情報と IAM ロール](./docs/AWS_IAM_CREDENTIALS.md) | Backend の AWS 認証情報・IAM ロール |
 | [Spec to Implementation Guide](./docs/SPEC_TO_IMPLEMENTATION_GUIDE.md) | 仕様 YAML とテスト生成 |
 | [Artifacts Schema](./docs/ARTIFACTS_SCHEMA.md) | artifact の schema |
 | [Contributing Guide](./docs/CONTRIBUTING.md) | 貢献・レビュー手順 |
@@ -504,9 +494,9 @@ workflow のトリガー・入力・権限は変更されることがあるた�
 3. workflow・操作・構成に変更があれば README と関連ドキュメントも更新してください。
 4. PR では変更内容、テスト結果、既知の制約を説明してください。
 
-Actions の失敗は該当 run のログと artifact を確認し、運用手順は[ワークフローガイド](./docs/WORKFLOWS_GUIDE.md)と[運用フロー](./docs/OPERATION_FLOW.md)を参照してください。改善提案や不具合報告は [Issues](https://github.com/cocomomojo/copilot-quality-harness/issues) へお願いします。
+Actions の失敗は該当 run のログと artifact を確認し、運用手順は[ワークフローガイド](./docs/WORKFLOWS_GUIDE.md)と[運用フロー](./docs/OPERATION_FLOW.md)を参照してください。不具合や改善提案は [Issues](https://github.com/cocomomojo/copilot-quality-harness/issues) で報告してください。
 
 ---
 
-**最終更新**: 2026-11-15  
+**最終更新**: 2026-11-22  
 **状態**: 開発・テスト用品質ハーネス（テスト実績は Actions / Dashboard の最新データを参照）
