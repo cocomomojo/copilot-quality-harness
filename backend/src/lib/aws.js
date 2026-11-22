@@ -9,6 +9,8 @@ import { isLocalAwsEndpoint } from '../config.js';
 const DEFAULT_LOCAL_ENDPOINT = 'https://127.0.0.1:9297';
 const repoRoot = path.resolve(process.cwd(), '..');
 const defaultCertsDir = path.join(repoRoot, 'certs');
+const LOCAL_EMULATOR_ACCESS_ID = 'emulator-placeholder-access-id';
+const LOCAL_EMULATOR_SECRET_VALUE = 'emulator-placeholder-secret-value';
 
 function errorMessage(err) {
   return err instanceof Error ? err.message : String(err);
@@ -20,8 +22,8 @@ function resolveExistingFile(envValue, defaultPath) {
 
 function fallbackEmulatorCredentials() {
   return {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test-key',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test-secret',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || LOCAL_EMULATOR_ACCESS_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || LOCAL_EMULATOR_SECRET_VALUE,
   };
 }
 
@@ -34,7 +36,7 @@ function loadEmulatorCredentials() {
   );
 
   if (!credentialsFile) {
-    console.warn('⚠️  AWS Emulator credentials file not found. Using local test credentials.');
+    console.warn('⚠️  AWS Emulator credentials file not found. Using local placeholder credentials.');
     return fallbackEmulatorCredentials();
   }
 
@@ -54,7 +56,7 @@ function loadEmulatorCredentials() {
     };
   } catch (err) {
     console.warn('⚠️  Failed to load AWS Emulator credentials from', credentialsFile, ':', errorMessage(err));
-    console.warn('   Falling back to local test credentials.');
+    console.warn('   Falling back to local placeholder credentials.');
     return fallbackEmulatorCredentials();
   }
 }
