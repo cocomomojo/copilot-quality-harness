@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-21T22:55:27.354Z",
+  "timestamp": "2026-11-22T00:26:57.756Z",
   "pass_rate": 100,
   "test_count": 151,
   "passed": 151,
@@ -13,14 +13,14 @@
   "data_source": "TEST_MATRIX_ARTIFACT",
   "details": {
     "test_source": "test-matrix-artifact",
-    "github_run_id": 44958660655,
-    "coverage_source": "ARTIFACT_RUN:44958660655",
+    "github_run_id": 44966152969,
+    "coverage_source": "ARTIFACT_RUN:44966152969",
     "coverage_breakdown": [
       {
         "package": "backend",
-        "covered": 398,
-        "total": 768,
-        "pct": 51.82
+        "covered": 400,
+        "total": 770,
+        "pct": 51.95
       },
       {
         "package": "frontend",
@@ -29,7 +29,7 @@
         "pct": 98.68
       }
     ],
-    "explicit_test_run_id": "44958660655"
+    "explicit_test_run_id": "44966152969"
   },
   "trend": "STABLE",
   "trend_details": {
