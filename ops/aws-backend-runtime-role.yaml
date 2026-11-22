@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Least-privilege runtime IAM role for the Quality Harness backend.
+Parameters:
+  RuntimeServicePrincipal:
+    Type: String
+    Default: ecs-tasks.amazonaws.com
+    Description: AWS service principal that assumes this role (for example ecs-tasks.amazonaws.com, ec2.amazonaws.com, or lambda.amazonaws.com).
+Resources:
+  BackendRuntimeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Runtime permissions for the Quality Harness backend; does not grant application-user access.
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: !Ref RuntimeServicePrincipal
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: QualityHarnessRuntimeResources
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: DynamoDBApplicationData
+                Effect: Allow
+                Action:
+                  - dynamodb:DescribeTable
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/Users'
+                  - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/Todos'
+                  - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/AuditLogs'
+                  - !Sub 'arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/FileMetadata'
+              - Sid: ApplicationFileObjects
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub 'arn:${AWS::Partition}:s3:::app-uploads-bucket/*'
+              - Sid: TaskNotificationQueue
+                Effect: Allow
+                Action:
+                  - sqs:GetQueueAttributes
+                  - sqs:SendMessage
+                  - sqs:ReceiveMessage
+                  - sqs:DeleteMessage
+                Resource: !Sub 'arn:${AWS::Partition}:sqs:${AWS::Region}:${AWS::AccountId}:task-notification-queue'
+Outputs:
+  BackendRuntimeRoleArn:
+    Description: Attach this role to the backend compute service as its runtime/task role.
+    Value: !GetAtt BackendRuntimeRole.Arn

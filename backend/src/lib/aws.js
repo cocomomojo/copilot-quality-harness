@@ -6,9 +6,11 @@ import https from 'https';
 import path from 'path';
 import { isLocalAwsEndpoint } from '../config.js';
 
-const DEFAULT_ENDPOINT = 'https://127.0.0.1:9297';
+const DEFAULT_LOCAL_ENDPOINT = 'https://127.0.0.1:9297';
 const repoRoot = path.resolve(process.cwd(), '..');
 const defaultCertsDir = path.join(repoRoot, 'certs');
+const LOCAL_EMULATOR_ACCESS_ID = 'emulator-placeholder-access-id';
+const LOCAL_EMULATOR_SECRET_VALUE = 'emulator-placeholder-secret-value';
 
 function errorMessage(err) {
   return err instanceof Error ? err.message : String(err);
@@ -18,14 +20,15 @@ function resolveExistingFile(envValue, defaultPath) {
   return envValue || (fs.existsSync(defaultPath) ? defaultPath : undefined);
 }
 
-function fallbackCredentials() {
+function fallbackEmulatorCredentials() {
   return {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test-key',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test-secret',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || LOCAL_EMULATOR_ACCESS_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || LOCAL_EMULATOR_SECRET_VALUE,
   };
 }
 
-// Per AWS Emulator docs: AWS_SHARED_CREDENTIALS_FILE points to the auto-generated emulator_credentials file.
+// Emulator credentials are local-only. On AWS, leave `credentials` unset so
+// the SDK uses its default provider chain (task role, instance profile, etc.).
 function loadEmulatorCredentials() {
   const credentialsFile = resolveExistingFile(
     process.env.AWS_SHARED_CREDENTIALS_FILE,
@@ -33,8 +36,8 @@ function loadEmulatorCredentials() {
   );
 
   if (!credentialsFile) {
-    console.warn('⚠️  AWS_SHARED_CREDENTIALS_FILE not set. Using environment variables or placeholders.');
-    return fallbackCredentials();
+    console.warn('⚠️  AWS Emulator credentials file not found. Using local placeholder credentials.');
+    return fallbackEmulatorCredentials();
   }
 
   try {
@@ -52,37 +55,37 @@ function loadEmulatorCredentials() {
       secretAccessKey: secretKeyMatch[1].trim(),
     };
   } catch (err) {
-    console.warn('⚠️  Failed to load credentials from', credentialsFile, ':', errorMessage(err));
-    console.warn('   Falling back to environment variables or placeholders.');
-    return fallbackCredentials();
+    console.warn('⚠️  Failed to load AWS Emulator credentials from', credentialsFile, ':', errorMessage(err));
+    console.warn('   Falling back to local placeholder credentials.');
+    return fallbackEmulatorCredentials();
   }
 }
 
+const isProduction = process.env.NODE_ENV === 'production';
+const endpoint = process.env.AWS_ENDPOINT_URL || (isProduction ? undefined : DEFAULT_LOCAL_ENDPOINT);
+const usesLocalEmulator = isLocalAwsEndpoint(endpoint);
+
 const awsConfig = {
-  endpoint: process.env.AWS_ENDPOINT_URL || DEFAULT_ENDPOINT,
+  ...(endpoint ? { endpoint } : {}),
   region: process.env.AWS_REGION || 'us-east-1',
-  credentials: loadEmulatorCredentials(),
+  ...(usesLocalEmulator ? { credentials: loadEmulatorCredentials() } : {}),
   disableHostPrefix: true, // Required for AWS SDK v3 with emulator
 };
 
 function buildClientConfig() {
   const config = { ...awsConfig };
 
-  // Local AWS Emulator uses self-signed certificates
-  if (isLocalAwsEndpoint() && process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0') {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    console.log('✅ Disabled TLS certificate verification for local AWS Emulator');
-  }
-
-  const caPath = resolveExistingFile(process.env.NODE_EXTRA_CA_CERTS, path.join(defaultCertsDir, 'ca.pem'));
-  if (caPath) {
-    try {
-      config.requestHandler = {
-        httpsAgent: new https.Agent({ ca: fs.readFileSync(caPath), rejectUnauthorized: false }),
-      };
-      console.log(`✅ Loaded CA certificate from: ${caPath}`);
-    } catch (err) {
-      console.warn(`⚠️  Failed to load CA certificate from ${caPath}:`, errorMessage(err));
+  if (usesLocalEmulator) {
+    const caPath = resolveExistingFile(process.env.NODE_EXTRA_CA_CERTS, path.join(defaultCertsDir, 'ca.pem'));
+    if (caPath) {
+      try {
+        config.requestHandler = {
+          httpsAgent: new https.Agent({ ca: fs.readFileSync(caPath), rejectUnauthorized: true }),
+        };
+        console.log(`✅ Loaded AWS Emulator CA certificate from: ${caPath}`);
+      } catch (err) {
+        console.warn(`⚠️  Failed to load CA certificate from ${caPath}:`, errorMessage(err));
+      }
     }
   }
 
@@ -101,4 +104,4 @@ export const getDynamoDBClient = lazyClient(DynamoDBClient);
 export const getS3Client = lazyClient(S3Client);
 export const getSQSClient = lazyClient(SQSClient);
 
-export { awsConfig };
+export { awsConfig, buildClientConfig };

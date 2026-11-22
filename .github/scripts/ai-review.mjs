@@ -70,12 +70,11 @@ async function gh(path) {
       stopReasons.push('coverage の結果が明示されていません');
     }
 
+    // Detect actual secret values assigned as string literals, not references to
+    // environment variable names such as AWS_SECRET_ACCESS_KEY.
     const secretPatterns = [
-      /API[_-]?KEY/i,
-      /SECRET/i,
-      /AWS[_-]?SECRET/i,
-      /BEGIN\s+(RSA|DSA|EC)\s+PRIVATE\s+KEY/i,
-      /password\s*=/i
+      /\b(?:API[_-]?KEY|SECRET(?:[_-]KEY)?|AWS[_-]?SECRET(?:[_-]KEY)?|PASSWORD)\b\s*[:=]\s*(['"`])[^\s'"`]{8,}\1/i,
+      /BEGIN\s+(RSA|DSA|EC)\s+PRIVATE\s+KEY/i
     ];
 
     let secretFound = false;

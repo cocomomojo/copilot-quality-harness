@@ -1,0 +1,39 @@
+{
+  "feature": "Backend AWS SDK IAM role credential selection",
+  "scope": "Verify that AWS resource authentication is selected by runtime environment, without changing application-user authentication.",
+  "scenarios": [
+    {
+      "id": "AWS-IAM-001",
+      "environment": "production without custom endpoint",
+      "setup": "NODE_ENV=production; AWS_ENDPOINT_URL, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY unset",
+      "expected": "No emulator endpoint or explicit credentials are configured; AWS SDK default provider chain is used.",
+      "automatedTest": "backend/src/lib/aws.test.js"
+    },
+    {
+      "id": "AWS-IAM-002",
+      "environment": "local development",
+      "setup": "NODE_ENV=development; AWS_ENDPOINT_URL unset; emulator credentials supplied through environment or credentials file",
+      "expected": "Local emulator endpoint and local credentials are configured.",
+      "automatedTest": "backend/src/lib/aws.test.js"
+    },
+    {
+      "id": "AWS-IAM-003",
+      "environment": "production with non-local endpoint override",
+      "setup": "NODE_ENV=production; AWS_ENDPOINT_URL points to a non-local AWS endpoint; access-key environment variables are present",
+      "expected": "Emulator credentials are not explicitly injected into SDK client configuration.",
+      "automatedTest": "backend/src/lib/aws.test.js"
+    },
+    {
+      "id": "AWS-IAM-004",
+      "environment": "AWS Emulator integration",
+      "setup": "Start the local emulator, initialize DynamoDB/S3/SQS resources, then run Playwright E2E.",
+      "expected": "Existing registration/login, protected API, file, and queue workflows continue to pass.",
+      "automatedTest": "E2E suite (Playwright)"
+    }
+  ],
+  "coverage": {
+    "backend": "51.82%",
+    "frontend": "98.68%",
+    "note": "Values from the CI run for PR #128; rerun CI after this change to refresh results."
+  }
+}
