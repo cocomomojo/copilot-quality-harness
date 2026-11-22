@@ -1,3 +1,3 @@
 # Implementation Notes
 
-Work in progress for the AI document assistant and design review PoC.
+Implemented scope: AI document assistant and design review PoC foundation.
